@@ -1,0 +1,328 @@
+1) Makes sense, keep (at least some of the) functionality
+2) Name, new or keep
+3) Can fail under standard conditions, should have an error parameter
+3.5) can fail under abnormal conditions, mark with OOM/Network/etc.
+4) Return type makes sense
+5) Parameters make sense
+
+general: (statements are correct as of now, but might change based on the results of these labels)
+  * create/free -- maybe create/free should be create/delete? TODO look at more c apis
+  (create/delete would be consistent with pthreads, alloc/free would be more consistent
+  but implies a separate initialization)
+  * error handling -- griddyn_status could be converted to an output parameter
+  used without checking, except at the very end, like HELICS
+  * add/remove -- these have parameters that indicate usage in a tree, but act more like graph
+  edge add/remove. maybe just parameter renames? maybe something more significant?
+    * should be add to Area (I think), then connect() within area?
+    * if multiple Areas, I think there's a parent for those too? (or add one?)
+    * TODO look at this stuff
+  * parameter strings -- I would like these to be not strings
+
+gridDynObject:
+gridDynObject_create
+  1) yes, but replace componentType/objectType with enums
+  2) keep -- create/free
+  3) yes (however this shouldn't happen after it's enum-ified)
+  3.5) OOM
+  4) yes
+  5) no -- parameter strings
+
+gridDynObject_clone
+  1) I think so?
+  2) new, gridDynObject_copy
+  3) no
+  3.5) OOM
+  4) yes
+  5) yes
+
+gridDynObject_free
+  1) yes
+  2) keep -- create/free
+  3) no
+  3.5) no
+  4) yes
+  5) yes
+
+gridDynObject_add
+  1) questionable (should operate in grid space, not internal representation space) -- add/remove
+  2) keep
+  3) yes
+    *) nonsense add from a grid perspective (bus to bus, maybe?)
+    *) add to free'd object
+  3.5) no (? TODO check for allocs)
+  4) yes -- error handling
+  5) maybe, should this really be a tree relationship?
+
+gridDynObject_remove
+  1) questionable -- add/remove
+  2) keep
+  3) yes
+    *) parent/object/edge don't exist
+  3.5) no (I hope)
+  4) yes -- error handling
+  5) not really, shouldn't have to specify parent?
+
+gridDynObject_setString -- TOO MUCH INTERFACE COMPLEXITY BURIED HERE
+  1) yes
+  2) new -- parameter strings, not sure what it would be though
+  3) yes
+  3.5) maybe? (TODO check for allocs)
+  4) yes -- error handling
+  5) no, parameter isn't typesafe, and this shouldn't be usable except for metadata
+    (i.e. "bus 1" is fine as a string, "245MW" is not)
+
+gridDynObject_setValue
+  1) yes
+  2) keep
+  3) yes
+  3.5) maybe? (TODO check for allocs)
+  4) yes -- error handling
+  5) no, this needs units, and parameter should be typesafe
+
+gridDynObject_setValueUnits
+  1) no -- this should be setValue
+
+gridDynObject_setFlag
+  1) no -- it's unclear what you would need both this and setValue for
+
+gridDynObject_getString -- return type not what is documented
+gridDynObject_getValue
+gridDynObject_getValueUnits
+gridDynObject_getFlag
+  1) yes, these are all fine (modulo concerns about their set counterparts)
+  2) keep
+  3) yes, if obj doesn't exist or parameter isn't valid
+  3.5) no
+  4) yes -- error handling
+  5) sure, again depending on the sets.
+    *) TODO does gridDynObject_getString work like snprintf, where calling with
+       N=0 returns what the strlen would have been?
+    *) maybe some way of having these alloc a string of the correct length?
+
+gridDynObject_find
+  1) no, TODO rethink this
+
+gridDynObject_getSubObject
+  1) maybe?
+  2) new, not sure what though
+  3) yes, no children of type componentType at index N
+  3.5) no, should already be alloc'd
+  4) no -- error handling (should be status, with an out param?)
+  5) no, componentType should be an enum
+
+gridDynObject_findByUserId
+  1) ???? (TODO)
+
+gridDynObject_getParent
+  1) yes
+  2) keep
+  3) yes, no/multiple parent/s
+  3.5) no
+  4) no -- error handling (should be status, with an out param?)
+  5) no, what if there are multiple parents?
+
+gridDynObject_getType
+  1) yes
+  2) keep
+  3) yes, object is invalid
+  3.5) no, memory ought to be in the static data segment of the library
+  4) no, make this an enum
+  5) yes
+
+gridDynSimulation:
+gridDynSimulation_create
+  1) yes
+  2) keep
+  3) no
+  3.5) OOM
+  4) yes
+  5) no -- "type" should be an enum, unclear what "name" does. can "name" be null?
+
+gridDynSimulation_free
+  1) yes
+  2) maybe -- create/delete
+  3) no
+  3.5) no
+  4) yes
+  5) yes
+
+gridDynSimulation_initializeFromString
+  1) maybe?
+  2) new -- createFromString? (would be slightly different)
+  3) yes
+  3.5) maybe OOM?
+  4) no -- error handling + should produce a new sim rather than (re)initializing another
+  5) initializationString needs docs
+
+gridDynSimulation_initializeFromArgs
+  1) maybe?
+  2) new -- createFromArgs (see initializeFromString)
+  3) yes
+  3.5) maybe OOM?
+  4) no (see initializeFromString)
+  5) no
+    *) argv needs docs
+    *) this probably shouldn't exist
+    *) argc/argv are swapped (rather, should be char** args only, where args[argc] == nullptr)
+
+gridDynSimulation_loadfile  # TODO capitalization
+  1) yes -- maybe also createFromFile?
+  2) new -- loadFile?
+  3) yes
+  3.5) yes -- OOM
+  4) yes -- error handling
+  5) yes -- fileType should maybe be an enum of types supported?
+
+gridDynSimulation_addCommand
+  1) no -- would like a gridDynSimulationCommand interface with stronger types
+
+gridDynSimulation_powerflowInitialize
+  1) yes
+  2) maybe -- powerflow_initialize?
+  3) yes
+  3.5) probably OOM
+  4) yes -- error handling
+  5) yes
+
+gridDynSimulation_powerflow
+  1) yes
+  2) new -- at least, powerflowRun, preferably powerflow_run?
+  3) yes
+  3.5) maybe OOM (though I would hope not)
+  4) yes -- error handling
+  5) yes
+
+gridDynSimulation_dynamicInitialize
+  1) no -- this should be a flag on powerflowInitialize
+
+gridDynSimulation_reset
+  1) no
+    *) if all it does is set the time to 0, then it needs a new name
+    *) if it does reset things to initial values, delete it in favor of a copy sim function
+
+gridDynSimulation_getCurrentTime
+  1) yes
+  2) keep
+  3) no
+  3.5) I hope not
+  4) yes
+  5) yes
+
+gridDynSimulation_run
+  1) no
+    *) discrete commands should be one type of thing (with a powerflow solve if the queue is empty?)
+      *) how is this different from while (status == 0) { status = step(sim); } ?
+    *) dynamic should be another entirely
+  2) new -- split into runDynamic and runQueue
+  3) yes
+  3.5) probably OOM
+  4) yes -- error handling
+  5) yes -- maybe an explicit command queue for runQueue?
+
+gridDynSimulation_runTo
+  1) no -- it seems like the event system should support this as a stop criteria?
+
+gridDynSimulation_Step      # TODO capitalization
+  1) yes -- but same static vs dynamic issues as run
+  2) keep
+  3) yes
+  3.5) probably OOM
+  4) yes -- error handling
+  5) yes
+
+async: same comments as sync (but how does synchronization happen?!?)
+  *) returns should all either be void or a waitable
+     (or maybe status captures enough state to be good for that?? I guess the async
+     things can fail to start... should the error be reported here or later?)
+gridDynSimulation_runAsync
+gridDynSimulation_runToAsync
+gridDynSimulation_StepAsync # TODO capitalization
+
+gridDynSimulation_getStatus
+  *) ah just kidding this is how
+  1) NO (could be, if as part of more synchronization machinery)
+  2) new -- gridDynSimulation_isReady ?
+  3) not directly -- can report failure?
+  3.5) no
+  4) not really "will return GRIDDYN_PENDING if an Async operation is ongoing, otherwise will return the execution state"
+    *) should not be an int
+  5) sure I guess
+
+getSimulationObject         # TODO prefix
+  1) it is unclear to me why you would want access to the gridDynObject backing the simulation
+  2) new -- needs a gridDyn prefix, at least
+  3) yes -- sim isn't valid
+  3.5) no
+  4) yes
+  5) yes
+
+gridDynSimulation_getSolverKey
+  1) ???
+
+gridDynSolverKey_free       # TODO naming (gridDynSimulation_freeSolverKey ?)
+  1) sure, but these should be cleaned up automatically as well
+
+gridDynSimulation_stateSize
+  1) ??? why is this needed?
+
+these: sure, fine, maybe an unsigned return value? maybe more things like this?
+  *) can you even get busses/lines by index?
+gridDynSimulation_busCount
+gridDynSimulation_lineCount
+
+gridDynSimulation_getResults
+  1) ?? delete because we have the Query functions?
+
+gridDynQuery: These look mostly okay, but I'm planning on looking at the query string
+gridDynSingleQuery_create   # TODO naming (switch single/vector and query?)
+gridDynVectorQuery_create
+gridDynSingleQuery_free
+gridDynVectorQuery_free
+gridDynSingleQuery_run
+gridDynVectorQuery_run
+gridDynVectorQuery_append
+gridDynSingleQuery_update
+gridDynVectorQuery_update
+
+gridDynEvent: ???
+gridDynEvent_create
+  1/2/3/4/5) fine
+  3.5) probably OOM
+gridDynEvent_free
+  1/3/3.5/4/5) fine
+  2) new -- create/delete
+
+gridDynEvent_trigger
+  1) what does this actually do??
+
+gridDynEvent_schedule
+  1) what does this actually do?
+
+same comments as the rest of the set functions above
+gridDynEvent_setValue
+gridDynEvent_setString
+gridDynEvent_setFlag
+
+gridDynEvent_setTarget
+  1) what does this do??
+
+export_advanced: (look at later; including gridDynSimulation_* here even though they aren't in the advanced header)
+gridDynObject_stateSize
+gridDynObject_guessState
+gridDynObject_setState
+gridDynObject_getStateVariableTypes
+gridDynObject_residual
+gridDynObject_derivative
+gridDynObject_algebraicUpdate
+gridDynObject_jacobian
+gridDynObject_ioPartialDerivatives
+gridDynObject_outputPartialDerivatives
+
+TODO should these be marked advanced as well?
+gridDynSimulation_guessState
+gridDynSimulation_setState
+gridDynSimulation_getStateVariableTypes
+gridDynSimulation_residual
+gridDynSimulation_derivative
+gridDynSimulation_algebraicUpdate
+gridDynSimulation_jacobian
