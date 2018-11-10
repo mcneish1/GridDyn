@@ -19,7 +19,7 @@
 
 using namespace griddyn;
 
-gridDynSimReference gridDynSimulation_create (const char *type, const char *name)
+griddyn_sim_t griddyn_simulation_create (const char *type, const char *name)
 {
     GriddynRunner *sim;
     std::string typeStr (type);
@@ -46,10 +46,10 @@ gridDynSimReference gridDynSimulation_create (const char *type, const char *name
         sim->getSim ()->setName (name);
     }
 
-    return reinterpret_cast<gridDynSimReference> (sim);
+    return reinterpret_cast<griddyn_sim_t> (sim);
 }
 
-void gridDynSimulation_free (gridDynSimReference sim)
+void griddyn_simulation_delete (griddyn_sim_t sim)
 {
     if (sim != nullptr)
     {
@@ -57,7 +57,7 @@ void gridDynSimulation_free (gridDynSimReference sim)
     }
 }
 
-griddyn_status gridDynSimulation_initializeFromString (gridDynSimReference sim, const char *initializationString)
+griddyn_status_t griddyn_simulation_initializeFromString (griddyn_sim_t sim, const char *initializationString)
 {
     auto runner = reinterpret_cast<GriddynRunner *> (sim);
 
@@ -68,8 +68,8 @@ griddyn_status gridDynSimulation_initializeFromString (gridDynSimReference sim, 
     return runner->InitializeFromString (initializationString);
 }
 
-griddyn_status
-gridDynSimulation_initializeFromArgs (gridDynSimReference sim, int argc, char *argv[], int ignoreUnrecognized)
+griddyn_status_t
+griddyn_simulation_initializeFromArgs (griddyn_sim_t sim, int argc, char *argv[], int ignoreUnrecognized)
 {
     auto runner = reinterpret_cast<GriddynRunner *> (sim);
 
@@ -80,7 +80,7 @@ gridDynSimulation_initializeFromArgs (gridDynSimReference sim, int argc, char *a
     return runner->Initialize (argc, argv, (ignoreUnrecognized != 0));
 }
 
-griddyn_status gridDynSimulation_loadfile (gridDynSimReference sim, const char *fileName, const char *fileType)
+griddyn_status_t griddyn_simulation_loadFile (griddyn_sim_t sim, const char *fileName, const char *fileType)
 {
     auto runner = reinterpret_cast<GriddynRunner *> (sim);
 
@@ -108,7 +108,7 @@ griddyn_status gridDynSimulation_loadfile (gridDynSimReference sim, const char *
     }
 }
 
-griddyn_status gridDynSimulation_addCommand (gridDynSimReference sim, const char *command)
+griddyn_status_t griddyn_simulation_addCommand (griddyn_sim_t sim, const char *command)
 {
     auto runner = reinterpret_cast<GriddynRunner *> (sim);
 
@@ -125,7 +125,7 @@ griddyn_status gridDynSimulation_addCommand (gridDynSimReference sim, const char
     return griddyn_add_failure;
 }
 
-griddyn_status gridDynSimulation_run (gridDynSimReference sim)
+griddyn_status_t griddyn_simulation_run (griddyn_sim_t sim)
 {
     auto runner = reinterpret_cast<GriddynRunner *> (sim);
 
@@ -144,7 +144,7 @@ griddyn_status gridDynSimulation_run (gridDynSimReference sim)
     return griddyn_ok;
 }
 
-griddyn_status gridDynSimulation_runTo (gridDynSimReference sim, double runToTime)
+griddyn_status_t griddyn_simulation_runTo (griddyn_sim_t sim, double runToTime)
 {
     auto runner = reinterpret_cast<GriddynRunner *> (sim);
 
@@ -163,7 +163,7 @@ griddyn_status gridDynSimulation_runTo (gridDynSimReference sim, double runToTim
     return griddyn_ok;
 }
 
-griddyn_status gridDynSimulation_Step (gridDynSimReference sim)
+griddyn_status_t griddyn_simulation_Step (griddyn_sim_t sim)
 {
     auto runner = reinterpret_cast<GriddynRunner *> (sim);
 
@@ -175,7 +175,7 @@ griddyn_status gridDynSimulation_Step (gridDynSimReference sim)
     return ret;
 }
 
-griddyn_status gridDynSimulation_runAsync (gridDynSimReference sim)
+griddyn_status_t griddyn_simulation_runAsync (griddyn_sim_t sim)
 {
     auto runner = reinterpret_cast<GriddynRunner *> (sim);
 
@@ -194,7 +194,7 @@ griddyn_status gridDynSimulation_runAsync (gridDynSimReference sim)
     return 0;
 }
 
-griddyn_status gridDynSimulation_runToAsync (gridDynSimReference sim, double runToTime)
+griddyn_status_t griddyn_simulation_runToAsync (griddyn_sim_t sim, double runToTime)
 {
     auto runner = reinterpret_cast<GriddynRunner *> (sim);
 
@@ -213,7 +213,7 @@ griddyn_status gridDynSimulation_runToAsync (gridDynSimReference sim, double run
     return 0;
 }
 
-griddyn_status gridDynSimulation_StepAsync (gridDynSimReference sim)
+griddyn_status_t griddyn_simulation_StepAsync (griddyn_sim_t sim)
 {
     auto runner = reinterpret_cast<GriddynRunner *> (sim);
 
@@ -224,7 +224,7 @@ griddyn_status gridDynSimulation_StepAsync (gridDynSimReference sim)
     return 0;
 }
 
-int gridDynSimulation_getStatus (gridDynSimReference sim)
+int griddyn_simulation_getStatus (griddyn_sim_t sim)
 {
     auto runner = reinterpret_cast<GriddynRunner *> (sim);
 
@@ -237,7 +237,7 @@ int gridDynSimulation_getStatus (gridDynSimReference sim)
     return res;
 }
 
-gridDynObject getSimulationObject (gridDynSimReference sim)
+griddyn_object_t getSimulationObject (griddyn_sim_t sim)
 {
     auto runner = reinterpret_cast<GriddynRunner *> (sim);
 
@@ -249,7 +249,7 @@ gridDynObject getSimulationObject (gridDynSimReference sim)
     return creategridDynObject (runner->getSim ().get ());
 }
 
-griddyn_status gridDynSimulation_powerflowInitialize (gridDynSimReference sim)
+griddyn_status_t griddyn_simulation_powerflowInitialize (griddyn_sim_t sim)
 {
     auto runner = reinterpret_cast<GriddynRunner *> (sim);
 
@@ -260,7 +260,7 @@ griddyn_status gridDynSimulation_powerflowInitialize (gridDynSimReference sim)
     return runner->getSim ()->pFlowInitialize ();
 }
 
-griddyn_status gridDynSimulation_powerflow (gridDynSimReference sim)
+griddyn_status_t griddyn_simulation_runPowerflow (griddyn_sim_t sim)
 {
     auto runner = reinterpret_cast<GriddynRunner *> (sim);
 
@@ -271,7 +271,7 @@ griddyn_status gridDynSimulation_powerflow (gridDynSimReference sim)
     return runner->getSim ()->powerflow ();
 }
 
-griddyn_status gridDynSimulation_dynamicInitialize (gridDynSimReference sim)
+griddyn_status_t griddyn_simulation_dynamicInitialize (griddyn_sim_t sim)
 {
     auto runner = reinterpret_cast<GriddynRunner *> (sim);
 
@@ -283,7 +283,7 @@ griddyn_status gridDynSimulation_dynamicInitialize (gridDynSimReference sim)
     return griddyn_ok;
 }
 
-griddyn_status gridDynSimulation_reset (gridDynSimReference sim)
+griddyn_status_t griddyn_simulation_reset (griddyn_sim_t sim)
 {
     auto runner = reinterpret_cast<GriddynRunner *> (sim);
 
@@ -294,7 +294,7 @@ griddyn_status gridDynSimulation_reset (gridDynSimReference sim)
     return runner->Reset ();
 }
 
-double gridDynSimulation_getCurrentTime (gridDynSimReference sim)
+double griddyn_simulation_getCurrentTime (griddyn_sim_t sim)
 {
     auto runner = reinterpret_cast<GriddynRunner *> (sim);
 

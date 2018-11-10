@@ -10,7 +10,6 @@
 * LLNS Copyright End
 */
 
-
 #ifndef _MSC_VER
 #define BOOST_TEST_DYN_LINK
 #endif

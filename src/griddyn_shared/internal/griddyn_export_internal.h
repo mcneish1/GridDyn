@@ -12,18 +12,23 @@
 
 #ifndef GRIDDYN_EXPORT_INTERNAL_H_
 #define GRIDDYN_EXPORT_INTERNAL_H_
+
 #include "griddyn/gridComponent.h"
 #include "griddyn/solvers/solverMode.hpp"
-typedef void *gridDynObject;
+
+#define griddyn_object_t void *
+
 /** make a gridDynObject wrapper out of an actual component pointer*/
-gridDynObject creategridDynObject (griddyn::gridComponent *comp);
+griddyn_object_t creategridDynObject (griddyn::gridComponent *comp);
+
 /** get the component pointer from a gridDynObject*/
-griddyn::gridComponent *getComponentPointer (gridDynObject obj);
+griddyn::gridComponent *getComponentPointer (griddyn_object_t obj);
+
 /** get the const component pointer from a const gridDynObject*/
-const griddyn::gridComponent *getConstComponentPointer (gridDynObject obj);
+const griddyn::gridComponent *getConstComponentPointer (griddyn_object_t obj);
 
 /** data class for storing some solver information and data buffers*/
-class solverKeyInfo
+class solverHandle
 {
   public:
     griddyn::solverMode sMode_;  //!< solverMode
@@ -31,13 +36,13 @@ class solverKeyInfo
     std::vector<double> dstateBuffer;  //!< buffer for storing dstate_dt data
     std::vector<std::string> stateNames;  //!< buffer for storing the stateNames
     /** default constructor*/
-    solverKeyInfo () = default;
+    solverHandle () = default;
     /** constructor from a solverMode reference*/
-    solverKeyInfo (const griddyn::solverMode &sMode) : sMode_ (sMode){};
+    solverHandle (const griddyn::solverMode &sMode) : sMode_ (sMode){};
 };
 
-/** allocate buffers for using a solverKeyInfo object with a gridComponent*/
-void setUpSolverKeyInfo (solverKeyInfo *key, griddyn::gridComponent *comp);
+/** allocate buffers for using a solverHandle object with a gridComponent*/
+void setUpsolverHandle (solverHandle *key, griddyn::gridComponent *comp);
 /** translate a system state vector to a local state vector*/
 void TranslateToLocal (const std::vector<double> &orig,
                        double *newData,

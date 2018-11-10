@@ -21,7 +21,7 @@
 
 using namespace griddyn;
 
-gridDynEvent gridDynEvent_create (const char *eventString, gridDynObject obj)
+griddyn_event_t gridDynEvent_create (const char *eventString, griddyn_object_t obj)
 {
     auto evnt = new std::shared_ptr<Event> (make_event (eventString, getComponentPointer (obj)));
     if (evnt != nullptr)
@@ -31,7 +31,7 @@ gridDynEvent gridDynEvent_create (const char *eventString, gridDynObject obj)
     return nullptr;
 }
 
-void gridDynEvent_free (gridDynEvent evnt)
+void gridDynEvent_free (griddyn_event_t evnt)
 {
     if (evnt != nullptr)
     {
@@ -40,7 +40,7 @@ void gridDynEvent_free (gridDynEvent evnt)
     }
 }
 
-griddyn_status gridDynEvent_trigger (gridDynEvent evnt)
+griddyn_status_t gridDynEvent_trigger (griddyn_event_t evnt)
 {
     if (evnt == nullptr)
     {
@@ -57,7 +57,7 @@ griddyn_status gridDynEvent_trigger (gridDynEvent evnt)
     return griddyn_function_failure;
 }
 
-griddyn_status gridDynEvent_schedule (gridDynEvent evnt, gridDynSimReference sim)
+griddyn_status_t gridDynEvent_schedule (griddyn_event_t evnt, griddyn_sim_t sim)
 {
     if (evnt == nullptr)
     {
@@ -82,7 +82,7 @@ griddyn_status gridDynEvent_schedule (gridDynEvent evnt, gridDynSimReference sim
     }
 }
 
-griddyn_status gridDynEvent_setValue (gridDynEvent evnt, const char *parameter, double value)
+griddyn_status_t gridDynEvent_setValue (griddyn_event_t evnt, const char *parameter, double value)
 {
     if (evnt == nullptr)
     {
@@ -104,7 +104,7 @@ griddyn_status gridDynEvent_setValue (gridDynEvent evnt, const char *parameter, 
     }
 }
 
-griddyn_status gridDynEvent_setString (gridDynEvent evnt, const char *parameter, const char *value)
+griddyn_status_t gridDynEvent_setString (griddyn_event_t evnt, const char *parameter, const char *value)
 {
     if (evnt == nullptr)
     {
@@ -126,7 +126,7 @@ griddyn_status gridDynEvent_setString (gridDynEvent evnt, const char *parameter,
     }
 }
 
-griddyn_status gridDynEvent_setFlag (gridDynEvent evnt, const char *flag, int val)
+griddyn_status_t gridDynEvent_setFlag (griddyn_event_t evnt, const char *flag, int val)
 {
     if (evnt == nullptr)
     {
@@ -148,7 +148,7 @@ griddyn_status gridDynEvent_setFlag (gridDynEvent evnt, const char *flag, int va
     }
 }
 
-griddyn_status gridDynEvent_setTarget (gridDynEvent evnt, gridDynObject obj)
+griddyn_status_t gridDynEvent_setTarget (griddyn_event_t evnt, griddyn_object_t obj)
 {
     if (evnt == nullptr)
     {
