@@ -175,6 +175,8 @@ class coreObjectFactory
   private:
     coreObjectFactory ();
 
+    static std::shared_ptr<coreObjectFactory> create();
+
     fMap m_factoryMap;  //!< the main map from string to the typeFactory
 };
 }  // namespace griddyn

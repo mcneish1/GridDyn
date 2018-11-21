@@ -132,16 +132,22 @@ objectFactory *componentFactory::getFactory (const std::string &typeName)
     return nullptr;
 }
 
-// create a high level object factory for the coreObject class
-
+// singleton getter
 std::shared_ptr<coreObjectFactory> coreObjectFactory::instance ()
 {
-    // can't use make shared since constructor is private
-    static std::shared_ptr<coreObjectFactory> factory =
-      std::shared_ptr<coreObjectFactory> (new coreObjectFactory ());  // NOLINT
+    static auto factory = coreObjectFactory::create();
     return factory;
 }
 
+// see https://stackoverflow.com/a/8147213
+// note that make_shared doesn't support friendship
+std::shared_ptr<coreObjectFactory> coreObjectFactory::create ()
+{
+    struct tmp : public coreObjectFactory {};
+    return std::make_shared<tmp>();
+}
+
+// TODO isn't this just std::unordered_map::operator[]?
 void coreObjectFactory::registerFactory (const std::string &name, std::shared_ptr<componentFactory> tf)
 {
     auto ret = m_factoryMap.emplace (name, tf);
@@ -178,7 +184,7 @@ stringVec coreObjectFactory::getTypeNames (const std::string &component)
     {
         return m_factoryMap[component]->getTypeNames ();
     }
-    return stringVec ();
+    return {};
 }
 
 coreObject *coreObjectFactory::createObject (const std::string &component)
@@ -197,8 +203,7 @@ coreObject *coreObjectFactory::createObject (const std::string &component, const
     auto mfind = m_factoryMap.find (component);
     if (mfind != m_factoryMap.end ())
     {
-        coreObject *obj = m_factoryMap[component]->makeObject (typeName);
-        return obj;
+        return m_factoryMap[component]->makeObject (typeName);
     }
     return nullptr;
 }

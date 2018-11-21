@@ -168,10 +168,12 @@ BOOST_AUTO_TEST_CASE (test_unit_functions)
 BOOST_AUTO_TEST_CASE (object_factory_test)
 {
     auto cof = coreObjectFactory::instance ();
+
     coreObject *obj = cof->createObject ("load", "basic");
     auto ld = dynamic_cast<zipLoad *> (obj);
     BOOST_CHECK (ld != nullptr);
     delete ld;
+
     auto gsL = dynamic_cast<loads::sourceLoad *> (cof->createObject ("load", "sine"));
     BOOST_CHECK (gsL != nullptr);
     delete gsL;
