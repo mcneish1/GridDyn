@@ -44,7 +44,10 @@ class gridGrabber;
 class stateGrabber;
 
 /** base class for capturing and storing data from a grid simulation */
-class collector : public helperObject, public eventInterface, public objectOperatorInterface, public griddyn_query_vector
+class collector : public helperObject,
+                  public eventInterface,
+                  public objectOperatorInterface,
+                  public griddyn_query_vector
 {
   protected:
     count_t warningCount = 0;  //!< counter for the number of warnings

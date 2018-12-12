@@ -16,8 +16,8 @@
 
 #include "../gridDynDefinitions.hpp"
 #include <bitset>
-#include <vector>
 #include <string>
+#include <vector>
 
 namespace griddyn
 {
@@ -114,7 +114,7 @@ class solverHandle : public griddyn_solver
     /** default constructor*/
     solverHandle () = default;
     /** constructor from a solverMode reference*/
-    solverHandle (const griddyn::solverMode &sMode) : sMode_(sMode) {};
+    solverHandle (const griddyn::solverMode &sMode) : sMode_ (sMode){};
 };
 
 #define LINKAPPROXMASK ((unsigned int)(0x000F))

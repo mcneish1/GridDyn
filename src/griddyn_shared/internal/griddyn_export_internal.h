@@ -20,35 +20,35 @@
 // #include "griddyn/solvers/solverMode.hpp"
 
 // forward_declarations  {
-namespace griddyn {
+namespace griddyn
+{
 class gridComponent;
 class solverHandle;
 class solverMode;
-}
+}  // namespace griddyn
 // } // forward_declarations
 
 /** make a gridDynObject wrapper out of an actual component pointer*/
-griddyn_object* griddyn_object_create (griddyn::gridComponent* comp);
+griddyn_object *griddyn_object_create (griddyn::gridComponent *comp);
 
 /** get the component pointer from a gridDynObject*/
-griddyn::gridComponent* getComponentPointer (griddyn_object* obj);
+griddyn::gridComponent *getComponentPointer (griddyn_object *obj);
 
 /** get the const component pointer from a const gridDynObject*/
-griddyn::gridComponent const* getConstComponentPointer (const griddyn_object* obj);
-
+griddyn::gridComponent const *getConstComponentPointer (const griddyn_object *obj);
 
 /** allocate buffers for using a solverHandle object with a gridComponent*/
 void setUpsolverHandle (griddyn::solverHandle *key, griddyn::gridComponent *comp);
 
 /** translate a system state vector to a local state vector*/
-void TranslateToLocal (const std::vector<double>& orig,
-                       double* newData,
-                       const griddyn::gridComponent* comp,
-                       const griddyn::solverMode& sMode);
+void TranslateToLocal (const std::vector<double> &orig,
+                       double *newData,
+                       const griddyn::gridComponent *comp,
+                       const griddyn::solverMode &sMode);
 
 /** translate a local state vector into the appropriate elements of a system state vector*/
-void CopyFromLocal (std::vector<double>& dest,
-                    const double* localData,
-                    const griddyn::gridComponent* comp,
-                    const griddyn::solverMode& sMode);
+void CopyFromLocal (std::vector<double> &dest,
+                    const double *localData,
+                    const griddyn::gridComponent *comp,
+                    const griddyn::solverMode &sMode);
 #endif

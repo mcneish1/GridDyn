@@ -19,7 +19,7 @@
 
 using namespace griddyn;
 
-griddyn_sim* griddyn_simulation_create (const char *type, const char *name)
+griddyn_sim *griddyn_simulation_create (const char *type, const char *name)
 {
     GriddynRunner *sim;
     std::string typeStr (type);
@@ -49,12 +49,9 @@ griddyn_sim* griddyn_simulation_create (const char *type, const char *name)
     return sim;
 }
 
-void griddyn_simulation_delete (griddyn_sim* sim)
-{
-    delete static_cast<GriddynRunner *> (sim);
-}
+void griddyn_simulation_delete (griddyn_sim *sim) { delete static_cast<GriddynRunner *> (sim); }
 
-griddyn_status griddyn_simulation_initialize_from_string (griddyn_sim* sim, const char *initializationString)
+griddyn_status griddyn_simulation_initialize_from_string (griddyn_sim *sim, const char *initializationString)
 {
     auto runner = static_cast<GriddynRunner *> (sim);
 
@@ -63,12 +60,13 @@ griddyn_status griddyn_simulation_initialize_from_string (griddyn_sim* sim, cons
         return griddyn_invalid_object;
     }
     auto rv = runner->InitializeFromString (initializationString);
-    if (rv == FUNCTION_EXECUTION_SUCCESS) return griddyn_ok;
-    return griddyn_function_failure; // TODO error_mapping_work
+    if (rv == FUNCTION_EXECUTION_SUCCESS)
+        return griddyn_ok;
+    return griddyn_function_failure;  // TODO error_mapping_work
 }
 
 griddyn_status
-griddyn_simulation_initialize_from_args (griddyn_sim* sim, int argc, char *argv[], int ignoreUnrecognized)
+griddyn_simulation_initialize_from_args (griddyn_sim *sim, int argc, char *argv[], int ignoreUnrecognized)
 {
     auto runner = static_cast<GriddynRunner *> (sim);
 
@@ -77,11 +75,12 @@ griddyn_simulation_initialize_from_args (griddyn_sim* sim, int argc, char *argv[
         return griddyn_invalid_object;
     }
     auto rv = runner->Initialize (argc, argv, (ignoreUnrecognized != 0));
-    if (rv == FUNCTION_EXECUTION_SUCCESS) return griddyn_ok;
-    return griddyn_function_failure; // TODO error_mapping_work
+    if (rv == FUNCTION_EXECUTION_SUCCESS)
+        return griddyn_ok;
+    return griddyn_function_failure;  // TODO error_mapping_work
 }
 
-griddyn_status griddyn_simulation_load_file (griddyn_sim* sim, const char *fileName, const char *fileType)
+griddyn_status griddyn_simulation_load_file (griddyn_sim *sim, const char *fileName, const char *fileType)
 {
     auto runner = static_cast<GriddynRunner *> (sim);
 
@@ -109,7 +108,7 @@ griddyn_status griddyn_simulation_load_file (griddyn_sim* sim, const char *fileN
     }
 }
 
-griddyn_status griddyn_simulation_add_command (griddyn_sim* sim, const char *command)
+griddyn_status griddyn_simulation_add_command (griddyn_sim *sim, const char *command)
 {
     auto runner = static_cast<GriddynRunner *> (sim);
 
@@ -126,7 +125,7 @@ griddyn_status griddyn_simulation_add_command (griddyn_sim* sim, const char *com
     return griddyn_add_failure;
 }
 
-griddyn_status griddyn_simulation_run (griddyn_sim* sim)
+griddyn_status griddyn_simulation_run (griddyn_sim *sim)
 {
     auto runner = static_cast<GriddynRunner *> (sim);
 
@@ -145,7 +144,7 @@ griddyn_status griddyn_simulation_run (griddyn_sim* sim)
     return griddyn_ok;
 }
 
-griddyn_status griddyn_simulation_run_to (griddyn_sim* sim, double runToTime)
+griddyn_status griddyn_simulation_run_to (griddyn_sim *sim, double runToTime)
 {
     auto runner = static_cast<GriddynRunner *> (sim);
 
@@ -164,7 +163,7 @@ griddyn_status griddyn_simulation_run_to (griddyn_sim* sim, double runToTime)
     return griddyn_ok;
 }
 
-griddyn_status griddyn_simulation_step (griddyn_sim* sim)
+griddyn_status griddyn_simulation_step (griddyn_sim *sim)
 {
     auto runner = static_cast<GriddynRunner *> (sim);
 
@@ -173,11 +172,12 @@ griddyn_status griddyn_simulation_step (griddyn_sim* sim)
         return griddyn_invalid_object;
     }
     auto rv = runner->getSim ()->step ();
-    if (rv == FUNCTION_EXECUTION_SUCCESS) return griddyn_ok;
-    return griddyn_function_failure; // TODO error_mapping_work
+    if (rv == FUNCTION_EXECUTION_SUCCESS)
+        return griddyn_ok;
+    return griddyn_function_failure;  // TODO error_mapping_work
 }
 
-griddyn_status griddyn_simulation_run_async (griddyn_sim* sim)
+griddyn_status griddyn_simulation_run_async (griddyn_sim *sim)
 {
     auto runner = static_cast<GriddynRunner *> (sim);
 
@@ -196,7 +196,7 @@ griddyn_status griddyn_simulation_run_async (griddyn_sim* sim)
     return griddyn_ok;
 }
 
-griddyn_status griddyn_simulation_run_to_async (griddyn_sim* sim, double runToTime)
+griddyn_status griddyn_simulation_run_to_async (griddyn_sim *sim, double runToTime)
 {
     auto runner = static_cast<GriddynRunner *> (sim);
 
@@ -215,7 +215,7 @@ griddyn_status griddyn_simulation_run_to_async (griddyn_sim* sim, double runToTi
     return griddyn_ok;
 }
 
-griddyn_status griddyn_simulation_step_async (const griddyn_sim* sim)
+griddyn_status griddyn_simulation_step_async (const griddyn_sim *sim)
 {
     auto runner = static_cast<const GriddynRunner *> (sim);
 
@@ -226,7 +226,7 @@ griddyn_status griddyn_simulation_step_async (const griddyn_sim* sim)
     return griddyn_ok;
 }
 
-int griddyn_simulation_get_status (griddyn_sim* sim)
+int griddyn_simulation_get_status (griddyn_sim *sim)
 {
     auto runner = static_cast<GriddynRunner *> (sim);
 
@@ -238,7 +238,7 @@ int griddyn_simulation_get_status (griddyn_sim* sim)
     return runner->getStatus (tRet);
 }
 
-griddyn_object* griddyn_simulation_get_as_object (griddyn_sim* sim)
+griddyn_object *griddyn_simulation_get_as_object (griddyn_sim *sim)
 {
     auto runner = static_cast<GriddynRunner *> (sim);
 
@@ -250,7 +250,7 @@ griddyn_object* griddyn_simulation_get_as_object (griddyn_sim* sim)
     return griddyn_object_create (runner->getSim ().get ());
 }
 
-griddyn_status griddyn_simulation_powerflow_initialize (griddyn_sim* sim)
+griddyn_status griddyn_simulation_powerflow_initialize (griddyn_sim *sim)
 {
     auto runner = static_cast<GriddynRunner *> (sim);
 
@@ -259,11 +259,12 @@ griddyn_status griddyn_simulation_powerflow_initialize (griddyn_sim* sim)
         return griddyn_invalid_object;
     }
     auto rv = runner->getSim ()->pFlowInitialize ();
-    if (rv == FUNCTION_EXECUTION_SUCCESS) return griddyn_ok;
-    return griddyn_function_failure; // TODO error_mapping_work
+    if (rv == FUNCTION_EXECUTION_SUCCESS)
+        return griddyn_ok;
+    return griddyn_function_failure;  // TODO error_mapping_work
 }
 
-griddyn_status griddyn_simulation_powerflow_run (griddyn_sim* sim)
+griddyn_status griddyn_simulation_powerflow_run (griddyn_sim *sim)
 {
     auto runner = static_cast<GriddynRunner *> (sim);
 
@@ -272,11 +273,12 @@ griddyn_status griddyn_simulation_powerflow_run (griddyn_sim* sim)
         return griddyn_invalid_object;
     }
     auto rv = runner->getSim ()->powerflow ();
-    if (rv == FUNCTION_EXECUTION_SUCCESS) return griddyn_ok;
-    return griddyn_function_failure; // TODO error_mapping_work
+    if (rv == FUNCTION_EXECUTION_SUCCESS)
+        return griddyn_ok;
+    return griddyn_function_failure;  // TODO error_mapping_work
 }
 
-griddyn_status griddyn_simulation_dynamic_initialize (griddyn_sim* sim)
+griddyn_status griddyn_simulation_dynamic_initialize (griddyn_sim *sim)
 {
     auto runner = static_cast<GriddynRunner *> (sim);
 
@@ -288,7 +290,7 @@ griddyn_status griddyn_simulation_dynamic_initialize (griddyn_sim* sim)
     return griddyn_ok;
 }
 
-griddyn_status griddyn_simulation_reset (griddyn_sim* sim)
+griddyn_status griddyn_simulation_reset (griddyn_sim *sim)
 {
     auto runner = static_cast<GriddynRunner *> (sim);
 
@@ -297,11 +299,12 @@ griddyn_status griddyn_simulation_reset (griddyn_sim* sim)
         return griddyn_invalid_object;
     }
     auto rv = runner->Reset ();
-    if (rv == FUNCTION_EXECUTION_SUCCESS) return griddyn_ok;
-    return griddyn_function_failure; // TODO error_mapping_work
+    if (rv == FUNCTION_EXECUTION_SUCCESS)
+        return griddyn_ok;
+    return griddyn_function_failure;  // TODO error_mapping_work
 }
 
-double griddyn_simulation_get_current_time (const griddyn_sim* sim)
+double griddyn_simulation_get_current_time (const griddyn_sim *sim)
 {
     auto runner = static_cast<const GriddynRunner *> (sim);
 

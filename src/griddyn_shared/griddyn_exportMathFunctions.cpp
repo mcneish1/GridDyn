@@ -21,7 +21,7 @@
 
 using namespace griddyn;
 
-griddyn_solver* griddyn_simulation_getSolverKey (griddyn_sim* sim, const char *solverType)
+griddyn_solver *griddyn_simulation_getSolverKey (griddyn_sim *sim, const char *solverType)
 {
     auto runner = static_cast<GriddynRunner *> (sim);
 
@@ -34,12 +34,9 @@ griddyn_solver* griddyn_simulation_getSolverKey (griddyn_sim* sim, const char *s
     return key;
 }
 
-void gridDynSolverKey_free (griddyn_solver* key)
-{
-    delete static_cast<solverHandle *> (key);
-}
+void gridDynSolverKey_free (griddyn_solver *key) { delete static_cast<solverHandle *> (key); }
 
-int griddyn_simulation_get_bus_count (const griddyn_sim* sim)
+int griddyn_simulation_get_bus_count (const griddyn_sim *sim)
 {
     auto runner = static_cast<const GriddynRunner *> (sim);
 
@@ -50,7 +47,7 @@ int griddyn_simulation_get_bus_count (const griddyn_sim* sim)
     return runner->getSim ()->getInt ("buscount");
 }
 
-int griddyn_simulation_get_line_count (const griddyn_sim* sim)
+int griddyn_simulation_get_line_count (const griddyn_sim *sim)
 {
     auto runner = static_cast<const GriddynRunner *> (sim);
 
@@ -61,7 +58,7 @@ int griddyn_simulation_get_line_count (const griddyn_sim* sim)
     return runner->getSim ()->getInt ("linkcount");
 }
 
-int griddyn_simulation_get_results (griddyn_sim* sim, const char *dataType, double *data, int maxSize)
+int griddyn_simulation_get_results (griddyn_sim *sim, const char *dataType, double *data, int maxSize)
 {
     auto runner = static_cast<GriddynRunner *> (sim);
 
@@ -87,7 +84,7 @@ int griddyn_simulation_get_results (griddyn_sim* sim, const char *dataType, doub
     return (std::min) (maxSize, static_cast<int> (dataVec.size ()));
 }
 
-int griddyn_simulation_stateSize (const griddyn_sim* sim, const griddyn_solver* key)
+int griddyn_simulation_stateSize (const griddyn_sim *sim, const griddyn_solver *key)
 {
     auto runner = static_cast<const GriddynRunner *> (sim);
 
@@ -103,11 +100,11 @@ int griddyn_simulation_stateSize (const griddyn_sim* sim, const griddyn_solver* 
     return runner->getSim ()->stateSize (sMode);
 }
 
-griddyn_status griddyn_simulation_guessState (griddyn_sim* sim,
+griddyn_status griddyn_simulation_guessState (griddyn_sim *sim,
                                               double time,
                                               double *states,
                                               double *dstate_dt,
-                                              const griddyn_solver* key)
+                                              const griddyn_solver *key)
 {
     auto runner = static_cast<GriddynRunner *> (sim);
 
@@ -124,11 +121,11 @@ griddyn_status griddyn_simulation_guessState (griddyn_sim* sim,
     return griddyn_ok;
 }
 
-griddyn_status griddyn_simulation_setState (griddyn_sim* sim,
+griddyn_status griddyn_simulation_setState (griddyn_sim *sim,
                                             double time,
                                             const double *states,
                                             const double *dstate_dt,
-                                            const griddyn_solver* key)
+                                            const griddyn_solver *key)
 {
     auto runner = static_cast<GriddynRunner *> (sim);
 
@@ -145,7 +142,8 @@ griddyn_status griddyn_simulation_setState (griddyn_sim* sim,
     return griddyn_ok;
 }
 
-griddyn_status griddyn_simulation_getStateVariableTypes (griddyn_sim* sim, double *types, const griddyn_solver* key)
+griddyn_status
+griddyn_simulation_getStateVariableTypes (griddyn_sim *sim, double *types, const griddyn_solver *key)
 {
     auto runner = static_cast<GriddynRunner *> (sim);
 
@@ -162,12 +160,12 @@ griddyn_status griddyn_simulation_getStateVariableTypes (griddyn_sim* sim, doubl
     return griddyn_ok;
 }
 
-int griddyn_simulation_residual (griddyn_sim* sim,
-                                double time,
-                                double *resid,
-                                const double *states,
-                                const double *dstate_dt,
-                                const griddyn_solver* key)
+int griddyn_simulation_residual (griddyn_sim *sim,
+                                 double time,
+                                 double *resid,
+                                 const double *states,
+                                 const double *dstate_dt,
+                                 const griddyn_solver *key)
 {
     auto runner = static_cast<GriddynRunner *> (sim);
 
@@ -183,11 +181,11 @@ int griddyn_simulation_residual (griddyn_sim* sim,
     return runner->getSim ()->residualFunction (time, states, dstate_dt, resid, sMode);
 }
 
-griddyn_status griddyn_simulation_derivative (griddyn_sim* sim,
+griddyn_status griddyn_simulation_derivative (griddyn_sim *sim,
                                               double time,
                                               double *deriv,
                                               const double *states,
-                                              const griddyn_solver* key)
+                                              const griddyn_solver *key)
 {
     auto runner = static_cast<GriddynRunner *> (sim);
 
@@ -205,12 +203,12 @@ griddyn_status griddyn_simulation_derivative (griddyn_sim* sim,
     return griddyn_function_failure;
 }
 
-griddyn_status griddyn_simulation_algebraicUpdate (griddyn_sim* sim,
+griddyn_status griddyn_simulation_algebraicUpdate (griddyn_sim *sim,
                                                    double time,
                                                    double *update,
                                                    const double *states,
                                                    double alpha,
-                                                   const griddyn_solver* key)
+                                                   const griddyn_solver *key)
 {
     auto runner = static_cast<GriddynRunner *> (sim);
 
@@ -228,12 +226,12 @@ griddyn_status griddyn_simulation_algebraicUpdate (griddyn_sim* sim,
     return griddyn_function_failure;
 }
 
-griddyn_status griddyn_simulation_jacobian (griddyn_sim* sim,
+griddyn_status griddyn_simulation_jacobian (griddyn_sim *sim,
                                             double time,
                                             const double *states,
                                             const double *dstate_dt,
                                             double cj,
-                                            const griddyn_solver* key,
+                                            const griddyn_solver *key,
                                             void (*insert) (int, int, double))
 {
     auto runner = static_cast<GriddynRunner *> (sim);

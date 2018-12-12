@@ -21,7 +21,7 @@
 
 using namespace griddyn;
 
-int gridDynObject_stateSize (griddyn_object* obj, const griddyn_solver* key)
+int gridDynObject_stateSize (griddyn_object *obj, const griddyn_solver *key)
 {
     gridComponent *comp = getComponentPointer (obj);
 
@@ -110,7 +110,7 @@ void CopyFromLocal (std::vector<double> &dest,
 }
 
 griddyn_status
-gridDynObject_guessState (griddyn_object* obj, double time, double *states, double *dstate_dt, griddyn_solver* key)
+gridDynObject_guessState (griddyn_object *obj, double time, double *states, double *dstate_dt, griddyn_solver *key)
 {
     gridComponent *comp = getComponentPointer (obj);
 
@@ -148,11 +148,11 @@ gridDynObject_guessState (griddyn_object* obj, double time, double *states, doub
     return griddyn_ok;
 }
 
-griddyn_status gridDynObject_setState (griddyn_object* obj,
+griddyn_status gridDynObject_setState (griddyn_object *obj,
                                        double time,
                                        const double *states,
                                        const double *dstate_dt,
-                                       griddyn_solver* key)
+                                       griddyn_solver *key)
 {
     gridComponent *comp = getComponentPointer (obj);
 
@@ -178,7 +178,7 @@ griddyn_status gridDynObject_setState (griddyn_object* obj,
     return griddyn_ok;
 }
 
-griddyn_status gridDynObject_getStateVariableTypes (griddyn_object* obj, double *types, griddyn_solver* key)
+griddyn_status gridDynObject_getStateVariableTypes (griddyn_object *obj, double *types, griddyn_solver *key)
 {
     gridComponent *comp = getComponentPointer (obj);
 
@@ -200,8 +200,11 @@ griddyn_status gridDynObject_getStateVariableTypes (griddyn_object* obj, double 
     return griddyn_ok;
 }
 
-griddyn_status
-gridDynObject_residual (griddyn_object* obj, const double *inputs, int inputSize, double *resid, griddyn_solver* key)
+griddyn_status gridDynObject_residual (griddyn_object *obj,
+                                       const double *inputs,
+                                       int inputSize,
+                                       double *resid,
+                                       griddyn_solver *key)
 {
     gridComponent *comp = getComponentPointer (obj);
 
@@ -224,8 +227,11 @@ gridDynObject_residual (griddyn_object* obj, const double *inputs, int inputSize
     return griddyn_ok;
 }
 
-griddyn_status
-gridDynObject_derivative (griddyn_object* obj, const double *inputs, int inputSize, double *deriv, griddyn_solver* key)
+griddyn_status gridDynObject_derivative (griddyn_object *obj,
+                                         const double *inputs,
+                                         int inputSize,
+                                         double *deriv,
+                                         griddyn_solver *key)
 {
     gridComponent *comp = getComponentPointer (obj);
 
@@ -252,12 +258,12 @@ gridDynObject_derivative (griddyn_object* obj, const double *inputs, int inputSi
     return griddyn_ok;
 }
 
-griddyn_status gridDynObject_algebraicUpdate (griddyn_object* obj,
+griddyn_status gridDynObject_algebraicUpdate (griddyn_object *obj,
                                               const double *inputs,
                                               int inputSize,
                                               double *update,
                                               double alpha,
-                                              griddyn_solver* key)
+                                              griddyn_solver *key)
 {
     gridComponent *comp = getComponentPointer (obj);
 
@@ -282,12 +288,12 @@ griddyn_status gridDynObject_algebraicUpdate (griddyn_object* obj,
 
 const IOlocs defInputlocs{kNullLocation, kNullLocation, kNullLocation, kNullLocation, kNullLocation, kNullLocation,
                           kNullLocation, kNullLocation, kNullLocation, kNullLocation, kNullLocation};
-griddyn_status gridDynObject_jacobian (griddyn_object* obj,
+griddyn_status gridDynObject_jacobian (griddyn_object *obj,
                                        const double *inputs,
                                        int inputSize,
                                        double cj,
                                        void (*insert) (int, int, double),
-                                       const griddyn_solver* key)
+                                       const griddyn_solver *key)
 {
     gridComponent *comp = getComponentPointer (obj);
 
@@ -312,11 +318,11 @@ griddyn_status gridDynObject_jacobian (griddyn_object* obj,
 
 const IOlocs defInputlocs_act{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
-griddyn_status gridDynObject_ioPartialDerivatives (griddyn_object* obj,
+griddyn_status gridDynObject_ioPartialDerivatives (griddyn_object *obj,
                                                    const double *inputs,
                                                    int inputSize,
                                                    void (*insert) (int, int, double),
-                                                   const griddyn_solver* key)
+                                                   const griddyn_solver *key)
 {
     gridComponent *comp = getComponentPointer (obj);
 
@@ -338,11 +344,11 @@ griddyn_status gridDynObject_ioPartialDerivatives (griddyn_object* obj,
     return griddyn_ok;
 }
 
-griddyn_status gridDynObject_outputPartialDerivatives (griddyn_object* obj,
+griddyn_status gridDynObject_outputPartialDerivatives (griddyn_object *obj,
                                                        const double *inputs,
                                                        int inputSize,
                                                        void (*insert) (int, int, double),
-                                                       const griddyn_solver* key)
+                                                       const griddyn_solver *key)
 {
     gridComponent *comp = getComponentPointer (obj);
 

@@ -20,24 +20,21 @@
 
 using namespace griddyn;
 
-griddyn_event* gridDynEvent_create (const char *eventString, griddyn_object* obj)
+griddyn_event *gridDynEvent_create (const char *eventString, griddyn_object *obj)
 {
-    return make_event (eventString, getComponentPointer (obj)).release();
+    return make_event (eventString, getComponentPointer (obj)).release ();
 }
 
-void gridDynEvent_free (griddyn_event* event)
-{
-    delete static_cast<Event*> (event);
-}
+void gridDynEvent_free (griddyn_event *event) { delete static_cast<Event *> (event); }
 
-griddyn_status gridDynEventrigger (griddyn_event* gd_event)
+griddyn_status gridDynEventrigger (griddyn_event *gd_event)
 {
     if (gd_event == nullptr)
     {
         return griddyn_invalid_object;
     }
 
-    auto event = static_cast<Event*> (gd_event);
+    auto event = static_cast<Event *> (gd_event);
     if (event->trigger () >= change_code::no_change)
     {
         return griddyn_ok;
@@ -45,19 +42,19 @@ griddyn_status gridDynEventrigger (griddyn_event* gd_event)
     return griddyn_function_failure;
 }
 
-griddyn_status gridDynEvent_schedule (griddyn_event* gd_event, griddyn_sim* sim)
+griddyn_status gridDynEvent_schedule (griddyn_event *gd_event, griddyn_sim *sim)
 {
     if (gd_event == nullptr || sim == nullptr)
     {
         return griddyn_invalid_object;
     }
 
-    auto event = static_cast<Event*> (gd_event);
+    auto event = static_cast<Event *> (gd_event);
     auto runner = static_cast<GriddynRunner *> (sim);
 
     try
     {
-        runner->getSim ()->add (event->clone());
+        runner->getSim ()->add (event->clone ());
         return griddyn_ok;
     }
     catch (...)
@@ -66,14 +63,14 @@ griddyn_status gridDynEvent_schedule (griddyn_event* gd_event, griddyn_sim* sim)
     }
 }
 
-griddyn_status gridDynEvent_setValue (griddyn_event* gd_event, const char *parameter, double value)
+griddyn_status gridDynEvent_setValue (griddyn_event *gd_event, const char *parameter, double value)
 {
     if (gd_event == nullptr)
     {
         return griddyn_invalid_object;
     }
 
-    auto event = static_cast<Event*> (gd_event);
+    auto event = static_cast<Event *> (gd_event);
 
     try
     {
@@ -90,14 +87,14 @@ griddyn_status gridDynEvent_setValue (griddyn_event* gd_event, const char *param
     }
 }
 
-griddyn_status gridDynEvent_setString (griddyn_event* gd_event, const char *parameter, const char *value)
+griddyn_status gridDynEvent_setString (griddyn_event *gd_event, const char *parameter, const char *value)
 {
     if (gd_event == nullptr)
     {
         return griddyn_invalid_object;
     }
 
-    auto event = static_cast<Event*> (gd_event);
+    auto event = static_cast<Event *> (gd_event);
     try
     {
         event->set (parameter, value);
@@ -113,14 +110,14 @@ griddyn_status gridDynEvent_setString (griddyn_event* gd_event, const char *para
     }
 }
 
-griddyn_status gridDynEvent_setFlag (griddyn_event* gd_event, const char *flag, int val)
+griddyn_status gridDynEvent_setFlag (griddyn_event *gd_event, const char *flag, int val)
 {
     if (gd_event == nullptr)
     {
         return griddyn_invalid_object;
     }
 
-    auto event = static_cast<Event*> (gd_event);
+    auto event = static_cast<Event *> (gd_event);
     try
     {
         event->setFlag (flag, (val != 0));
@@ -136,14 +133,14 @@ griddyn_status gridDynEvent_setFlag (griddyn_event* gd_event, const char *flag, 
     }
 }
 
-griddyn_status gridDynEvent_setTarget (griddyn_event* gd_event, griddyn_object* obj)
+griddyn_status gridDynEvent_setTarget (griddyn_event *gd_event, griddyn_object *obj)
 {
     if (gd_event == nullptr || obj == nullptr)
     {
         return griddyn_invalid_object;
     }
 
-    auto event = static_cast<Event*> (gd_event);
+    auto event = static_cast<Event *> (gd_event);
     auto comp = getComponentPointer (obj);
 
     if (comp == nullptr)
