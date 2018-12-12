@@ -12,6 +12,8 @@
 
 #pragma once
 
+#include "../../griddyn_shared/griddyn_types.h"
+
 #include "core/coreObject.h"
 #include "core/helperObject.h"
 
@@ -47,7 +49,7 @@ class EventInfo
 /** basic event class enabling a property change in an object
 eventInterface, objectOperatorInterface are pure virtual interfaces
 */
-class Event : public helperObject, public eventInterface, public objectOperatorInterface
+class Event : public helperObject, public eventInterface, public objectOperatorInterface, public griddyn_event
 {
   protected:
     std::string field;  //!< event trigger field

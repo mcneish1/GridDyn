@@ -11,6 +11,8 @@
  */
 #pragma once
 
+#include "../griddyn_shared/griddyn_types.h"
+
 #include "../core/coreObject.h"
 #include "gridComponentHelperClasses.h"
 #include "offsetTable.h"
@@ -33,7 +35,7 @@ class violation;
  *intended to be instantiated directly and is mostly a common interface to inheriting objects @see gridPrimary,
  *@see gridSecondary, and @see gridSubModel as it encapsulated common functionality between those objects
  **/
-class gridComponent : public coreObject
+class gridComponent : public coreObject, public griddyn_object
 {
   protected:
     std::bitset<64>

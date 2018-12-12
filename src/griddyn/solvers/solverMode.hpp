@@ -12,8 +12,12 @@
 
 #pragma once
 
+#include "../../griddyn_shared/griddyn_types.h"
+
 #include "../gridDynDefinitions.hpp"
 #include <bitset>
+#include <vector>
+#include <string>
 
 namespace griddyn
 {
@@ -97,6 +101,20 @@ class solverMode
         return ((dynamic == b.dynamic) && (differential == b.differential) && (algebraic == b.algebraic) &&
                 (local == b.local) && (extended_state == b.extended_state) && (approx == b.approx));
     }
+};
+
+/** @brief data class for storing some solver information and data buffers*/
+class solverHandle : public griddyn_solver
+{
+  public:
+    griddyn::solverMode sMode_;  //!< solverMode
+    std::vector<double> stateBuffer;  //!< buffer for storing state data
+    std::vector<double> dstateBuffer;  //!< buffer for storing dstate_dt data
+    std::vector<std::string> stateNames;  //!< buffer for storing the stateNames
+    /** default constructor*/
+    solverHandle () = default;
+    /** constructor from a solverMode reference*/
+    solverHandle (const griddyn::solverMode &sMode) : sMode_(sMode) {};
 };
 
 #define LINKAPPROXMASK ((unsigned int)(0x000F))

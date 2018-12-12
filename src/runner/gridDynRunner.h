@@ -11,9 +11,9 @@
  * -----------------------------------------------------------------
  */
 
-#ifndef GRIDDYN_GRIDDYN_RUNNER_H
-#define GRIDDYN_GRIDDYN_RUNNER_H
 #pragma once
+
+#include "../griddyn_shared/griddyn_types.h"
 
 #include "griddyn/gridDynDefinitions.hpp"
 #include "griddyn/griddyn-config.h"
@@ -40,7 +40,7 @@ class readerInfo;
 /**
  * Build and run a GridDyn simulation.
  */
-class GriddynRunner
+class GriddynRunner : public griddyn_sim
 {
   public:
     /** constructor*/
@@ -174,4 +174,3 @@ int processCommandArguments (std::shared_ptr<gridDynSimulation> &gds,
                              boost::program_options::variables_map &vm);
 
 }  // namespace griddyn
-#endif

@@ -23,124 +23,124 @@ extern "C"
     // object mathematical functions*/
 
     /** get the statesize for an object
-     * @details this function uses a griddyn_solver_t.  0 can be used on objects with no subobjects on objects with subobject
+     * @details this function uses a griddyn_solver.  0 can be used on objects with no subobjects on objects with subobject
      * using a key of 0 will generate an error code and not produce results
      * @param[in] obj the object to query
-     * @param[in] key a griddyn_solver_t obtained from ::gridDynSimulation_getSolverKey
-     * @return the state size of the object for a particular griddyn_solver_t
+     * @param[in] key a griddyn_solver obtained from ::gridDynSimulation_getSolverKey
+     * @return the state size of the object for a particular griddyn_solver
      */
-    GRIDDYN_EXPORT griddyn_status_t gridDynObject_stateSize (griddyn_object_t obj, griddyn_solver_t key);
+    GRIDDYN_EXPORT griddyn_status griddyn_object_state_size (const griddyn_object* obj, const griddyn_solver* key);
 
     /** TODO all of the rest of these have the wrong comment
-     * @details this function uses a griddyn_solver_t.  0 can be used on objects with no subobjects on objects with subobject
+     * @details this function uses a griddyn_solver.  0 can be used on objects with no subobjects on objects with subobject
      * using a key of 0 will generate an error code and not produce results
      * @param[in] obj the object to query
-     * @param[in] key a griddyn_solver_t obtained from ::gridDynSimulation_getSolverKey
-     * @return the state size of the object for a particular griddyn_solver_t
+     * @param[in] key a griddyn_solver obtained from ::gridDynSimulation_getSolverKey
+     * @return the state size of the object for a particular griddyn_solver
      */
-    GRIDDYN_EXPORT griddyn_status_t
-    gridDynObject_guessState (griddyn_object_t obj, double time, double *states, double *dstate_dt, griddyn_solver_t key);
+    GRIDDYN_EXPORT griddyn_status
+    griddyn_object_guess_state (const griddyn_object* obj, double time, double *states, double *dstate_dt, const griddyn_solver* key);
 
     /** get the statesize for an object
-     * @details this function uses a griddyn_solver_t.  0 can be used on objects with no subobjects on objects with subobject
+     * @details this function uses a griddyn_solver.  0 can be used on objects with no subobjects on objects with subobject
      * using a key of 0 will generate an error code and not produce results
      * @param[in] obj the object to query
-     * @param[in] key a griddyn_solver_t obtained from ::gridDynSimulation_getSolverKey
-     * @return the state size of the object for a particular griddyn_solver_t
+     * @param[in] key a griddyn_solver obtained from ::gridDynSimulation_getSolverKey
+     * @return the state size of the object for a particular griddyn_solver
      */
-    GRIDDYN_EXPORT griddyn_status_t gridDynObject_setState (griddyn_object_t obj,
+    GRIDDYN_EXPORT griddyn_status griddyn_object_set_state (const griddyn_object* obj,
                                                           double time,
                                                           const double *states,
                                                           const double *dstate_dt,
-                                                          griddyn_solver_t key);
+                                                          const griddyn_solver* key);
 
     /** get the statesize for an object
-     * @details this function uses a griddyn_solver_t.  0 can be used on objects with no subobjects on objects with subobject
+     * @details this function uses a griddyn_solver.  0 can be used on objects with no subobjects on objects with subobject
      * using a key of 0 will generate an error code and not produce results
      * @param[in] obj the object to query
-     * @param[in] key a griddyn_solver_t obtained from ::gridDynSimulation_getSolverKey
-     * @return the state size of the object for a particular griddyn_solver_t
+     * @param[in] key a griddyn_solver obtained from ::gridDynSimulation_getSolverKey
+     * @return the state size of the object for a particular griddyn_solver
      */
-    GRIDDYN_EXPORT griddyn_status_t gridDynObject_getStateVariableTypes (griddyn_object_t obj,
+    GRIDDYN_EXPORT griddyn_status griddyn_object_get_state_variable_types (const griddyn_object* obj,
                                                                        double *types,
-                                                                       griddyn_solver_t key);
+                                                                       const griddyn_solver* key);
 
     /** get the statesize for an object
-     * @details this function uses a griddyn_solver_t.  0 can be used on objects with no subobjects on objects with subobject
+     * @details this function uses a griddyn_solver.  0 can be used on objects with no subobjects on objects with subobject
      * using a key of 0 will generate an error code and not produce results
      * @param[in] obj the object to query
-     * @param[in] key a griddyn_solver_t obtained from ::gridDynSimulation_getSolverKey
-     * @return the state size of the object for a particular griddyn_solver_t
+     * @param[in] key a griddyn_solver obtained from ::gridDynSimulation_getSolverKey
+     * @return the state size of the object for a particular griddyn_solver
      */
-    GRIDDYN_EXPORT griddyn_status_t
-    gridDynObject_residual (griddyn_object_t obj, const double *inputs, int inputSize, double *resid, griddyn_solver_t key);
+    GRIDDYN_EXPORT griddyn_status
+    griddyn_object_residual (const griddyn_object* obj, const double *inputs, int inputSize, double *resid, const griddyn_solver* key);
 
     /** get the statesize for an object
-     * @details this function uses a griddyn_solver_t.  0 can be used on objects with no subobjects on objects with subobject
+     * @details this function uses a griddyn_solver.  0 can be used on objects with no subobjects on objects with subobject
      * using a key of 0 will generate an error code and not produce results
      * @param[in] obj the object to query
-     * @param[in] key a griddyn_solver_t obtained from ::gridDynSimulation_getSolverKey
-     * @return the state size of the object for a particular griddyn_solver_t
+     * @param[in] key a griddyn_solver obtained from ::gridDynSimulation_getSolverKey
+     * @return the state size of the object for a particular griddyn_solver
      */
-    GRIDDYN_EXPORT griddyn_status_t gridDynObject_derivative (griddyn_object_t obj,
+    GRIDDYN_EXPORT griddyn_status griddyn_object_derivative (const griddyn_object* obj,
                                                             const double *inputs,
                                                             int inputSize,
                                                             double *deriv,
-                                                            griddyn_solver_t key);
+                                                            const griddyn_solver* key);
 
     /** get the statesize for an object
-     * @details this function uses a griddyn_solver_t.  0 can be used on objects with no subobjects on objects with subobject
+     * @details this function uses a griddyn_solver.  0 can be used on objects with no subobjects on objects with subobject
      * using a key of 0 will generate an error code and not produce results
      * @param[in] obj the object to query
-     * @param[in] key a griddyn_solver_t obtained from ::gridDynSimulation_getSolverKey
-     * @return the state size of the object for a particular griddyn_solver_t
+     * @param[in] key a griddyn_solver obtained from ::gridDynSimulation_getSolverKey
+     * @return the state size of the object for a particular griddyn_solver
      */
-    GRIDDYN_EXPORT griddyn_status_t gridDynObject_algebraicUpdate (griddyn_object_t obj,
+    GRIDDYN_EXPORT griddyn_status griddyn_object_algebraic_update (const griddyn_object* obj,
                                                                  const double *inputs,
                                                                  int inputSize,
                                                                  double *update,
                                                                  double alpha,
-                                                                 griddyn_solver_t key);
+                                                                 const griddyn_solver* key);
 
     /** get the statesize for an object
-     * @details this function uses a griddyn_solver_t.  0 can be used on objects with no subobjects on objects with subobject
+     * @details this function uses a griddyn_solver.  0 can be used on objects with no subobjects on objects with subobject
      * using a key of 0 will generate an error code and not produce results
      * @param[in] obj the object to query
-     * @param[in] key a griddyn_solver_t obtained from ::gridDynSimulation_getSolverKey
-     * @return the state size of the object for a particular griddyn_solver_t
+     * @param[in] key a griddyn_solver obtained from ::gridDynSimulation_getSolverKey
+     * @return the state size of the object for a particular griddyn_solver
      */
-    GRIDDYN_EXPORT griddyn_status_t gridDynObject_jacobian (griddyn_object_t obj,
+    GRIDDYN_EXPORT griddyn_status griddyn_object_jacobian (const griddyn_object* obj,
                                                           const double *inputs,
                                                           int inputSize,
                                                           double cj,
                                                           void (*insert) (int, int, double),
-                                                          griddyn_solver_t key);
+                                                          const griddyn_solver* key);
 
     /** get the statesize for an object
-     * @details this function uses a griddyn_solver_t.  0 can be used on objects with no subobjects on objects with subobject
+     * @details this function uses a griddyn_solver.  0 can be used on objects with no subobjects on objects with subobject
      * using a key of 0 will generate an error code and not produce results
      * @param[in] obj the object to query
-     * @param[in] key a griddyn_solver_t obtained from ::gridDynSimulation_getSolverKey
-     * @return the state size of the object for a particular griddyn_solver_t
+     * @param[in] key a griddyn_solver obtained from ::gridDynSimulation_getSolverKey
+     * @return the state size of the object for a particular griddyn_solver
      */
-    GRIDDYN_EXPORT griddyn_status_t gridDynObject_ioPartialDerivatives (griddyn_object_t obj,
+    GRIDDYN_EXPORT griddyn_status griddyn_object_io_partial_derivatives (const griddyn_object* obj,
                                                                       const double *inputs,
                                                                       int inputSize,
                                                                       void (*insert) (int, int, double),
-                                                                      griddyn_solver_t key);
+                                                                      const griddyn_solver* key);
 
     /** get the statesize for an object
-     * @details this function uses a griddyn_solver_t.  0 can be used on objects with no subobjects on objects with subobject
+     * @details this function uses a griddyn_solver.  0 can be used on objects with no subobjects on objects with subobject
      * using a key of 0 will generate an error code and not produce results
      * @param[in] obj the object to query
-     * @param[in] key a griddyn_solver_t obtained from ::gridDynSimulation_getSolverKey
-     * @return the state size of the object for a particular griddyn_solver_t
+     * @param[in] key a griddyn_solver obtained from ::gridDynSimulation_getSolverKey
+     * @return the state size of the object for a particular griddyn_solver
      */
-    GRIDDYN_EXPORT griddyn_status_t gridDynObject_outputPartialDerivatives (griddyn_object_t obj,
+    GRIDDYN_EXPORT griddyn_status griddyn_object_output_partial_derivatives (const griddyn_object* obj,
                                                                           const double *inputs,
                                                                           int inputSize,
                                                                           void (*insert) (int, int, double),
-                                                                          griddyn_solver_t key);
+                                                                          const griddyn_solver* key);
 
 #ifdef __cplusplus
 } /* end of extern "C" { */

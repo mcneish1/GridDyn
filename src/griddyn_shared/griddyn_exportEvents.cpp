@@ -16,55 +16,48 @@
 #include "griddyn_export.h"
 #include "internal/griddyn_export_internal.h"
 #include "runner/gridDynRunner.h"
-#include <memory>
 #include <vector>
 
 using namespace griddyn;
 
-griddyn_event gridDynEvent_create (const char *eventString, griddyn_object const* obj)
+griddyn_event* gridDynEvent_create (const char *eventString, griddyn_object* obj)
 {
-    return std::make_shared<Event> (make_event (eventString, getComponentPointer (obj)));
+    return make_event (eventString, getComponentPointer (obj)).release();
 }
 
-void gridDynEvent_free (griddyn_event event)
+void gridDynEvent_free (griddyn_event* event)
 {
-    delete static_cast<std::shared_ptr<Event>> (event);
+    delete static_cast<Event*> (event);
 }
 
-griddyn_status gridDynEventrigger (griddyn_event event)
+griddyn_status gridDynEventrigger (griddyn_event* gd_event)
 {
-    if (evnt == nullptr)
+    if (gd_event == nullptr)
     {
         return griddyn_invalid_object;
     }
-    auto shr_event = reinterpret_cast<std::shared_ptr<Event> *> (event);
-    if (*shr_event)
+
+    auto event = static_cast<Event*> (gd_event);
+    if (event->trigger () >= change_code::no_change)
     {
-        if ((*shr_event)->trigger () >= change_code::no_change)
-        {
-            return griddyn_ok;
-        }
+        return griddyn_ok;
     }
     return griddyn_function_failure;
 }
 
-griddyn_status gridDynEvent_schedule (griddyn_event evnt, griddyn_sim sim)
+griddyn_status gridDynEvent_schedule (griddyn_event* gd_event, griddyn_sim* sim)
 {
-    if (evnt == nullptr)
+    if (gd_event == nullptr || sim == nullptr)
     {
         return griddyn_invalid_object;
     }
-    auto shr_event = reinterpret_cast<std::shared_ptr<Event> *> (evnt);
 
-    auto runner = reinterpret_cast<GriddynRunner *> (sim);
+    auto event = static_cast<Event*> (gd_event);
+    auto runner = static_cast<GriddynRunner *> (sim);
 
-    if (runner == nullptr)
-    {
-        return griddyn_invalid_object;
-    }
     try
     {
-        runner->getSim ()->add (*shr_event);
+        runner->getSim ()->add (event->clone());
         return griddyn_ok;
     }
     catch (...)
@@ -73,16 +66,18 @@ griddyn_status gridDynEvent_schedule (griddyn_event evnt, griddyn_sim sim)
     }
 }
 
-griddyn_status gridDynEvent_setValue (griddyn_event evnt, const char *parameter, double value)
+griddyn_status gridDynEvent_setValue (griddyn_event* gd_event, const char *parameter, double value)
 {
-    if (evnt == nullptr)
+    if (gd_event == nullptr)
     {
         return griddyn_invalid_object;
     }
-    auto shr_event = reinterpret_cast<std::shared_ptr<Event> *> (evnt);
+
+    auto event = static_cast<Event*> (gd_event);
+
     try
     {
-        shr_event->operator-> ()->set (parameter, value);
+        event->set (parameter, value);
         return griddyn_ok;
     }
     catch (const invalidParameterValue &)
@@ -95,16 +90,17 @@ griddyn_status gridDynEvent_setValue (griddyn_event evnt, const char *parameter,
     }
 }
 
-griddyn_status gridDynEvent_setString (griddyn_event evnt, const char *parameter, const char *value)
+griddyn_status gridDynEvent_setString (griddyn_event* gd_event, const char *parameter, const char *value)
 {
-    if (evnt == nullptr)
+    if (gd_event == nullptr)
     {
         return griddyn_invalid_object;
     }
-    auto shr_event = reinterpret_cast<std::shared_ptr<Event> *> (evnt);
+
+    auto event = static_cast<Event*> (gd_event);
     try
     {
-        shr_event->operator-> ()->set (parameter, value);
+        event->set (parameter, value);
         return griddyn_ok;
     }
     catch (const invalidParameterValue &)
@@ -117,16 +113,17 @@ griddyn_status gridDynEvent_setString (griddyn_event evnt, const char *parameter
     }
 }
 
-griddyn_status gridDynEvent_setFlag (griddyn_event evnt, const char *flag, int val)
+griddyn_status gridDynEvent_setFlag (griddyn_event* gd_event, const char *flag, int val)
 {
-    if (evnt == nullptr)
+    if (gd_event == nullptr)
     {
         return griddyn_invalid_object;
     }
-    auto shr_event = reinterpret_cast<std::shared_ptr<Event> *> (evnt);
+
+    auto event = static_cast<Event*> (gd_event);
     try
     {
-        shr_event->operator-> ()->setFlag (flag, (val != 0));
+        event->setFlag (flag, (val != 0));
         return griddyn_ok;
     }
     catch (const invalidParameterValue &)
@@ -139,21 +136,24 @@ griddyn_status gridDynEvent_setFlag (griddyn_event evnt, const char *flag, int v
     }
 }
 
-griddyn_status gridDynEvent_setTarget (griddyn_event evnt, griddyn_object obj)
+griddyn_status gridDynEvent_setTarget (griddyn_event* gd_event, griddyn_object* obj)
 {
-    if (evnt == nullptr)
+    if (gd_event == nullptr || obj == nullptr)
     {
         return griddyn_invalid_object;
     }
-    auto shr_event = reinterpret_cast<std::shared_ptr<Event> *> (evnt);
+
+    auto event = static_cast<Event*> (gd_event);
     auto comp = getComponentPointer (obj);
+
     if (comp == nullptr)
     {
         return griddyn_invalid_object;
     }
+
     try
     {
-        shr_event->operator-> ()->updateObject (comp, object_update_mode::match);
+        event->updateObject (comp, object_update_mode::match);
         return griddyn_ok;
     }
     catch (...)

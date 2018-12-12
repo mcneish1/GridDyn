@@ -10,6 +10,7 @@
  * LLNS Copyright End
  */
 
+#include "griddyn/gridComponent.h"
 #include "griddyn/measurement/collector.h"
 #include "griddyn/measurement/gridGrabbers.h"
 #include "griddyn_export.h"
@@ -19,7 +20,7 @@
 
 using namespace griddyn;
 
-griddyn_query_t gridDynSingleQuery_create (griddyn_object_t obj, const char *queryString)
+griddyn_query* gridDynSingleQuery_create (griddyn_object* obj, const char *queryString)
 {
     gridComponent *comp = getComponentPointer (obj);
 
@@ -36,11 +37,10 @@ griddyn_query_t gridDynSingleQuery_create (griddyn_object_t obj, const char *que
     {
         return nullptr;
     }
-    auto grabber = val.release ();
-    return reinterpret_cast<griddyn_query_t> (grabber);
+    return val.release ();
 }
 
-griddyn_query_vector_t gridDynVectorQuery_create (griddyn_object_t obj, const char *queryString)
+griddyn_query_vector* gridDynVectorQuery_create (griddyn_object* obj, const char *queryString)
 {
     gridComponent *comp = getComponentPointer (obj);
 
@@ -54,44 +54,39 @@ griddyn_query_vector_t gridDynVectorQuery_create (griddyn_object_t obj, const ch
     return mquery;
 }
 
-void gridDynSingleQuery_free (griddyn_query_t query)
+void gridDynSingleQuery_free (griddyn_query* query)
 {
-    if (query != nullptr)
-    {
-        delete reinterpret_cast<gridGrabber *> (query);
-    }
+    delete static_cast<gridGrabber *> (query);
 }
 
-void gridDynVectorQuery_free (griddyn_query_vector_t query)
+void gridDynVectorQuery_free (griddyn_query_vector* query)
 {
-    if (query != nullptr)
-    {
-        delete reinterpret_cast<collector *> (query);
-    }
+    delete static_cast<collector *> (query);
 }
 
-double gridDynSingleQuery_run (griddyn_query_t query)
+double gridDynSingleQuery_run (griddyn_query* query)
 {
     if (query == nullptr)
     {
         return kNullVal;
     }
-    auto grabber = reinterpret_cast<gridGrabber *> (query);
+    auto grabber = static_cast<gridGrabber*> (query);
     return grabber->grabData ();
 }
 
-griddyn_status_t gridDynVectorQuery_run (griddyn_query_vector_t query, double *data, int N)
+griddyn_status gridDynVectorQuery_run (griddyn_query_vector* query, double *data, int N)
 {
     if (query == nullptr)
     {
         return griddyn_invalid_object;
     }
-    auto mGrabber = reinterpret_cast<collector *> (query);
+    auto mGrabber = static_cast<collector *> (query);
 
-    return mGrabber->grabData (data, N);
+    if (N == mGrabber->grabData (data, N)) return griddyn_ok;
+    return griddyn_function_failure;
 }
 
-griddyn_status_t gridDynVectorQuery_append (griddyn_query_vector_t query, griddyn_object_t obj, const char *queryString)
+griddyn_status gridDynVectorQuery_append (griddyn_query_vector* query, griddyn_object* obj, const char *queryString)
 {
     if (query == nullptr)
     {
@@ -103,13 +98,13 @@ griddyn_status_t gridDynVectorQuery_append (griddyn_query_vector_t query, griddy
     {
         return griddyn_invalid_object;
     }
-    auto col = reinterpret_cast<collector *> (query);
+    auto col = static_cast<collector *> (query);
 
     col->add (queryString, comp);
     return griddyn_ok;
 }
 
-griddyn_status_t gridDynSingleQuery_update (griddyn_query_t query, griddyn_object_t obj, const char *queryString)
+griddyn_status gridDynSingleQuery_update (griddyn_query* query, griddyn_object* obj, const char *queryString)
 {
     if (query == nullptr)
     {
@@ -121,7 +116,7 @@ griddyn_status_t gridDynSingleQuery_update (griddyn_query_t query, griddyn_objec
     {
         return griddyn_invalid_object;
     }
-    auto grabber = reinterpret_cast<gridGrabber *> (query);
+    auto grabber = static_cast<gridGrabber *> (query);
     grabber->updateField (queryString);
     grabber->updateObject (comp);
     if (!grabber->loaded)
@@ -131,7 +126,7 @@ griddyn_status_t gridDynSingleQuery_update (griddyn_query_t query, griddyn_objec
     return griddyn_ok;
 }
 
-griddyn_status_t gridDynVectorQuery_update (griddyn_query_vector_t query, griddyn_object_t obj, const char *queryString)
+griddyn_status gridDynVectorQuery_update (griddyn_query_vector* query, griddyn_object* obj, const char *queryString)
 {
     if (query == nullptr)
     {
@@ -143,7 +138,7 @@ griddyn_status_t gridDynVectorQuery_update (griddyn_query_vector_t query, griddy
     {
         return griddyn_invalid_object;
     }
-    auto col = reinterpret_cast<collector *> (query);
+    auto col = static_cast<collector *> (query);
     col->reset ();
     col->add (queryString, comp);
     return griddyn_ok;

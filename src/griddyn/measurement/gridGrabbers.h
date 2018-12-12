@@ -12,6 +12,8 @@
 
 #pragma once
 
+#include "../../griddyn_shared/griddyn_types.h"
+
 #include "../gridDynDefinitions.hpp"
 #include "core/objectOperatorInterface.hpp"
 #include "utilities/units.h"
@@ -27,7 +29,7 @@ class gridCore;
 @details there is a target object and a functional object that actually can extract data from that object
 it also includes a gain and bias to do a linear shift and scale on the object
 */
-class gridGrabber : public objectOperatorInterface
+class gridGrabber : public objectOperatorInterface, public griddyn_query
 {
   public:
     std::string field;  //!< the target field that is being grabbed

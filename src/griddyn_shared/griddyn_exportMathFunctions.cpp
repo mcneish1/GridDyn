@@ -21,9 +21,9 @@
 
 using namespace griddyn;
 
-griddyn_solver_t griddyn_simulation_getSolverKey (griddyn_sim_t sim, const char *solverType)
+griddyn_solver* griddyn_simulation_getSolverKey (griddyn_sim* sim, const char *solverType)
 {
-    auto runner = reinterpret_cast<GriddynRunner *> (sim);
+    auto runner = static_cast<GriddynRunner *> (sim);
 
     if (runner == nullptr)
     {
@@ -31,29 +31,28 @@ griddyn_solver_t griddyn_simulation_getSolverKey (griddyn_sim_t sim, const char 
     }
     auto slv = runner->getSim ()->getSolverMode (solverType);
     auto key = new solverHandle (slv);
-    return reinterpret_cast<void *> (key);
+    return key;
 }
 
-void gridDynSolverKey_free (griddyn_solver_t key)
+void gridDynSolverKey_free (griddyn_solver* key)
 {
-    auto skey = reinterpret_cast<const solverHandle *> (key);
-    delete skey;
+    delete static_cast<solverHandle *> (key);
 }
 
-griddyn_status_t griddyn_simulation_getBusCount (griddyn_sim_t sim)
+int griddyn_simulation_get_bus_count (const griddyn_sim* sim)
 {
-    auto runner = reinterpret_cast<GriddynRunner *> (sim);
+    auto runner = static_cast<const GriddynRunner *> (sim);
 
     if (runner == nullptr)
     {
         return griddyn_invalid_object;
     }
-    return static_cast<griddyn_status_t> (runner->getSim ()->getInt ("buscount"));
+    return runner->getSim ()->getInt ("buscount");
 }
 
-griddyn_status_t griddyn_simulation_lineCount (griddyn_sim_t sim)
+int griddyn_simulation_get_line_count (const griddyn_sim* sim)
 {
-    auto runner = reinterpret_cast<GriddynRunner *> (sim);
+    auto runner = static_cast<const GriddynRunner *> (sim);
 
     if (runner == nullptr)
     {
@@ -62,9 +61,9 @@ griddyn_status_t griddyn_simulation_lineCount (griddyn_sim_t sim)
     return runner->getSim ()->getInt ("linkcount");
 }
 
-int griddyn_simulation_getResults (griddyn_sim_t sim, const char *dataType, double *data, int maxSize)
+int griddyn_simulation_get_results (griddyn_sim* sim, const char *dataType, double *data, int maxSize)
 {
-    auto runner = reinterpret_cast<GriddynRunner *> (sim);
+    auto runner = static_cast<GriddynRunner *> (sim);
 
     if (runner == nullptr)
     {
@@ -88,35 +87,35 @@ int griddyn_simulation_getResults (griddyn_sim_t sim, const char *dataType, doub
     return (std::min) (maxSize, static_cast<int> (dataVec.size ()));
 }
 
-int griddyn_simulation_stateSize (griddyn_sim_t sim, griddyn_solver_t key)
+int griddyn_simulation_stateSize (const griddyn_sim* sim, const griddyn_solver* key)
 {
-    auto runner = reinterpret_cast<GriddynRunner *> (sim);
+    auto runner = static_cast<const GriddynRunner *> (sim);
 
     if (runner == nullptr)
     {
         return griddyn_invalid_object;
     }
-    auto &sMode = reinterpret_cast<const solverHandle *> (key)->sMode_;
+    auto &sMode = static_cast<const solverHandle *> (key)->sMode_;
     if ((sMode.offsetIndex < 0) || (sMode.offsetIndex > 500))
     {
         return griddyn_invalid_object;
     }
-    return static_cast<int> (runner->getSim ()->stateSize (sMode));
+    return runner->getSim ()->stateSize (sMode);
 }
 
-griddyn_status_t griddyn_simulation_guessState (griddyn_sim_t sim,
-                                             double time,
-                                             double *states,
-                                             double *dstate_dt,
-                                             griddyn_solver_t key)
+griddyn_status griddyn_simulation_guessState (griddyn_sim* sim,
+                                              double time,
+                                              double *states,
+                                              double *dstate_dt,
+                                              const griddyn_solver* key)
 {
-    auto runner = reinterpret_cast<GriddynRunner *> (sim);
+    auto runner = static_cast<GriddynRunner *> (sim);
 
     if (runner == nullptr)
     {
         return griddyn_invalid_object;
     }
-    auto &sMode = reinterpret_cast<const solverHandle *> (key)->sMode_;
+    auto &sMode = static_cast<const solverHandle *> (key)->sMode_;
     if ((sMode.offsetIndex < 0) || (sMode.offsetIndex > 500))
     {
         return griddyn_invalid_object;
@@ -125,19 +124,19 @@ griddyn_status_t griddyn_simulation_guessState (griddyn_sim_t sim,
     return griddyn_ok;
 }
 
-griddyn_status_t griddyn_simulation_setState (griddyn_sim_t sim,
-                                           double time,
-                                           const double *states,
-                                           const double *dstate_dt,
-                                           griddyn_solver_t key)
+griddyn_status griddyn_simulation_setState (griddyn_sim* sim,
+                                            double time,
+                                            const double *states,
+                                            const double *dstate_dt,
+                                            const griddyn_solver* key)
 {
-    auto runner = reinterpret_cast<GriddynRunner *> (sim);
+    auto runner = static_cast<GriddynRunner *> (sim);
 
     if (runner == nullptr)
     {
         return griddyn_invalid_object;
     }
-    auto &sMode = reinterpret_cast<const solverHandle *> (key)->sMode_;
+    auto &sMode = static_cast<const solverHandle *> (key)->sMode_;
     if ((sMode.offsetIndex < 0) || (sMode.offsetIndex > 500))
     {
         return griddyn_invalid_object;
@@ -146,15 +145,15 @@ griddyn_status_t griddyn_simulation_setState (griddyn_sim_t sim,
     return griddyn_ok;
 }
 
-griddyn_status_t griddyn_simulation_getStateVariableTypes (griddyn_sim_t sim, double *types, griddyn_solver_t key)
+griddyn_status griddyn_simulation_getStateVariableTypes (griddyn_sim* sim, double *types, const griddyn_solver* key)
 {
-    auto runner = reinterpret_cast<GriddynRunner *> (sim);
+    auto runner = static_cast<GriddynRunner *> (sim);
 
     if (runner == nullptr)
     {
         return griddyn_invalid_object;
     }
-    auto &sMode = reinterpret_cast<const solverHandle *> (key)->sMode_;
+    auto &sMode = static_cast<const solverHandle *> (key)->sMode_;
     if ((sMode.offsetIndex < 0) || (sMode.offsetIndex > 500))
     {
         return griddyn_invalid_object;
@@ -163,20 +162,20 @@ griddyn_status_t griddyn_simulation_getStateVariableTypes (griddyn_sim_t sim, do
     return griddyn_ok;
 }
 
-int griddyn_simulation_residual (griddyn_sim_t sim,
+int griddyn_simulation_residual (griddyn_sim* sim,
                                 double time,
                                 double *resid,
                                 const double *states,
                                 const double *dstate_dt,
-                                griddyn_solver_t key)
+                                const griddyn_solver* key)
 {
-    auto runner = reinterpret_cast<GriddynRunner *> (sim);
+    auto runner = static_cast<GriddynRunner *> (sim);
 
     if (runner == nullptr)
     {
         return griddyn_invalid_object;
     }
-    auto &sMode = reinterpret_cast<const solverHandle *> (key)->sMode_;
+    auto &sMode = static_cast<const solverHandle *> (key)->sMode_;
     if ((sMode.offsetIndex < 0) || (sMode.offsetIndex > 500))
     {
         return griddyn_invalid_object;
@@ -184,62 +183,66 @@ int griddyn_simulation_residual (griddyn_sim_t sim,
     return runner->getSim ()->residualFunction (time, states, dstate_dt, resid, sMode);
 }
 
-griddyn_status_t griddyn_simulation_derivative (griddyn_sim_t sim,
-                                             double time,
-                                             double *deriv,
-                                             const double *states,
-                                             griddyn_solver_t key)
+griddyn_status griddyn_simulation_derivative (griddyn_sim* sim,
+                                              double time,
+                                              double *deriv,
+                                              const double *states,
+                                              const griddyn_solver* key)
 {
-    auto runner = reinterpret_cast<GriddynRunner *> (sim);
+    auto runner = static_cast<GriddynRunner *> (sim);
 
     if (runner == nullptr)
     {
         return griddyn_invalid_object;
     }
-    auto &sMode = reinterpret_cast<const solverHandle *> (key)->sMode_;
+    auto &sMode = static_cast<const solverHandle *> (key)->sMode_;
     if ((sMode.offsetIndex < 0) || (sMode.offsetIndex > 500))
     {
         return griddyn_invalid_object;
     }
-    return runner->getSim ()->derivativeFunction (time, states, deriv, sMode);
+    if (runner->getSim ()->derivativeFunction (time, states, deriv, sMode) == 0)
+        return griddyn_ok;
+    return griddyn_function_failure;
 }
 
-griddyn_status_t griddyn_simulation_algebraicUpdate (griddyn_sim_t sim,
-                                                  double time,
-                                                  double *update,
-                                                  const double *states,
-                                                  double alpha,
-                                                  griddyn_solver_t key)
+griddyn_status griddyn_simulation_algebraicUpdate (griddyn_sim* sim,
+                                                   double time,
+                                                   double *update,
+                                                   const double *states,
+                                                   double alpha,
+                                                   const griddyn_solver* key)
 {
-    auto runner = reinterpret_cast<GriddynRunner *> (sim);
+    auto runner = static_cast<GriddynRunner *> (sim);
 
     if (runner == nullptr)
     {
         return griddyn_invalid_object;
     }
-    auto &sMode = reinterpret_cast<const solverHandle *> (key)->sMode_;
+    auto &sMode = static_cast<const solverHandle *> (key)->sMode_;
     if ((sMode.offsetIndex < 0) || (sMode.offsetIndex > 500))
     {
         return griddyn_invalid_object;
     }
-    return runner->getSim ()->algUpdateFunction (time, states, update, sMode, alpha);
+    if (runner->getSim ()->algUpdateFunction (time, states, update, sMode, alpha) == 0)
+        return griddyn_ok;
+    return griddyn_function_failure;
 }
 
-griddyn_status_t griddyn_simulation_jacobian (griddyn_sim_t sim,
-                                           double time,
-                                           const double *states,
-                                           const double *dstate_dt,
-                                           double cj,
-                                           griddyn_solver_t key,
-                                           void (*insert) (int, int, double))
+griddyn_status griddyn_simulation_jacobian (griddyn_sim* sim,
+                                            double time,
+                                            const double *states,
+                                            const double *dstate_dt,
+                                            double cj,
+                                            const griddyn_solver* key,
+                                            void (*insert) (int, int, double))
 {
-    auto runner = reinterpret_cast<GriddynRunner *> (sim);
+    auto runner = static_cast<GriddynRunner *> (sim);
 
     if (runner == nullptr)
     {
         return griddyn_invalid_object;
     }
-    auto &sMode = reinterpret_cast<const solverHandle *> (key)->sMode_;
+    auto &sMode = static_cast<const solverHandle *> (key)->sMode_;
     if ((sMode.offsetIndex < 0) || (sMode.offsetIndex > 500))
     {
         return griddyn_invalid_object;
@@ -248,5 +251,7 @@ griddyn_status_t griddyn_simulation_jacobian (griddyn_sim_t sim,
     md.setFunction ([insert](index_t row, index_t col, double val) {
         insert (static_cast<int> (row), static_cast<int> (col), val);
     });
-    return runner->getSim ()->jacobianFunction (time, states, dstate_dt, md, cj, sMode);
+    if (runner->getSim ()->jacobianFunction (time, states, dstate_dt, md, cj, sMode) == 0)
+        return griddyn_ok;
+    return griddyn_function_failure;
 }

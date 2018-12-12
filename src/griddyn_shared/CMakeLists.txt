@@ -13,6 +13,7 @@ set(
     griddyn.h
     griddyn_export.h
     griddyn_export_advanced.h
+    griddyn_types.h
 )
 
 set(griddyn_lib_internal_headers internal/griddyn_export_internal.h)
