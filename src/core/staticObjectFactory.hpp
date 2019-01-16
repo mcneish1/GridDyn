@@ -24,12 +24,7 @@ class staticObjectFactory
     void prepObjects (const std::string &, const std::string &, count_t, coreObject *);
     void prepObjects (const std::string &, count_t, coreObject *);
 
-    // we don't support createObject_3 here, since the only uses of that are for fncs and helics
     coreObject *createObject (griddyn_component component_type);
-    coreObject *createObject (griddyn_component component_type, griddyn_component_subtype type);
-
-  private:
-    bool is_valid_subtype(griddyn_component component_type, griddyn_component_subtype type);
 };
 
 }  // namespace griddyn

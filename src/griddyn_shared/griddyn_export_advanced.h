@@ -13,7 +13,8 @@
 #ifndef GRIDDYN_EXPORT_ADVANCED_C_H_
 #define GRIDDYN_EXPORT_ADVANCED_C_H_
 
-#include "griddyn_export.h"
+#include "griddyn_shared_export.h"
+#include "griddyn_types.h"
 
 #ifdef __cplusplus
 extern "C"

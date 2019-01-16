@@ -1,6 +1,8 @@
 #ifndef GRIDDYN_TYPES_C_H_
 #define GRIDDYN_TYPES_C_H_
 
+// TODO we want to prevent this from being used directly, but also allow it to be used internally
+
 #ifdef __cplusplus
 extern "C"
 {

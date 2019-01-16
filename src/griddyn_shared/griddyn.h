@@ -21,14 +21,6 @@
 #ifndef GRIDDYN_IMPORT_C_H_
 #define GRIDDYN_IMPORT_C_H_
 
-/* TODO this hides GRIDDYN_EXPORT in griddyn_shared_export.h, it probably shouldn't */
-#if defined _WIN32 || defined __CYGWIN__
-/* Note: both gcc & MSVC on Windows support this syntax. */
-#define GRIDDYN_EXPORT __declspec(dllimport)
-#else
-#define GRIDDYN_EXPORT
-#endif  // defined _WIN32 || defined __CYGWIN__
-
 #include "griddyn_export.h"
 
 /* TODO this probably shouldn't be included by default */
