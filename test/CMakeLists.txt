@@ -8,6 +8,10 @@
 # For details, see the LICENSE file.
 # LLNS Copyright End
 
+include(GridDynCMakeTestingHelpers)
+
+add_subdirectory(libraryTests)
+
 set(
     testComponent_sources
     componentTests/ConditionTests.cpp
@@ -178,10 +182,12 @@ target_link_libraries(
     fileInput
     griddyn_test_base
 )
+
 target_link_libraries(testSystem fileInput griddyn_test_base)
 target_link_libraries(testExtra fileInput griddyn_test_base)
 
 # message(${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+# TODO don't install tests wtf
 install(DIRECTORY DESTINATION ${CMAKE_INSTALL_BINDIR}/test/)
 install(TARGETS testLibrary RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}/test/)
 install(

@@ -10,15 +10,17 @@
  * LLNS Copyright End
  */
 
-#include <boost/test/unit_test.hpp>
+#include "../GridDynTest.h"
 
-#include <griddyn.h>
+#include "utilities/units_new.hpp"
 
-BOOST_AUTO_TEST_SUITE (griddyn_object_tests, *boost::unit_test::label ("quick"))
+BOOST_AUTO_TEST_SUITE (unit_tests, *boost::unit_test::label("quick"))
 
-BOOST_AUTO_TEST_CASE (object_create_delete)
+BOOST_AUTO_TEST_CASE (unit_addition_should_throw)
 {
-    auto obj = griddyn_object_create ();
+  unit a = unit::delete_me();
+  unit b = unit::delete_me();
+  BOOST_CHECK_THROW(a.multiply_result(b), std::runtime_error);
 }
 
 BOOST_AUTO_TEST_SUITE_END ()

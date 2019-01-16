@@ -10,15 +10,12 @@
  * LLNS Copyright End
  */
 
+// This is a minimal header to enable BOOST_AUTO_TEST_SUITE and BOOST_AUTO_TEST_CASE
+// TODO how is BOOST_TEST_MODULE actually used?
+
+#include "griddyn/griddyn-config.h"
+#ifndef BOOST_STATIC
+#define BOOST_TEST_DYN_LINK
+#endif
+#define BOOST_TEST_MODULE GRIDDYN_TEST_CATEGORY
 #include <boost/test/unit_test.hpp>
-
-#include <griddyn.h>
-
-BOOST_AUTO_TEST_SUITE (griddyn_object_tests, *boost::unit_test::label ("quick"))
-
-BOOST_AUTO_TEST_CASE (object_create_delete)
-{
-    auto obj = griddyn_object_create ();
-}
-
-BOOST_AUTO_TEST_SUITE_END ()

@@ -696,11 +696,11 @@ endif(ENABLE_CLANG_TOOLS)
 # ------------------------------------------------------------
 if(ENABLE_TESTS)
     # message(STATUS "otcf:${optional_component_test_files}")
+    enable_testing()
     add_subdirectory(test)
     if(BUILD_SHARED_LIBS)
         add_subdirectory(test/testSharedLibrary)
     endif(BUILD_SHARED_LIBS)
-    enable_testing()
     # add_test(NAME gridDynTest COMMAND testCore)
 endif(ENABLE_TESTS)
 
