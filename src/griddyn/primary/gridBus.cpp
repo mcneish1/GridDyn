@@ -970,7 +970,7 @@ int gridBus::propogatePower (bool /*makeSlack*/)
     {
         if ((adjPSecondary == 0) && (adjQSecondary == 0))
         {
-            unfixed_line->fixPower (-Pexp, -Qexp, getID (), getID ());
+            unfixed_line->fixPower (-Pexp, -Qexp, getID (), getID (), gridUnits::defUnit);
         }
     }
     else  // no lines so adjust the generators and load

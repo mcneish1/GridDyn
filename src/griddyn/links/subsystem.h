@@ -10,8 +10,7 @@
 * LLNS Copyright End
 */
 
-#ifndef GRID_SUBSYSTEM_H_
-#define GRID_SUBSYSTEM_H_
+#pragma once
 
 #include "../Link.h"
 
@@ -124,8 +123,8 @@ public:
   //is connected
   virtual bool isConnected () const override;
 
-  virtual int fixRealPower (double power, id_type_t measureTerminal, id_type_t fixedterminal = 0, gridUnits::units_t unitType = gridUnits::defUnit) override;
-  virtual int fixPower (double rPower, double qPower, id_type_t measureTerminal, id_type_t fixedterminal = 0, gridUnits::units_t unitType = gridUnits::defUnit) override;
+  virtual int fixRealPower (double power, id_type_t measureTerminal, id_type_t fixedterminal, gridUnits::units_t unitType) override;
+  virtual int fixPower (double rPower, double qPower, id_type_t measureTerminal, id_type_t fixedterminal, gridUnits::units_t unitType) override;
 
   virtual void followNetwork (int network,std::queue<gridBus *> &stk) override;
   virtual void updateBus (gridBus *bus, index_t busnumber) override;
@@ -181,4 +180,3 @@ protected:
 
 
 }//namespace griddyn
-#endif

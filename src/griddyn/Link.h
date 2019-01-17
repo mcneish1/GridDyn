@@ -131,8 +131,8 @@ class Link : public gridPrimary
     */
     virtual int fixRealPower (double power,
                               id_type_t measureTerminal,
-                              id_type_t fixedTerminal = 0,
-                              gridUnits::units_t unitType = gridUnits::defUnit);
+                              id_type_t fixedTerminal,
+                              gridUnits::units_t unitType);
     /** @brief allow the power flow to be fixed by adjusting the properties of one bus or another
      performs the calculations necessary to get the power at the measureTerminal to be a certain value
     @param[in] rPower  the desired real power flow as measured by measureTerminal
@@ -147,8 +147,8 @@ class Link : public gridPrimary
     virtual int fixPower (double rPower,
                           double qPower,
                           id_type_t measureTerminal,
-                          id_type_t fixedTerminal = 0,
-                          gridUnits::units_t unitType = gridUnits::defUnit);
+                          id_type_t fixedTerminal,
+                          gridUnits::units_t unitType);
     /** @brief propagate a network number to all connected buses
      checks if a link actually connects the two buses in an AC sense, then checks if a bus is already part of the
     specified network and if not it adds it to the queue

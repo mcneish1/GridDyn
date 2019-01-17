@@ -10,9 +10,7 @@
 * LLNS Copyright End
 */
 
-#ifndef ZBREAKER_H_
-#define ZBREAKER_H_
-
+#pragma once
 
 #include "../Link.h"
 
@@ -44,9 +42,9 @@ public:
 	virtual double quickupdateP() override;
 
 
-	virtual int fixRealPower(double power, id_type_t  measureTerminal, id_type_t  fixedTerminal = 0, gridUnits::units_t = gridUnits::defUnit) override;
+	virtual int fixRealPower(double power, id_type_t measureTerminal, id_type_t fixedTerminal, gridUnits::units_t) override;
 
-	virtual int fixPower(double rPower, double qPower, id_type_t  measureTerminal, id_type_t  fixedTerminal = 0, gridUnits::units_t = gridUnits::defUnit) override;
+	virtual int fixPower(double rPower, double qPower, id_type_t measureTerminal, id_type_t fixedTerminal, gridUnits::units_t) override;
 
 	virtual void coordinateMergeStatus();
 
@@ -61,4 +59,3 @@ protected:
 
 }//namespace links
 }//namespace griddyn
-#endif

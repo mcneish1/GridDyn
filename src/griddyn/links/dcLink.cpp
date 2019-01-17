@@ -124,7 +124,7 @@ void dcLink::pFlowObjectInitializeA (coreTime time0, std::uint32_t flags)
     {
         if (opFlags[fixed_target_power])
         {
-            fixRealPower (Pset, 1);
+            fixRealPower (Pset, 1, 0, gridUnits::defUnit);
         }
     }
 }
@@ -136,7 +136,7 @@ void dcLink::pFlowObjectInitializeB ()
         updateLocalCache ();
         if (opFlags[fixed_target_power])
         {
-            fixRealPower (Pset, 1);
+            fixRealPower (Pset, 1, 0, gridUnits::defUnit);
         }
     }
 }

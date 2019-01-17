@@ -13,6 +13,8 @@
 #include "gridSubModel.h"
 #include "measurement/objectGrabbers.h"
 
+using namespace gridUnits;
+
 namespace griddyn
 {
 gridSubModel::gridSubModel (const std::string &objName) : gridComponent (objName)

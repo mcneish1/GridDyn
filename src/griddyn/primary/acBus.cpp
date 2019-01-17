@@ -1023,7 +1023,7 @@ void acBus::dynObjectInitializeB (const IOdata & /*inputs*/, const IOdata &desir
             {
                 busController.proxyVControlObject[poi]->fixPower (
                   busController.proxyVControlObject[poi]->getRealPower (cid), Qgap * busController.vcfrac[vci],
-                  cid, cid);
+                  cid, cid, gridUnits::defUnit);
                 ++poi;
             }
             ++vci;
@@ -1053,7 +1053,7 @@ void acBus::dynObjectInitializeB (const IOdata & /*inputs*/, const IOdata &desir
                 else
                 {  // use both together on fixpower function
                     busController.proxyVControlObject[poi]->fixPower (-Pgap * busController.pcfrac[vci],
-                                                                      -Qgap * busController.vcfrac[vci], cid, cid);
+                                                                      -Qgap * busController.vcfrac[vci], cid, cid, gridUnits::defUnit);
                     ++poi;
                 }
                 ++vci;
@@ -1072,7 +1072,7 @@ void acBus::dynObjectInitializeB (const IOdata & /*inputs*/, const IOdata &desir
                 {
                     busController.proxyVControlObject[poi]->fixPower (
                       -Pgap * busController.pcfrac[vci],
-                      busController.proxyPControlObject[poi]->getReactivePower (cid), cid, cid);
+                      busController.proxyPControlObject[poi]->getReactivePower (cid), cid, cid, gridUnits::defUnit);
                     ++poi;
                 }
                 ++vci;
@@ -1091,7 +1091,7 @@ void acBus::dynObjectInitializeB (const IOdata & /*inputs*/, const IOdata &desir
                 {
                     busController.proxyVControlObject[poi]->fixPower (
                       busController.proxyVControlObject[poi]->getRealPower (cid),
-                      -Qgap * busController.vcfrac[vci], cid, cid);
+                      -Qgap * busController.vcfrac[vci], cid, cid, gridUnits::defUnit);
                     ++poi;
                 }
                 ++vci;
@@ -1111,7 +1111,7 @@ void acBus::dynObjectInitializeB (const IOdata & /*inputs*/, const IOdata &desir
             {
                 busController.proxyVControlObject[poi]->fixPower (
                   -Pgap * busController.pcfrac[vci],
-                  busController.proxyPControlObject[poi]->getReactivePower (cid), cid, cid);
+                  busController.proxyPControlObject[poi]->getReactivePower (cid), cid, cid, gridUnits::defUnit);
                 ++poi;
             }
             ++vci;
@@ -1756,7 +1756,7 @@ int acBus::propogatePower (bool makeSlack)
     {
         if ((adjPSecondary == 0) && (adjQSecondary == 0))
         {
-            /*ret = */ unfixed_line->fixPower (-Pexp, -Qexp, getID (), getID ());
+            /*ret = */ unfixed_line->fixPower (-Pexp, -Qexp, getID (), getID (), gridUnits::defUnit);
         }
     }
     else  // no lines so adjust the generators and load

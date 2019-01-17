@@ -10,8 +10,8 @@
  * LLNS Copyright End
  */
 
-#ifndef GRIDSUBMODEL_H_
-#define GRIDSUBMODEL_H_
+#pragma once
+
 #include "gridComponent.h"
 
 namespace griddyn
@@ -45,5 +45,3 @@ class gridSubModel : public gridComponent
 };
 
 }  // namespace griddyn
-
-#endif

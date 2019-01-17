@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef GRID_DC_LINK_H_
-#define GRID_DC_LINK_H_
+#pragma once
 
 #include "../Link.h"
 
@@ -91,16 +90,14 @@ class dcLink : public Link
     getStateName (stringVec &stNames, const solverMode &sMode, const std::string &prefix = "") const override;
     virtual int fixRealPower (double power,
                               id_type_t measureTerminal,
-                              id_type_t fixedTerminal = 0,
-                              gridUnits::units_t unitType = gridUnits::defUnit) override;
+                              id_type_t fixedTerminal,
+                              gridUnits::units_t unitType) override;
     virtual int fixPower (double power,
                           double qPower,
                           id_type_t measureTerminal,
-                          id_type_t fixedTerminal = 0,
-                          gridUnits::units_t unitType = gridUnits::defUnit) override final;
+                          id_type_t fixedTerminal,
+                          gridUnits::units_t unitType) override final;
 };
 
 }  // namespace links
 }  // namespace griddyn
-
-#endif

@@ -120,8 +120,8 @@ class acLine : public Link
     */
     virtual int fixRealPower (double power,
                               id_type_t measureTerminal,
-                              id_type_t fixedTerminal = 0,
-                              gridUnits::units_t unitType = gridUnits::defUnit) override;
+                              id_type_t fixedTerminal,
+                              gridUnits::units_t unitType) override;
 
     /** @brief allow the power flow to be fixed by adjusting the properties of one bus or another
      performs the calculations necessary to get the power at the measureTerminal to be a certain value
@@ -137,8 +137,8 @@ class acLine : public Link
     virtual int fixPower (double rPower,
                           double qPower,
                           id_type_t measureTerminal,
-                          id_type_t fixedTerminal = 0,
-                          gridUnits::units_t unitType = gridUnits::defUnit) override;
+                          id_type_t fixedTerminal,
+                          gridUnits::units_t unitType) override;
 
     /** @brief check for any violations of link limits or other factors based on power flow results
      checks things like the maximum angle,  power flow /current limits based on ratings and a few other things

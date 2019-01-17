@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef GRID_ACDCCONVERTER_H_
-#define GRID_ACDCCONVERTER_H_
+#pragma once
 
 #include "../Link.h"
 #include "core/coreOwningPtr.hpp"
@@ -137,13 +136,13 @@ class acdcConverter : public Link
     // for computing all the Jacobian elements at once
     virtual int fixRealPower (double power,
                               id_type_t terminal,
-                              id_type_t fixedTerminal = 0,
-                              gridUnits::units_t unitType = gridUnits::defUnit) override;
+                              id_type_t fixedTerminal,
+                              gridUnits::units_t unitType) override;
     virtual int fixPower (double rPower,
                           double qPower,
                           id_type_t measureTerminal,
-                          id_type_t fixedTerminal = 0,
-                          gridUnits::units_t unitType = gridUnits::defUnit) override;
+                          id_type_t fixedTerminal,
+                          gridUnits::units_t unitType) override;
 
     virtual void
     getStateName (stringVec &stNames, const solverMode &sMode, const std::string &prefix = "") const override;
@@ -155,4 +154,3 @@ class acdcConverter : public Link
 
 }  // namespace links
 }  // namespace griddyn
-#endif

@@ -635,7 +635,7 @@ int dcBus::propogatePower (bool makeSlack)
     }
     if (unfixed == 1)
     {
-        ret = dc1->fixRealPower (dc1->getRealPower (getID ()) - (S.sumP ()), getID ());
+        ret = dc1->fixRealPower (dc1->getRealPower (getID ()) - (S.sumP ()), getID (), 0, gridUnits::defUnit);
     }
     return ret;
 }

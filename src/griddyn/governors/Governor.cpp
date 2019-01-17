@@ -399,11 +399,13 @@ double Governor::get (const std::string &param, gridUnits::units_t unitType) con
     }
     else if (param == "pmax")
     {
-        out = unitConversion (Pmax, puMW, unitType, puMW, systemBasePower);
+        throw std::runtime_error("This was previously broken");
+//        out = unitConversion (Pmax, puMW, unitType, puMW, systemBasePower);
     }
     else if (param == "pmin")
     {
-        out = unitConversion (Pmin, puMW, unitType, puMW, systemBasePower);
+        throw std::runtime_error("This was previously broken");
+//        out = unitConversion (Pmin, puMW, unitType, puMW, systemBasePower);
     }
     else if (param == "deadband")
     {

@@ -1,3 +1,5 @@
+#if 0
+
 /*
  * LLNS Copyright Start
  * Copyright (c) 2014-2018, Lawrence Livermore National Security
@@ -931,3 +933,5 @@ double unitConversion (double val, const units_t in, const units_t out, double b
     return ret;
 }
 }  // namespace gridUnits
+
+#endif

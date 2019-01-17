@@ -246,40 +246,40 @@ BOOST_AUTO_TEST_CASE (link_test_fixPower)
     double qP2 = a->getReactivePower (2);
 
     b2->setVoltageAngle (v2, -0.18);
-    a->fixPower (rP1, qP1, 1, 1);
+    a->fixPower (rP1, qP1, 1, 1, gridUnits::defUnit);
     BOOST_CHECK_SMALL (std::abs (a2 - b2->getAngle ()), 0.0001);
 
     b2->setVoltageAngle (1.05, a2);
-    a->fixPower (rP1, qP1, 1, 1);
+    a->fixPower (rP1, qP1, 1, 1, gridUnits::defUnit);
     BOOST_CHECK_SMALL (std::abs (v2 - b2->getVoltage ()), 0.0001);
 
 
     b2->setVoltageAngle (v2, -0.18);
-    a->fixPower (rP2, qP2, 2, 1);
+    a->fixPower (rP2, qP2, 2, 1, gridUnits::defUnit);
     BOOST_CHECK_SMALL (std::abs (a2 - b2->getAngle ()), 0.0001);
 
     b2->setVoltageAngle (1.05, a2);
-    a->fixPower (rP2, qP2, 2, 1);
+    a->fixPower (rP2, qP2, 2, 1, gridUnits::defUnit);
     BOOST_CHECK_SMALL (std::abs (v2 - b2->getVoltage ()), 0.0001);
 
     b1->setVoltageAngle (1.05, a1);
-    a->fixPower (rP1, qP1, 1, 2);
+    a->fixPower (rP1, qP1, 1, 2, gridUnits::defUnit);
     BOOST_CHECK_SMALL (std::abs (v1 - b1->getVoltage ()), 0.0001);
 
     b1->setVoltageAngle (v1, 0.02);
-    a->fixPower (rP1, qP1, 1, 2);
+    a->fixPower (rP1, qP1, 1, 2, gridUnits::defUnit);
     BOOST_CHECK_SMALL (std::abs (a1 - b1->getAngle ()), 0.0001);
 
     b1->setVoltageAngle (1.05, a1);
-    a->fixPower (rP2, qP2, 2, 2);
+    a->fixPower (rP2, qP2, 2, 2, gridUnits::defUnit);
     BOOST_CHECK_SMALL (std::abs (v1 - b1->getVoltage ()), 0.0001);
 
     b1->setVoltageAngle (v1, 0.02);
-    a->fixPower (rP2, qP2, 2, 2);
+    a->fixPower (rP2, qP2, 2, 2, gridUnits::defUnit);
     BOOST_CHECK_SMALL (std::abs (a1 - b1->getAngle ()), 0.0001);
 
     b1->setVoltageAngle (1.05, -0.07);
-    a->fixPower (rP1, qP1, 1, 2);
+    a->fixPower (rP1, qP1, 1, 2, gridUnits::defUnit);
     BOOST_CHECK_SMALL (std::abs (v1 - b1->getVoltage ()), 0.0001);
     BOOST_CHECK_SMALL (std::abs (a1 - b1->getAngle ()), 0.0001);
 

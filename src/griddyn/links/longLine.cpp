@@ -17,6 +17,8 @@
 
 #include <cmath>
 
+using namespace gridUnits;
+
 namespace griddyn
 {
 namespace links
