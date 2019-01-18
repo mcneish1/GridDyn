@@ -29,12 +29,17 @@ T checked_assign(T val, T min_val = std::numeric_limits<T>::min, T max_val = std
 namespace griddyn {
 namespace units {
 
+const double pi = 3.141592653589793;
+
 class unit {
 public:
   std::string name() const
   {
     // TODO: actually implement this
-    return "(some unit type)";
+    if (original_type == "")
+        return "(some unit type)";
+    else
+        return original_type;
   }
 
   static unit parse(std::string const& input)
@@ -179,7 +184,7 @@ public:
 
   bool operator==(unit const& other) const
   {
-    return data == other.data;
+    return data == other.data && all_flags_same(other);
   }
 
   bool operator!=(unit const& other) const
@@ -191,7 +196,19 @@ public:
   // TODO: we should produce these automatically from modelica type things
 
   // Base units:
-  static unit dimensionless() { return unit(data_t(0, 0, 0, 0, 0, 0, 0)); }
+  static unit dimensionless(std::string const& tag = "(class default constructed)")
+  {
+      auto x = unit(data_t(0, 0, 0, 0, 0, 0, 0));
+      x.original_type = tag;
+      return x;
+  }
+
+  static unit error(std::string const& tag)
+  {
+    auto x = unit(data_t(7, 7, 7, 7, 7, 7, 7));
+    x.original_type = tag;
+    return x;
+  }
 
   static unit meter()     { return unit(data_t(1, 0, 0, 0, 0, 0, 0)); }
   static unit kilogram()  { return unit(data_t(0, 1, 0, 0, 0, 0, 0)); }
@@ -215,7 +232,6 @@ public:
   static unit weber() { return unit(data_t(2, 1, -2, -1, 0, 0, 0)); }
   static unit tesla() { return unit(data_t(0, 1, -2, -1, 0, 0, 0)); }
   static unit henry() { return unit(data_t(2, 1, -2, -2, 0, 0, 0)); }
-  static unit celsius() { return unit(data_t(0, 0, 0, 0, 1, 0, 0)); }
   static unit lumen() { return unit(data_t(0, 0, 0, 0, 0, 0, 1)); }
   static unit lux() { return unit(data_t(-2, 0, 0, 0, 0, 0, 1)); }
   static unit becquerel() { return unit(data_t(0, 0, -1, 0, 0, 0, 0)); }
@@ -223,11 +239,37 @@ public:
   static unit sievert() { return unit(data_t(2, 0, -2, 0, 0, 0, 0)); }
   static unit katal() { return unit(data_t(0, 0, -1, 0, 0, 1, 0)); }
 
+  // Transformed units:
+  static unit celsius() { return offset(unit(data_t(0, 0, 0, 0, 1, 0, 0)), 273.15); }
+  static unit degree() { return angle(); }
+  static unit radian() { return scale(angle(), 180 / pi); }
 
-  double apply_transform(double val) const { return transformer.apply(val); }
-  double unapply_transform(double val) const { return transformer.unapply(val); }
+  // Transformation functions
+  static unit per_unit(unit in) { in.is_per_unit = true; return in; }
+
+  static unit scale(unit in, double by) { in.transformer.scale *= by; return in; }
+  static unit offset(unit in, double by) { in.transformer.offset += by; return in; }
+  static unit affine(unit in, double scale_by, double offset_by) { return offset(scale(in, scale_by), offset_by); }
+
+  double apply_transform(double val) const { return transformer.apply(val * per_unit_scale); }
+  double unapply_transform(double val) const { return transformer.unapply(val / per_unit_scale); }
+
+  // double convert_to(double val, unit const& other)
+  // {
+  //   if (other != *this) throw std::runtime_error()
+  // }
+
+  void set_per_unit_value(double val)
+  {
+    if (per_unit_set && val != per_unit_scale) throw std::runtime_error("trying to set per_unit value twice");
+    per_unit_scale = val;
+  }
 
 private:
+  struct flags_tag {};
+
+  static unit angle() { return unit(flags_tag{}, true); }
+
   struct data_t
   {
     data_t()
@@ -318,9 +360,25 @@ private:
   };
 
   unit(data_t new_data) : data(new_data) {}
+  unit(flags_tag /*unused*/, bool set_is_angle)
+  {
+    *this = dimensionless();
+    is_angle = set_is_angle;
+  }
 
   data_t data;
   affine_transform<double> transformer;
+  std::string original_type;
+
+  bool all_flags_same(unit const& other) const
+  {
+    return is_angle == other.is_angle && is_per_unit == other.is_per_unit;
+  }
+
+  bool is_angle = false;
+  bool is_per_unit = false;
+  bool per_unit_set = false;
+  double per_unit_scale = 1.0;
 };
 
 inline std::ostream& operator<<(std::ostream& stream, unit const& u)
@@ -340,38 +398,38 @@ namespace gridUnits {
 
 using units_t = griddyn::units::unit;
 
-static units_t defUnit = units_t::dimensionless();
-static units_t deg = units_t::dimensionless();
-static units_t puMW = units_t::dimensionless();
-static units_t MVAR = units_t::dimensionless();
-static units_t puHz = units_t::dimensionless();
-static units_t rad = units_t::dimensionless();
-static units_t puV = units_t::dimensionless();
-static units_t puA = units_t::dimensionless();
-static units_t rps = units_t::dimensionless();
-static units_t MWps = units_t::dimensionless();
-static units_t puOhm = units_t::dimensionless();
-static units_t puMWps = units_t::dimensionless();
+static units_t defUnit = units_t::dimensionless("defUnit");
 
-static units_t hour = units_t::second();
-static units_t kW = units_t::watt();
+static units_t deg = units_t::degree();
+static units_t rad = units_t::radian();
+static units_t hour = units_t::scale(units_t::second(), 3600);
+static units_t kW = units_t::scale(units_t::watt(), 1000);
 static units_t Watt = units_t::watt();
 static units_t Ohm = units_t::ohm();
 static units_t Amp = units_t::ampere();
-static units_t C = units_t::kelvin();
-static units_t km = units_t::meter();
-static units_t kV = units_t::volt();
-static units_t MW = units_t::watt();
+static units_t C = units_t::celsius();
+static units_t km = units_t::scale(units_t::meter(), 1000);
+static units_t kV = units_t::scale(units_t::volt(), 1000);
+static units_t MW = units_t::scale(units_t::watt(), 1000000);
 static units_t sec = units_t::second();
 static units_t Hz = units_t::hertz();
 
+static units_t puMW = units_t::per_unit(MW);
+static units_t puV = units_t::per_unit(units_t::volt());
+static units_t MVAR = units_t::error("MVAR");
+static units_t puHz = units_t::error("puHz");
+static units_t puA = units_t::error("puA");
+static units_t rps = units_t::error("rps");
+static units_t MWps = units_t::error("MWps");
+static units_t puOhm = units_t::error("puOhm");
+static units_t puMWps = units_t::error("puMWps");
 
 inline std::string to_string (units_t unitType)
 {
   return unitType.name();
 }
 
-inline units_t getUnits (const std::string &unitString, units_t defValue = units_t::dimensionless())
+inline units_t getUnits (const std::string &unitString, units_t defValue = units_t::dimensionless("(default argument)"))
 {
   try
   {
@@ -383,18 +441,12 @@ inline units_t getUnits (const std::string &unitString, units_t defValue = units
   }
 }
 
-inline double unitConversion (
-                       double val,
+double unitConversion (double val,
                        const units_t in,
                        const units_t out,
                        double basePower = 100,
-                       double localBaseVoltage = 100)
-{
-  (void) basePower;
-  (void) localBaseVoltage;
-  if (in == units_t::dimensionless() || out == units_t::dimensionless()) { throw std::runtime_error("in or out is dimensionless, so probably not something we support yet"); }
-  return out.apply_transform(in.unapply_transform(val));
-}
+                       double localBaseVoltage = 100);
+
 
 inline double unitConversionTime (double val, units_t in, units_t out)
 {

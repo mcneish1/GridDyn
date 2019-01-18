@@ -10,3 +10,4 @@
 
 # usage: add_griddyn_test(test_category test_name SOURCES ${sources} REQUIRED_LIBRARIES ${libs})
 add_griddyn_test(libraryTests testUnits SOURCES testUnits.cpp)
+add_griddyn_test(libraryTests testLegacyUnitsInterface SOURCES testLegacyUnitsInterface.cpp)

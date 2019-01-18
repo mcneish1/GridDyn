@@ -19,6 +19,7 @@ set(
     ThreePhaseFunctions.cpp
     matrixOps.cpp
     stringConversion.cpp
+    units_new.cpp
     units.cpp
     vectorOps.cpp
     functionInterpreter.cpp
@@ -37,6 +38,7 @@ set(
 set(
     utilities_headers
     units.h
+    units_new.hpp
     dataDictionary.hpp
     timeSeries.hpp
     charMapper.h
