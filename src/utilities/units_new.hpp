@@ -36,6 +36,26 @@ public:
   std::string name() const
   {
     // TODO: actually implement this
+    if (data_equal(hertz())) { return "hertz"; }
+    if (data_equal(volt())) { return "volt"; }
+    if (data_equal(newton())) { return "newton"; }
+    if (data_equal(pascal())) { return "pascal"; }
+    if (data_equal(joule())) { return "joule"; }
+    if (data_equal(watt())) { return "watt"; }
+    if (data_equal(coulomb())) { return "coulomb"; }
+    if (data_equal(farad())) { return "farad"; }
+    if (data_equal(ohm())) { return "ohm"; }
+    if (data_equal(siemens())) { return "siemens"; }
+    if (data_equal(weber())) { return "weber"; }
+    if (data_equal(tesla())) { return "tesla"; }
+    if (data_equal(henry())) { return "henry"; }
+    if (data_equal(lumen())) { return "lumen"; }
+    if (data_equal(lux())) { return "lux"; }
+    if (data_equal(becquerel())) { return "becquerel"; }
+    if (data_equal(gray())) { return "gray"; }
+    if (data_equal(sievert())) { return "sievert"; }
+    if (data_equal(katal())) { return "katal"; }
+
     if (original_type == "")
         return "(some unit type)";
     else
@@ -52,6 +72,8 @@ public:
   static unit parse(const char* str)
   {
     // Note this function makes no attempt to provide the affine transform required
+
+    throw std::runtime_error("don't parse stuff bruh");
 
     if (str == nullptr) { throw std::runtime_error("Please don't attempt to parse null pointers"); }
 
@@ -187,6 +209,14 @@ public:
     return data == other.data && all_flags_same(other);
   }
 
+  bool needs_transform(unit const& other) const
+  {
+    if (*this != other) return true;
+    if (transformer.scale != other.transformer.scale) return true;
+    if (transformer.offset != other.transformer.offset) return true;
+    return false;
+  }
+
   bool operator!=(unit const& other) const
   {
     return !(*this == other);
@@ -251,24 +281,26 @@ public:
   static unit offset(unit in, double by) { in.transformer.offset += by; return in; }
   static unit affine(unit in, double scale_by, double offset_by) { return offset(scale(in, scale_by), offset_by); }
 
-  double apply_transform(double val) const { return transformer.apply(val * per_unit_scale); }
-  double unapply_transform(double val) const { return transformer.unapply(val / per_unit_scale); }
+  double apply_transform(double val) const { return transformer.apply(val); }
+  double unapply_transform(double val) const { return transformer.unapply(val); }
 
   // double convert_to(double val, unit const& other)
   // {
   //   if (other != *this) throw std::runtime_error()
   // }
 
-  void set_per_unit_value(double val)
-  {
-    if (per_unit_set && val != per_unit_scale) throw std::runtime_error("trying to set per_unit value twice");
-    per_unit_scale = val;
-  }
+  bool per_unit() const { return is_per_unit; }
+  static unit equivalent_non_per_unit(unit u) { u.is_per_unit = false; return u; }
 
 private:
   struct flags_tag {};
 
   static unit angle() { return unit(flags_tag{}, true); }
+
+  bool data_equal(unit const& other) const
+  {
+    return data == other.data;
+  }
 
   struct data_t
   {
@@ -377,14 +409,22 @@ private:
 
   bool is_angle = false;
   bool is_per_unit = false;
-  bool per_unit_set = false;
-  double per_unit_scale = 1.0;
 };
 
 inline std::ostream& operator<<(std::ostream& stream, unit const& u)
 {
   stream << u.name();
   return stream;
+}
+
+inline bool is_per_unit(unit const& u)
+{
+  return u.per_unit();
+}
+
+inline unit strip_per_unit(unit u)
+{
+  return unit::equivalent_non_per_unit(u);
 }
 
 // TODO: split the transformer off, add this back
@@ -395,6 +435,7 @@ inline std::ostream& operator<<(std::ostream& stream, unit const& u)
 
 // current interface
 namespace gridUnits {
+namespace new_impl {
 
 using units_t = griddyn::units::unit;
 
@@ -416,7 +457,7 @@ static units_t Hz = units_t::hertz();
 
 static units_t puMW = units_t::per_unit(MW);
 static units_t puV = units_t::per_unit(units_t::volt());
-static units_t MVAR = units_t::error("MVAR");
+static units_t MVAR = MW;
 static units_t puHz = units_t::error("puHz");
 static units_t puA = units_t::error("puA");
 static units_t rps = units_t::error("rps");
@@ -442,11 +483,8 @@ inline units_t getUnits (const std::string &unitString, units_t defValue = units
 }
 
 double unitConversion (double val,
-                       const units_t in,
-                       const units_t out,
-                       double basePower = 100,
-                       double localBaseVoltage = 100);
-
+                       units_t in,
+                       units_t out, double a = 100, double b = 100);
 
 inline double unitConversionTime (double val, units_t in, units_t out)
 {
@@ -491,4 +529,5 @@ inline double unitConversionTemperature (double val, units_t in, units_t out)
   return out.apply_transform(in.unapply_transform(val));
 }
 
+} // namespace new_impl
 } // namespace gridUnits

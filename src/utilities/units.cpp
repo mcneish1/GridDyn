@@ -1,5 +1,3 @@
-#if 0
-
 /*
  * LLNS Copyright Start
  * Copyright (c) 2014-2018, Lawrence Livermore National Security
@@ -65,6 +63,8 @@ week	= 405
 */
 
 namespace gridUnits
+{
+namespace old
 {
 static std::map<std::string, units_t> name2Unit{
   {"mw", MW},
@@ -932,6 +932,5 @@ double unitConversion (double val, const units_t in, const units_t out, double b
     }
     return ret;
 }
+} // namespace old;
 }  // namespace gridUnits
-
-#endif

@@ -62,4 +62,39 @@ BOOST_AUTO_TEST_CASE(temperature_conversion)
   BOOST_CHECK_CLOSE(one_hundred_celsius, 373.15, 1e-6);
 }
 
+double old_convert(double val, gridUnits::units_t in, gridUnits::units_t out, double basePower, double localBaseVoltage) {
+  using namespace gridUnits;
+  if (in == MW)
+  {
+    std::cout << "in mwatt" << std::endl;
+    val = val /  basePower;
+    in = puMW;
+  }
+  if (in == puMW)
+  {
+    std::cout << "in pumwatt" << std::endl;
+      if (out == MW) {
+        std::cout << "out mwatt" << std::endl;
+          return val * basePower;
+        }
+      if (out == puMW) {
+        std::cout << "out pumwatt" << std::endl;
+        return val;
+      }
+  }
+  throw std::runtime_error("??");
+}
+
+BOOST_AUTO_TEST_CASE(per_unit_power_conversions)
+{
+  double one_mw   = gridUnits::unitConversion(1, gridUnits::MW, gridUnits::puMW, 100, 100);
+  double one_pumw = gridUnits::unitConversion(1, gridUnits::puMW, gridUnits::MW, 100, 100);
+
+  double one_old_mw = old_convert(1, gridUnits::MW, gridUnits::puMW, 100, 100);
+  double one_old_pumw = old_convert(1, gridUnits::puMW, gridUnits::MW, 100, 100);
+
+  BOOST_CHECK_CLOSE(one_mw, one_old_mw, 1e-6);
+  BOOST_CHECK_CLOSE(one_pumw, one_old_pumw, 1e-6);
+}
+
 BOOST_AUTO_TEST_SUITE_END ()
