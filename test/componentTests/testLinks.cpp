@@ -1,5 +1,5 @@
 /*
-* LLNS Copyright Start
+ * LLNS Copyright Start
  * Copyright (c) 2014-2018, Lawrence Livermore National Security
  * This work was performed under the auspices of the U.S. Department
  * of Energy by Lawrence Livermore National Laboratory in part under
@@ -8,7 +8,7 @@
  * All rights reserved.
  * For details, see the LICENSE file.
  * LLNS Copyright End
-*/
+ */
 
 #include "griddyn/events/Event.h"
 #include "griddyn/gridDynSimulation.h"
@@ -32,7 +32,6 @@ BOOST_FIXTURE_TEST_SUITE(link_tests, gridDynSimulationTestFixture, * boost::unit
 using namespace griddyn;
 BOOST_AUTO_TEST_CASE (link_test1_simple)
 {
-    return; // broken test
     // test a bunch of different link parameters to make sure all the solve properly
     std::string fileName = std::string (LINK_TEST_DIRECTORY "link_test1.xml");
 
@@ -105,7 +104,6 @@ BOOST_AUTO_TEST_CASE (link_test_switches)
 
 BOOST_AUTO_TEST_CASE (link_test1_dynamic)
 {
-    return; // broken test
     // test a bunch of different link parameters to make sure all the solve properly
     std::string fileName = std::string (LINK_TEST_DIRECTORY "link_test1.xml");
 

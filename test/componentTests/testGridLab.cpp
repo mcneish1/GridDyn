@@ -25,23 +25,22 @@ using namespace griddyn;
 
 BOOST_AUTO_TEST_CASE (gridlab_test1)
 {
-    return; // broken test
     int argc = 0;
     GhostSwingBusManager::Initialize (&argc, nullptr);
     GhostSwingBusManager::SetDebug (false);
     std::string fileName = std::string (GRIDLAB_TEST_DIRECTORY "Simple_3Bus_mod.xml");
     gds = readSimXMLFile (fileName);
-	requireState(gridDynSimulation::gridState_t::STARTUP);
+    requireState(gridDynSimulation::gridState_t::STARTUP);
 
     int glb = gds->countMpiObjects ();
     BOOST_CHECK_EQUAL (glb, 1);
 
     gds->pFlowInitialize ();
-	requireState(gridDynSimulation::gridState_t::INITIALIZED);
+    requireState(gridDynSimulation::gridState_t::INITIALIZED);
 
 
     gds->powerflow ();
-	requireState(gridDynSimulation::gridState_t::POWERFLOW_COMPLETE);
+    requireState(gridDynSimulation::gridState_t::POWERFLOW_COMPLETE);
     zipLoad *ld = static_cast<zipLoad *> (gds->find ("bus2::gload1"));
 
     BOOST_REQUIRE (ld != nullptr);
@@ -64,23 +63,22 @@ BOOST_AUTO_TEST_CASE (gridlab_test1)
 
 BOOST_AUTO_TEST_CASE (gridlab_test2)
 {
-    return; // broken test
     int argc = 0;
     GhostSwingBusManager::Initialize (&argc, nullptr);
     GhostSwingBusManager::SetDebug (false);
     std::string fileName = std::string (GRIDLAB_TEST_DIRECTORY "Simple_3Bus_mod3x.xml");
     gds = readSimXMLFile (fileName);
-	requireState(gridDynSimulation::gridState_t::STARTUP);
+    requireState(gridDynSimulation::gridState_t::STARTUP);
 
     int glb = gds->countMpiObjects ();
     BOOST_CHECK_EQUAL (glb, 3);
 
     gds->pFlowInitialize ();
-	requireState(gridDynSimulation::gridState_t::INITIALIZED);
+    requireState(gridDynSimulation::gridState_t::INITIALIZED);
 
 
     gds->powerflow ();
-	requireState(gridDynSimulation::gridState_t::POWERFLOW_COMPLETE);
+    requireState(gridDynSimulation::gridState_t::POWERFLOW_COMPLETE);
     zipLoad *ld = static_cast<zipLoad *> (gds->find ("bus2::gload2"));
 
     // P = 0.27 Q = -0.1 Ir = 0.34 Iq = -0.13
@@ -105,23 +103,22 @@ BOOST_AUTO_TEST_CASE (gridlab_test2)
 
 BOOST_AUTO_TEST_CASE (gridlab_test3)
 {
-    return; // broken test
     int argc = 0;
     GhostSwingBusManager::Initialize (&argc, nullptr);
     GhostSwingBusManager::SetDebug (false);
     std::string fileName = std::string (GRIDLAB_TEST_DIRECTORY "Simple_3Bus_mod3x_current.xml");
     gds = readSimXMLFile (fileName);
-	requireState(gridDynSimulation::gridState_t::STARTUP);
+    requireState(gridDynSimulation::gridState_t::STARTUP);
 
     int glb = gds->countMpiObjects ();
     BOOST_CHECK_EQUAL (glb, 3);
 
     gds->pFlowInitialize ();
-	requireState(gridDynSimulation::gridState_t::INITIALIZED);
+    requireState(gridDynSimulation::gridState_t::INITIALIZED);
 
 
     gds->powerflow ();
-	requireState(gridDynSimulation::gridState_t::POWERFLOW_COMPLETE);
+    requireState(gridDynSimulation::gridState_t::POWERFLOW_COMPLETE);
     zipLoad *ld = static_cast<zipLoad *> (gds->find ("bus2::gload2"));
 
     // P = 0.27 Q = -0.1 Ir = 0.34 Iq = -0.13
@@ -145,7 +142,6 @@ BOOST_AUTO_TEST_CASE (gridlab_test3)
 
 BOOST_AUTO_TEST_CASE (test_gridlabArray)
 {
-    return; // broken test
     // test the define functionality
     int argc = 0;
     std::string fileName = std::string (GRIDLAB_TEST_DIRECTORY "Simple_3Bus_mod3x_mix_scale.xml");
@@ -154,7 +150,7 @@ BOOST_AUTO_TEST_CASE (test_gridlabArray)
     readerInfo ri;
     ri.keepdefines = true;
     gds = readSimXMLFile (fileName, &ri);
-	requireState(gridDynSimulation::gridState_t::STARTUP);
+    requireState(gridDynSimulation::gridState_t::STARTUP);
 
     int glb = gds->countMpiObjects ();
     int cnt = 60;
@@ -170,9 +166,9 @@ BOOST_AUTO_TEST_CASE (test_gridlabArray)
     }
     BOOST_CHECK_EQUAL (glb, cnt);
     gds->powerflow ();
-	requireState(gridDynSimulation::gridState_t::POWERFLOW_COMPLETE);
+    requireState(gridDynSimulation::gridState_t::POWERFLOW_COMPLETE);
 
     gds->run ();
-	requireState(gridDynSimulation::gridState_t::DYNAMIC_COMPLETE);
+    requireState(gridDynSimulation::gridState_t::DYNAMIC_COMPLETE);
 }
 BOOST_AUTO_TEST_SUITE_END ()

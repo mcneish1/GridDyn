@@ -383,7 +383,6 @@ BOOST_AUTO_TEST_CASE(file_load_test2)
 #ifndef ENABLE_MPI
 BOOST_AUTO_TEST_CASE (gridDynLoad_test1)
 {
-    return; // broken test
     std::string fileName = gridlabd_test_directory + "IEEE_13_mod.xml";
 
     auto gds = readSimXMLFile (fileName);

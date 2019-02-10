@@ -1,5 +1,5 @@
 /*
-* LLNS Copyright Start
+ * LLNS Copyright Start
  * Copyright (c) 2014-2018, Lawrence Livermore National Security
  * This work was performed under the auspices of the U.S. Department
  * of Energy by Lawrence Livermore National Laboratory in part under
@@ -8,7 +8,7 @@
  * All rights reserved.
  * For details, see the LICENSE file.
  * LLNS Copyright End
-*/
+ */
 
 #include "core/objectFactory.hpp"
 #include "griddyn/simulation/diagnostics.h"
@@ -29,7 +29,6 @@ using namespace griddyn;
 
 BOOST_AUTO_TEST_CASE (gov_stability_test)
 {
-    return; // broken test
     std::string fileName = std::string (GOVERNOR_TEST_DIRECTORY "test_gov_stability.xml");
 
     gds->resetObjectCounters ();

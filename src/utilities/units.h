@@ -12,8 +12,6 @@
 #pragma once
 
 #include <string>
-#include "units_new.hpp"
-
 #include <cmath>
 
 namespace gridUnits
@@ -87,8 +85,6 @@ enum units_t
     K = 1003,
 };
 
-namespace old
-{
 const double badConversion = -1e48;
 const double PI = 3.141592653589793;
 
@@ -129,8 +125,8 @@ units_t getUnits (const std::string &unitString, units_t defValue = defUnit);
  * @return the numerical value of the property in output units,  badConversion if unable to convert between the specified units
  */
 double unitConversion (double val,
-                       const units_t in,
-                       const units_t out,
+                       units_t in,
+                       units_t out,
                        double basePower = 100,
                        double localBaseVoltage = 100);
 
@@ -153,8 +149,8 @@ double unitConversionTime (double val, units_t in, units_t out);
  */
 
 double unitConversionPower (double val,
-                            const units_t in,
-                            const units_t out,
+                            units_t in,
+                            units_t out,
                             double basePower = 100,
                             double localBaseVoltage = 100);
 
@@ -201,97 +197,5 @@ double unitConversionCost (double val, units_t in, units_t out, double basePower
 specified units
 */
 double unitConversionTemperature (double val, units_t in, units_t out);
-
-}  // namespace old
-
-
-namespace {
-
-gridUnits::new_impl::units_t convert_units(units_t old_units) {
-    switch(old_units) {
-    case defUnit: return gridUnits::new_impl::defUnit;
-    case MW: return gridUnits::new_impl::MW;
-    case kW: return gridUnits::new_impl::kW;
-    case Watt: return gridUnits::new_impl::Watt;
-    case MVAR: return gridUnits::new_impl::MVAR;
-    case Volt: return gridUnits::new_impl::units_t::error("Volt");
-    case kV: return gridUnits::new_impl::kV;
-    case Ohm: return gridUnits::new_impl::Ohm;
-    case Amp: return gridUnits::new_impl::Amp;
-    case MWps: return gridUnits::new_impl::MWps;
-    case MWpmin: return gridUnits::new_impl::units_t::error("MWpmin");
-    case MWph: return gridUnits::new_impl::units_t::error("MWph");
-    case Hz: return gridUnits::new_impl::Hz;
-    case rps: return gridUnits::new_impl::rps;
-    case rpm: return gridUnits::new_impl::units_t::error("rpm");
-    case pu: return gridUnits::new_impl::units_t::error("pu");
-    case puMW: return gridUnits::new_impl::puMW;
-    case puV: return gridUnits::new_impl::puV;
-    case puOhm: return gridUnits::new_impl::puOhm;
-    case puA: return gridUnits::new_impl::puA;
-    case puMWps: return gridUnits::new_impl::puMWps;
-    case puMWpmin: return gridUnits::new_impl::units_t::error("puMWpmin");
-    case puMWph: return gridUnits::new_impl::units_t::error("puMWph");
-    case puHz: return gridUnits::new_impl::puHz;
-    case meter: return gridUnits::new_impl::units_t::error("meter");
-    case km: return gridUnits::new_impl::km;
-    case mile: return gridUnits::new_impl::units_t::error("mile");
-    case ft: return gridUnits::new_impl::units_t::error("ft");
-    case deg: return gridUnits::new_impl::deg;
-    case rad: return gridUnits::new_impl::rad;
-    case sec: return gridUnits::new_impl::sec;
-    case min: return gridUnits::new_impl::units_t::error("min");
-    case hour: return gridUnits::new_impl::hour;
-    case day: return gridUnits::new_impl::units_t::error("day");
-    case week: return gridUnits::new_impl::units_t::error("week");
-    case cost: return gridUnits::new_impl::units_t::error("cost");
-    case Cph: return gridUnits::new_impl::units_t::error("Cph");
-    case CpMWh: return gridUnits::new_impl::units_t::error("CpMWh");
-    case CpMW2h: return gridUnits::new_impl::units_t::error("CpMW2h");
-    case CppuMWh: return gridUnits::new_impl::units_t::error("CppuMWh");
-    case CppuMW2h: return gridUnits::new_impl::units_t::error("CppuMW2h");
-    case CpMVARh: return gridUnits::new_impl::units_t::error("CpMVARh");
-    case CpMVAR2h: return gridUnits::new_impl::units_t::error("CpMVAR2h");
-    case CppuMVARh: return gridUnits::new_impl::units_t::error("CppuMVARh");
-    case CppuMVAR2h: return gridUnits::new_impl::units_t::error("CppuMVAR2h");
-    case F: return gridUnits::new_impl::units_t::error("F");
-    case C: return gridUnits::new_impl::C;
-    case K: return gridUnits::new_impl::units_t::error("K");
-    }
-    throw std::runtime_error("Bad unit type");
-}
-
-} // anon namespace
-inline double unitConversion (double val,
-                       const units_t in,
-                       const units_t out,
-                       double basePower = 100,
-                       double localBaseVoltage = 100) {
-    gridUnits::new_impl::units_t in_new = convert_units(in);
-    gridUnits::new_impl::units_t out_new = convert_units(out);
-
-    double old_convert = gridUnits::old::unitConversion(val, in, out, basePower, localBaseVoltage);
-    double new_convert = gridUnits::new_impl::unitConversion(val, in_new, out_new, basePower, localBaseVoltage);
-
-    if (std::fabs(old_convert - new_convert) > 10e-6)
-    {
-        std::string in_params = "val: " + std::to_string(val) + ", in: " + gridUnits::old::to_string(in) + ", out: " + gridUnits::old::to_string(out);
-        if (basePower != 100 or localBaseVoltage != 100) { in_params += ", basePower: " + std::to_string(basePower) + ", localBaseVoltage: " + std::to_string(localBaseVoltage); }
-        std::string out_params = "old: " + std::to_string(old_convert) + ", new: " + std::to_string(new_convert) + ", diff: " + std::to_string(new_convert - old_convert);
-        throw std::runtime_error(std::string("Conversion don't werk yet. In params: ") + in_params + "; out params: " + out_params);
-    }
-
-    return new_convert;
-}
-
-// TODO: verify these too
-using gridUnits::old::getUnits;
-using gridUnits::old::unitConversionAngle;
-using gridUnits::old::to_string;
-using gridUnits::old::unitConversionTime;
-using gridUnits::old::unitConversionPower;
-using gridUnits::old::unitConversionFreq;
-using gridUnits::old::unitConversionDistance;
-using gridUnits::old::unitConversionTemperature;
 
 }  // namespace gridUnits

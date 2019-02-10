@@ -64,8 +64,7 @@ week	= 405
 
 namespace gridUnits
 {
-namespace old
-{
+
 static std::map<std::string, units_t> name2Unit{
   {"mw", MW},
   {"mws", MW},
@@ -287,14 +286,14 @@ static const std::map<units_t, units_type_t> unit2Type{std::make_pair (MW, elect
                                                        std::make_pair (F, temperature),
                                                        std::make_pair (K, temperature)};
 
-inline bool isPu (const units_t in) { return ((in >= pu) && (static_cast<int> (in) < 200)); }
-inline bool conversionNotNeeded (const units_t in, const units_t out)
+inline bool isPu (units_t in) { return ((in >= pu) && (static_cast<int> (in) < 200)); }
+inline bool conversionNotNeeded (units_t in, units_t out)
 {
     return ((in == defUnit) || (in == out) || (out == defUnit) || (isPu (in) && (out == pu)));
 }
 
 double
-unitConversionPower (double val, const units_t in, const units_t out, double basePower, double localBaseVoltage)
+unitConversionPower (double val, units_t in, units_t out, double basePower, double localBaseVoltage)
 {
     // check if no conversion is needed
     if (conversionNotNeeded (in, out))
@@ -503,7 +502,7 @@ unitConversionPower (double val, const units_t in, const units_t out, double bas
     return ret;
 }
 
-double unitConversionTemperature (double val, const units_t in, const units_t out)
+double unitConversionTemperature (double val, units_t in, units_t out)
 {
     if (conversionNotNeeded (in, out))
     {
@@ -548,7 +547,7 @@ double unitConversionTemperature (double val, const units_t in, const units_t ou
     return ret;
 }
 
-double unitConversionTime (double val, const units_t in, const units_t out)
+double unitConversionTime (double val, units_t in, units_t out)
 {
     // check if no conversion is needed
     if (conversionNotNeeded (in, out))
@@ -660,7 +659,7 @@ double unitConversionTime (double val, const units_t in, const units_t out)
     return ret;
 }
 
-double unitConversionAngle (double val, const units_t in, const units_t out)
+double unitConversionAngle (double val, units_t in, units_t out)
 {
     // check if no conversion is needed
 
@@ -686,7 +685,7 @@ double unitConversionAngle (double val, const units_t in, const units_t out)
     }
     return ret;
 }
-double unitConversionDistance (double val, const units_t in, const units_t out)
+double unitConversionDistance (double val, units_t in, units_t out)
 {
     // check if no conversion is needed
     if (conversionNotNeeded (in, out))
@@ -737,7 +736,7 @@ double unitConversionDistance (double val, const units_t in, const units_t out)
     return ret;
 }
 
-double unitConversionFreq (double val, const units_t in, const units_t out, double baseFreq)
+double unitConversionFreq (double val, units_t in, units_t out, double baseFreq)
 {
     // check if no conversion is needed
     if (conversionNotNeeded (in, out))
@@ -819,7 +818,7 @@ double unitConversionFreq (double val, const units_t in, const units_t out, doub
     return ret;
 }
 
-double unitConversionCost (double val, const units_t in, const units_t out, double basePower)
+double unitConversionCost (double val, units_t in, units_t out, double basePower)
 {
     // check if no conversion is needed
     if (conversionNotNeeded (in, out))
@@ -883,7 +882,7 @@ double unitConversionCost (double val, const units_t in, const units_t out, doub
     return ret;
 }
 
-double unitConversion (double val, const units_t in, const units_t out, double basePower, double localBaseVoltage)
+double unitConversion (double val, units_t in, units_t out, double basePower, double localBaseVoltage)
 {
     // check if no conversion is needed
     if (conversionNotNeeded (in, out))
@@ -932,5 +931,5 @@ double unitConversion (double val, const units_t in, const units_t out, double b
     }
     return ret;
 }
-} // namespace old;
+
 }  // namespace gridUnits
