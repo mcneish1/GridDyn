@@ -12,8 +12,8 @@
 #ifndef LineSearch_h
 #define LineSearch_h
 
-#include "../common/def.h"
-#include "../math/Vector.h"
+#include "common/def.h"
+#include "math/Vector.h"
 #include "Solver.h"
 
 namespace griddyn {

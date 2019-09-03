@@ -14,10 +14,10 @@
 #include "core/coreObject.h"
 #include "formatInterpreters/readerElement.h"
 #include "griddyn/gridDynDefinitions.hpp"
-#include "fileInput.h"
-#include "readElement.h"
-#include "readElement.h"
-#include "readerHelper.h"
+#include "fileInput/fileInput.h"
+#include "fileInput/readElement.h"
+#include "fileInput/readElement.h"
+#include "fileInput/readerHelper.h"
 #include "utilities/stringOps.h"
 
 namespace griddyn

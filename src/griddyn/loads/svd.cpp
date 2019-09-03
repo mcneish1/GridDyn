@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "svd.h"
+#include "griddyn/loads/svd.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"
 #include "utilities/stringConversion.h"

@@ -10,15 +10,15 @@
  * LLNS Copyright End
  */
 
-#include "blockLibrary.h"
+#include "griddyn/blocks/blockLibrary.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"
-#include "rampLimiter.h"
+#include "griddyn/blocks/rampLimiter.h"
 #include "utilities/matrixData.hpp"
 #include "utilities/stringOps.h"
 #include "utilities/string_viewConversion.h"
 #include "utilities/vectorOps.hpp"
-#include "valueLimiter.h"
+#include "griddyn/blocks/valueLimiter.h"
 
 namespace griddyn
 {

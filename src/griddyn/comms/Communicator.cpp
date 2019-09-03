@@ -9,11 +9,11 @@
  * For details, see the LICENSE file.
  * LLNS Copyright End
 */
-#include "griddyn/griddyn-config.h"
+#include "griddyn-config.h"
 
-#include "Communicator.h"
+#include "griddyn/comms/Communicator.h"
 
-#include "commMessage.h"
+#include "griddyn/comms/commMessage.h"
 #include "communicationsCore.h"
 #include "core/factoryTemplates.hpp"
 #include <string>

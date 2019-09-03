@@ -13,7 +13,7 @@
 #ifndef CORE_PROPERTIES_H_
 #define CORE_PROPERTIES_H_
 
-#include "coreObject.h"
+#include "core/coreObject.h"
 #include "utilities/dataDictionary.h"
 
 /** these objects are intended to capture extra properties about a coreObject that are not in the common definition

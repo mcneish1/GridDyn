@@ -10,7 +10,7 @@
 * LLNS Copyright End
 */
 #include "RungeKutta_Explicit.h"
-#include "../math/PVector.h"
+#include "math/PVector.h"
 namespace griddyn {
 namespace paradae {
 RungeKutta_Explicit::RungeKutta_Explicit(Equation* eq, bool varstep):RungeKutta(eq,varstep)

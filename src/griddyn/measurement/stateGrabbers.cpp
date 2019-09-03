@@ -10,16 +10,16 @@
  * LLNS Copyright End
  */
 
-#include "../Area.h"
-#include "Condition.h"
-#include "../Generator.h"
-#include "../Link.h"
-#include "../Relay.h"
+#include "griddyn/Area.h"
+#include "griddyn/measurement/Condition.h"
+#include "griddyn/Generator.h"
+#include "griddyn/Link.h"
+#include "griddyn/Relay.h"
 
-#include "grabberInterpreter.hpp"
-#include "../gridBus.h"
-#include "../relays/sensor.h"
-#include "stateGrabber.h"
+#include "griddyn/measurement/grabberInterpreter.hpp"
+#include "griddyn/gridBus.h"
+#include "griddyn/relays/sensor.h"
+#include "griddyn/measurement/stateGrabber.h"
 #include "utilities/mapOps.hpp"
 #include "utilities/matrixDataScale.hpp"
 #include "utilities/matrixDataTranslate.hpp"

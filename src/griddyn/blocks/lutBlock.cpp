@@ -10,7 +10,7 @@
  * LLNS Copyright End
 */
 
-#include "lutBlock.h"
+#include "griddyn/blocks/lutBlock.h"
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/matrixData.hpp"
 #include "utilities/stringConversion.h"

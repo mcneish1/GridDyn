@@ -12,7 +12,7 @@
 
 #pragma once
 
-#include "griddyn/griddyn-config.h"
+#include "griddyn-config.h"
 
 #include <memory>
 #include <mutex>

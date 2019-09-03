@@ -10,7 +10,7 @@
 * LLNS Copyright End
 */
 
-#include "blockSequence.h"
+#include "griddyn/blocks/blockSequence.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/matrixData.hpp"

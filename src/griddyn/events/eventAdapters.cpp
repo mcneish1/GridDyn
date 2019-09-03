@@ -10,10 +10,10 @@
 * LLNS Copyright End
 */
 
-#include "eventAdapters.h"
+#include "griddyn/events/eventAdapters.h"
 
-#include "Event.h"
-#include "../Relay.h"
+#include "griddyn/events/Event.h"
+#include "griddyn/Relay.h"
 #include "core/coreObject.h"
 
 #include <typeinfo>
@@ -39,7 +39,7 @@ std::unique_ptr<eventAdapter> eventAdapter::clone() const
 }
 void eventAdapter::cloneTo(eventAdapter *eA) const
 {
-	
+
 	eA->m_remove_event = m_remove_event;
 	eA->partBdelay = partBdelay;
 	eA->two_part_execute = two_part_execute;
@@ -51,7 +51,7 @@ void eventAdapter::cloneTo(eventAdapter *eA) const
 
 void eventAdapter::updateObject(coreObject * /*newObject*/, object_update_mode /*mode*/)
 {
-	
+
 }
 
 void eventAdapter::getObjects(std::vector<coreObject *> & /*objects*/) const

@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "charMapper.h"
+#include "utilities/charMapper.h"
 
 namespace utilities
 {

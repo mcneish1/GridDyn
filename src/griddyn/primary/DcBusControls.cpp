@@ -10,10 +10,10 @@
 * LLNS Copyright End
 */
 
-#include "BusControls.h"
-#include "dcBus.h"
-#include "../gridSecondary.h"
-#include "../links/dcLink.h"
+#include "griddyn/primary/BusControls.h"
+#include "griddyn/primary/dcBus.h"
+#include "griddyn/gridSecondary.h"
+#include "griddyn/links/dcLink.h"
 #include "utilities/vectorOps.hpp"
 
 namespace griddyn

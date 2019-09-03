@@ -22,10 +22,3 @@
 #include <iostream>
 #include "GhostSwingBus.h"
 using namespace std;
-
-GhostSwingBus::GhostSwingBus ()
-{
-
-}
-
-

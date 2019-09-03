@@ -10,7 +10,7 @@
 * LLNS Copyright End
 */
 
-#include "stringConversion.h"
+#include "utilities/stringConversion.h"
 
 extern const utilities::charMapper<bool> numCheck = utilities::numericStartMapper ();
 extern const utilities::charMapper<bool> numCheckEnd = utilities::numericEndMapper ();

@@ -10,8 +10,8 @@
  * LLNS Copyright End
  */
 
-#include "motorLoad3.h"
-#include "../gridBus.h"
+#include "griddyn/loads/motorLoad3.h"
+#include "griddyn/gridBus.h"
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/matrixData.hpp"
 #include "utilities/vectorOps.hpp"

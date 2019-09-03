@@ -12,7 +12,7 @@
 
 // headers
 #include "gridAreaOpt.h"
-#include "../optObjectFactory.h"
+#include "optimization/optObjectFactory.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "gridBusOpt.h"

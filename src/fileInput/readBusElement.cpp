@@ -10,11 +10,11 @@
  * LLNS Copyright End
 */
 
-#include "elementReaderTemplates.hpp"
+#include "fileInput/elementReaderTemplates.hpp"
 #include "formatInterpreters/readerElement.h"
-#include "fileInput.h"
-#include "readElement.h"
-#include "readerHelper.h"
+#include "fileInput/fileInput.h"
+#include "fileInput/readElement.h"
+#include "fileInput/readerHelper.h"
 
 #include "core/objectInterpreter.h"
 #include "griddyn/gridBus.h"

@@ -10,12 +10,12 @@
  * LLNS Copyright End
 */
 
-#include "dcLink.h"
-#include "../Area.h"
+#include "griddyn/links/dcLink.h"
+#include "griddyn/Area.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
-#include "../gridBus.h"
-#include "../primary/dcBus.h"
+#include "griddyn/gridBus.h"
+#include "griddyn/primary/dcBus.h"
 #include "utilities/vectorOps.hpp"
 
 #include <cmath>

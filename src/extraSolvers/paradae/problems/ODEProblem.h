@@ -11,10 +11,10 @@
 */
 #pragma once
 #include "mpi.h"
-#include "../common/def.h"
-#include "../common/MapParam.h"
-#include "../equations/Equation.h"
-#include "../timeintegrators/TimeIntegrator.h"
+#include "common/def.h"
+#include "common/MapParam.h"
+#include "equations/Equation.h"
+#include "timeintegrators/TimeIntegrator.h"
 #include <fstream>
 
 enum ODE_error {ODE_FAILED};

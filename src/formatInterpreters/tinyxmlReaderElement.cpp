@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "tinyxmlReaderElement.h"
+#include "formatInterpreters/tinyxmlReaderElement.h"
 
 #ifdef __GNUC__
 #pragma GCC diagnostic push

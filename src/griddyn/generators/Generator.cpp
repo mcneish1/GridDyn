@@ -10,9 +10,9 @@
  * LLNS Copyright End
  */
 
-#include "../controllers/scheduler.h"
-#include "../gridBus.h"
-#include "../measurement/objectGrabbers.h"
+#include "griddyn/controllers/scheduler.h"
+#include "griddyn/gridBus.h"
+#include "griddyn/measurement/objectGrabbers.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"
@@ -21,7 +21,7 @@
 #include "utilities/matrixData.hpp"
 #include "utilities/stringOps.h"
 #include "utilities/vectorOps.hpp"
-#include "variableGenerator.h"
+#include "griddyn/generators/variableGenerator.h"
 
 //#include <set>
 /*

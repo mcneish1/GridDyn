@@ -13,7 +13,7 @@
 #include "core/objectFactory.hpp"
 #include "griddyn/Generator.h"
 #include "griddyn/gridBus.h"
-#include "fileInput.h"
+#include "fileInput/fileInput.h"
 #include "griddyn/Exciter.h"
 #include "griddyn/GenModel.h"
 #include "griddyn/Governor.h"

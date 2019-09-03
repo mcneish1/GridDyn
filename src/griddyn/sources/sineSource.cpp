@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "sineSource.h"
+#include "griddyn/sources/sineSource.h"
 
 #include "core/coreObjectTemplates.hpp"
 #include <cmath>

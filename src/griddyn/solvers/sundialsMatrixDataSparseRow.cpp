@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "sundialsMatrixData.h"
+#include "griddyn/solvers/sundialsMatrixData.h"
 #include <algorithm>
 #include <cstring>
 

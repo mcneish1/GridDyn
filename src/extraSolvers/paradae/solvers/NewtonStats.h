@@ -12,8 +12,8 @@
 #pragma once
 
 #include "mpi.h"
-#include "../common/def.h"
-#include "../math/SVector.h"
+#include "common/def.h"
+#include "math/SVector.h"
 #include <map>
 #include <list>
 

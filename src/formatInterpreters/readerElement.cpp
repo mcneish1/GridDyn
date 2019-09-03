@@ -10,7 +10,7 @@
 * LLNS Copyright End
 */
 
-#include "readerElement.h"
+#include "formatInterpreters/readerElement.h"
 #include "utilities/stringConversion.h"
 
 readerAttribute::readerAttribute () = default;

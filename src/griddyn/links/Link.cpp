@@ -10,22 +10,22 @@
  * LLNS Copyright End
  */
 
-#include "../Area.h"
-#include "../gridBus.h"
-#include "../simulation/contingency.h"
-#include "acLine.h"
-#include "acdcConverter.h"
-#include "adjustableTransformer.h"
+#include "griddyn/Area.h"
+#include "griddyn/gridBus.h"
+#include "griddyn/simulation/contingency.h"
+#include "griddyn/links/acLine.h"
+#include "griddyn/links/acdcConverter.h"
+#include "griddyn/links/adjustableTransformer.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"
 #include "core/objectInterpreter.h"
-#include "dcLink.h"
+#include "griddyn/links/dcLink.h"
 #include "utilities/matrixDataCompact.hpp"
 #include "utilities/stringOps.h"
 #include "utilities/vectorOps.hpp"
 
-#include "../measurement/objectGrabbers.h"
+#include "griddyn/measurement/objectGrabbers.h"
 
 #include <cmath>
 #include <complex>

@@ -12,7 +12,7 @@
 
 #include "core/coreObjectTemplates.hpp"
 
-#include "nullBlock.h"
+#include "griddyn/blocks/nullBlock.h"
 
 namespace griddyn
 {

@@ -10,11 +10,11 @@
  * LLNS Copyright End
  */
 
-#include "commSource.h"
-#include "../comms/Communicator.h"
-#include "../comms/controlMessage.h"
-#include "../events/eventQueue.h"
-#include "../gridDynSimulation.h"
+#include "griddyn/sources/commSource.h"
+#include "griddyn/comms/Communicator.h"
+#include "griddyn/comms/controlMessage.h"
+#include "griddyn/events/eventQueue.h"
+#include "griddyn/gridDynSimulation.h"
 #include "core/coreObjectTemplates.hpp"
 #include <cassert>
 

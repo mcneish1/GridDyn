@@ -10,10 +10,10 @@
  * LLNS Copyright End
 */
 
-#include "elementReaderTemplates.hpp"
-#include "fileInput.h"
-#include "readElement.h"
-#include "readerHelper.h"
+#include "fileInput/elementReaderTemplates.hpp"
+#include "fileInput/fileInput.h"
+#include "fileInput/readElement.h"
+#include "fileInput/readerHelper.h"
 
 #include "utilities/stringConversion.h"
 #include <numeric>

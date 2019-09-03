@@ -17,12 +17,12 @@
 #endif
 #endif
 
-#include "functionInterpreter.h"
-#include "griddyn/griddyn-config.h"
-#include "gridRandom.h"
-#include "mapOps.hpp"
-#include "stringOps.h"
-#include "vectorOps.hpp"
+#include "utilities/functionInterpreter.h"
+#include "griddyn-config.h"
+#include "utilities/gridRandom.h"
+#include "utilities/mapOps.hpp"
+#include "utilities/stringOps.h"
+#include "utilities/vectorOps.hpp"
 #include <algorithm>
 #include <cmath>
 

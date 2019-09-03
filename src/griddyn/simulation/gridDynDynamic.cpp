@@ -9,18 +9,18 @@
  * For details, see the LICENSE file.
  * LLNS Copyright End
  */
-#include "../events/Event.h"
+#include "griddyn/events/Event.h"
 
-#include "../gridDynSimulation.h"
+#include "griddyn/gridDynSimulation.h"
 
-#include "../events/eventQueue.h"
-#include "../gridBus.h"
-#include "../solvers/solverInterface.h"
+#include "griddyn/events/eventQueue.h"
+#include "griddyn/gridBus.h"
+#include "griddyn/solvers/solverInterface.h"
 #include "core/coreExceptions.h"
-#include "diagnostics.h"
-#include "dynamicInitialConditionRecovery.h"
-#include "faultResetRecovery.h"
-#include "gridDynSimulationFileOps.h"
+#include "griddyn/simulation/diagnostics.h"
+#include "griddyn/simulation/dynamicInitialConditionRecovery.h"
+#include "griddyn/simulation/faultResetRecovery.h"
+#include "griddyn/simulation/gridDynSimulationFileOps.h"
 #include "utilities/matrixData.hpp"
 #include "utilities/vectorOps.hpp"
 // system libraries

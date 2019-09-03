@@ -17,6 +17,8 @@
 #include <boost/test/unit_test.hpp>
 #include <fstream>
 
+#include "../testHelper.h"
+
 static const std::string zip_test_directory (GRIDDYN_TEST_DIRECTORY "/zip_tests/");
 
 BOOST_AUTO_TEST_SUITE (zipUtilities_tests, * boost::unit_test::label("quick"))

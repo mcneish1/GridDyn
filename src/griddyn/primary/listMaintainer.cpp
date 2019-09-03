@@ -10,10 +10,10 @@
 * LLNS Copyright End
 */
 
-#include "listMaintainer.h"
-#include "../Area.h"
+#include "griddyn/primary/listMaintainer.h"
+#include "griddyn/Area.h"
 
-#include "griddyn/griddyn-config.h"
+#include "griddyn-config.h"
 
 namespace griddyn
 {

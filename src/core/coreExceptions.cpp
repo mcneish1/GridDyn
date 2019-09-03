@@ -10,7 +10,7 @@
 * LLNS Copyright End
 */
 
-#include "coreExceptions.h"
+#include "core/coreExceptions.h"
 namespace griddyn
 {
 coreObjectException::coreObjectException (const coreObject *obj) noexcept : throwingObject (obj) {}

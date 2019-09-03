@@ -10,9 +10,9 @@
 * LLNS Copyright End
 */
 #include "RungeKutta_SDIRK.h"
-#include "../math/DBlockTriMatrix.h"
-#include "../math/PMultiVector.h"
-#include "../solvers/Newton.h"
+#include "math/DBlockTriMatrix.h"
+#include "math/PMultiVector.h"
+#include "solvers/Newton.h"
 namespace griddyn {
 namespace paradae {
 using namespace std;

@@ -10,9 +10,9 @@
  * LLNS Copyright End
 */
 
-#include "griddyn/griddyn-config.h"
-#include "fileInput.h"
-#include "readerHelper.h"
+#include "griddyn-config.h"
+#include "fileInput/fileInput.h"
+#include "fileInput/readerHelper.h"
 
 #include "core/objectFactoryTemplates.hpp"
 #include "griddyn/Generator.h"

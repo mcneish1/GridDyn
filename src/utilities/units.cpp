@@ -10,11 +10,11 @@
  * LLNS Copyright End
  */
 
-#include "units.h"
+#include "utilities/units.h"
 
-#include "stringOps.h"
+#include "utilities/stringOps.h"
 
-#include "mapOps.hpp"
+#include "utilities/mapOps.hpp"
 #include <utility>
 
 // disable a funny warning (bug in visual studio 2015)

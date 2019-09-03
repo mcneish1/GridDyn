@@ -10,10 +10,10 @@
  * LLNS Copyright End
  */
 
-#include "diagnostics.h"
-#include "../gridDynSimulation.h"
+#include "griddyn/simulation/diagnostics.h"
+#include "griddyn/gridDynSimulation.h"
 
-#include "../solvers/solverInterface.h"
+#include "griddyn/solvers/solverInterface.h"
 
 #include "utilities/gridRandom.h"
 #include "utilities/matrixDataSparse.hpp"

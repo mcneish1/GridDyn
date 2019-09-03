@@ -14,7 +14,7 @@
 #define GRIDDYNGOVERNOR_H_
 #pragma once
 
-#include "gridSubModel.h"
+#include "griddyn/gridSubModel.h"
 
 #include "submodels/controlBlocks/delayBlock.h"
 #include "submodels/controlBlocks/deadbandBlock.h"

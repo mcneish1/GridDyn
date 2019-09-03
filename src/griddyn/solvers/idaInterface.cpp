@@ -10,13 +10,13 @@
  * LLNS Copyright End
  */
 
-#include "idaInterface.h"
+#include "griddyn/solvers/idaInterface.h"
 
-#include "../gridDynSimulation.h"
+#include "griddyn/gridDynSimulation.h"
 #include "utilities/vectorOps.hpp"
 
-#include "../simulation/gridDynSimulationFileOps.h"
-#include "sundialsMatrixData.h"
+#include "griddyn/simulation/gridDynSimulationFileOps.h"
+#include "griddyn/solvers/sundialsMatrixData.h"
 #include "utilities/matrixCreation.h"
 #include "utilities/matrixDataFilter.hpp"
 #include <ida/ida.h>

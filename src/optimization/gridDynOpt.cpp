@@ -10,13 +10,13 @@
  * LLNS Copyright End
  */
 
-#include "gridDynOpt.h"
+#include "optimization/gridDynOpt.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"
-#include "gridOptObjects.h"
+#include "optimization/gridOptObjects.h"
 #include "models/gridAreaOpt.h"
-#include "optObjectFactory.h"
+#include "optimization/optObjectFactory.h"
 #include "utilities/stringOps.h"
 // system headers
 

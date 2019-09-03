@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "gridOptObjects.h"
+#include "optimization/gridOptObjects.h"
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/stringOps.h"
 #include <cstdio>

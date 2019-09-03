@@ -11,7 +11,7 @@
 */
 
 #include "communicationsCore.h"
-#include "Communicator.h"
+#include "griddyn/comms/Communicator.h"
 #include "utilities/mapOps.hpp"
 
 namespace griddyn

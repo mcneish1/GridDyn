@@ -10,11 +10,11 @@
  * LLNS Copyright End
  */
 
-#include "kinsolInterface.h"
+#include "griddyn/solvers/kinsolInterface.h"
 
-#include "../gridDynSimulation.h"
-#include "../simulation/gridDynSimulationFileOps.h"
-#include "sundialsMatrixData.h"
+#include "griddyn/gridDynSimulation.h"
+#include "griddyn/simulation/gridDynSimulationFileOps.h"
+#include "griddyn/solvers/sundialsMatrixData.h"
 //#include "matrixDataBoost.h"
 #include "core/coreExceptions.h"
 

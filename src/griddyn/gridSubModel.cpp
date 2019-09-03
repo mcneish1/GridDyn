@@ -10,8 +10,8 @@
  * LLNS Copyright End
  */
 
-#include "gridSubModel.h"
-#include "measurement/objectGrabbers.h"
+#include "griddyn/gridSubModel.h"
+#include "griddyn/measurement/objectGrabbers.h"
 
 namespace griddyn
 {

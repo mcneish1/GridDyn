@@ -10,14 +10,14 @@
  * LLNS Copyright End
  */
 
-#include "collector.h"
-#include "../events/Event.h"
-#include "Recorder.h"
+#include "griddyn/measurement/collector.h"
+#include "griddyn/events/Event.h"
+#include "griddyn/measurement/Recorder.h"
 #include "core/coreExceptions.h"
 #include "core/factoryTemplates.hpp"
 #include "core/objectInterpreter.h"
-#include "gridGrabbers.h"
-#include "stateGrabber.h"
+#include "griddyn/measurement/gridGrabbers.h"
+#include "griddyn/measurement/stateGrabber.h"
 #include "utilities/stringOps.h"
 #include "utilities/timeSeries.hpp"
 #include <cmath>

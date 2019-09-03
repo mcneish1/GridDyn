@@ -10,20 +10,20 @@
  * LLNS Copyright End
  */
 
-#include "Event.h"
+#include "griddyn/events/Event.h"
 
-#include "../gridDynSimulation.h"
+#include "griddyn/gridDynSimulation.h"
 #include "core/coreExceptions.h"
 #include "core/factoryTemplates.hpp"
 #include "core/objectInterpreter.h"
 #include "utilities/stringOps.h"
 #include "utilities/units.h"
 
-#include "Player.h"
-#include "compoundEvent.h"
-#include "compoundEventPlayer.h"
-#include "interpolatingPlayer.h"
-#include "reversibleEvent.h"
+#include "griddyn/events/Player.h"
+#include "griddyn/events/compoundEvent.h"
+#include "griddyn/events/compoundEventPlayer.h"
+#include "griddyn/events/interpolatingPlayer.h"
+#include "griddyn/events/reversibleEvent.h"
 #include <sstream>
 
 namespace griddyn

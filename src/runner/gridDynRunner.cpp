@@ -12,7 +12,7 @@
  * -----------------------------------------------------------------
  */
 
-#include "gridDynRunner.h"
+#include "runner/gridDynRunner.h"
 
 #include "griddyn/gridDynSimulation.h"
 
@@ -354,7 +354,7 @@ int processCommandArguments (std::shared_ptr<gridDynSimulation> &gds, readerInfo
     int gens = gds->getInt ("gencount");
     int loads = gds->getInt ("loadcount");
     std::cout << "areas=" << areas << " buses=" << buses << " links=" << links << " relays=" << relays << " gens=" << gens << " loads=" << loads << '\n';
-    
+
     // set any flags used by the system
     if (vm.count ("flags") > 0)
     {

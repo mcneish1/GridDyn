@@ -10,8 +10,8 @@
  * LLNS Copyright End
  */
 
-#include "blockSource.h"
-#include "../Block.h"
+#include "griddyn/sources/blockSource.h"
+#include "griddyn/Block.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include <algorithm>

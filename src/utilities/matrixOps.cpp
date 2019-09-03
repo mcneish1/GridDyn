@@ -10,7 +10,7 @@
 * LLNS Copyright End
 */
 
-#include "matrixOps.h"
+#include "utilities/matrixOps.h"
 #include <cstring>
 
 std::vector<double> matrixDataMultiply (matrixData<double> &md, const double vec[])

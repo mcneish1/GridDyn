@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "gridParameter.h"
+#include "fileInput/gridParameter.h"
 #include "core/coreExceptions.h"
 #include "griddyn/gridDynDefinitions.hpp"
 #include "utilities/string_viewConversion.h"

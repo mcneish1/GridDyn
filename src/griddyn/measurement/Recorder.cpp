@@ -10,7 +10,7 @@
  * LLNS Copyright End
 */
 
-#include "Recorder.h"
+#include "griddyn/measurement/Recorder.h"
 
 #include "core/coreExceptions.h"
 #include "core/objectInterpreter.h"

@@ -10,11 +10,11 @@
  * LLNS Copyright End
  */
 
-#include "gridSecondary.h"
+#include "griddyn/gridSecondary.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectInterpreter.h"
-#include "gridBus.h"
-#include "gridSubModel.h"
+#include "griddyn/gridBus.h"
+#include "griddyn/gridSubModel.h"
 #include "utilities/stringOps.h"
 
 namespace griddyn

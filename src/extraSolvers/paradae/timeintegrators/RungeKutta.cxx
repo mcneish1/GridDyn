@@ -10,8 +10,8 @@
 * LLNS Copyright End
 */
 #include "RungeKutta.h"
-#include "../math/PVector.h"
-#include "../math/IPoly.h"
+#include "math/PVector.h"
+#include "math/IPoly.h"
 #include <iostream>
 #include <cmath>
 #include <algorithm>

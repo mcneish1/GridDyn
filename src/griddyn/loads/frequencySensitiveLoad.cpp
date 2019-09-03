@@ -10,9 +10,9 @@
  * LLNS Copyright End
  */
 
-#include "frequencySensitiveLoad.h"
+#include "griddyn/loads/frequencySensitiveLoad.h"
 
-#include "../gridBus.h"
+#include "griddyn/gridBus.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"

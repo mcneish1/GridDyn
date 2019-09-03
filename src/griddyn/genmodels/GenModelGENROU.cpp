@@ -10,9 +10,9 @@
  * LLNS Copyright End
  */
 
-#include "GenModelGENROU.h"
-#include "../Generator.h"
-#include "../gridBus.h"
+#include "griddyn/genmodels/GenModelGENROU.h"
+#include "griddyn/Generator.h"
+#include "griddyn/gridBus.h"
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/matrixData.hpp"
 #include "utilities/vectorOps.hpp"

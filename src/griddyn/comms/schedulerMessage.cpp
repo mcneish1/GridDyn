@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "schedulerMessage.h"
+#include "griddyn/comms/schedulerMessage.h"
 #include "utilities/stringConversion.h"
 #include <cstring>
 

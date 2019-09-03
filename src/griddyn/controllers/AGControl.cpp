@@ -10,14 +10,14 @@
  * LLNS Copyright End
  */
 
-#include "AGControl.h"
-#include "../Area.h"
-#include "../Generator.h"
-#include "../blocks/blockLibrary.h"
+#include "griddyn/controllers/AGControl.h"
+#include "griddyn/Area.h"
+#include "griddyn/Generator.h"
+#include "griddyn/blocks/blockLibrary.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"
-#include "scheduler.h"
+#include "griddyn/controllers/scheduler.h"
 
 namespace griddyn
 {

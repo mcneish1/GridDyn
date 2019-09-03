@@ -11,7 +11,7 @@
  */
 
 #include "core/objectInterpreter.h"
-#include "fileInput.h"
+#include "fileInput/fileInput.h"
 #include "utilities/functionInterpreter.h"
 #include "utilities/stringConversion.h"
 #include "utilities/string_viewConversion.h"

@@ -10,9 +10,9 @@
  * LLNS Copyright End
  */
 
-#include "ExciterDC1A.h"
-#include "../Generator.h"
-#include "../gridBus.h"
+#include "griddyn/exciters/ExciterDC1A.h"
+#include "griddyn/Generator.h"
+#include "griddyn/gridBus.h"
 #include "utilities/matrixData.hpp"
 
 #include <cmath>

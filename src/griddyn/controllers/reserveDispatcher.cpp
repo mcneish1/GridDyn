@@ -10,12 +10,12 @@
  * LLNS Copyright End
  */
 
-#include "reserveDispatcher.h"
-#include "../Area.h"
-#include "../Generator.h"
-#include "AGControl.h"
+#include "griddyn/controllers/reserveDispatcher.h"
+#include "griddyn/Area.h"
+#include "griddyn/Generator.h"
+#include "griddyn/controllers/AGControl.h"
 #include "core/coreExceptions.h"
-#include "scheduler.h"
+#include "griddyn/controllers/scheduler.h"
 
 namespace griddyn
 {

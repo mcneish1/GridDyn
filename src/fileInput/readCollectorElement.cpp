@@ -10,10 +10,10 @@
  * LLNS Copyright End
 */
 #include "core/factoryTemplates.hpp"
-#include "elementReaderTemplates.hpp"
-#include "fileInput.h"
-#include "readElement.h"
-#include "readerHelper.h"
+#include "fileInput/elementReaderTemplates.hpp"
+#include "fileInput/fileInput.h"
+#include "fileInput/readElement.h"
+#include "fileInput/readerHelper.h"
 
 #include "core/objectInterpreter.h"
 #include "griddyn/measurement/collector.h"

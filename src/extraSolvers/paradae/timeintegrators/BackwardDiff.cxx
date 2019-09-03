@@ -12,11 +12,11 @@
 
 #include "BackwardDiff.h"
 #include "AllTimeIntegrators.h"
-#include "../solvers/Newton.h"
-#include "../solvers/LineSearch.h"
-#include "../math/DenseMatrix.h"
-#include "../math/SparseMatrix.h"
-#include "../math/IPoly.h"
+#include "solvers/Newton.h"
+#include "solvers/LineSearch.h"
+#include "math/DenseMatrix.h"
+#include "math/SparseMatrix.h"
+#include "math/IPoly.h"
 #include <sstream>
 #include <iostream>
 #include <cmath>

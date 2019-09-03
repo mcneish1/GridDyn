@@ -10,9 +10,9 @@
 * LLNS Copyright End
 */
 
-#include "dimeInterface.h"
-#include "dimeCommunicator.h"
-#include "dimeCollector.h"
+#include "networking/dimeInterface.h"
+#include "networking/dimeCommunicator.h"
+#include "networking/dimeCollector.h"
 
 #include "core/factoryTemplates.hpp"
 #include "core/objectFactory.hpp"

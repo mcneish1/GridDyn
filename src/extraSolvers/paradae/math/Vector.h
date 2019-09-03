@@ -13,7 +13,7 @@
 
 #include <iostream>
 #include <cstring>
-#include "../common/def.h"
+#include "common/def.h"
 
 namespace griddyn {
 namespace paradae {

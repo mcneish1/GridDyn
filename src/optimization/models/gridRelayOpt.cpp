@@ -12,7 +12,7 @@
 
 // headers
 #include "gridRelayOpt.h"
-#include "../optObjectFactory.h"
+#include "optimization/optObjectFactory.h"
 #include "core/coreExceptions.h"
 #include "gridAreaOpt.h"
 #include "griddyn/Relay.h"

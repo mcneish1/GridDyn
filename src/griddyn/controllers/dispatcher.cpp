@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "dispatcher.h"
+#include "griddyn/controllers/dispatcher.h"
 #include "core/coreExceptions.h"
 
 namespace griddyn

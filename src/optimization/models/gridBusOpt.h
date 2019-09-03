@@ -13,7 +13,7 @@
 #pragma once
 
 // headers
-#include "../gridOptObjects.h"
+#include "optimization/gridOptObjects.h"
 // forward classes
 namespace griddyn
 {

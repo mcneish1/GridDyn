@@ -10,18 +10,18 @@
  * LLNS Copyright End
  */
 
-#include "objectGrabbers.h"
-#include "../Area.h"
-#include "../Generator.h"
-#include "../Link.h"
-#include "../Load.h"
-#include "../Relay.h"
-#include "../gridBus.h"
-#include "../gridSubModel.h"
-#include "../relays/controlRelay.h"
-#include "../relays/sensor.h"
+#include "griddyn/measurement/objectGrabbers.h"
+#include "griddyn/Area.h"
+#include "griddyn/Generator.h"
+#include "griddyn/Link.h"
+#include "griddyn/Load.h"
+#include "griddyn/Relay.h"
+#include "griddyn/gridBus.h"
+#include "griddyn/gridSubModel.h"
+#include "griddyn/relays/controlRelay.h"
+#include "griddyn/relays/sensor.h"
 
-#include "../solvers/solverMode.hpp"
+#include "griddyn/solvers/solverMode.hpp"
 #include "utilities/mapOps.hpp"
 #include "utilities/stringOps.h"
 #include <iterator>

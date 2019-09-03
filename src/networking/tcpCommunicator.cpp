@@ -10,9 +10,9 @@
  * LLNS Copyright End
  */
 
-#include "tcpCommunicator.h"
-#include "AsioServiceManager.h"
-#include "TcpHelperClasses.h"
+#include "networking/tcpCommunicator.h"
+#include "networking/AsioServiceManager.h"
+#include "networking/TcpHelperClasses.h"
 
 #include "griddyn/comms/commMessage.h"
 

@@ -10,12 +10,12 @@
  * LLNS Copyright End
  */
 
-#include "arkodeInterface.h"
+#include "griddyn/solvers/arkodeInterface.h"
 
 #include "core/coreExceptions.h"
 
-#include "../gridDynSimulation.h"
-#include "../simulation/gridDynSimulationFileOps.h"
+#include "griddyn/gridDynSimulation.h"
+#include "griddyn/simulation/gridDynSimulationFileOps.h"
 #include "utilities/stringOps.h"
 #include "utilities/vectorOps.hpp"
 

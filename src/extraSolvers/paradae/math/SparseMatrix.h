@@ -12,7 +12,7 @@
 #ifndef SparseMatrix_h
 #define SparseMatrix_h
 
-#include "../math/VirtualMatrix.h"
+#include "math/VirtualMatrix.h"
 
 namespace griddyn {
 namespace paradae {

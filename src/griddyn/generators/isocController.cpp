@@ -10,8 +10,8 @@
  * LLNS Copyright End
  */
 
-#include "isocController.h"
-#include "../Generator.h"
+#include "griddyn/generators/isocController.h"
+#include "griddyn/Generator.h"
 
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"

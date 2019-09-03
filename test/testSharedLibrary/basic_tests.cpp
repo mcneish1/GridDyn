@@ -17,16 +17,13 @@
 
 /** these test cases test out the value converters
  */
-#include "griddyn.h"
-
-static const std::string ieee_test_directory = std::string(GRIDDYN_TEST_DIRECTORY "/IEEE_test_cases/");
-static const std::string matlab_test_directory = std::string(GRIDDYN_TEST_DIRECTORY "/matlab_test_files/");
-static const std::string other_test_directory = std::string(GRIDDYN_TEST_DIRECTORY "/other_test_cases/");
+#include "griddyn_shared/griddyn.h"
+#include "../testHelper.h"
 
 BOOST_AUTO_TEST_SUITE (basic_tests, * boost::unit_test::label("quick"))
 
 /** just a check that in the simple case we do actually get the time back we requested*/
-BOOST_AUTO_TEST_CASE (simple_load_test) 
+BOOST_AUTO_TEST_CASE (simple_load_test)
 {
     gridDynSimReference sim = gridDynSimulation_create("", "sim1");
     BOOST_CHECK(sim != nullptr);
@@ -149,7 +146,7 @@ BOOST_AUTO_TEST_CASE(build_small_test_case)
 	gridDynObject_getValue(bus2, "voltage", &V2);
 	BOOST_CHECK_EQUAL(V, V2);
 	gridDynObject_free(bus2);
-   
+
 }
 
 BOOST_AUTO_TEST_SUITE_END ()

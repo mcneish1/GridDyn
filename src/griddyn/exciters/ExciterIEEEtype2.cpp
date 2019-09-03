@@ -11,9 +11,9 @@
 */
 
 #include "core/coreObjectTemplates.hpp"
-#include "../Generator.h"
-#include "../gridBus.h"
-#include "ExciterIEEEtype2.h"
+#include "griddyn/Generator.h"
+#include "griddyn/gridBus.h"
+#include "griddyn/exciters/ExciterIEEEtype2.h"
 #include "utilities/matrixData.hpp"
 #include <cmath>
 

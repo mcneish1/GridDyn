@@ -10,8 +10,8 @@
  * LLNS Copyright End
  */
 
-#include "jsonReaderElement.h"
-#include "jsonElement.h"
+#include "formatInterpreters/jsonReaderElement.h"
+#include "formatInterpreters/jsonElement.h"
 #include "utilities/stringConversion.h"
 #include <cassert>
 #include <fstream>

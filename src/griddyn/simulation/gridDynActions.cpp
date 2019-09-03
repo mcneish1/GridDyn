@@ -10,7 +10,7 @@
 * LLNS Copyright End
 */
 
-#include "gridDynActions.h"
+#include "griddyn/simulation/gridDynActions.h"
 #include "core/coreExceptions.h"
 #include "utilities/stringConversion.h"
 

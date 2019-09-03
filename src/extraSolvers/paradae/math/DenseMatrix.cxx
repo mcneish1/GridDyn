@@ -11,7 +11,7 @@
 */
 #include "DenseMatrix.h"
 #include "Vector.h"
-#include "../common/Timer.h"
+#include "common/Timer.h"
 #include <algorithm>
 #include <cstring>
 #include <typeinfo>

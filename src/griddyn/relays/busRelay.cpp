@@ -10,11 +10,11 @@
  * LLNS Copyright End
 */
 
-#include "busRelay.h"
+#include "griddyn/relays/busRelay.h"
 #include "core/coreObjectTemplates.hpp"
-#include "../events/Event.h"
-#include "../events/eventQueue.h"
-#include "../measurement/Condition.h"
+#include "griddyn/events/Event.h"
+#include "griddyn/events/eventQueue.h"
+#include "griddyn/measurement/Condition.h"
 
 #include <boost/format.hpp>
 

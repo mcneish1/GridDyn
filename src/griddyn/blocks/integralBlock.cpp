@@ -10,7 +10,7 @@
  * LLNS Copyright End
 */
 
-#include "integralBlock.h"
+#include "griddyn/blocks/integralBlock.h"
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/matrixData.hpp"
 #include "utilities/vectorOps.hpp"

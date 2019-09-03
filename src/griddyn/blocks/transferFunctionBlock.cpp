@@ -10,7 +10,7 @@
 * LLNS Copyright End
 */
 
-#include "transferFunctionBlock.h"
+#include "griddyn/blocks/transferFunctionBlock.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/matrixData.hpp"

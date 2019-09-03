@@ -10,10 +10,10 @@
 * LLNS Copyright End
 */
 
-#include "zmqInterface.h"
-#include "dimeCommunicator.h"
-#include "dimeCollector.h"
-#include "zmqCommunicator.h"
+#include "networking/zmqInterface.h"
+#include "networking/dimeCommunicator.h"
+#include "networking/dimeCollector.h"
+#include "networking/zmqCommunicator.h"
 
 #include "core/factoryTemplates.hpp"
 #include "core/objectFactory.hpp"

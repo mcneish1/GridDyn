@@ -4,7 +4,7 @@ Battelle Memorial Institute; Lawrence Livermore National Security, LLC; Alliance
 All rights reserved. See LICENSE file and DISCLAIMER for more details.
 */
 
-#include "TripWire.hpp"
+#include "utilities/TripWire.hpp"
 namespace tripwire
 {
 

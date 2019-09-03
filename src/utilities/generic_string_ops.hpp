@@ -13,7 +13,7 @@
 
 /** this file defines some operations that can be performed on string like objects
 */
-#include "charMapper.h"
+#include "utilities/charMapper.h"
 #include <vector>
 
 template <class X>

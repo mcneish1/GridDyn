@@ -11,9 +11,9 @@
 */
 #include <string>
 #include "def.h"
-#include "../math/SVector.h"
-#include "../math/IVanderExt.h"
-#include "../math/IVander.h"
+#include "math/SVector.h"
+#include "math/IVanderExt.h"
+#include "math/IVander.h"
 namespace griddyn {
 namespace paradae {
 

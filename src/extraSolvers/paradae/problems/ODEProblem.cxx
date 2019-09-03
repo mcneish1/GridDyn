@@ -10,8 +10,8 @@
 * LLNS Copyright End
 */
 #include "ODEProblem.h"
-#include "../equations/AllEquations.h"
-#include "../timeintegrators/AllTimeIntegrators.h"
+#include "equations/AllEquations.h"
+#include "timeintegrators/AllTimeIntegrators.h"
 
 #include <sstream>
 #include <iomanip>
@@ -33,7 +33,7 @@ ODEProblem::ODEProblem(MPI_Comm comm_)
 
 // Note that this is a different SetEquation than was originally in paradae.
 // The ability to switch between different equations, and to read t0, Tmax, and
-// Nsteps from params.ini has been removed. 
+// Nsteps from params.ini has been removed.
 void ODEProblem::SetEquation(Equation* equation_, Real t0, Real Tmax, int Nsteps)
 {
     equation = equation_;

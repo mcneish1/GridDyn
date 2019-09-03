@@ -11,7 +11,7 @@
 */
 
 
-#include "griddyn/griddyn-config.h"
+#include "griddyn-config.h"
 #ifndef BOOST_STATIC
 #define BOOST_TEST_DYN_LINK
 #endif

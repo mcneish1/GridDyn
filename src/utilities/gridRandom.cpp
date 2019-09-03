@@ -10,9 +10,9 @@
  * LLNS Copyright End
  */
 
-#include "gridRandom.h"
-#include "mapOps.hpp"
-#include "vectorOps.hpp"
+#include "utilities/gridRandom.h"
+#include "utilities/mapOps.hpp"
+#include "utilities/vectorOps.hpp"
 #include <algorithm>
 #include <ctime>
 

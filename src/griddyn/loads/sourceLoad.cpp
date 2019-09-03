@@ -9,9 +9,9 @@
  * For details, see the LICENSE file.
  * LLNS Copyright End
  */
-#include "sourceLoad.h"
-#include "../Source.h"
-#include "../sources/sourceTypes.h"
+#include "griddyn/loads/sourceLoad.h"
+#include "griddyn/Source.h"
+#include "griddyn/sources/sourceTypes.h"
 
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"

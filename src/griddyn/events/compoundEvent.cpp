@@ -10,7 +10,7 @@
 * LLNS Copyright End
 */
 
-#include "compoundEvent.h"
+#include "griddyn/events/compoundEvent.h"
 #include "core/objectInterpreter.h"
 #include "utilities/stringOps.h"
 #include "core/coreExceptions.h"
@@ -113,7 +113,7 @@ void compoundEvent::set(const std::string &param, double val)
 {
 	if (param[0] == '#')
 	{
-		
+
 	}
 	else
 	{
@@ -125,7 +125,7 @@ void compoundEvent::set(const std::string &param, const std::string &val)
 {
 	if (param[0] == '#')
 	{
-		
+
 	}
 	else
 	{
@@ -145,7 +145,7 @@ std::string compoundEvent::to_string()
 	// @time1[,time2,time3,... |+ period] >[rootobj::obj:]field(units) = val1,[val2,val3,...]
 	std::stringstream ss;
 		ss << '@' << triggerTime << " | ";
-		
+
 		ss << fullObjectName(targetObjects[0]) << ':' << fields[0];
 		if (units[0] != gridUnits::defUnit)
 		{
@@ -161,7 +161,7 @@ std::string compoundEvent::to_string()
 			}
 			ss << " = " << values[kk];
 		}
-	
+
 	return ss.str();
 }
 change_code compoundEvent::trigger()
@@ -205,7 +205,7 @@ bool compoundEvent::setTarget(coreObject *gdo, const std::string &var)
 	{
 		m_obj = gdo;
 	}
-	
+
 
 	if (m_obj!=nullptr)
 	{

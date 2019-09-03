@@ -10,8 +10,8 @@
  * LLNS Copyright End
  */
 
-#include "offsetTable.h"
-#include "gridComponent.h"
+#include "griddyn/offsetTable.h"
+#include "griddyn/gridComponent.h"
 
 namespace griddyn
 {

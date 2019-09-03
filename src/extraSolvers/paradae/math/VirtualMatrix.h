@@ -11,7 +11,7 @@
 */
 #pragma once
 
-#include "../common/def.h"
+#include "common/def.h"
 #include <iostream>
 #include <fstream>
 #include <iomanip>

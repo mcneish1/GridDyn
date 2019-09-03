@@ -10,10 +10,10 @@
 * LLNS Copyright End
 */
 
-#include "dynamicInitialConditionRecovery.h"
-#include "../gridDynSimulation.h"
-#include "diagnostics.h"
-#include "../solvers/solverInterface.h"
+#include "griddyn/simulation/dynamicInitialConditionRecovery.h"
+#include "griddyn/gridDynSimulation.h"
+#include "griddyn/simulation/diagnostics.h"
+#include "griddyn/solvers/solverInterface.h"
 
 #include <algorithm>
 

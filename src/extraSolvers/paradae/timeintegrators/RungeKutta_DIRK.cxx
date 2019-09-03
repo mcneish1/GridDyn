@@ -10,8 +10,8 @@
 * LLNS Copyright End
 */
 #include "RungeKutta_DIRK.h"
-#include "../math/DBlockTriMatrix.h"
-#include "../math/PMultiVector.h"
+#include "math/DBlockTriMatrix.h"
+#include "math/PMultiVector.h"
 namespace griddyn {
 namespace paradae {
 RungeKutta_DIRK::RungeKutta_DIRK(Equation* eq, bool varstep):RungeKutta_Implicit(eq,varstep)

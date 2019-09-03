@@ -10,8 +10,8 @@
  * LLNS Copyright End
  */
 
-#include "readerHelper.h"
-#include "fileInput.h"
+#include "fileInput/readerHelper.h"
+#include "fileInput/fileInput.h"
 
 #include <boost/filesystem.hpp>
 

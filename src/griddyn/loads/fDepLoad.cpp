@@ -10,9 +10,9 @@
  * LLNS Copyright End
 */
 
-#include "fDepLoad.h"
+#include "griddyn/loads/fDepLoad.h"
 #include "core/coreObjectTemplates.hpp"
-#include "../gridBus.h"
+#include "griddyn/gridBus.h"
 #include "utilities/matrixData.hpp"
 #include "utilities/stringOps.h"
 #include <cmath>

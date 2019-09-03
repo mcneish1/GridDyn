@@ -10,15 +10,15 @@
  * LLNS Copyright End
 */
 
-#include "grabberInterpreter.hpp"
-#include "../Area.h"
-#include "../Generator.h"
-#include "../Link.h"
-#include "../Load.h"
-#include "../gridBus.h"
-#include "gridGrabbers.h"
-#include "objectGrabbers.h"
-#include "../simulation/gridSimulation.h"
+#include "griddyn/measurement/grabberInterpreter.hpp"
+#include "griddyn/Area.h"
+#include "griddyn/Generator.h"
+#include "griddyn/Link.h"
+#include "griddyn/Load.h"
+#include "griddyn/gridBus.h"
+#include "griddyn/measurement/gridGrabbers.h"
+#include "griddyn/measurement/objectGrabbers.h"
+#include "griddyn/simulation/gridSimulation.h"
 #include "utilities/vectorOps.hpp"
 
 namespace griddyn

@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "stringOps.h"
+#include "utilities/stringOps.h"
 #include "generic_string_ops.hpp"
 #ifdef __GNUC__
 #pragma GCC diagnostic push

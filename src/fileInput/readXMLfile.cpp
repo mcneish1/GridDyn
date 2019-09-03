@@ -10,13 +10,13 @@
 * LLNS Copyright End
 */
 
-#include "elementReaderTemplates.hpp"
+#include "fileInput/elementReaderTemplates.hpp"
 #include "formatInterpreters/tinyxml2ReaderElement.h"
 #include "formatInterpreters/tinyxmlReaderElement.h"
 #include "griddyn/gridDynSimulation.h"
-#include "readElement.h"
-#include "readElementFile.h"
-#include "readerHelper.h"
+#include "fileInput/readElement.h"
+#include "fileInput/readElementFile.h"
+#include "fileInput/readerHelper.h"
 
 #include <cstdio>
 #include <sstream>

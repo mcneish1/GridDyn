@@ -10,20 +10,20 @@
  * LLNS Copyright End
  */
 
-#include "gridGrabbers.h"
-#include "../Area.h"
-#include "../Generator.h"
-#include "../Link.h"
-#include "../Load.h"
-#include "../Relay.h"
+#include "griddyn/measurement/gridGrabbers.h"
+#include "griddyn/Area.h"
+#include "griddyn/Generator.h"
+#include "griddyn/Link.h"
+#include "griddyn/Load.h"
+#include "griddyn/Relay.h"
 #include "core/coreExceptions.h"
 
-#include "../gridBus.h"
-#include "../gridSubModel.h"
-#include "../relays/sensor.h"
-#include "../simulation/gridSimulation.h"
-#include "grabberInterpreter.hpp"
-#include "objectGrabbers.h"
+#include "griddyn/gridBus.h"
+#include "griddyn/gridSubModel.h"
+#include "griddyn/relays/sensor.h"
+#include "griddyn/simulation/gridSimulation.h"
+#include "griddyn/measurement/grabberInterpreter.hpp"
+#include "griddyn/measurement/objectGrabbers.h"
 #include "utilities/functionInterpreter.h"
 #include "utilities/vectorOps.hpp"
 #include <algorithm>

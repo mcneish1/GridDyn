@@ -10,16 +10,16 @@
  * LLNS Copyright End
 */
 
-#include "fileInput.h"
+#include "fileInput/fileInput.h"
 
-#include "readElement.h"
+#include "fileInput/readElement.h"
 
 #include "core/coreExceptions.h"
 #include "formatInterpreters/jsonReaderElement.h"
 #include "formatInterpreters/tinyxml2ReaderElement.h"
 #include "formatInterpreters/tinyxmlReaderElement.h"
 #include "formatInterpreters/yamlReaderElement.h"
-#include "readElementFile.h"
+#include "fileInput/readElementFile.h"
 #include "utilities/stringOps.h"
 
 #include <boost/date_time/gregorian/gregorian.hpp>
@@ -28,17 +28,17 @@
 #include "griddyn/gridDynSimulation.h"
 namespace griddyn
 {
-	
+
 namespace readerConfig
 {
-int printMode = READER_DEFAULT_PRINT;  
-int warnMode = READER_WARN_ALL;	
-int warnCount = 0;	
+int printMode = READER_DEFAULT_PRINT;
+int warnMode = READER_WARN_ALL;
+int warnCount = 0;
 
-match_type defMatchType = match_type::capital_case_match; 
+match_type defMatchType = match_type::capital_case_match;
 
-xmlreader default_xml_reader = xmlreader::tinyxml;  
- 
+xmlreader default_xml_reader = xmlreader::tinyxml;
+
 
 void setPrintMode (int level) { printMode = level; }
 #define READER_VERBOSE_PRINT 3
@@ -203,7 +203,7 @@ void loadFile (std::unique_ptr<gridDynSimulation> &gds,
 
 void loadFile (coreObject *parentObject, const std::string &fileName, readerInfo *ri, std::string ext)
 {
-    
+
 
     if (ext.empty ())
     {

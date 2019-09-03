@@ -10,9 +10,9 @@
  * LLNS Copyright End
  */
 
-#include "GovernorSteamTCSR.h"
-#include "../Generator.h"
-#include "../gridBus.h"
+#include "griddyn/governors/GovernorSteamTCSR.h"
+#include "griddyn/Generator.h"
+#include "griddyn/gridBus.h"
 #include "utilities/matrixData.hpp"
 namespace griddyn
 {

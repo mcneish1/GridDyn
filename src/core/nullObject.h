@@ -14,7 +14,7 @@
 #define NULLOBJECT_H_
 #pragma once
 
-#include "coreObject.h"
+#include "core/coreObject.h"
 
 namespace griddyn
 {

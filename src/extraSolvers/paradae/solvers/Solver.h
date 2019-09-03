@@ -11,9 +11,9 @@
 */
 #pragma once
 
-#include "../common/def.h"
-#include "../math/SVector.h"
-#include "../math/VirtualMatrix.h"
+#include "common/def.h"
+#include "math/SVector.h"
+#include "math/VirtualMatrix.h"
 #include <cmath>
 namespace griddyn {
 namespace paradae {

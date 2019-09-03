@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "coreObjectList.h"
+#include "core/coreObjectList.h"
 namespace griddyn
 {
 bool coreObjectList::insert (coreObject *obj, bool replace)

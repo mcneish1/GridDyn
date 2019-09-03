@@ -9,7 +9,7 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#include "relayMessage.h"
+#include "griddyn/comms/relayMessage.h"
 
 #include "utilities/stringOps.h"
 #include <map>

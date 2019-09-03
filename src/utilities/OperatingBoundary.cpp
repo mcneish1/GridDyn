@@ -9,7 +9,7 @@
  * For details, see the LICENSE file.
  * LLNS Copyright End
  */
-#include "OperatingBoundary.h"
+#include "utilities/OperatingBoundary.h"
 
 #include <algorithm>
 #include <cmath>

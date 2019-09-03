@@ -10,16 +10,16 @@
  * LLNS Copyright End
  */
 
-#include "controlRelay.h"
+#include "griddyn/relays/controlRelay.h"
 #include "core/coreExceptions.h"
 //#include "utilities/timeSeries.hpp"
-#include "../comms/Communicator.h"
-#include "../comms/controlMessage.h"
+#include "griddyn/comms/Communicator.h"
+#include "griddyn/comms/controlMessage.h"
 #include "core/coreObjectTemplates.hpp"
-#include "../events/Event.h"
-#include "../events/eventQueue.h"
-#include "../measurement/gridGrabbers.h"
-#include "../simulation/gridSimulation.h"
+#include "griddyn/events/Event.h"
+#include "griddyn/events/eventQueue.h"
+#include "griddyn/measurement/gridGrabbers.h"
+#include "griddyn/simulation/gridSimulation.h"
 #include "utilities/stringOps.h"
 
 #include <boost/format.hpp>

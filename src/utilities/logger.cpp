@@ -15,7 +15,7 @@ All rights reserved. See LICENSE file and DISCLAIMER for more details.
  * LLNS Copyright End
  */
 
-#include "logger.h"
+#include "utilities/logger.h"
 #include <iostream>
 
 namespace utilities

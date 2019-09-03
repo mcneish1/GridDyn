@@ -12,7 +12,7 @@
 #include "SparseMatrix.h"
 #include "Vector.h"
 #include "SVector.h"
-#include "../common/Timer.h"
+#include "common/Timer.h"
 #include <algorithm>
 #include <cstring>
 #include <typeinfo>

@@ -10,8 +10,8 @@
  * LLNS Copyright End
  */
 
-#include "dimeCommunicator.h"
-#include "zmqLibrary/zmqHelper.h"
+#include "networking/dimeCommunicator.h"
+#include "networking/zmqLibrary/zmqHelper.h"
 
 #include "cppzmq/zmq_addon.hpp"
 

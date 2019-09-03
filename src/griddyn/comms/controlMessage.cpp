@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#include "controlMessage.h"
-#include "../gridDynDefinitions.hpp"
+#include "griddyn/comms/controlMessage.h"
+#include "griddyn/gridDynDefinitions.hpp"
 #include "utilities/stringConversion.h"
 
 namespace griddyn

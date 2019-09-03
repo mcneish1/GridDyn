@@ -10,9 +10,9 @@
 * LLNS Copyright End
 */
 
-#include "powerFlowErrorRecovery.h"
-#include "../gridDynSimulation.h"
-#include "../solvers/solverInterface.h"
+#include "griddyn/simulation/powerFlowErrorRecovery.h"
+#include "griddyn/gridDynSimulation.h"
+#include "griddyn/solvers/solverInterface.h"
 
 #include <algorithm>
 

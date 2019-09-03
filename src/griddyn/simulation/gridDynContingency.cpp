@@ -10,15 +10,15 @@
 * LLNS Copyright End
 */
 
-#include "../Generator.h"
-#include "../Link.h"
-#include "contingency.h"
-#include "../events/Event.h"
-#include "../gridBus.h"
-#include "gridDynSimulationFileOps.h"
-#include "../gridDynSimulation.h"
-#include "../loads/zipLoad.h"
-#include "../simulation/diagnostics.h"
+#include "griddyn/Generator.h"
+#include "griddyn/Link.h"
+#include "griddyn/simulation/contingency.h"
+#include "griddyn/events/Event.h"
+#include "griddyn/gridBus.h"
+#include "griddyn/simulation/gridDynSimulationFileOps.h"
+#include "griddyn/gridDynSimulation.h"
+#include "griddyn/loads/zipLoad.h"
+#include "griddyn/simulation/diagnostics.h"
 #include "utilities/vectorOps.hpp"
 #include "utilities/workQueue.h"
 

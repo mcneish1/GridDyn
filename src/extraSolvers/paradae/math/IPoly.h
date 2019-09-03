@@ -12,7 +12,7 @@
 #ifndef IPoly_h
 #define IPoly_h
 
-#include "../common/def.h"
+#include "common/def.h"
 #include "Vector.h"
 #include "PMultiVector.h"
 #include "DenseMatrix.h"

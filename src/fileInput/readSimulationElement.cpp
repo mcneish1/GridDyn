@@ -10,12 +10,12 @@
  * LLNS Copyright End
  */
 
-#include "readElement.h"
+#include "fileInput/readElement.h"
 
-#include "elementReaderTemplates.hpp"
+#include "fileInput/elementReaderTemplates.hpp"
 #include "griddyn/gridDynSimulation.h"
 #include "griddyn/measurement/collector.h"
-#include "readerHelper.h"
+#include "fileInput/readerHelper.h"
 
 namespace griddyn
 {

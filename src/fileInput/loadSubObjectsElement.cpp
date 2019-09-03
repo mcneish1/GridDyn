@@ -10,9 +10,9 @@
  * LLNS Copyright End
  */
 
-#include "elementReaderTemplates.hpp"
-#include "fileInput.h"
-#include "readElement.h"
+#include "fileInput/elementReaderTemplates.hpp"
+#include "fileInput/fileInput.h"
+#include "fileInput/readElement.h"
 #include <cstdio>
 #include <functional>
 #include <iterator>

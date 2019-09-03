@@ -11,7 +11,7 @@
  */
 
 // headers
-#include "griddyn/griddyn-config.h"
+#include "griddyn-config.h"
 #include "griddyn/gridDynSimulation.h"
 #include "core/coreExceptions.h"
 #include "runner/gridDynRunner.h"

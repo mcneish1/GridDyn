@@ -10,17 +10,17 @@
  * LLNS Copyright End
  */
 
-#include "../Area.h"
+#include "griddyn/Area.h"
 
-#include "../Generator.h"
-#include "../Link.h"
-#include "../Load.h"
+#include "griddyn/Generator.h"
+#include "griddyn/Link.h"
+#include "griddyn/Load.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/coreOwningPtr.hpp"
 
-#include "../blocks/derivativeBlock.h"
-#include "../simulation/contingency.h"
-#include "acBus.h"
+#include "griddyn/blocks/derivativeBlock.h"
+#include "griddyn/simulation/contingency.h"
+#include "griddyn/primary/acBus.h"
 #include "core/coreExceptions.h"
 #include "core/objectFactoryTemplates.hpp"
 #include "utilities/vectorOps.hpp"

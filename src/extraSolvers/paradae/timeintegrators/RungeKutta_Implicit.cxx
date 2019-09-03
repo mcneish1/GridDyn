@@ -10,11 +10,11 @@
 * LLNS Copyright End
 */
 #include "RungeKutta_Implicit.h"
-#include "../solvers/Newton.h"
-#include "../solvers/LineSearch.h"
-#include "../math/DenseMatrix.h"
-#include "../math/SparseMatrix.h"
-#include "../math/PMultiVector.h"
+#include "solvers/Newton.h"
+#include "solvers/LineSearch.h"
+#include "math/DenseMatrix.h"
+#include "math/SparseMatrix.h"
+#include "math/PMultiVector.h"
 #include <cmath>
 
 using namespace std;

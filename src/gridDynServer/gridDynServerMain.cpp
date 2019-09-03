@@ -15,10 +15,12 @@
 
 
 // headers
-#include "gridDyn.h"
+#include "griddyn_shared/griddyn.h"
 #include "gridDynServer.h"
-#include "gridDynRunner.h"
-#include "libraryLoader.h"
+#include "runner/gridDynRunner.h"
+#include "gridDynLoader/libraryLoader.h"
+#include "griddyn/gridDynSimulation.h"
+
 #include <boost/program_options.hpp>
 #include <boost/filesystem.hpp>
 
@@ -34,11 +36,11 @@ namespace po = boost::program_options;
 // main
 int main (int argc, char *argv[])
 {
-	loadLibraries();
-  std::shared_ptr<gridDynSimulation> gds = std::make_shared<gridDynSimulation> ();
+	griddyn::loadLibraries();
+  std::shared_ptr<griddyn::gridDynSimulation> gds = std::make_shared<griddyn::gridDynSimulation> ();
 
   // Store the simulation pointer somewhere so that it can be accessed in other modules.
-  gridDynSimulation::setInstance (gds.get ()); // peer to gridDynSimulation::GetInstance ();
+  griddyn::gridDynSimulation::setInstance (gds.get ()); // peer to gridDynSimulation::GetInstance ();
 
 
   if (!gds)
@@ -57,7 +59,7 @@ int main (int argc, char *argv[])
     }
 
   po::variables_map vm;
-  int ret = argumentParser (argc, argv, vm);
+  int ret = griddyn::argumentParser (argc, argv, vm);
   if (ret)
     {
       return ret;
@@ -66,7 +68,7 @@ int main (int argc, char *argv[])
 
   //create the simulation
 
- 
+
 
 
   return 0;

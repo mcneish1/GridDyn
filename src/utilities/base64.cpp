@@ -21,7 +21,7 @@
 */
 
 #include "base64.h"
-#include "charMapper.h"
+#include "utilities/charMapper.h"
 #include <iostream>
 #include <vector>
 

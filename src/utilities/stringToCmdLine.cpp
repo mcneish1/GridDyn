@@ -11,8 +11,8 @@
  */
 
 
-#include "stringToCmdLine.h"
-#include "stringOps.h"
+#include "utilities/stringToCmdLine.h"
+#include "utilities/stringOps.h"
 
 namespace utilities
 {

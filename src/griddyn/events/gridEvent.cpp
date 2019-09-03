@@ -10,7 +10,7 @@
  * LLNS Copyright End
 */
 
-#include "Event.h"
+#include "griddyn/events/Event.h"
 
 #include "gridDyn.h"
 #include "utilities/units.h"
@@ -19,11 +19,11 @@
 #include "core/coreExceptions.h"
 #include "utilities/stringOps.h"
 
-#include "reversibleEvent.h"
-#include "Player.h"
-#include "interpolatingPlayer.h"
-#include "compoundEvent.h"
-#include "compoundEventPlayer.h"
+#include "griddyn/events/reversibleEvent.h"
+#include "griddyn/events/Player.h"
+#include "griddyn/events/interpolatingPlayer.h"
+#include "griddyn/events/compoundEvent.h"
+#include "griddyn/events/compoundEventPlayer.h"
 #include <sstream>
 
 
@@ -94,8 +94,8 @@ void Event::updateEvent(gridEventInfo &gdEI, coreObject *rootObject)
 	{
 		m_obj = searchObj;
 	}
-	
-	
+
+
 	armed = checkArmed();
 }
 
@@ -121,13 +121,13 @@ void Event::loadField(coreObject *searchObj, const std::string &newfield)
 	{
 		setName(stringOps::trim(newfield.substr(renameloc + 4)));
 		fdata = objInfo(newfield.substr(0,renameloc),searchObj);
-		
+
 	}
 	else
 	{
 		fdata = objInfo(newfield, searchObj);
 	}
-	
+
 	field = fdata.m_field;
 	if (fdata.m_unitType != gridUnits::units_t::defUnit)
 	{
@@ -140,7 +140,7 @@ void Event::loadField(coreObject *searchObj, const std::string &newfield)
 		{
 			setName(m_obj->getName());
 		}
-		
+
 	}
 	armed = checkArmed();
 }
@@ -152,7 +152,7 @@ std::shared_ptr<Event> Event::clone(std::shared_ptr<Event> gE) const
 	if (!nE)
 	{
 		nE = std::make_shared<Event>(getName());
-		
+
 	}
 	else
 	{
@@ -249,7 +249,7 @@ void Event::setValue (double val, gridUnits::units_t newUnits)
 			  unitType = newUnits;
 		  }
 	  }
-	  
+
   }
 }
 
@@ -333,14 +333,14 @@ void Event::updateObject(coreObject *gco, object_update_mode mode)
 			else
 			{
 				throw(objectUpdateFailException());
-			}		
-			
+			}
+
 		}
 		else
 		{
 			setTarget(gco);
 		}
-		
+
 	}
 }
 
@@ -360,7 +360,7 @@ bool Event::setTarget ( coreObject *gdo,const std::string &var)
 	{
 		m_obj = gdo;
 		setName(m_obj->getName());
-		
+
 	}
   if (!var.empty ())
     {
@@ -504,7 +504,7 @@ void gridEventInfo::loadString(const std::string &eventString, coreObject *rootO
     { //now we get into file based event
 	  auto posEndFile = vstring.find_first_of('}', posFile);
       file = vstring.substr (posE + 1,posEndFile-posFile-1);
-      
+
       int col = stringOps::trailingStringInt (file, file, 0);
 	  columns.push_back(col);
 	  auto posPlus= vstring.find_first_of('+',posEndFile);
@@ -556,7 +556,7 @@ std::unique_ptr<Event> make_event (gridEventInfo &gdEI, coreObject *rootObject)
 		}
 	}
 	auto evType = findEventType(gdEI);
-	
+
 	switch (evType)
 	{
 	case event_types::basic:
@@ -582,7 +582,7 @@ std::unique_ptr<Event> make_event (gridEventInfo &gdEI, coreObject *rootObject)
 	default:
 		break;
 	}
- 
+
   return ev;
 }
 

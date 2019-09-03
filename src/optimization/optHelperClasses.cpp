@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "optHelperClasses.h"
+#include "optimization/optHelperClasses.h"
 #include <cstring>
 #include "utilities/vectorOps.hpp"
 

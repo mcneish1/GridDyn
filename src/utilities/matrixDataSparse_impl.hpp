@@ -13,7 +13,7 @@
 #ifndef _MATRIX_DATA_SPARSE_IMPL_HPP_
 #define _MATRIX_DATA_SPARSE_IMPL_HPP_
 
-#include "matrixDataSparse.hpp"
+#include "utilities/matrixDataSparse.hpp"
 
 template <typename ValueT>
 void matrixDataSparse<ValueT>::assign (index_t row, index_t col, ValueT num)

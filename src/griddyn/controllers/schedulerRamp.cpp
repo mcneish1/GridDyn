@@ -10,11 +10,11 @@
  * LLNS Copyright End
  */
 
-#include "../comms/schedulerMessage.h"
-#include "AGControl.h"
+#include "griddyn/comms/schedulerMessage.h"
+#include "griddyn/controllers/AGControl.h"
 #include "core/coreObjectTemplates.hpp"
-#include "reserveDispatcher.h"
-#include "scheduler.h"
+#include "griddyn/controllers/reserveDispatcher.h"
+#include "griddyn/controllers/scheduler.h"
 #include "utilities/stringOps.h"
 #include "utilities/timeSeries.hpp"
 

@@ -11,7 +11,7 @@
 */
 
 #include "formatInterpreters/readerElement.h"
-#include "readElement.h"
+#include "fileInput/readElement.h"
 #include "utilities/stringOps.h"
 
 namespace griddyn

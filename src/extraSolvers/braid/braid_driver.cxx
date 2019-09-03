@@ -10,10 +10,10 @@
 * LLNS Copyright End
 */
 #include "braid_driver.h"
-#include "../paradae/timeintegrators/BackwardDiff.h"
-#include "../paradae/math/IVanderExt.h"
-#include "../paradae/math/IVander.h"
-#include "../paradae/common/Timer.h"
+#include "paradae/timeintegrators/BackwardDiff.h"
+#include "paradae/math/IVanderExt.h"
+#include "paradae/math/IVander.h"
+#include "paradae/common/Timer.h"
 #include <iomanip>
 #include <sstream>
 #include <cmath>

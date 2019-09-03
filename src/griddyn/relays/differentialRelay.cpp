@@ -10,14 +10,14 @@
  * LLNS Copyright End
  */
 
-#include "differentialRelay.h"
-#include "../Link.h"
-#include "../comms/Communicator.h"
-#include "../comms/relayMessage.h"
-#include "../events/Event.h"
-#include "../events/eventQueue.h"
-#include "../gridBus.h"
-#include "../measurement/Condition.h"
+#include "griddyn/relays/differentialRelay.h"
+#include "griddyn/Link.h"
+#include "griddyn/comms/Communicator.h"
+#include "griddyn/comms/relayMessage.h"
+#include "griddyn/events/Event.h"
+#include "griddyn/events/eventQueue.h"
+#include "griddyn/gridBus.h"
+#include "griddyn/measurement/Condition.h"
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/timeSeries.hpp"
 

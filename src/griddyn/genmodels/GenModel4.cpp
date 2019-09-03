@@ -10,9 +10,9 @@
  * LLNS Copyright End
  */
 
-#include "GenModel4.h"
+#include "griddyn/genmodels/GenModel4.h"
 #include "core/coreObjectTemplates.hpp"
-#include "../gridBus.h"
+#include "griddyn/gridBus.h"
 #include "utilities/matrixData.hpp"
 #include "utilities/vectorOps.hpp"
 
@@ -96,7 +96,7 @@ void GenModel4::residual (const IOdata &inputs, const stateData &sD, double resi
         // omega
         double Pe = gmd[2] * gm[0] + gmd[3] * gm[1] + (Xdp - Xqp) * gm[0] * gm[1];
         rvd[1] = 0.5 * (Pmt - Pe - D * (gmd[1] - 1.0)) / H - gmp[1];
-		
+
     }
     // if (parent->parent->name == "BUS_31")
     //   {

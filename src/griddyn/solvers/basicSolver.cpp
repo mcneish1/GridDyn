@@ -10,9 +10,9 @@
  * LLNS Copyright End
  */
 
-#include "basicSolver.h"
+#include "griddyn/solvers/basicSolver.h"
 
-#include "../gridDynSimulation.h"
+#include "griddyn/gridDynSimulation.h"
 #include "utilities/stringOps.h"
 #include "utilities/vectorOps.hpp"
 

@@ -10,12 +10,12 @@
  * LLNS Copyright End
  */
 
-#include "readerInfo.h"
+#include "fileInput/readerInfo.h"
 #include "core/coreObject.h"
-#include "fileInput.h"
+#include "fileInput/fileInput.h"
 #include "formatInterpreters/readerElement.h"
 #include "griddyn/measurement/collector.h"
-#include "readerHelper.h"
+#include "fileInput/readerHelper.h"
 
 #include <boost/date_time.hpp>
 #include <boost/date_time/gregorian/gregorian.hpp>

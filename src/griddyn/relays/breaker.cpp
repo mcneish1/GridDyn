@@ -10,16 +10,16 @@
  * LLNS Copyright End
  */
 
-#include "breaker.h"
-#include "../measurement/Condition.h"
+#include "griddyn/relays/breaker.h"
+#include "griddyn/measurement/Condition.h"
 
-#include "../Link.h"
-#include "../events/Event.h"
-#include "../gridBus.h"
-#include "../gridSecondary.h"
-#include "../measurement/grabberSet.h"
-#include "../measurement/gridGrabbers.h"
-#include "../measurement/stateGrabber.h"
+#include "griddyn/Link.h"
+#include "griddyn/events/Event.h"
+#include "griddyn/gridBus.h"
+#include "griddyn/gridSecondary.h"
+#include "griddyn/measurement/grabberSet.h"
+#include "griddyn/measurement/gridGrabbers.h"
+#include "griddyn/measurement/stateGrabber.h"
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/matrixDataSparse.hpp"
 

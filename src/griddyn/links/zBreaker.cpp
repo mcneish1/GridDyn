@@ -11,10 +11,10 @@
 */
 
 // headers
-#include "zBreaker.h"
+#include "griddyn/links/zBreaker.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
-#include "../gridBus.h"
+#include "griddyn/gridBus.h"
 #include "utilities/stringOps.h"
 
 #include "core/objectFactoryTemplates.hpp"

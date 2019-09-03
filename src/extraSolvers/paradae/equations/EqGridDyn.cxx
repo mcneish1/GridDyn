@@ -10,8 +10,8 @@
 * LLNS Copyright End
 */
 #include "EqGridDyn.h"
-#include "../math/paradaeArrayData.h"
-#include "../common/Timer.h"
+#include "math/paradaeArrayData.h"
+#include "common/Timer.h"
 #include "griddyn/gridDynSimulation.h"
 #include "fileInput/fileInput.h"
 #include "griddyn/simulation/gridSimulation.h"
@@ -51,19 +51,19 @@ EquationGridDyn::EquationGridDyn(Real t0_, Real Tmax_, int N_unistep_, gridDynSi
   //roots.n_sactive=100;
   //for (int i=0; i<100; i++)
   //{
-  //    roots.is_active(i) = 1; 
+  //    roots.is_active(i) = 1;
   //    roots.t_sroot(i) = 0.5 + i;
   //}
-  
+
   // New code, import discontinuity locations from XML file
   roots=RootManager(discontinuities.size(), 1, 0, 1e-10);
   roots.n_sactive=discontinuities.size();
   for (int i=0; i<discontinuities.size(); i++)
   {
-      roots.is_active(i) = 1; 
+      roots.is_active(i) = 1;
       roots.t_sroot(i) = discontinuities[i];
   }
-  
+
   // This will print out all of the variable names
   //stringVec stNames;
   //gds->getStateName(stNames, cDaeSolverMode);

@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "optObjectFactory.h"
+#include "optimization/optObjectFactory.h"
 
 namespace griddyn
 {

@@ -10,8 +10,8 @@
  * LLNS Copyright End
  */
 
-#include "coreObject.h"
-#include "coreExceptions.h"
+#include "core/coreObject.h"
+#include "core/coreExceptions.h"
 #include "nullObject.h"
 #include "utilities/dataDictionary.h"
 #include "utilities/stringOps.h"

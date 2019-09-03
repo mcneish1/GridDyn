@@ -14,7 +14,7 @@
 #define GRIDDYN_COMMUNICATIONS_CORE_
 #pragma once
 
-#include "../gridDynDefinitions.hpp"
+#include "griddyn/gridDynDefinitions.hpp"
 #include <memory>
 #include <unordered_map>
 #include <cstdint>
@@ -36,10 +36,10 @@ class communicationsCore
 {
 public:
 	/** get an instance of the singleton core */
-  static std::shared_ptr<communicationsCore> instance (); 
+  static std::shared_ptr<communicationsCore> instance ();
   virtual ~communicationsCore() = default;
   /** register a communicator*/
-  virtual void registerCommunicator (Communicator *comm); 
+  virtual void registerCommunicator (Communicator *comm);
   /** unregister a communicator */
   virtual void unregisterCommunicator(Communicator *comm);
   /** send a message to a specified destination

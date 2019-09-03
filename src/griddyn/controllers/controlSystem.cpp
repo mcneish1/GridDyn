@@ -10,8 +10,8 @@
  * LLNS Copyright End
  */
 
-#include "controlSystem.h"
-#include "../Block.h"
+#include "griddyn/controllers/controlSystem.h"
+#include "griddyn/Block.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 

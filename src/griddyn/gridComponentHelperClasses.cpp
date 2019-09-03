@@ -10,8 +10,8 @@
  * LLNS Copyright End
 */
 
-#include "gridComponentHelperClasses.h"
-#include "gridComponent.h"
+#include "griddyn/gridComponentHelperClasses.h"
+#include "griddyn/gridComponent.h"
 #include <cstring>
 
 namespace griddyn

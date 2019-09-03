@@ -10,10 +10,10 @@
  * LLNS Copyright End
  */
 
-#include "readElement.h"
+#include "fileInput/readElement.h"
 
-#include "elementReaderTemplates.hpp"
-#include "readerHelper.h"
+#include "fileInput/elementReaderTemplates.hpp"
+#include "fileInput/readerHelper.h"
 #include "utilities/string_viewOps.h"
 #include <cmath>
 

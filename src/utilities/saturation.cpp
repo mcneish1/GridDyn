@@ -9,7 +9,7 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#include "saturation.h"
+#include "utilities/saturation.h"
 
 #include <cmath>
 

@@ -10,8 +10,8 @@
  * LLNS Copyright End
  */
 
-#include "parameterOperator.h"
-#include "../gridComponent.h"
+#include "griddyn/events/parameterOperator.h"
+#include "griddyn/gridComponent.h"
 #include "core/objectInterpreter.h"
 #include "utilities/string_viewOps.h"
 

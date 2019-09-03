@@ -17,7 +17,7 @@
 #include <cstring>
 #include "mpi.h"
 #include "def.h"
-#include "../math/SVector.h"
+#include "math/SVector.h"
 
 namespace griddyn {
 namespace paradae {

@@ -10,19 +10,19 @@
  * LLNS Copyright End
  */
 
-#include "pmu.h"
+#include "griddyn/relays/pmu.h"
 #include "core/coreObjectTemplates.hpp"
 
-#include "../Link.h"
-#include "../blocks/delayBlock.h"
-#include "../blocks/filteredDerivativeBlock.h"
-#include "../comms/Communicator.h"
-#include "../comms/controlMessage.h"
-#include "../events/Event.h"
-#include "../gridBus.h"
-#include "../measurement/Condition.h"
-#include "../measurement/grabberSet.h"
-#include "../measurement/gridGrabbers.h"
+#include "griddyn/Link.h"
+#include "griddyn/blocks/delayBlock.h"
+#include "griddyn/blocks/filteredDerivativeBlock.h"
+#include "griddyn/comms/Communicator.h"
+#include "griddyn/comms/controlMessage.h"
+#include "griddyn/events/Event.h"
+#include "griddyn/gridBus.h"
+#include "griddyn/measurement/Condition.h"
+#include "griddyn/measurement/grabberSet.h"
+#include "griddyn/measurement/gridGrabbers.h"
 #include "core/coreExceptions.h"
 #include <cmath>
 

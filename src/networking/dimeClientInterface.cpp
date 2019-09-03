@@ -10,8 +10,8 @@
  * LLNS Copyright End
  */
 
-#include "dimeClientInterface.h"
-#include "zmqLibrary/zmqContextManager.h"
+#include "networking/dimeClientInterface.h"
+#include "networking/zmqLibrary/zmqContextManager.h"
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -57,7 +57,8 @@ void dimeClientInterface::init ()
     writer->write (outgoing, &sstr);
     delete writer;
 
-    socket->send (sstr.str ());
+    std::string contents = sstr.str();
+    socket->send (contents.c_str(), contents.size());
 
     char buffer[3] = {};
     auto sz = socket->recv (buffer, 3, 0);
@@ -84,7 +85,8 @@ void dimeClientInterface::close ()
         writer->write (outgoing, &ss);
         delete writer;
 
-        socket->send (ss.str ());
+        std::string contents = ss.str();
+        socket->send (contents.c_str(), contents.size());
 
         socket->close ();
     }
@@ -129,7 +131,8 @@ void dimeClientInterface::send_var (const std::string &varName, double val, cons
     writer->write (outgoing, &ss);
     delete writer;
 
-    socket->send (ss.str ());
+    std::string contents = ss.str();
+    socket->send (contents.c_str(), contents.size());
 
     char buffer[3];
     auto sz = socket->recv (buffer, 3, 0);
@@ -153,7 +156,9 @@ void dimeClientInterface::send_var (const std::string &varName, double val, cons
     writer = builder.newStreamWriter ();
     writer->write (outgoing, &ss);
     delete writer;
-    socket->send (ss.str ());
+
+    contents = ss.str();
+    socket->send (contents.c_str(), contents.size());
 
     sz = socket->recv (buffer, 3, 0);
     if (sz != 2)  // TODO check for "OK"

@@ -10,12 +10,12 @@
 * LLNS Copyright End
 */
 
-#include "GenModelInverter.h"
+#include "griddyn/genmodels/GenModelInverter.h"
 #include "core/coreExceptions.h"
-#include "../Generator.h"
+#include "griddyn/Generator.h"
 
 #include "core/coreObjectTemplates.hpp"
-#include "../gridBus.h"
+#include "griddyn/gridBus.h"
 #include "utilities/matrixData.hpp"
 #include "utilities/vectorOps.hpp"
 

@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "tinyxml2ReaderElement.h"
+#include "formatInterpreters/tinyxml2ReaderElement.h"
 #include "utilities/string_viewConversion.h"
 #include <tinyxml2/tinyxml2.h>
 

@@ -10,13 +10,13 @@
  * LLNS Copyright End
  */
 
-#include "../gridDynSimulation.h"
-#include "basicOdeSolver.h"
-#include "basicSolver.h"
+#include "griddyn/gridDynSimulation.h"
+#include "griddyn/solvers/basicOdeSolver.h"
+#include "griddyn/solvers/basicSolver.h"
 #include "core/coreExceptions.h"
 #include "core/factoryTemplates.hpp"
-#include "idaInterface.h"
-#include "kinsolInterface.h"
+#include "griddyn/solvers/idaInterface.h"
+#include "griddyn/solvers/kinsolInterface.h"
 #include "utilities/mapOps.hpp"
 #include "utilities/stringConversion.h"
 #include <iostream>
@@ -34,7 +34,7 @@ static childClassFactoryArg<basicSolver, SolverInterface, basicSolver::mode_t>
 static childClassFactory<basicOdeSolver, SolverInterface> basicOdeFactory (stringVec{"basicode", "euler"});
 #else
 // if cvode is not available this becomes the default differential solver
-static childClassFactory<basicOdeSolver, solverInterface>
+static childClassFactory<basicOdeSolver, SolverInterface>
   basicOdeFactory (stringVec{"basicode", "dyndiff", "differential"});
 
 #endif

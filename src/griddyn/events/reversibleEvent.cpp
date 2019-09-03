@@ -10,8 +10,8 @@
 * LLNS Copyright End
 */
 
-#include "reversibleEvent.h"
-#include "../measurement/gridGrabbers.h"
+#include "griddyn/events/reversibleEvent.h"
+#include "griddyn/measurement/gridGrabbers.h"
 
 
 namespace griddyn

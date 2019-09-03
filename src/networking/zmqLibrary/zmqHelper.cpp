@@ -18,8 +18,8 @@ Livermore National Laboratory, operated by Lawrence Livermore National Security,
  * LLNS Copyright End
  */
 
-#include "zmqHelper.h"
-#include "../cppzmq/zmq.hpp"
+#include "networking/zmqLibrary/zmqHelper.h"
+#include "cppzmq/zmq.hpp"
 #include <cctype>
 #include <map>
 using namespace zmq;

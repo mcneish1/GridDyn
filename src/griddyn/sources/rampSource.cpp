@@ -10,7 +10,7 @@
  * LLNS Copyright End
 */
 
-#include "rampSource.h"
+#include "griddyn/sources/rampSource.h"
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/vectorOps.hpp"
 #include <ctime>

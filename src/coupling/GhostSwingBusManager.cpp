@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "GhostSwingBusManager.h"
+#include "coupling/GhostSwingBusManager.h"
 #ifdef ENABLE_MPI
 #include "MpiService.h"
 #include <mpi.h>

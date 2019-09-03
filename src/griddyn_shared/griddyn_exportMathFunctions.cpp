@@ -13,7 +13,7 @@
 #include "griddyn/gridDynSimulation.h"
 #include "runner/gridDynRunner.h"
 
-#include "griddyn_export.h"
+#include "griddyn_shared/griddyn_export.h"
 
 #include "griddyn/measurement/objectGrabbers.h"
 #include "internal/griddyn_export_internal.h"

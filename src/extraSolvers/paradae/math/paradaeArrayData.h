@@ -13,7 +13,7 @@
 #define paradaeArrayData_h
 
 #include "utilities/matrixData.hpp"
-#include "../math/SparseMatrix.h"
+#include "math/SparseMatrix.h"
 
 namespace griddyn {
 namespace paradae {

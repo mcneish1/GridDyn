@@ -10,7 +10,7 @@
 * LLNS Copyright End
 */
 
-#include "valueLimiter.h"
+#include "griddyn/blocks/valueLimiter.h"
 #include <algorithm>
 
 namespace griddyn

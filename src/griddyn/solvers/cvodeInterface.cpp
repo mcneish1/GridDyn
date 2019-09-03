@@ -10,12 +10,12 @@
  * LLNS Copyright End
  */
 
-#include "cvodeInterface.h"
+#include "griddyn/solvers/cvodeInterface.h"
 
 #include "core/coreExceptions.h"
 
-#include "../gridDynSimulation.h"
-#include "../simulation/gridDynSimulationFileOps.h"
+#include "griddyn/gridDynSimulation.h"
+#include "griddyn/simulation/gridDynSimulationFileOps.h"
 #include "utilities/stringOps.h"
 #include "utilities/vectorOps.hpp"
 
@@ -201,7 +201,7 @@ double cvodeInterface::get (const std::string &param) const
 #ifdef ENABLE_KLU
 //	CVodeCVodeSlsGetNumJacEvals(solverMem, &val);
 #else
-        CVodeDlsGetNumJacEvals (solverMem, &val);
+        CVDlsGetNumJacEvals (solverMem, &val);
 #endif
     }
     else

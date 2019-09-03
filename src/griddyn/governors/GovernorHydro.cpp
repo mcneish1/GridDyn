@@ -10,9 +10,9 @@
  * LLNS Copyright End
  */
 
-#include "GovernorHydro.h"
-#include "../Generator.h"
-#include "../gridBus.h"
+#include "griddyn/governors/GovernorHydro.h"
+#include "griddyn/Generator.h"
+#include "griddyn/gridBus.h"
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/matrixData.hpp"
 

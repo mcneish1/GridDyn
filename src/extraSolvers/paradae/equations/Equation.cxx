@@ -10,7 +10,7 @@
 * LLNS Copyright End
 */
 #include "Equation.h"
-#include "../math/SVector.h"
+#include "math/SVector.h"
 #include <cmath>
 #include <algorithm>
 

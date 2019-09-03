@@ -10,8 +10,8 @@
  * LLNS Copyright End
  */
 
-#include "Condition.h"
-#include "grabberInterpreter.hpp"
+#include "griddyn/measurement/Condition.h"
+#include "griddyn/measurement/grabberInterpreter.hpp"
 
 namespace griddyn
 {

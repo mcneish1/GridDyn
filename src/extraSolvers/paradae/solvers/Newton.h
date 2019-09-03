@@ -12,7 +12,7 @@
 #ifndef Newton_h
 #define Newton_h
 
-#include "../common/def.h"
+#include "common/def.h"
 #include "Solver.h"
 
 namespace griddyn {

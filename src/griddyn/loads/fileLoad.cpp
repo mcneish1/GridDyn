@@ -10,9 +10,9 @@
  * LLNS Copyright End
  */
 
-#include "fileLoad.h"
+#include "griddyn/loads/fileLoad.h"
 #include "core/coreObjectTemplates.hpp"
-#include "../gridBus.h"
+#include "griddyn/gridBus.h"
 #include "utilities/stringOps.h"
 
 #include "utilities/vectorOps.hpp"

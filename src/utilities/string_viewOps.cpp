@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "string_viewOps.h"
+#include "utilities/string_viewOps.h"
 #include "generic_string_ops.hpp"
 #include <algorithm>
 #include <stdexcept>

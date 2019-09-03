@@ -14,13 +14,13 @@
 #define BackwardDiff_h
 
 #include <list>
-#include "../math/Vector.h"
-#include "../math/PVector.h"
-#include "../math/SVector.h"
-#include "../math/SMultiVector.h"
-#include "../math/PMultiVector.h"
-#include "../solvers/Solver.h"
-#include "../equations/Equation.h"
+#include "math/Vector.h"
+#include "math/PVector.h"
+#include "math/SVector.h"
+#include "math/SMultiVector.h"
+#include "math/PMultiVector.h"
+#include "solvers/Solver.h"
+#include "equations/Equation.h"
 #include "TimeIntegrator.h"
 
 namespace griddyn {

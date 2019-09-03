@@ -10,7 +10,7 @@
  * LLNS Copyright End
 */
 
-#include "pidBlock.h"
+#include "griddyn/blocks/pidBlock.h"
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/matrixData.hpp"
 #include "utilities/vectorOps.hpp"

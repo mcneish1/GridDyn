@@ -13,7 +13,7 @@
 #include <minizip/miniunz.h>
 #include <minizip/minizip.h>
 
-#include "zipUtilities.h"
+#include "utilities/zipUtilities.h"
 #include <boost/filesystem.hpp>
 #include <boost/range/iterator_range.hpp>
 

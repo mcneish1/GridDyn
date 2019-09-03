@@ -10,9 +10,9 @@
  * LLNS Copyright End
 */
 
-#include "Condition.h"
-#include "grabberInterpreter.hpp"
-#include "grabberSet.h"
+#include "griddyn/measurement/Condition.h"
+#include "griddyn/measurement/grabberInterpreter.hpp"
+#include "griddyn/measurement/grabberSet.h"
 #include "utilities/mapOps.hpp"
 
 namespace griddyn
@@ -147,7 +147,7 @@ void Condition::cloneTo (Condition *ngc) const
 		{
 			ngc->conditionLHS = conditionLHS->clone();
 		}
-       
+
     }
 
     if (!m_constRHS)

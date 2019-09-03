@@ -10,7 +10,7 @@
 * LLNS Copyright End
 */
 
-#include "gridPrimary.h"
+#include "griddyn/gridPrimary.h"
 #include "core/coreObjectTemplates.hpp"
 #include <cstdio>
 #include <iostream>

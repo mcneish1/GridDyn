@@ -17,17 +17,17 @@
 #include "utilities/vectorOps.hpp"
 #include <algorithm>
 #include <cmath>
-#include "mpi.h" 
+#include "mpi.h"
 
-#include "../paradae/common/def.h"
+#include "paradae/common/def.h"
 #include "braid_driver.h"
-#include "../paradae/math/Vector.h"
-#include "../paradae/common/MapParam.h"
-#include "../paradae/problems/ODEProblem.h" 
-#include "../paradae/equations/Equation.h"
-#include "../paradae/equations/EqGridDyn.h"
-#include "../paradae/timeintegrators/TimeIntegrator.h"
-#include "../paradae/math/paradaeArrayData.h"
+#include "paradae/math/Vector.h"
+#include "paradae/common/MapParam.h"
+#include "paradae/problems/ODEProblem.h"
+#include "paradae/equations/Equation.h"
+#include "paradae/equations/EqGridDyn.h"
+#include "paradae/timeintegrators/TimeIntegrator.h"
+#include "paradae/math/paradaeArrayData.h"
 #include <sstream>
 #include "utilities/string_viewConversion.h"
 
@@ -195,7 +195,7 @@ void braidSolver::initialize(coreTime t0)
     solverCallCount = 0;
     solveTime = t0;
 
-    // USE  EquationGridDyn(t0_,Tmax_,N_unistep_,gds_,y0_); 
+    // USE  EquationGridDyn(t0_,Tmax_,N_unistep_,gds_,y0_);
     int n = m_gds->stateSize(mode);//cDaeSolverMode);
     SVector y0_(n, 0.0), y0p_(n, 0.0);
 

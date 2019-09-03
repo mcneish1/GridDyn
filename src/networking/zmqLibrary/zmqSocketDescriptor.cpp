@@ -19,7 +19,7 @@ Livermore National Laboratory, operated by Lawrence Livermore National Security,
  * LLNS Copyright End
  */
 
-#include "zmqSocketDescriptor.h"
+#include "networking/zmqLibrary/zmqSocketDescriptor.h"
 
 namespace zmqlib
 {

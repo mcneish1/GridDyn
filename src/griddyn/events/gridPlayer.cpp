@@ -10,11 +10,11 @@
 * LLNS Copyright End
 */
 
-#include "Player.h"
+#include "griddyn/events/Player.h"
 
 #include "core/objectInterpreter.h"
 #include "utilities/stringOps.h"
-#include "core/helperTemplates.hpp"
+// #include "core/helperTemplates.hpp"
 #include "core/coreExceptions.h"
 #include <sstream>
 
@@ -22,7 +22,7 @@ namespace griddyn
 {
 Player::Player(const std::string &eventName):Event(eventName)
 {
-	
+
 }
 
 Player::Player(coreTime time0,double loopPeriod) : Event(time0), period(loopPeriod)
@@ -45,7 +45,7 @@ Player::Player(gridEventInfo &gdEI, coreObject *rootObject) : Event(gdEI,rootObj
 		}
 		loadEventFile(gdEI.file);
 	}
-	
+
 }
 
 void Player::updateEvent(gridEventInfo &gdEI, coreObject *rootObject)
@@ -96,7 +96,7 @@ void Player::set(const std::string &param, double val)
 	{
 		timeOffset = val;
 	}
-	else 
+	else
 	{
 		Event::set(param, val);
 	}
@@ -127,7 +127,7 @@ void Player::setTimeValue(coreTime time, double val)
 
 void Player::setTimeValue(const std::vector<coreTime> &time, const std::vector<double> &val)
 {
-	
+
 	ts.reserve(static_cast<fsize_t> (time.size()));
 
 	ts.addData(time, val);
@@ -161,7 +161,7 @@ void Player::updateTrigger(coreTime time)
 				if (time - ts.lastTime() > period)
 				{
 					timeOffset = period + triggerTime;
-					
+
 				}
 				else
 				{
@@ -299,7 +299,7 @@ void Player::loadEventFile(const std::string &fileName)
 	{
 		eFile = fileName;
 	}
-	
+
 	ts.loadFile(eFile, column);
 
 	currIndex = 0;

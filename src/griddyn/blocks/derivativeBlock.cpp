@@ -10,7 +10,7 @@
  * LLNS Copyright End
 */
 
-#include "derivativeBlock.h"
+#include "griddyn/blocks/derivativeBlock.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactory.hpp"

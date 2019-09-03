@@ -10,7 +10,7 @@
  * LLNS Copyright End
 */
 
-#include "delayBlock.h"
+#include "griddyn/blocks/delayBlock.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/matrixData.hpp"

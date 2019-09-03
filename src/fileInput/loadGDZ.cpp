@@ -10,7 +10,7 @@
 * LLNS Copyright End
 */
 
-#include "fileInput.h"
+#include "fileInput/fileInput.h"
 #include "utilities/zipUtilities.h"
 #include <boost/filesystem.hpp>
 

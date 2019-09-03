@@ -10,17 +10,17 @@
  * LLNS Copyright End
  */
 
-#include "fileInput.h"
+#include "fileInput/fileInput.h"
 #include "griddyn/Generator.h"
 #include "griddyn/events/Event.h"
-#include "griddyn/griddyn-config.h"
+#include "griddyn-config.h"
 #include "griddyn/links/acLine.h"
 #include "griddyn/links/adjustableTransformer.h"
 #include "griddyn/loads/motorLoad.h"
 #include "griddyn/loads/zipLoad.h"
 #include "griddyn/primary/acBus.h"
 #include "griddyn/relays/pmu.h"
-#include "readerHelper.h"
+#include "fileInput/readerHelper.h"
 #include "utilities/stringOps.h"
 
 #ifdef ENABLE_OPTIMIZATION_LIBRARY

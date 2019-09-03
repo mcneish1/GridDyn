@@ -10,11 +10,11 @@
  * LLNS Copyright End
  */
 
-#include "variableGenerator.h"
-#include "../Block.h"
-#include "../Source.h"
+#include "griddyn/generators/variableGenerator.h"
+#include "griddyn/Block.h"
+#include "griddyn/Source.h"
 #include "core/coreObjectTemplates.hpp"
-#include "../gridBus.h"
+#include "griddyn/gridBus.h"
 
 namespace griddyn
 {

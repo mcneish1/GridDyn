@@ -10,15 +10,15 @@
  * LLNS Copyright End
  */
 
-#include "griddyn/griddyn-config.h"
+#include "griddyn-config.h"
 
-#include "idaInterface.h"
-#include "kinsolInterface.h"
+#include "griddyn/solvers/idaInterface.h"
+#include "griddyn/solvers/kinsolInterface.h"
 #ifdef LOAD_CVODE
-#include "cvodeInterface.h"
+#include "griddyn/solvers/cvodeInterface.h"
 #endif
 #ifdef LOAD_ARKODE
-#include "arkodeInterface.h"
+#include "griddyn/solvers/arkodeInterface.h"
 #endif
 
 #ifdef ENABLE_KLU
@@ -27,10 +27,10 @@
 
 #include "core/factoryTemplates.hpp"
 
-#include "../gridDynSimulation.h"
-#include "../simulation/diagnostics.h"
-#include "../simulation/gridDynSimulationFileOps.h"
-#include "sundialsMatrixData.h"
+#include "griddyn/gridDynSimulation.h"
+#include "griddyn/simulation/diagnostics.h"
+#include "griddyn/simulation/gridDynSimulationFileOps.h"
+#include "griddyn/solvers/sundialsMatrixData.h"
 #include "utilities/matrixCreation.h"
 #include "utilities/matrixDataFilter.hpp"
 #include "utilities/stringOps.h"

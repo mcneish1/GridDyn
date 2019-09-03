@@ -10,8 +10,8 @@
  * LLNS Copyright End
  */
 
-#include "workQueue.h"
-#include "griddyn/griddyn-config.h"
+#include "utilities/workQueue.h"
+#include "griddyn-config.h"
 #include <iostream>
 
 // static definitions in workQueue class

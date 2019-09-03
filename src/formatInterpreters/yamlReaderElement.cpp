@@ -10,9 +10,9 @@
 * LLNS Copyright End
 */
 
-#include "yamlReaderElement.h"
+#include "formatInterpreters/yamlReaderElement.h"
 #include "utilities/stringConversion.h"
-#include "yamlElement.h"
+#include "formatInterpreters/yamlElement.h"
 #include <cassert>
 #include <fstream>
 #include <iostream>

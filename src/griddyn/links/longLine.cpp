@@ -10,10 +10,10 @@
  * LLNS Copyright End
  */
 
-#include "longLine.h"
+#include "griddyn/links/longLine.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
-#include "../primary/acBus.h"
+#include "griddyn/primary/acBus.h"
 
 #include <cmath>
 

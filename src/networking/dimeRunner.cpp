@@ -13,9 +13,9 @@
 // libraries
 
 // headers
-#include "dimeRunner.h"
+#include "networking/dimeRunner.h"
 #include "coupling/GhostSwingBusManager.h"
-#include "dimeInterface.h"
+#include "networking/dimeInterface.h"
 #include "fileInput/fileInput.h"
 #include "griddyn/gridDynSimulation.h"
 

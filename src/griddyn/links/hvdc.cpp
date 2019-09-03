@@ -11,14 +11,14 @@
 */
 
 // headers
-#include "hvdc.h"
-#include "../Link.h"
+#include "griddyn/links/hvdc.h"
+#include "griddyn/Link.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"
-#include "../gridBus.h"
-#include "acdcConverter.h"
-#include "dcLink.h"
-#include "../primary/dcBus.h"
+#include "griddyn/gridBus.h"
+#include "griddyn/links/acdcConverter.h"
+#include "griddyn/links/dcLink.h"
+#include "griddyn/primary/dcBus.h"
 #include "utilities/stringOps.h"
 #include "utilities/vectorOps.hpp"
 

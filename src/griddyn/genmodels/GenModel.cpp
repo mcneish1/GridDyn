@@ -13,9 +13,9 @@
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"
-#include "../Generator.h"
-#include "../gridBus.h"
-#include "otherGenModels.h"
+#include "griddyn/Generator.h"
+#include "griddyn/gridBus.h"
+#include "griddyn/genmodels/otherGenModels.h"
 #include "utilities/matrixData.hpp"
 #include "utilities/vectorOps.hpp"
 
@@ -168,7 +168,7 @@ double GenModel::getOutput (const IOdata &inputs,
 
 double GenModel::getOutput(
 	index_t /*numOut*/) const
-{	
+{
 	return kNullVal;
 }
 

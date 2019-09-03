@@ -10,11 +10,11 @@
  * LLNS Copyright End
  */
 
-#include "dcBus.h"
-#include "../Area.h"
-#include "../Generator.h"
-#include "../Link.h"
-#include "../Load.h"
+#include "griddyn/primary/dcBus.h"
+#include "griddyn/Area.h"
+#include "griddyn/Generator.h"
+#include "griddyn/Link.h"
+#include "griddyn/Load.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"

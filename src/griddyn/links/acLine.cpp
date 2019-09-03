@@ -11,10 +11,10 @@
  */
 
 // headers
-#include "acLine.h"
-#include "../Area.h"
-#include "../gridBus.h"
-#include "../simulation/contingency.h"
+#include "griddyn/links/acLine.h"
+#include "griddyn/Area.h"
+#include "griddyn/gridBus.h"
+#include "griddyn/simulation/contingency.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"

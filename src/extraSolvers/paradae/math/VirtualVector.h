@@ -12,7 +12,7 @@
 #ifndef VirtualVector_h
 #define VirtualVector_h
 
-#include "../common/def.h"
+#include "common/def.h"
 
 namespace griddyn {
 namespace paradae {

@@ -10,10 +10,10 @@
 * LLNS Copyright End
 */
 
-#include "ThreePhaseLoad.h"
+#include "griddyn/loads/ThreePhaseLoad.h"
 
 #include "core/coreObjectTemplates.hpp"
-#include "../gridBus.h"
+#include "griddyn/gridBus.h"
 #include "utilities/matrixData.hpp"
 #include "utilities/ThreePhaseFunctions.h"
 #include <cmath>

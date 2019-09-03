@@ -10,8 +10,8 @@
 * LLNS Copyright End
 */
 
-#include "dimeCollector.h"
-#include "dimeClientInterface.h"
+#include "networking/dimeCollector.h"
+#include "networking/dimeClientInterface.h"
 
 
 namespace griddyn
@@ -67,14 +67,14 @@ change_code dimeCollector::trigger(coreTime time)
 	{
 		dime->send_var(points[kk].colname, data[kk]);
 	}
-	
+
 	return out;
 }
 
 
 void dimeCollector::set(const std::string &param, double val)
 {
-	
+
 	collector::set(param, val);
 }
 
@@ -92,7 +92,7 @@ void dimeCollector::set(const std::string &param, const std::string &val)
 	{
 		collector::set(param, val);
 	}
-	
+
 }
 
 const std::string &dimeCollector::getSinkName() const

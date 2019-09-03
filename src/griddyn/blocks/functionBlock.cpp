@@ -10,7 +10,7 @@
  * LLNS Copyright End
 */
 
-#include "functionBlock.h"
+#include "griddyn/blocks/functionBlock.h"
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/functionInterpreter.h"
 #include "utilities/matrixData.hpp"

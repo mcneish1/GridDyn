@@ -10,9 +10,9 @@
  * LLNS Copyright End
  */
 
-#include "../Generator.h"
-#include "../gridBus.h"
-#include "GovernorTypes.h"
+#include "griddyn/Generator.h"
+#include "griddyn/gridBus.h"
+#include "griddyn/governors/GovernorTypes.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"

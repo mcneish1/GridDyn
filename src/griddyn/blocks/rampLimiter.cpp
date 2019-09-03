@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "rampLimiter.h"
+#include "griddyn/blocks/rampLimiter.h"
 #include <algorithm>
 namespace griddyn
 {

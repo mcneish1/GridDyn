@@ -10,9 +10,9 @@
 * LLNS Copyright End
 */
 
-#include "tcpInterface.h"
-#include "tcpCommunicator.h"
-#include "tcpCollector.h"
+#include "networking/tcpInterface.h"
+#include "networking/tcpCommunicator.h"
+#include "networking/tcpCollector.h"
 
 #include "core/factoryTemplates.hpp"
 #include "core/objectFactory.hpp"

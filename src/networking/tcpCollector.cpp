@@ -10,9 +10,9 @@
 * LLNS Copyright End
 */
 
-#include "tcpCollector.h"
-#include "AsioServiceManager.h"
-#include "TcpHelperClasses.h"
+#include "networking/tcpCollector.h"
+#include "networking/AsioServiceManager.h"
+#include "networking/TcpHelperClasses.h"
 
 namespace griddyn
 {

@@ -1,4 +1,4 @@
-#include "matrixDataSparse.hpp"
+#include "utilities/matrixDataSparse.hpp"
 #include "matrixDataSparse_impl.hpp"
 
 #include <complex>

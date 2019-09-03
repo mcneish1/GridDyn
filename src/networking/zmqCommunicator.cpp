@@ -10,13 +10,13 @@
 * LLNS Copyright End
 */
 
-#include "zmqCommunicator.h"
-#include "zmqLibrary/zmqHelper.h"
-#include "zmqLibrary/zmqContextManager.h"
+#include "networking/zmqCommunicator.h"
+#include "networking/zmqLibrary/zmqHelper.h"
+#include "networking/zmqLibrary/zmqContextManager.h"
 
-#include "zmqLibrary/zmqProxyHub.h"
-#include "zmqLibrary/zmqReactor.h"
-#include "cppzmq/zmq_addon.hpp"
+#include "networking/zmqLibrary/zmqProxyHub.h"
+#include "networking/zmqLibrary/zmqReactor.h"
+#include <cppzmq/zmq_addon.hpp>
 
 #include "griddyn/comms/commMessage.h"
 

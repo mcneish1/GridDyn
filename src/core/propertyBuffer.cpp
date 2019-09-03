@@ -10,9 +10,9 @@
  * LLNS Copyright End
  */
 
-#include "propertyBuffer.h"
-#include "coreObject.h"
-#include "helperObject.h"
+#include "core/propertyBuffer.h"
+#include "core/coreObject.h"
+#include "core/helperObject.h"
 #include <algorithm>
 namespace griddyn
 {
@@ -54,20 +54,20 @@ void propertyBuffer::apply (coreObject *obj) const
         switch (prop.second.index ())
         {
         case 0:
-            obj->set (prop.first, mpark::get<double> (prop.second));
+            obj->set (prop.first, std::get<double> (prop.second));
             break;
         case 1:
-            obj->set (prop.first, mpark::get<std::pair<double, gridUnits::units_t>> (prop.second).first,
-                      mpark::get<std::pair<double, gridUnits::units_t>> (prop.second).second);
+            obj->set (prop.first, std::get<std::pair<double, gridUnits::units_t>> (prop.second).first,
+                      std::get<std::pair<double, gridUnits::units_t>> (prop.second).second);
             break;
         case 2:
-            obj->set (prop.first, mpark::get<int> (prop.second));
+            obj->set (prop.first, std::get<int> (prop.second));
             break;
         case 3:
-            obj->setFlag (prop.first, mpark::get<bool> (prop.second));
+            obj->setFlag (prop.first, std::get<bool> (prop.second));
             break;
         case 4:
-            obj->set (prop.first, mpark::get<std::string> (prop.second));
+            obj->set (prop.first, std::get<std::string> (prop.second));
             break;
         }
     }

@@ -13,11 +13,11 @@
 #define TimeIntegrator_h
 
 #include <list>
-#include "../common/def.h"
-#include "../equations/Equation.h"
-#include "../solvers/Newton.h"
-#include "../math/PVector.h"
-#include "../math/SMultiVector.h"
+#include "common/def.h"
+#include "equations/Equation.h"
+#include "solvers/Newton.h"
+#include "math/PVector.h"
+#include "math/SMultiVector.h"
 
 namespace griddyn {
 namespace paradae {

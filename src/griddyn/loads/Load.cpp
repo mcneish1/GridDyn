@@ -10,9 +10,9 @@
  * LLNS Copyright End
  */
 
-#include "../Load.h"
-#include "../gridBus.h"
-#include "../measurement/objectGrabbers.h"
+#include "griddyn/Load.h"
+#include "griddyn/gridBus.h"
+#include "griddyn/measurement/objectGrabbers.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/matrixData.hpp"

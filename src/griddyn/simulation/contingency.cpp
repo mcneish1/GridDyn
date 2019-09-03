@@ -10,9 +10,9 @@
  * LLNS Copyright End
  */
 
-#include "contingency.h"
-#include "../events/Event.h"
-#include "../gridDynSimulation.h"
+#include "griddyn/simulation/contingency.h"
+#include "griddyn/events/Event.h"
+#include "griddyn/gridDynSimulation.h"
 #include "utilities/vectorOps.hpp"
 
 #include <map>

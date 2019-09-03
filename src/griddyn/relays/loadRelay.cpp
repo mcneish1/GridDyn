@@ -10,10 +10,10 @@
  * LLNS Copyright End
 */
 
-#include "loadRelay.h"
+#include "griddyn/relays/loadRelay.h"
 #include "core/coreObjectTemplates.hpp"
-#include "../events/Event.h"
-#include "../measurement/Condition.h"
+#include "griddyn/events/Event.h"
+#include "griddyn/measurement/Condition.h"
 
 #include <boost/format.hpp>
 
@@ -113,7 +113,7 @@ void loadRelay::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
     add(std::shared_ptr<Condition>(make_condition("voltage", "<", cutoutVoltage, m_sourceObject)));
     add(std::shared_ptr<Condition>(make_condition("frequency", "<", cutoutFrequency, m_sourceObject)));
     if (cutoutVoltage < 2.0)
-    {  
+    {
         setActionTrigger (0, 0, voltageDelay);
     }
     else

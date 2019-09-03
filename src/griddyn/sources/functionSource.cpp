@@ -10,7 +10,7 @@
 * LLNS Copyright End
 */
 
-#include "functionSource.h"
+#include "griddyn/sources/functionSource.h"
 #include "core/coreObjectTemplates.hpp"
 
 namespace griddyn

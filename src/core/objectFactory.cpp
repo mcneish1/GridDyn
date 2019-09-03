@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "objectFactory.hpp"
+#include "core/objectFactory.hpp"
 namespace griddyn
 {
 objectFactory::objectFactory (const std::string & /*component*/, std::string typeName)

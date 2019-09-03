@@ -11,7 +11,7 @@
  */
 
 #include "numericEstimationFunctions.h"
-#include "gridComponent.h"
+#include "griddyn/gridComponent.h"
 #include "utilities/matrixData.hpp"
 
 namespace griddyn

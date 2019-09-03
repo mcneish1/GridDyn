@@ -10,18 +10,18 @@
  * LLNS Copyright End
  */
 
-#include "zipLoad.h"
-#include "../gridBus.h"
-#include "ThreePhaseLoad.h"
-#include "approximatingLoad.h"
+#include "griddyn/loads/zipLoad.h"
+#include "griddyn/gridBus.h"
+#include "griddyn/loads/ThreePhaseLoad.h"
+#include "griddyn/loads/approximatingLoad.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"
-#include "exponentialLoad.h"
-#include "fDepLoad.h"
-#include "fileLoad.h"
-#include "rampLoad.h"
-#include "sourceLoad.h"
+#include "griddyn/loads/exponentialLoad.h"
+#include "griddyn/loads/fDepLoad.h"
+#include "griddyn/loads/fileLoad.h"
+#include "griddyn/loads/rampLoad.h"
+#include "griddyn/loads/sourceLoad.h"
 #include "utilities/matrixData.hpp"
 
 #include <cmath>

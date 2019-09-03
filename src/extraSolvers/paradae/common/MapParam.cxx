@@ -10,7 +10,7 @@
 * LLNS Copyright End
 */
 #include "MapParam.h"
-#include "../math/SVector.h"
+#include "math/SVector.h"
 #include <iostream>
 #include <fstream>
 #include <algorithm>

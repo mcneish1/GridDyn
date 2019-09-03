@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "objectInterpreter.h"
+#include "core/objectInterpreter.h"
 #include "utilities/stringConversion.h"
 
 namespace griddyn

@@ -10,8 +10,8 @@
  * LLNS Copyright End
  */
 
-#include "grabberSource.h"
-#include "../measurement/grabberSet.h"
+#include "griddyn/sources/grabberSource.h"
+#include "griddyn/measurement/grabberSet.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectInterpreter.h"
 

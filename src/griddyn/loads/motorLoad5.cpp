@@ -10,8 +10,8 @@
  * LLNS Copyright End
  */
 
-#include "motorLoad5.h"
-#include "../gridBus.h"
+#include "griddyn/loads/motorLoad5.h"
+#include "griddyn/gridBus.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactory.hpp"
 #include "utilities/matrixData.hpp"

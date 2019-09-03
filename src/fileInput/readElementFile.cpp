@@ -10,12 +10,12 @@
  * LLNS Copyright End
  */
 
-#include "readElement.h"
+#include "fileInput/readElement.h"
 
 #include "core/helperObject.h"
-#include "elementReaderTemplates.hpp"
+#include "fileInput/elementReaderTemplates.hpp"
 #include "griddyn/gridDynSimulation.h"
-#include "readerHelper.h"
+#include "fileInput/readerHelper.h"
 #include "utilities/gridRandom.h"
 #include "utilities/stringConversion.h"
 #include <sstream>

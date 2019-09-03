@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "fileInput.h"
+#include "fileInput/fileInput.h"
 #include "griddyn/Governor.h"
 #include "griddyn/Link.h"
 #include "griddyn/events/Event.h"
@@ -20,7 +20,7 @@
 #include "griddyn/gridBus.h"
 #include "griddyn/gridDynSimulation.h"
 #include "griddyn/loads/zipLoad.h"
-#include "readerHelper.h"
+#include "fileInput/readerHelper.h"
 #include "utilities/string_viewConversion.h"
 
 #include <cstdlib>

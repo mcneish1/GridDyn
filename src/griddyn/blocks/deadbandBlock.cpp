@@ -10,7 +10,7 @@
  * LLNS Copyright End
 */
 
-#include "deadbandBlock.h"
+#include "griddyn/blocks/deadbandBlock.h"
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/matrixData.hpp"
 #include "utilities/stringOps.h"

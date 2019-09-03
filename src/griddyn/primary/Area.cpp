@@ -11,18 +11,18 @@
  */
 
 // headers
-#include "../Area.h"
-#include "../Link.h"
-#include "../Relay.h"
-#include "../gridBus.h"
-#include "../gridDynSimulation.h"
-#include "../measurement/objectGrabbers.h"
+#include "griddyn/Area.h"
+#include "griddyn/Link.h"
+#include "griddyn/Relay.h"
+#include "griddyn/gridBus.h"
+#include "griddyn/gridDynSimulation.h"
+#include "griddyn/measurement/objectGrabbers.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectList.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"
 #include "core/objectInterpreter.h"
-#include "listMaintainer.h"
+#include "griddyn/primary/listMaintainer.h"
 #include "utilities/vectorOps.hpp"
 
 namespace griddyn

@@ -10,8 +10,8 @@
 * LLNS Copyright End
 */
 
-#include "matrixCreation.h"
-#include "matrixDataSparseSM.hpp"
+#include "utilities/matrixCreation.h"
+#include "utilities/matrixDataSparseSM.hpp"
 
 std::unique_ptr<matrixData<double>> makeSparseMatrix (count_t size, count_t maxElements)
 {

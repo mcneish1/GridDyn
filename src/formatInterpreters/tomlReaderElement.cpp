@@ -10,8 +10,8 @@
  * LLNS Copyright End
  */
 
-#include "tomlReaderElement.h"
-#include "tomlElement.h"
+#include "formatInterpreters/tomlReaderElement.h"
+#include "formatInterpreters/tomlElement.h"
 #include "utilities/stringConversion.h"
 #include <cassert>
 #include <fstream>

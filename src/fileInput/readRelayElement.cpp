@@ -10,12 +10,12 @@
  * LLNS Copyright End
 */
 
-#include "elementReaderTemplates.hpp"
+#include "fileInput/elementReaderTemplates.hpp"
 #include "griddyn/Generator.h"
 #include "griddyn/Area.h"
 #include "griddyn/gridBus.h"
 #include "griddyn/loads/zipLoad.h"
-#include "readElement.h"
+#include "fileInput/readElement.h"
 #include "griddyn/Relay.h"
 
 namespace griddyn

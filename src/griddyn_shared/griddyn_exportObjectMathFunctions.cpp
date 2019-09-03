@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "griddyn_export_advanced.h"
+#include "griddyn_shared/griddyn_export_advanced.h"
 #include "internal/griddyn_export_internal.h"
 
 #include "core/coreExceptions.h"

@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "vectorOps.hpp"
+#include "utilities/vectorOps.hpp"
 
 double solve2x2 (double v11, double v12, double v21, double v22, double y1, double y2, double &x1, double &x2)
 {

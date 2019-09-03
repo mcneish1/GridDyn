@@ -10,7 +10,7 @@
  * LLNS Copyright End
 */
 
-#include "controlBlock.h"
+#include "griddyn/blocks/controlBlock.h"
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/matrixData.hpp"
 #include "utilities/vectorOps.hpp"

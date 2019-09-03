@@ -12,7 +12,7 @@
 
 #include "core/coreExceptions.h"
 #include "core/objectFactoryTemplates.hpp"
-#include "fileInput.h"
+#include "fileInput/fileInput.h"
 #include "griddyn/Generator.h"
 #include "griddyn/Load.h"
 #include "griddyn/gridBus.h"
@@ -20,7 +20,7 @@
 #include "griddyn/links/acLine.h"
 #include "griddyn/links/adjustableTransformer.h"
 #include "griddyn/loads/svd.h"
-#include "readerHelper.h"
+#include "fileInput/readerHelper.h"
 #include "utilities/stringConversion.h"
 #include "utilities/stringOps.h"
 

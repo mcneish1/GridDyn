@@ -10,13 +10,13 @@
  * LLNS Copyright End
  */
 
-#include "gridDynSimulationFileOps.h"
-#include "../gridBus.h"
-#include "../gridDynSimulation.h"
-#include "../links/acLine.h"
-#include "../links/adjustableTransformer.h"
-#include "../solvers/solverInterface.h"
-#include "contingency.h"
+#include "griddyn/simulation/gridDynSimulationFileOps.h"
+#include "griddyn/gridBus.h"
+#include "griddyn/gridDynSimulation.h"
+#include "griddyn/links/acLine.h"
+#include "griddyn/links/adjustableTransformer.h"
+#include "griddyn/solvers/solverInterface.h"
+#include "griddyn/simulation/contingency.h"
 #include "core/coreExceptions.h"
 
 #ifdef __GNUC__

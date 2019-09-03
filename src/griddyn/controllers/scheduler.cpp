@@ -10,12 +10,12 @@
  * LLNS Copyright End
  */
 
-#include "scheduler.h"
-#include "../comms/Communicator.h"
-#include "../comms/schedulerMessage.h"
+#include "griddyn/controllers/scheduler.h"
+#include "griddyn/comms/Communicator.h"
+#include "griddyn/comms/schedulerMessage.h"
 #include "core/coreObjectTemplates.hpp"
-#include "dispatcher.h"
-#include "griddyn/griddyn-config.h"
+#include "griddyn/controllers/dispatcher.h"
+#include "griddyn-config.h"
 #include "utilities/timeSeries.hpp"
 namespace griddyn
 {

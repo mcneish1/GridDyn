@@ -10,9 +10,9 @@
  * LLNS Copyright End
  */
 
-#include "optimizerInterface.h"
+#include "optimization/optimizerInterface.h"
 #include "core/factoryTemplates.hpp"
-#include "gridDynOpt.h"
+#include "optimization/gridDynOpt.h"
 
 namespace griddyn
 {

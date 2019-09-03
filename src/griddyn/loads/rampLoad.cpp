@@ -10,10 +10,10 @@
  * LLNS Copyright End
 */
 
-#include "rampLoad.h"
+#include "griddyn/loads/rampLoad.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
-#include "../gridBus.h"
+#include "griddyn/gridBus.h"
 #include "utilities/vectorOps.hpp"
 
 //#include <ctime>

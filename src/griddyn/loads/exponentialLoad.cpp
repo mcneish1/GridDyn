@@ -10,9 +10,9 @@
  * LLNS Copyright End
 */
 
-#include "exponentialLoad.h"
+#include "griddyn/loads/exponentialLoad.h"
 #include "core/coreObjectTemplates.hpp"
-#include "../gridBus.h"
+#include "griddyn/gridBus.h"
 #include "utilities/matrixData.hpp"
 #include "utilities/stringOps.h"
 #include <cmath>

@@ -13,8 +13,8 @@
 #define RungeKutta_Implicit_h
 
 #include "RungeKutta.h"
-#include "../math/PVector.h"
-#include "../math/SMultiVector.h"
+#include "math/PVector.h"
+#include "math/SMultiVector.h"
 namespace griddyn {
 namespace paradae {
 class RungeKutta_Implicit;

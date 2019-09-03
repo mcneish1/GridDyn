@@ -12,11 +12,11 @@
 #ifndef Equation_h
 #define Equation_h
 
-#include "../common/def.h"
-#include "../math/Vector.h"
-#include "../math/SVector.h"
-#include "../math/VirtualMatrix.h"
-#include "../math/IPoly.h"
+#include "common/def.h"
+#include "math/Vector.h"
+#include "math/SVector.h"
+#include "math/VirtualMatrix.h"
+#include "math/IPoly.h"
 
 namespace griddyn {
 namespace paradae {
@@ -25,21 +25,21 @@ enum type_Equation {ODE, DAE};
 
 class RootManager {
 public:
-  int n_sroots;        // Number of scheduled roots 
-  int n_uroots;        // Number of unscheduled roots 
-  int n_uactive;       // Number of active unscheduled roots 
-  int n_sactive;       // Number of active scheduled roots 
-                       // If a root is inactive, the code ignores it 
+  int n_sroots;        // Number of scheduled roots
+  int n_uroots;        // Number of unscheduled roots
+  int n_uactive;       // Number of active unscheduled roots
+  int n_sactive;       // Number of active scheduled roots
+                       // If a root is inactive, the code ignores it
   int n_state;         // Size of the state vector, i.e. number of DOFs in space
 
   SVector is_active;   // Vector of size n_sroots+n_uroots, that says if a root
                        // is active or not.  First n_sroots indices are for
                        // scheduled roots, with the following indices
                        // indicating activity for unscheduled roots
-  
-  SVector dir_root;    // Direction of the crossing that would create a discontinuity 
-                       //   -1: zero is crossed with g decreasing, 
-                       //    1: zero is crossed with g increasing, 
+
+  SVector dir_root;    // Direction of the crossing that would create a discontinuity
+                       //   -1: zero is crossed with g decreasing,
+                       //    1: zero is crossed with g increasing,
                        //    0: both direction would create a discontinuity
 
   SVector t_sroot;     // The times of the scheduled discontinuities

@@ -10,14 +10,14 @@
  * LLNS Copyright End
  */
 
-#include "sensor.h"
-#include "../Block.h"
-#include "../Link.h"  //some special features for links
-#include "../comms/Communicator.h"
-#include "../comms/controlMessage.h"
-#include "../events/Event.h"
-#include "../measurement/Condition.h"
-#include "../measurement/grabberSet.h"
+#include "griddyn/relays/sensor.h"
+#include "griddyn/Block.h"
+#include "griddyn/Link.h"  //some special features for links
+#include "griddyn/comms/Communicator.h"
+#include "griddyn/comms/controlMessage.h"
+#include "griddyn/events/Event.h"
+#include "griddyn/measurement/Condition.h"
+#include "griddyn/measurement/grabberSet.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/matrixDataSparse.hpp"

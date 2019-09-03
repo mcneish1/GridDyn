@@ -12,7 +12,7 @@
 
 // headers
 #include "gridLoadOpt.h"
-#include "../optObjectFactory.h"
+#include "optimization/optObjectFactory.h"
 #include "core/coreExceptions.h"
 #include "gridBusOpt.h"
 #include "griddyn/loads/zipLoad.h"

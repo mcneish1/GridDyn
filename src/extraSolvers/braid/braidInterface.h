@@ -12,10 +12,10 @@
 #pragma once
 
 #include "griddyn/solvers/solverInterface.h"
-#include "../paradae/problems/ODEProblem.h"
-#include "../paradae/equations/Equation.h"
-#include "../paradae/equations/EqGridDyn.h"
-#include "../paradae/math/paradaeArrayData.h"
+#include "paradae/problems/ODEProblem.h"
+#include "paradae/equations/Equation.h"
+#include "paradae/equations/EqGridDyn.h"
+#include "paradae/math/paradaeArrayData.h"
 
 namespace griddyn
 {
@@ -32,9 +32,9 @@ private:
     std::vector<double> state2;  //!< temp state data location 2
     std::vector<double> type;    //!< type data
     coreTime deltaT = 0.005;     //!< the default time step
-    coreTime tStart = 0.0;       //!< the start time 
+    coreTime tStart = 0.0;       //!< the start time
 	std::string configFile{"braid_params.ini"}; //!< file containing additional braid configuration data
-    std::vector<double> discontinuities;  //<! vector containing any known event (discontinuity) locations 
+    std::vector<double> discontinuities;  //<! vector containing any known event (discontinuity) locations
   public:
     /** @brief default constructor*/
     explicit braidSolver(const std::string &objName = "braid");

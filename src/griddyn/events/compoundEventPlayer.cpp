@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "compoundEventPlayer.h"
+#include "griddyn/events/compoundEventPlayer.h"
 
 #include "core/coreExceptions.h"
 #include "core/objectInterpreter.h"

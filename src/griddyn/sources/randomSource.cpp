@@ -10,7 +10,7 @@
  * LLNS Copyright End
 */
 
-#include "randomSource.h"
+#include "griddyn/sources/randomSource.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/gridRandom.h"

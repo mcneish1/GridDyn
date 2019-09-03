@@ -10,9 +10,9 @@
 * LLNS Copyright End
 */
 
-#include "grabberSet.h"
-#include "gridGrabbers.h"
-#include "stateGrabber.h"
+#include "griddyn/measurement/grabberSet.h"
+#include "griddyn/measurement/gridGrabbers.h"
+#include "griddyn/measurement/stateGrabber.h"
 #include "utilities/valuePredictor.hpp"
 
 namespace griddyn
@@ -84,7 +84,7 @@ void grabberSet::updateField (const std::string &fld)
 	{
 		grab->updateField(fld);
 	}
-    
+
     if (stGrab)
     {
         stGrab->updateField (fld);

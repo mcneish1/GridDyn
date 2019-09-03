@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "gridComponent.h"
+#include "griddyn/gridComponent.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectInterpreter.h"

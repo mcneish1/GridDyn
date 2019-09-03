@@ -11,12 +11,12 @@
  */
 
 // headers
-#include "adjustableTransformer.h"
-#include "../gridBus.h"
+#include "griddyn/links/adjustableTransformer.h"
+#include "griddyn/gridBus.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectInterpreter.h"
-#include "griddyn/griddyn-config.h"
+#include "griddyn-config.h"
 #include "utilities/matrixData.hpp"
 #include "utilities/matrixDataTranslate.hpp"
 #include "utilities/stringOps.h"

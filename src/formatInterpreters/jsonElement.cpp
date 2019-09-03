@@ -10,7 +10,7 @@
 * LLNS Copyright End
 */
 
-#include "jsonElement.h"
+#include "formatInterpreters/jsonElement.h"
 
 static const std::string nullStr = std::string ("");
 

@@ -10,7 +10,7 @@
  * LLNS Copyright End
 */
 
-#include "commMessage.h"
+#include "griddyn/comms/commMessage.h"
 #include "utilities/stringConversion.h"
 
 #include <boost/iostreams/device/back_inserter.hpp>

@@ -11,7 +11,7 @@
  */
 
 #include "core/coreExceptions.h"
-#include "fileInput.h"
+#include "fileInput/fileInput.h"
 #include "griddyn/Generator.h"
 #include "griddyn/links/acLine.h"
 #include "griddyn/links/adjustableTransformer.h"
@@ -20,7 +20,7 @@
 #include "griddyn/loads/zipLoad.h"
 #include "griddyn/primary/acBus.h"
 #include "griddyn/primary/dcBus.h"
-#include "readerHelper.h"
+#include "fileInput/readerHelper.h"
 #include "utilities/stringConversion.h"
 #include "utilities/stringOps.h"
 #include "utilities/string_viewConversion.h"

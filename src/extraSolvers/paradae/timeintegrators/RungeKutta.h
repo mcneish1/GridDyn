@@ -13,13 +13,13 @@
 #define RungeKutta_hxx
 
 #include <list>
-#include "../math/Vector.h"
-#include "../math/SVector.h"
-#include "../math/SMultiVector.h"
-#include "../math/DenseMatrix.h"
-#include "../solvers/Solver.h"
-#include "../equations/Equation.h"
-#include "../timeintegrators/TimeIntegrator.h"
+#include "math/Vector.h"
+#include "math/SVector.h"
+#include "math/SMultiVector.h"
+#include "math/DenseMatrix.h"
+#include "solvers/Solver.h"
+#include "equations/Equation.h"
+#include "timeintegrators/TimeIntegrator.h"
 namespace griddyn {
 namespace paradae {
 class RungeKutta;
