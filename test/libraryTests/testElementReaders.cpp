@@ -88,7 +88,7 @@ BOOST_AUTO_TEST_CASE (tinyxmlElementReader_test2)
     std::cout << "NOTE:: this should have a message testing bad xml input and not fault\n";
     BOOST_CHECK (reader.isValid () == false);
     reader.loadFile (elementReaderTestDirectory + "xmlElementReader_test2.xml");
-    BOOST_CHECK (reader.isValid () == true);
+    BOOST_REQUIRE (reader.isValid () == true);
 
     auto main = reader.clone ();
     // there should be 9 elements
@@ -171,7 +171,7 @@ BOOST_AUTO_TEST_CASE (tinyxmlElementReader_test3)
 BOOST_AUTO_TEST_CASE (tinyxmlElementReader_testParse)
 {
     std::string XMLtestString = R"xml(<?xml version="1.0" encoding="utf - 8"?>
-<!--xml file to test the xml - reader functions--> 
+<!--xml file to test the xml - reader functions-->
 		<GridDyn name = "test1" version = "0.0.1">
 		<bus name = "bus1">
 		<type>SLK</type>
@@ -338,7 +338,7 @@ BOOST_AUTO_TEST_CASE (tinyxml2ElementReader_test2)
     reader.loadFile (elementReaderTestDirectory + "xmlElementReader_testbbad.xml");
     BOOST_CHECK (reader.isValid () == false);
     reader.loadFile (elementReaderTestDirectory + "xmlElementReader_test2.xml");
-    BOOST_CHECK (reader.isValid () == true);
+    BOOST_REQUIRE (reader.isValid () == true);
 
     auto main = reader.clone ();
     // there should be 9 elements
@@ -421,7 +421,7 @@ BOOST_AUTO_TEST_CASE (tinyxml2ElementReader_test3)
 BOOST_AUTO_TEST_CASE (tinyxml2ElementReader_testParse)
 {
     std::string XMLtestString = R"xml(<?xml version="1.0" encoding="utf - 8"?>
-<!--xml file to test the xml - reader functions--> 
+<!--xml file to test the xml - reader functions-->
 		<GridDyn name = "test1" version = "0.0.1">
 		<bus name = "bus1">
 		<type>SLK</type>

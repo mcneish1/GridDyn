@@ -511,7 +511,6 @@ griddyn_shared_lib = library('griddyn_shared', [
     ])
 griddyn_shared_dep = declare_dependency(link_with : griddyn_shared_lib, include_directories : griddyn_shared_inc)
 
-griddyn_server_inc = include_directories('include/gridDynServer')
 executable('griddyn_server', [
         'src/gridDynServer/gridDynServer.cpp',
         'src/gridDynServer/gridDynServerMain.cpp',

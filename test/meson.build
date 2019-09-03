@@ -14,7 +14,6 @@ library_tests = [
     'testString_viewOps',
     'testGridParameter',
     'testStringOps',
-    'libraryTests',
     'testValuePredictors',
     'testWorkQueue',
 ]
@@ -87,7 +86,7 @@ foreach test_name_folder_name : folder_map
     folder_name = test_name_folder_name[1]
 
     foreach test_name : test_names
-        test_exe = executable(test_name + '_' + folder_name, [
+        test_exe = executable(folder_name + '_' + test_name, [
                 folder_name + '/' + test_name + '.cpp',
                 'testHelperFunctions.cpp'
             ],
@@ -106,6 +105,6 @@ foreach test_name_folder_name : folder_map
                 griddyn_shared_dep,
                 cereal_dep,
             ])
-        test('test_' + test_name + '_' + folder_name, test_exe)
+        test('test_' + folder_name + '_' + test_name, test_exe)
     endforeach
 endforeach

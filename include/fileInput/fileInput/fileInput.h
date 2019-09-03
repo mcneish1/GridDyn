@@ -22,6 +22,9 @@ define some functions and operations for configuring file reader operations and 
 
 namespace griddyn
 {
+
+struct file_input_throw_if_null {};
+
 class Event;
 class Recorder;
 
@@ -100,6 +103,12 @@ enum readerFlags
 std::unique_ptr<gridDynSimulation> readSimXMLFile (const std::string &fileName,
                                                    readerInfo *ri = nullptr,
                                                    xmlreader rtype = xmlreader::default_reader);
+
+std::unique_ptr<gridDynSimulation> readSimXMLFile (
+  file_input_throw_if_null,
+  const std::string &fileName,
+  readerInfo *ri = nullptr,
+  xmlreader rtype = xmlreader::default_reader);
 
 void addflags (basicReaderInfo &bri, const std::string &flags);
 

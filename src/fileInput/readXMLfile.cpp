@@ -48,4 +48,13 @@ std::unique_ptr<gridDynSimulation> readSimXMLFile (const std::string &fileName, 
           static_cast<gridDynSimulation *> (loadElementFile<tinyxml2ReaderElement> (nullptr, fileName, ri)));
     }
 }
-}//namespace griddyn
+
+std::unique_ptr<gridDynSimulation> readSimXMLFile (file_input_throw_if_null, const std::string &fileName, readerInfo *ri, xmlreader rtype)
+{
+    auto ptr = readSimXMLFile(fileName, ri, rtype);
+    if (!ptr)
+        throw fileOperationError("Load failed");
+    return ptr;
+}
+
+} //namespace griddyn
