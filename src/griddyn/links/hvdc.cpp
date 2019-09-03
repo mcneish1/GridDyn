@@ -35,7 +35,6 @@ hvdc::hvdc (const std::string &objName) : subsystem (4, objName)
     // default values
 
     auto dcl = new dcLink ("dcline");
-    dcl->set ("type", "slk");
     subsystem::add (dcl);
 
     auto rec1 = new acdcConverter ("rect1");
