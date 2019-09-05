@@ -8,7 +8,7 @@ library_tests = [
     #- 'testCore',
     #- 'testMatrixData',
     #- 'simpleQueueTests',
-    'testReaderInfo',
+    #- 'testReaderInfo',
     #- 'testZipUtilities',
     'testJsonReader',
     #- 'testStringConversion',
@@ -89,7 +89,7 @@ foreach test_name_folder_name : folder_map
             cpp_args : [
                 '-DBOOST_TEST_DYN_LINK',
                 '-DBOOST_TEST_MODULE=griddyn_tests',
-                '-DGRIDDYN_TEST_DIRECTORY="' + meson.current_source_dir() + '/test_files/"',
+                '-DGRIDDYN_TEST_DIRECTORY="' + meson.current_source_dir() + '/test_files"',
             ],
             include_directories : griddyn_config_inc,
             dependencies : [
