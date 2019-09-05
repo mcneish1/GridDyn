@@ -3,13 +3,13 @@ library_tests = [
     #- 'testString_viewConversion',
     #- 'testOperatingBounds',
     'testXML',
-    'testElementReaders',
+    #- 'testElementReaders',
     #- 'testGridDynRunner',
     #- 'testCore',
     #- 'testMatrixData',
     #- 'simpleQueueTests',
     'testReaderInfo',
-    'testZipUtilities',
+    #- 'testZipUtilities',
     'testJsonReader',
     #- 'testStringConversion',
     #- 'testString_viewOps',
@@ -51,7 +51,7 @@ component_tests = [
     'testRelays',
     'testLinks',
     #- 'testSource',
-    'testEvents',
+    #- 'testEvents',
     'testExciters',
     'testAdjustableTX',
 ]
@@ -86,7 +86,11 @@ foreach test_name_folder_name : folder_map
                 folder_name + '/' + test_name + '.cpp',
                 'testHelperFunctions.cpp'
             ],
-            cpp_args : ['-DBOOST_TEST_DYN_LINK', '-DBOOST_TEST_MODULE=griddyn_tests'],
+            cpp_args : [
+                '-DBOOST_TEST_DYN_LINK',
+                '-DBOOST_TEST_MODULE=griddyn_tests',
+                '-DGRIDDYN_TEST_DIRECTORY="' + meson.current_source_dir() + '/test_files/"',
+            ],
             include_directories : griddyn_config_inc,
             dependencies : [
                 griddyn_utility_dep,
