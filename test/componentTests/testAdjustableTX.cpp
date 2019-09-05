@@ -29,7 +29,7 @@ BOOST_AUTO_TEST_CASE (adj_test_simple)
 {
     std::string fileName = std::string (TADJ_TEST_DIRECTORY "adj_test1.xml");
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->powerflow ();
 	requireState(gridDynSimulation::gridState_t::POWERFLOW_COMPLETE);
 
@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE (adj_test_simple)
 
     // tap changing doesn't do anything in this case we are checking to make sure the tap goes all the way
     fileName = std::string (TADJ_TEST_DIRECTORY "adj_test2.xml");
-    gds2 = readSimXMLFile (fileName);
+    gds2 = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds2->powerflow ();
     requireStates(gds2->currentProcessState (),gridDynSimulation::gridState_t::POWERFLOW_COMPLETE);
 
@@ -54,7 +54,7 @@ BOOST_AUTO_TEST_CASE (adj_test_simple2)
     // test multiple interacting controllers
     std::string fileName = std::string (TADJ_TEST_DIRECTORY "adj_test3.xml");
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->powerflow ();
     requireState(gridDynSimulation::gridState_t::POWERFLOW_COMPLETE);
 
@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE (adj_test_simple2)
     // test multiple interacting controllers voltage reduction mode
     fileName = std::string (TADJ_TEST_DIRECTORY "adj_test4.xml");
 
-    gds2 = readSimXMLFile (fileName);
+    gds2 = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds2->powerflow ();
     BOOST_REQUIRE (gds2->currentProcessState () == gridDynSimulation::gridState_t::POWERFLOW_COMPLETE);
 
@@ -81,7 +81,7 @@ BOOST_AUTO_TEST_CASE (adj_test_simple2)
     // test a remote control bus adjustable link between 1 and 3 and controlling bus 4
     fileName = std::string (TADJ_TEST_DIRECTORY "adj_test5.xml");
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->powerflow ();
     requireState(gridDynSimulation::gridState_t::POWERFLOW_COMPLETE);
 
@@ -95,7 +95,7 @@ BOOST_AUTO_TEST_CASE (adj_test_mw)
 {
     std::string fileName = std::string (TADJ_TEST_DIRECTORY "adj_test6.xml");
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->powerflow ();
 	requireState(gridDynSimulation::gridState_t::POWERFLOW_COMPLETE);
 
@@ -111,7 +111,7 @@ BOOST_AUTO_TEST_CASE (adj_test_mvar)
 {
     std::string fileName = std::string (TADJ_TEST_DIRECTORY "adj_test7.xml");
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->pFlowInitialize ();
     int mmatch = runJacobianCheck (gds, cPflowSolverMode);
 
@@ -128,7 +128,7 @@ BOOST_AUTO_TEST_CASE (adj_test_mvar)
     fileName = std::string (TADJ_TEST_DIRECTORY "adj_test8.xml");
 
 
-    gds2 = readSimXMLFile (fileName);
+    gds2 = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds2->powerflow ();
 	requireStates(gds2->currentProcessState (),gridDynSimulation::gridState_t::POWERFLOW_COMPLETE);
 
@@ -142,7 +142,7 @@ BOOST_AUTO_TEST_CASE (adj_testcont_mvar)
 {
     std::string fileName = std::string (TADJ_TEST_DIRECTORY "adj_test7c.xml");
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->pFlowInitialize ();
     int mmatch = runJacobianCheck (gds, cPflowSolverMode);
 
@@ -158,7 +158,7 @@ BOOST_AUTO_TEST_CASE (adj_testcont_mvar)
     fileName = std::string (TADJ_TEST_DIRECTORY "adj_test8c.xml");
 
 
-    gds2 = readSimXMLFile (fileName);
+    gds2 = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds2->powerflow ();
 	requireStates(gds2->currentProcessState (),gridDynSimulation::gridState_t::POWERFLOW_COMPLETE);
 
@@ -172,7 +172,7 @@ BOOST_AUTO_TEST_CASE (adj_test_contV)
 {
     std::string fileName = std::string (TADJ_TEST_DIRECTORY "adj_test9.xml");
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->pFlowInitialize ();
     int mmatch = runJacobianCheck (gds, cPflowSolverMode);
 
@@ -187,7 +187,7 @@ BOOST_AUTO_TEST_CASE (adj_test_contV)
     // test multiple continuous controllers
     fileName = std::string (TADJ_TEST_DIRECTORY "adj_test10.xml");
 
-    gds2 = readSimXMLFile (fileName);
+    gds2 = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds2->powerflow ();
 	requireStates(gds2->currentProcessState (),gridDynSimulation::gridState_t::POWERFLOW_COMPLETE);
 

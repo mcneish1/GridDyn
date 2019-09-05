@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_CASE (relay_test1)
 {
     std::string fileName = std::string (RELAY_TEST_DIRECTORY "relay_test1.xml");
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 
     gds->dynInitialize (timeZero);
 
@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE (relay_test2)
     // test a bunch of different link parameters to make sure all the solve properly
     std::string fileName = std::string (RELAY_TEST_DIRECTORY "relay_test2.xml");
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 
     gds->dynInitialize (timeZero);
 
@@ -74,7 +74,7 @@ BOOST_AUTO_TEST_CASE (relay_test_multi)
     // test a bunch of different link parameters to make sure all the solve properly
     std::string fileName = std::string (RELAY_TEST_DIRECTORY "relay_test_multi.xml");
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 
     gds->dynInitialize (timeZero);
     int cnt = gds->getInt ("relaycount");
@@ -106,7 +106,7 @@ BOOST_AUTO_TEST_CASE (test_bus_relay)
 BOOST_AUTO_TEST_CASE (test_differential_relay)
 {
     std::string fileName = std::string (RELAY_TEST_DIRECTORY "test_differential_relay.xml");
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->consolePrintLevel = print_level::summary;
     gds->run ();
     auto obj = gds->find ("bus1_to_bus3");
@@ -118,9 +118,9 @@ BOOST_AUTO_TEST_CASE (test_differential_relay)
 
 BOOST_AUTO_TEST_CASE (test_control_relay)
 {
-	
+
     std::string fileName = std::string (RELAY_TEST_DIRECTORY "test_control_relay.xml");
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     // gds->consolePrintLevel = print_level::no_print;
     auto obj = gds->find ("bus4::load4");
     auto cr = dynamic_cast<relays::controlRelay *> (gds->getRelay (0));
@@ -159,7 +159,7 @@ BOOST_AUTO_TEST_CASE (test_control_relay)
 BOOST_AUTO_TEST_CASE (test_relay_comms)
 {
     std::string fileName = std::string (RELAY_TEST_DIRECTORY "test_relay_comms.xml");
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     // gds->consolePrintLevel = print_level::no_print;
     gds->dynInitialize ();
     auto obj = gds->find ("sensor1");
@@ -179,7 +179,7 @@ BOOST_AUTO_TEST_CASE(pmu_test1)
 {
 	std::string fileName = std::string(RELAY_TEST_DIRECTORY "pmu_test1.xml");
 
-	gds = readSimXMLFile(fileName);
+	gds = readSimXMLFile(file_input_throw_if_null{}, fileName);
 
 	gds->dynInitialize(timeZero);
 

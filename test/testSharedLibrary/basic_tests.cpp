@@ -26,7 +26,7 @@ BOOST_AUTO_TEST_SUITE (basic_tests, * boost::unit_test::label("quick"))
 BOOST_AUTO_TEST_CASE (simple_load_test)
 {
     gridDynSimReference sim = gridDynSimulation_create("", "sim1");
-    BOOST_CHECK(sim != nullptr);
+    BOOST_REQUIRE(sim != nullptr);
     std::string file = ieee_test_directory + "ieee14.cdf";
     auto res = gridDynSimulation_loadfile(sim, file.c_str(), "");
     BOOST_CHECK(res == griddyn_ok);
@@ -46,7 +46,7 @@ BOOST_AUTO_TEST_CASE (simple_load_test)
 BOOST_AUTO_TEST_CASE(getResult_test)
 {
     gridDynSimReference sim = gridDynSimulation_create("", "sim1");
-    BOOST_CHECK(sim != nullptr);
+    BOOST_REQUIRE(sim != nullptr);
     std::string file = ieee_test_directory + "ieee14.cdf";
     auto res = gridDynSimulation_loadfile(sim, file.c_str(), "");
     BOOST_CHECK(res == griddyn_ok);
@@ -54,7 +54,7 @@ BOOST_AUTO_TEST_CASE(getResult_test)
 
     int cnt = gridDynSimulation_busCount(sim);
 
-    BOOST_CHECK_EQUAL(cnt,14);
+    BOOST_REQUIRE_EQUAL(cnt,14);
     std::vector<double> voltages(cnt);
     std::vector<double> angles(cnt);
     int act = gridDynSimulation_getResults(sim, "voltage",voltages.data(), cnt);
@@ -74,7 +74,7 @@ BOOST_AUTO_TEST_CASE(getResult_test)
 BOOST_AUTO_TEST_CASE(getObject_tests)
 {
     gridDynSimReference sim = gridDynSimulation_create("", "sim1");
-    BOOST_CHECK(sim != nullptr);
+    BOOST_REQUIRE(sim != nullptr);
     std::string file = ieee_test_directory + "ieee14.cdf";
     auto res = gridDynSimulation_loadfile(sim, file.c_str(), "");
     BOOST_CHECK(res == griddyn_ok);
@@ -104,7 +104,7 @@ BOOST_AUTO_TEST_CASE(getObject_tests)
 BOOST_AUTO_TEST_CASE(build_small_test_case)
 {
 	gridDynSimReference sim = gridDynSimulation_create("", "sim1");
-	BOOST_CHECK(sim != nullptr);
+	BOOST_REQUIRE(sim != nullptr);
 	auto obj = getSimulationObject(sim);
 
 	auto bus1 = gridDynObject_create("bus", "infinite");

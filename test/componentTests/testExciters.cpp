@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_CASE (root_exciter_test)
     std::string fileName = std::string (EXCITER_TEST_DIRECTORY "test_root_exciter.xml");
 
     readerConfig::setPrintMode (0);
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 
     int retval = gds->dynInitialize ();
     BOOST_CHECK_EQUAL (retval, 0);
@@ -69,7 +69,7 @@ BOOST_AUTO_TEST_CASE (basic_stability_test1)
 		{
 			continue;
 		}
-        gds = readSimXMLFile (fileName);
+        gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
         Generator *gen = gds->getGen (0);
         gds->consolePrintLevel = print_level::no_print;
 
@@ -134,7 +134,7 @@ BOOST_AUTO_TEST_CASE (basic_stability_test2)
 		{
 			continue;
 		}
-        gds = readSimXMLFile (fileName);
+        gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
         Generator *gen = gds->getGen (0);
         gds->consolePrintLevel = print_level::no_print;
         auto obj = cof->createObject ("exciter", excname);
@@ -209,7 +209,7 @@ BOOST_AUTO_TEST_CASE (basic_stability_test3)
             // TODO: this doesn't work for now (unknown)
             continue;
         }
-        gds = readSimXMLFile (fileName);
+        gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
         Generator *gen = gds->getGen (0);
         gds->consolePrintLevel = print_level::no_print;
         obj = cof->createObject ("exciter", excname);
@@ -284,7 +284,7 @@ BOOST_AUTO_TEST_CASE (basic_stability_test4)
             // TODO: this doesn't work for now (unknown)
             continue;
         }
-        gds = readSimXMLFile (fileName);
+        gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
         Generator *gen = gds->getGen (0);
         gds->consolePrintLevel = print_level::no_print;
         obj = cof->createObject ("exciter", excname);
@@ -353,7 +353,7 @@ BOOST_AUTO_TEST_CASE (exciter_test2_alg_diff_tests)  // test the algebraic updat
 		{
 			continue;
 		}
-        gds = readSimXMLFile (fileName);
+        gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
         Generator *gen = gds->getGen (0);
         gds->consolePrintLevel = print_level::no_print;
         auto obj = cof->createObject ("exciter", excname);
@@ -403,7 +403,7 @@ BOOST_AUTO_TEST_CASE (exciter_alg_diff_jacobian_tests)  // test the algebraic up
 		{
 			continue;
 		}
-        gds = readSimXMLFile (fileName);
+        gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
         Generator *gen = gds->getGen (0);
         gds->consolePrintLevel = print_level::no_print;
         auto obj = cof->createObject ("exciter", excname);

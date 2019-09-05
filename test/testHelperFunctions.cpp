@@ -106,7 +106,7 @@ void gridDynSimulationTestFixture::simpleRunTestXML(const std::string &fileName)
 
 void gridDynSimulationTestFixture::runTestXML(const std::string &fileName, gridDynSimulation::gridState_t finalState)
 {
-	gds = readSimXMLFile(fileName);
+	gds = readSimXMLFile(file_input_throw_if_null{}, fileName);
 	gds->consolePrintLevel = print_level::no_print;
 	gds->run();
 	requireState(finalState);
@@ -117,7 +117,7 @@ void gridDynSimulationTestFixture::simpleStageCheck(const std::string &fileName,
 {
 	readerConfig::setPrintMode(0);
 	int retval = 0;
-	gds = readSimXMLFile(fileName);
+	gds = readSimXMLFile(file_input_throw_if_null{}, fileName);
 	BOOST_REQUIRE_EQUAL(readerConfig::warnCount,0);
 	requireState(gridDynSimulation::gridState_t::STARTUP);
 	switch (finalState)
@@ -149,7 +149,7 @@ void gridDynSimulationTestFixture::simpleStageCheck(const std::string &fileName,
 void gridDynSimulationTestFixture::detailedStageCheck(const std::string &fileName, gridDynSimulation::gridState_t finalState)
 {
 	readerConfig::setPrintMode(0);
-	gds = readSimXMLFile(fileName);
+	gds = readSimXMLFile(file_input_throw_if_null{}, fileName);
 	BOOST_REQUIRE_EQUAL(readerConfig::warnCount,0);
 	requireState(gridDynSimulation::gridState_t::STARTUP);
 	int retval = gds->pFlowInitialize();
@@ -194,7 +194,7 @@ void gridDynSimulationTestFixture::detailedStageCheck(const std::string &fileNam
 void gridDynSimulationTestFixture::dynamicInitializationCheck(const std::string &fileName)
 {
 	readerConfig::setPrintMode(0);
-	gds = readSimXMLFile(fileName);
+	gds = readSimXMLFile(file_input_throw_if_null{}, fileName);
 
 	int  retval = gds->dynInitialize();
 

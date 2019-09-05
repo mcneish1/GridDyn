@@ -385,7 +385,7 @@ BOOST_AUTO_TEST_CASE (gridDynLoad_test1)
 {
     std::string fileName = gridlabd_test_directory + "IEEE_13_mod.xml";
 
-    auto gds = readSimXMLFile (fileName);
+    auto gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 
     auto bus = gds->getBus (1);
     auto gld = dynamic_cast<gridLabDLoad *> (bus->getLoad ());
@@ -401,7 +401,7 @@ BOOST_AUTO_TEST_CASE (motor_test1)
 {
     std::string fileName = load_test_directory + "motorload_test1.xml";
 
-    auto gds = readSimXMLFile (fileName);
+    auto gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 
     gridBus *bus = gds->getBus (1);
     auto mtld = dynamic_cast<motorLoad *> (bus->getLoad ());
@@ -421,7 +421,7 @@ BOOST_AUTO_TEST_CASE (motor_test3)
 {
     std::string fileName = load_test_directory + "motorload_test3.xml";
 
-    auto gds = readSimXMLFile (fileName);
+    auto gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 
     gridBus *bus = gds->getBus (1);
     auto mtld = dynamic_cast<motorLoad3 *> (bus->getLoad ());
@@ -446,7 +446,7 @@ BOOST_AUTO_TEST_CASE (motor_test3_stall)
 {
     std::string fileName = load_test_directory + "motorload_test3_stall.xml";
 
-    auto gds = readSimXMLFile (fileName);
+    auto gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 
     gridBus *bus = gds->getBus (1);
     auto mtld = dynamic_cast<motorLoad3 *> (bus->getLoad ());
@@ -475,7 +475,7 @@ BOOST_AUTO_TEST_CASE (motor_test5)
 {
     std::string fileName = std::string (LOAD_TEST_DIRECTORY "motorload_test5.xml");
     readerConfig::setPrintMode (0);
-    auto gds = readSimXMLFile (fileName);
+    auto gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 
     gridBus *bus = gds->getBus (1);
     auto mtld = dynamic_cast<motorLoad5 *> (bus->getLoad ());
@@ -501,7 +501,7 @@ BOOST_AUTO_TEST_CASE (fdep_test)
 {
     std::string fileName = load_test_directory + "fdepLoad.xml";
     readerConfig::setPrintMode (0);
-    auto gds = readSimXMLFile (fileName);
+    auto gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 
     gridBus *bus = gds->getBus (2);
     auto mtld = dynamic_cast<fDepLoad *> (bus->getLoad ());

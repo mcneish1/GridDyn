@@ -29,7 +29,7 @@ using namespace griddyn;
 BOOST_AUTO_TEST_CASE (cloning_test1)
 {
     std::string fileName = clone_test_directory + "clone_test1.xml";
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->consolePrintLevel = print_level::no_print;
 
     gds2 = std::unique_ptr<gridDynSimulation> (static_cast<gridDynSimulation *> (gds->clone ()));
@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE (cloning_test1)
 BOOST_AUTO_TEST_CASE (cloning_test2)
 {
     std::string fileName = clone_test_directory + "clone_test2.xml";
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->consolePrintLevel = print_level::no_print;
 
     gds2 = std::unique_ptr<gridDynSimulation> (static_cast<gridDynSimulation *> (gds->clone ()));
@@ -70,7 +70,7 @@ BOOST_AUTO_TEST_CASE (cloning_test2)
 BOOST_AUTO_TEST_CASE (cloning_test_solver_approx)
 {
     std::string fileName = clone_test_directory + "clone_test3.xml";
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->consolePrintLevel = print_level::no_print;
 
     gds2 = std::unique_ptr<gridDynSimulation> (static_cast<gridDynSimulation *> (gds->clone ()));
@@ -113,7 +113,7 @@ BOOST_AUTO_TEST_CASE (cloning_test_solver_approx)
 BOOST_AUTO_TEST_CASE (cloning_test_events)
 {
     std::string fileName = clone_test_directory + "test_griddyn39_events.xml";
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 
     gds2 = std::unique_ptr<gridDynSimulation> (static_cast<gridDynSimulation *> (gds->clone ()));
 

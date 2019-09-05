@@ -27,7 +27,7 @@ BOOST_FIXTURE_TEST_SUITE (constraint_tests, gridDynSimulationTestFixture, * boos
 BOOST_AUTO_TEST_CASE (constraint_test1)
 {
     std::string fileName = std::string (CONSTRAINT_TEST_DIRECTORY "test_constSimple1.xml");
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 	requireState(gridDynSimulation::gridState_t::STARTUP);
 
     gds->consolePrintLevel = print_level::no_print;

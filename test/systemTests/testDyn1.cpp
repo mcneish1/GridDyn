@@ -28,7 +28,7 @@ BOOST_AUTO_TEST_CASE (dyn_test_genModel)
 {
     std::string fileName = std::string (DYN1_TEST_DIRECTORY "test_dynSimple1.xml");
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 	requireState(gridDynSimulation::gridState_t::STARTUP);
 
     gds->pFlowInitialize ();
@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE (dyn_test_genModel)
 BOOST_AUTO_TEST_CASE (dyn_test_Exciter)
 {
     std::string fileName = std::string (DYN1_TEST_DIRECTORY "test_2m4bDyn_ss_ext_only.xml");
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 	requireState(gridDynSimulation::gridState_t::STARTUP);
 
     gds->pFlowInitialize ();
@@ -111,7 +111,7 @@ BOOST_AUTO_TEST_CASE (dyn_test_Exciter)
 BOOST_AUTO_TEST_CASE (dyn_test_simpleCase)
 {
     std::string fileName = std::string (DYN1_TEST_DIRECTORY "test_2m4bDyn_ss.xml");
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 	requireState(gridDynSimulation::gridState_t::STARTUP);
 
     gds->pFlowInitialize ();
@@ -147,7 +147,7 @@ BOOST_AUTO_TEST_CASE (dyn_test_simpleCase)
 BOOST_AUTO_TEST_CASE (dyn_test_infinite_bus)
 {
     std::string fileName = std::string (DYN1_TEST_DIRECTORY "test_inf_bus.xml");
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 	requireState(gridDynSimulation::gridState_t::STARTUP);
     infiniteBus *bus = dynamic_cast<infiniteBus *> (gds->getBus (0));
     BOOST_CHECK (bus != nullptr);
@@ -173,12 +173,10 @@ BOOST_AUTO_TEST_CASE (dyn_test_mbase)
     detailedStageCheck (fileName, gridDynSimulation::gridState_t::DYNAMIC_COMPLETE);
 }
 
-/*
 BOOST_AUTO_TEST_CASE(dyn_test_griddyn39)
 {
     std::string fileName = std::string(DYN1_TEST_DIRECTORY "test_griddyn39.xml");
     detailedStageCheck(fileName, gridDynSimulation::gridState_t::DYNAMIC_COMPLETE);
 }
-*/
 
 BOOST_AUTO_TEST_SUITE_END ()

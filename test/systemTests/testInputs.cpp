@@ -153,6 +153,7 @@ BOOST_DATA_TEST_CASE_F (gridDynSimulationTestFixture, test_power_flow_inputs, da
 
         // do a manual reset of the voltages
         // gds->consolePrintLevel = print_level::trace;
+        BOOST_REQUIRE(count == 300);
         for (int ii = 0; ii < 300; ++ii)
         {
             gridBus *bus = gds->getBus (ii);

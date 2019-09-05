@@ -1,21 +1,22 @@
+#- commented out tests are passing
 library_tests = [
-    'testString_viewConversion',
-    'testOperatingBounds',
+    #- 'testString_viewConversion',
+    #- 'testOperatingBounds',
     'testXML',
     'testElementReaders',
-    'testGridDynRunner',
-    'testCore',
-    'testMatrixData',
-    'simpleQueueTests',
+    #- 'testGridDynRunner',
+    #- 'testCore',
+    #- 'testMatrixData',
+    #- 'simpleQueueTests',
     'testReaderInfo',
     'testZipUtilities',
     'testJsonReader',
-    'testStringConversion',
-    'testString_viewOps',
-    'testGridParameter',
-    'testStringOps',
-    'testValuePredictors',
-    'testWorkQueue',
+    #- 'testStringConversion',
+    #- 'testString_viewOps',
+    #- 'testGridParameter',
+    #- 'testStringOps',
+    #- 'testValuePredictors',
+    #- 'testWorkQueue',
 ]
 
 system_tests = [
@@ -26,34 +27,30 @@ system_tests = [
     'testInputs',
     'testContingency',
     'testDyn1',
-    'validationTests',
+    #- 'validationTests',
     'testDyn2',
     'testCloning',
     'faultTests',
     'testConstraints',
     'testOutputs',
     'testpFlow',
-    # 'testMainExe',
 ]
 
 component_tests = [
-    'simulationTests',
     'testGenModels',
     'testBlocks',
-    'ConditionTests',
+    #- 'ConditionTests',
     'testArea',
     'testdcLinks',
     'testExtraModels',
     'testRecorders',
     'testGridLab',
     'testGovernors',
-    # 'testFMI',
-    'testComponents',
     'testGenerators',
     'testLoads',
     'testRelays',
     'testLinks',
-    'testSource',
+    #- 'testSource',
     'testEvents',
     'testExciters',
     'testAdjustableTX',
@@ -61,16 +58,15 @@ component_tests = [
 
 extra_tests = [
     'performanceTests',
-    # 'extraFMUtests',
-    'objectSizeReport',
-    'largeInputTests',
+    #- 'objectSizeReport',
+    #- 'largeInputTests',
     'largeContingencyTests',
     'testExtra',
 ]
 
 shared_library_tests = [
     'shared_library_tests',
-    'basic_tests',
+    'basic_tests', # completely broken ://
 ]
 
 folder_map = [

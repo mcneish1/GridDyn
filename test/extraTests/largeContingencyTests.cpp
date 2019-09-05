@@ -33,7 +33,7 @@ using namespace griddyn;
 BOOST_AUTO_TEST_CASE (contingency_n2)
 {
     std::string fileName = contingency_test_directory + "contingency_test3.xml";
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->set ("printlevel", 0);
     auto start_t = std::chrono::high_resolution_clock::now ();
     gds->run ();
@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE (contingency_n2)
 BOOST_AUTO_TEST_CASE (contingency_bcase)
 {
     std::string fileName = contingency_test_directory + "contingency_testbig.xml";
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->set ("printlevel", 0);
     auto start_t = std::chrono::high_resolution_clock::now ();
     int ret = gds->run ();

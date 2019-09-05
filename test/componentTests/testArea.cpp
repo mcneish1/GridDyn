@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_CASE (area_test1)
 {
     std::string fileName = std::string (AREA_TEST_DIRECTORY "area_test1.xml");
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     requireState(gridDynSimulation::gridState_t::STARTUP);
 
     gds->pFlowInitialize ();
@@ -55,7 +55,7 @@ BOOST_AUTO_TEST_CASE (area_test1)
     fileName = std::string (AREA_TEST_DIRECTORY "area_test0.xml");
 
 
-    gds2 = readSimXMLFile (fileName);
+    gds2 = readSimXMLFile (file_input_throw_if_null{}, fileName);
 
 
     gds2->powerflow ();

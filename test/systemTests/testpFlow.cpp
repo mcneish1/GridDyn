@@ -31,7 +31,7 @@ BOOST_FIXTURE_TEST_SUITE (pFlow_tests, gridDynSimulationTestFixture, * boost::un
 BOOST_AUTO_TEST_CASE (pFlow_test1)
 {
     std::string fileName = pFlow_test_directory + "test_powerflow3m9b.xml";
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     BOOST_REQUIRE (gds->currentProcessState () == gridDynSimulation::gridState_t::STARTUP);
 
     gds->pFlowInitialize ();
@@ -43,7 +43,7 @@ BOOST_AUTO_TEST_CASE (pFlow_test1)
     // check the linkcount
     count = gds->getInt ("totallinkcount");
     BOOST_CHECK_EQUAL (count, 9);
-    
+
     BOOST_CHECK_EQUAL (runJacobianCheck (gds, cPflowSolverMode, false), 0);
     BOOST_CHECK_EQUAL(gds->getInt("jacsize"), 108);
     gds->powerflow ();
@@ -54,7 +54,7 @@ BOOST_AUTO_TEST_CASE (pFlow_test1)
 BOOST_AUTO_TEST_CASE (pFlow_test2)
 {
     std::string fileName = pFlow_test_directory + "test_powerflow3m9b2.xml";
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     BOOST_REQUIRE (gds->currentProcessState () == gridDynSimulation::gridState_t::STARTUP);
     gds->pFlowInitialize ();
     BOOST_REQUIRE (gds->currentProcessState () == gridDynSimulation::gridState_t::INITIALIZED);
@@ -84,14 +84,14 @@ BOOST_AUTO_TEST_CASE (pFlow_test2)
 BOOST_AUTO_TEST_CASE (pFlow_test3)
 {
     std::string fileName = pFlow_test_directory + "test_powerflow3m9b.xml";
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     requireState(gridDynSimulation::gridState_t::STARTUP);
     gds->pFlowInitialize ();
     requireState(gridDynSimulation::gridState_t::INITIALIZED);
 
 
     std::string fname2 = pFlow_test_directory + "test_powerflow3m9b2.xml";
-    gds2 = readSimXMLFile (fname2);
+    gds2 = readSimXMLFile (file_input_throw_if_null{}, fname2);
     requireState2(gridDynSimulation::gridState_t::STARTUP);
     gds2->pFlowInitialize ();
 	requireState2(gridDynSimulation::gridState_t::INITIALIZED);
@@ -329,7 +329,7 @@ BOOST_AUTO_TEST_CASE (test_iterated_pflow)
 BOOST_AUTO_TEST_CASE (pFlow_test_floating_bus)
 {
     std::string fileName = pFlow_test_directory + "test_powerflow3m9b_float.xml";
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 
     gds->pFlowInitialize ();
     requireState(gridDynSimulation::gridState_t::INITIALIZED);
@@ -344,9 +344,9 @@ BOOST_AUTO_TEST_CASE (pFlow_test_floating_bus)
 BOOST_AUTO_TEST_CASE(pflow_test_single_breaker)
 {
 	std::string fileName = pFlow_test_directory + "line_single_breaker_trip.xml";
-	gds = readSimXMLFile(fileName);
+	gds = readSimXMLFile(file_input_throw_if_null{}, fileName);
 
-	
+
 	gds->run(5.0);
 	BOOST_CHECK_GE(static_cast<double>(gds->getSimulationTime()), 5.0);
 	//gds->timestep(2.05,noInputs,cPflowSolverMode);

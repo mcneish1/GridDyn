@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_CASE (model_test1)
 {
     std::string fileName = std::string (GENMODEL_TEST_DIRECTORY "test_model1.xml");
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 
     int retval = gds->dynInitialize ();
     BOOST_CHECK_EQUAL (retval, 0);
@@ -64,7 +64,7 @@ BOOST_AUTO_TEST_CASE (model_test2)  // Jacobian code check
         {
             continue;
         }
-        gds = readSimXMLFile(fileName);
+        gds = readSimXMLFile(file_input_throw_if_null{}, fileName);
 
         Generator *gen = gds->getGen(0);
 
@@ -99,7 +99,7 @@ BOOST_AUTO_TEST_CASE (model_test2_withr)  // Jacobian code check
 		{
 			continue;
 		}
-        gds = readSimXMLFile(fileName);
+        gds = readSimXMLFile(file_input_throw_if_null{}, fileName);
 
         Generator *gen = gds->getGen(0);
         auto obj = cof->createObject ("genmodel", gname);
@@ -133,7 +133,7 @@ BOOST_AUTO_TEST_CASE (model_test2_alg_diff_tests)  // test the algebraic updates
 		{
 			continue;
 		}
-        gds = readSimXMLFile(fileName);
+        gds = readSimXMLFile(file_input_throw_if_null{}, fileName);
 
         Generator *gen = gds->getGen(0);
         auto obj = cof->createObject ("genmodel", gname);
@@ -167,7 +167,7 @@ BOOST_AUTO_TEST_CASE (model_test3)  // Jacobian code check
 {
     std::string fileName = std::string (GENMODEL_TEST_DIRECTORY "test_model2.xml");
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 
     gds->run ();
 	requireState(gridDynSimulation::gridState_t::DYNAMIC_COMPLETE);

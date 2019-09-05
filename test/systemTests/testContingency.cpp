@@ -27,7 +27,7 @@ using namespace boost::filesystem;
 BOOST_AUTO_TEST_CASE (contingency_test1)
 {
     std::string fileName = contingency_test_directory + "contingency_test1.xml";
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->run ();
     BOOST_CHECK (exists ("contout.csv"));
     remove ("contout.csv");
@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_CASE (contingency_test1)
 BOOST_AUTO_TEST_CASE (contingency_test2)
 {
     std::string fileName = contingency_test_directory + "contingency_test2.xml";
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->set ("printlevel", 0);
     gds->run ();
 
@@ -51,17 +51,15 @@ BOOST_AUTO_TEST_CASE (contingency_test2)
 }
 
 // Testing N-2 contingencies  TODO:: move to testExtra
-/*
 BOOST_AUTO_TEST_CASE(contingency_test3)
 {
     std::string fileName = contingency_test_directory + "contingency_test3.xml";
-    gds = readSimXMLFile(fileName);
+    gds = readSimXMLFile(file_input_throw_if_null{}, fileName);
     gds->set("printlevel", 0);
     gds->run();
 
     BOOST_CHECK(exists("contout_N2.csv"));
     remove("contout_N2.csv");
 }
-*/
 
 BOOST_AUTO_TEST_SUITE_END ()

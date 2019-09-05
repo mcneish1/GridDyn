@@ -35,7 +35,7 @@ BOOST_AUTO_TEST_CASE (link_test1_simple)
     // test a bunch of different link parameters to make sure all the solve properly
     std::string fileName = std::string (LINK_TEST_DIRECTORY "link_test1.xml");
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     BOOST_CHECK_EQUAL (readerConfig::warnCount, 0);
     gds->powerflow ();
 	requireState(gridDynSimulation::gridState_t::POWERFLOW_COMPLETE);
@@ -100,6 +100,8 @@ BOOST_AUTO_TEST_CASE (link_test_switches)
     BOOST_CHECK (P2 == 0);
     BOOST_CHECK (Q1 == 0);
     BOOST_CHECK (Q2 == 0);
+    delete B1;
+    delete B2;
 }
 
 BOOST_AUTO_TEST_CASE (link_test1_dynamic)
@@ -107,7 +109,7 @@ BOOST_AUTO_TEST_CASE (link_test1_dynamic)
     // test a bunch of different link parameters to make sure all the solve properly
     std::string fileName = std::string (LINK_TEST_DIRECTORY "link_test1.xml");
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->consolePrintLevel = print_level::warning;
     auto g1 = std::make_shared<Event> ();
 
@@ -145,7 +147,7 @@ BOOST_AUTO_TEST_CASE (link_test_fault_powerflow)
     // test a bunch of different link parameters to make sure all the solve properly
     std::string fileName = std::string (LINK_TEST_DIRECTORY "link_test1.xml");
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->consolePrintLevel = print_level::warning;
     gds->powerflow ();
 
@@ -187,7 +189,7 @@ BOOST_AUTO_TEST_CASE (link_test_fault_powerflow2)
     // test a bunch of different link parameters to make sure all the solve properly
     std::string fileName = std::string (LINK_TEST_DIRECTORY "link_test1.xml");
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->consolePrintLevel = print_level::warning;
     gds->powerflow ();
 

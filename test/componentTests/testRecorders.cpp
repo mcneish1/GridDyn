@@ -118,7 +118,7 @@ BOOST_AUTO_TEST_CASE (file_save_tests2)
 BOOST_AUTO_TEST_CASE (recorder_test1)
 {
     std::string fileName = std::string (RECORDER_TEST_DIRECTORY "recorder_test.xml");
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->consolePrintLevel = print_level::debug;
     gds->solverSet ("dynamic", "printlevel", 0);
     int val = gds->getInt ("recordercount");
@@ -138,7 +138,7 @@ BOOST_AUTO_TEST_CASE (recorder_test1)
 BOOST_AUTO_TEST_CASE (recorder_test2)
 {
     std::string fileName = std::string (RECORDER_TEST_DIRECTORY "recorder_test2.xml");
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->consolePrintLevel = print_level::no_print;
     gds->solverSet ("dynamic", "printlevel", 0);
     int val = gds->getInt ("recordercount");
@@ -160,7 +160,7 @@ BOOST_AUTO_TEST_CASE (recorder_test2)
 BOOST_AUTO_TEST_CASE (recorder_test3)
 {
     std::string fileName = std::string (RECORDER_TEST_DIRECTORY "recorder_test3.xml");
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     BOOST_CHECK_EQUAL (readerConfig::warnCount, 0);
     gds->consolePrintLevel = print_level::no_print;
     gds->solverSet ("dynamic", "printlevel", 0);
@@ -202,7 +202,7 @@ BOOST_AUTO_TEST_CASE (recorder_test3)
 BOOST_AUTO_TEST_CASE (recorder_test4)
 {
     std::string fileName = std::string (RECORDER_TEST_DIRECTORY "recorder_test4.xml");
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     BOOST_CHECK_EQUAL (readerConfig::warnCount, 0);
     gds->consolePrintLevel = print_level::no_print;
     gds->solverSet ("dynamic", "printlevel", 0);
@@ -237,7 +237,7 @@ BOOST_AUTO_TEST_CASE (recorder_test4)
 BOOST_AUTO_TEST_CASE (recorder_test5)
 {
     std::string fileName = std::string (RECORDER_TEST_DIRECTORY "recorder_test5.xml");
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     BOOST_CHECK_EQUAL (readerConfig::warnCount, 0);
     gds->consolePrintLevel = print_level::no_print;
     gds->solverSet ("dynamic", "printlevel", 0);
@@ -274,7 +274,7 @@ BOOST_AUTO_TEST_CASE (recorder_test6)
 {
     std::string fileName = std::string (RECORDER_TEST_DIRECTORY "recorder_test6.xml");
     readerConfig::setPrintMode (0);
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     BOOST_CHECK_EQUAL (readerConfig::warnCount, 0);
     gds->consolePrintLevel = print_level::no_print;
     gds->solverSet ("dynamic", "printlevel", 0);
@@ -313,7 +313,7 @@ BOOST_AUTO_TEST_CASE (recorder_test7)
 {
     std::string fileName = std::string (RECORDER_TEST_DIRECTORY "recorder_test7.xml");
     readerConfig::setPrintMode (0);
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     BOOST_CHECK_EQUAL (readerConfig::warnCount, 0);
     gds->consolePrintLevel = print_level::no_print;
     gds->solverSet ("dynamic", "printlevel", 0);
@@ -351,7 +351,7 @@ BOOST_AUTO_TEST_CASE (recorder_test7)
 BOOST_AUTO_TEST_CASE (recorder_test8)
 {
     std::string fileName = std::string (RECORDER_TEST_DIRECTORY "recorder_test8.xml");
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     BOOST_CHECK_EQUAL (readerConfig::warnCount, 0);
     gds->consolePrintLevel = print_level::no_print;
     gds->solverSet ("dynamic", "printlevel", 0);
@@ -392,7 +392,7 @@ BOOST_AUTO_TEST_CASE (recorder_test8)
 BOOST_AUTO_TEST_CASE (recorder_test9)
 {
     std::string fileName = std::string (RECORDER_TEST_DIRECTORY "recorder_test9.xml");
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     BOOST_CHECK_EQUAL (readerConfig::warnCount, 0);
     gds->consolePrintLevel = print_level::no_print;
     gds->solverSet ("dynamic", "printlevel", 0);
@@ -418,7 +418,7 @@ BOOST_AUTO_TEST_CASE (recorder_test9)
 BOOST_AUTO_TEST_CASE (recorder_test10)
 {
     std::string fileName = std::string (RECORDER_TEST_DIRECTORY "recorder_test10.xml");
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     BOOST_CHECK_EQUAL (readerConfig::warnCount, 0);
     gds->consolePrintLevel = print_level::no_print;
     gds->solverSet ("dynamic", "printlevel", 0);
@@ -444,7 +444,7 @@ BOOST_AUTO_TEST_CASE (recorder_test10)
 BOOST_AUTO_TEST_CASE (recorder_test11)
 {
     std::string fileName = std::string (RECORDER_TEST_DIRECTORY "recorder_test11.xml");
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     BOOST_CHECK_EQUAL (readerConfig::warnCount, 0);
     gds->consolePrintLevel = print_level::no_print;
     gds->solverSet ("dynamic", "printlevel", 0);
@@ -471,7 +471,7 @@ BOOST_AUTO_TEST_CASE (recorder_test11)
 BOOST_AUTO_TEST_CASE (recorder_test12)
 {
     std::string fileName = std::string (RECORDER_TEST_DIRECTORY "recorder_test12.xml");
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     BOOST_CHECK_EQUAL (readerConfig::warnCount, 0);
     gds->consolePrintLevel = print_level::no_print;
     gds->solverSet ("dynamic", "printlevel", 0);
@@ -499,13 +499,13 @@ BOOST_AUTO_TEST_CASE (recorder_test_bad_input)
 {
     std::string fileName = collector_test_directory + "recorder_test_invalid_field1.xml";
     printf ("NOTE:  this should produce some warning messages\n");
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 
     BOOST_CHECK_GT (readerConfig::warnCount, 0);
     readerConfig::warnCount = 0;
 
     fileName = collector_test_directory + "recorder_test_invalid_field2.xml";
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 
     BOOST_CHECK_GT (readerConfig::warnCount, 0);
 
@@ -516,7 +516,7 @@ BOOST_AUTO_TEST_CASE (recorder_test_bad_input)
 BOOST_AUTO_TEST_CASE (recorder_test_period)
 {
     std::string fileName = collector_test_directory + "recorder_test_sineA.xml";
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     BOOST_CHECK_EQUAL (readerConfig::warnCount, 0);
     gds->consolePrintLevel = print_level::no_print;
     gds->solverSet ("dynamic", "printlevel", 0);
@@ -529,7 +529,7 @@ BOOST_AUTO_TEST_CASE (recorder_test_period)
     timeSeriesMulti<> tsA (recname);
 
     std::string fname2 = collector_test_directory + "recorder_test_sineB.xml";
-    gds2 = readSimXMLFile (fname2);
+    gds2 = readSimXMLFile (file_input_throw_if_null{}, fname2);
     BOOST_CHECK_EQUAL (readerConfig::warnCount, 0);
     gds2->consolePrintLevel = print_level::no_print;
     gds2->solverSet ("dynamic", "printlevel", 0);

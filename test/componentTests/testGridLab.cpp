@@ -29,7 +29,7 @@ BOOST_AUTO_TEST_CASE (gridlab_test1)
     GhostSwingBusManager::Initialize (&argc, nullptr);
     GhostSwingBusManager::SetDebug (false);
     std::string fileName = std::string (GRIDLAB_TEST_DIRECTORY "Simple_3Bus_mod.xml");
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 	requireState(gridDynSimulation::gridState_t::STARTUP);
 
     int glb = gds->countMpiObjects ();
@@ -67,7 +67,7 @@ BOOST_AUTO_TEST_CASE (gridlab_test2)
     GhostSwingBusManager::Initialize (&argc, nullptr);
     GhostSwingBusManager::SetDebug (false);
     std::string fileName = std::string (GRIDLAB_TEST_DIRECTORY "Simple_3Bus_mod3x.xml");
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 	requireState(gridDynSimulation::gridState_t::STARTUP);
 
     int glb = gds->countMpiObjects ();
@@ -107,7 +107,7 @@ BOOST_AUTO_TEST_CASE (gridlab_test3)
     GhostSwingBusManager::Initialize (&argc, nullptr);
     GhostSwingBusManager::SetDebug (false);
     std::string fileName = std::string (GRIDLAB_TEST_DIRECTORY "Simple_3Bus_mod3x_current.xml");
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 	requireState(gridDynSimulation::gridState_t::STARTUP);
 
     int glb = gds->countMpiObjects ();
@@ -149,7 +149,7 @@ BOOST_AUTO_TEST_CASE (test_gridlabArray)
     GhostSwingBusManager::SetDebug (false);
     readerInfo ri;
     ri.keepdefines = true;
-    gds = readSimXMLFile (fileName, &ri);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName, &ri);
 	requireState(gridDynSimulation::gridState_t::STARTUP);
 
     int glb = gds->countMpiObjects ();

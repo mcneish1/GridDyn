@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE (fault_test1, *boost::unit_test::label("quick"))
 
     for (auto &gname : genlist)
     {
-        gds = readSimXMLFile (fileName);
+        gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
         gds->consolePrintLevel = print_level::no_print;
         obj = cof->createObject ("genmodel", gname);
         BOOST_REQUIRE (obj != nullptr);
@@ -102,7 +102,7 @@ BOOST_AUTO_TEST_CASE (fault_test2, *boost::unit_test::label("quick"))
 
     for (auto &gname : genlist)
     {
-        gds = readSimXMLFile (fileName);
+        gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
         gds->consolePrintLevel = print_level::no_print;
         auto obj = cof->createObject ("genmodel", gname);
         BOOST_REQUIRE (obj != nullptr);
@@ -154,7 +154,7 @@ BOOST_AUTO_TEST_CASE (fault_test3, *boost::unit_test::label("quick"))
 
     for (auto &gname : genlist)
     {
-        gds = readSimXMLFile (fileName);
+        gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
         gds->consolePrintLevel = print_level::no_print;
         auto obj = cof->createObject ("genmodel", gname);
         BOOST_REQUIRE (obj != nullptr);
@@ -201,7 +201,7 @@ BOOST_AUTO_TEST_CASE (geco_fault_case)
 {
     std::string fileName = fault_test_directory + "geco_fault_uncoupled.xml";
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->consolePrintLevel = print_level::debug;
     int retval = gds->dynInitialize ();
 
@@ -225,7 +225,7 @@ BOOST_AUTO_TEST_CASE (link_test_fault_dynamic)
     // test a bunch of different link parameters to make sure all the solve properly
     std::string fileName = fault_test_directory + "link_fault2.xml";
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->consolePrintLevel = print_level::trace;
     gds->consolePrintLevel = print_level::warning;
 
@@ -247,7 +247,7 @@ BOOST_AUTO_TEST_CASE (link_test_fault_fuse)
     // test a fuse
     std::string fileName = fault_test_directory + "link_fault_fuse.xml";
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->consolePrintLevel = print_level::warning;
     auto obj = dynamic_cast<fuse *> (gds->getRelay (0));
     BOOST_REQUIRE (obj != nullptr);
@@ -269,7 +269,7 @@ BOOST_AUTO_TEST_CASE (link_test_fault_fuse2)
     // test whether fuses are working properly
     std::string fileName = fault_test_directory + "link_fault_fuse2.xml";
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->consolePrintLevel = print_level::debug;
     auto obj = dynamic_cast<Link *> (gds->find ("bus8_to_bus9"));
     BOOST_REQUIRE (obj != nullptr);
@@ -290,7 +290,7 @@ BOOST_AUTO_TEST_CASE (link_test_fault_fuse3)
     // test a bunch of different link parameters to make sure all the solve properly
     std::string fileName = fault_test_directory + "link_fault_fuse3.xml";
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->consolePrintLevel = print_level::debug;
     // auto obj = dynamic_cast<Link *>(gds->find("bus2_to_bus3"));
     gds->dynInitialize ();
@@ -317,7 +317,7 @@ BOOST_AUTO_TEST_CASE (link_test_fault_breaker)
     // test a bunch of different link parameters to make sure all the solve properly
     std::string fileName = fault_test_directory + "link_fault_breaker.xml";
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->consolePrintLevel = print_level::warning;
     auto obj = dynamic_cast<breaker *> (gds->getRelay (0));
     BOOST_REQUIRE (obj != nullptr);
@@ -339,7 +339,7 @@ BOOST_AUTO_TEST_CASE (link_test_fault_breaker2)
     // test a bunch of different link parameters to make sure all the solve properly
     std::string fileName = fault_test_directory + "link_fault_breaker2.xml";
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->consolePrintLevel = print_level::warning;
     auto obj = dynamic_cast<breaker *> (gds->getRelay (0));
     BOOST_REQUIRE (obj != nullptr);
@@ -361,7 +361,7 @@ BOOST_AUTO_TEST_CASE (link_test_fault_breaker3)
     // test a bunch of different link parameters to make sure all the solve properly
     std::string fileName = fault_test_directory + "link_fault_breaker3.xml";
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->consolePrintLevel = print_level::warning;
     auto obj = dynamic_cast<breaker *> (gds->getRelay (0));
     BOOST_REQUIRE (obj != nullptr);
@@ -383,7 +383,7 @@ BOOST_AUTO_TEST_CASE (link_test_fault_breaker4)
     // test a bunch of different link parameters to make sure all the solve properly
     std::string fileName = fault_test_directory + "link_fault_breaker4.xml";
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->consolePrintLevel = print_level::warning;
     auto obj = dynamic_cast<breaker *> (gds->getRelay (0));
     BOOST_REQUIRE (obj != nullptr);

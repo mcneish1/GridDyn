@@ -27,9 +27,9 @@ BOOST_AUTO_TEST_CASE (jsonElementReader_test1)
 {
     jsonReaderElement reader;
     BOOST_REQUIRE (reader.loadFile (elementReaderTestDirectory + "json_test1.json"));
-    BOOST_CHECK (reader.isValid ());
+    BOOST_REQUIRE (reader.isValid ());
     auto firstChild = reader.clone ();
-    BOOST_CHECK (firstChild != nullptr);
+    BOOST_REQUIRE (firstChild != nullptr);
     BOOST_CHECK (firstChild->getName () == elementReaderTestDirectory + "json_test1.json");
 
     auto sibling = firstChild->nextSibling ();
@@ -80,7 +80,7 @@ BOOST_AUTO_TEST_CASE (jsonElementReader_test2)
     std::cout << "NOTE:: this should have a message about a missing file >>testing bad file input\n";
     BOOST_CHECK (reader.isValid () == false);
     reader.loadFile (elementReaderTestDirectory + "json_test2.json");
-    BOOST_CHECK (reader.isValid () == true);
+    BOOST_REQUIRE (reader.isValid () == true);
     auto firstChild = reader.clone ();
 
     auto sibling = firstChild->firstChild ();
@@ -134,7 +134,7 @@ BOOST_AUTO_TEST_CASE (jsonElementReader_test3)
     std::cout << "NOTE:: this should have a message indicating format error >>testing bad file input\n";
     BOOST_CHECK (reader.isValid () == false);
     reader.loadFile (elementReaderTestDirectory + "json_test3.json");
-    BOOST_CHECK (reader.isValid () == true);
+    BOOST_REQUIRE (reader.isValid () == true);
     // test traversal using move commands
     auto main = reader.clone ();
     // bookmark the top level
@@ -171,7 +171,9 @@ BOOST_AUTO_TEST_CASE (jsonElementReader_test3)
 
 BOOST_AUTO_TEST_CASE (jsonElementReader_test4)
 {
-    /*auto reader = std::make_shared<jsonReaderElement>(xmlTestDirectory + "xmlElementReader_test3.xml");
+    using griddyn::kNullVal;
+    auto reader = std::make_shared<jsonReaderElement>(elementReaderTestDirectory + "xmlElementReader_test3.xml");
+    BOOST_REQUIRE (reader->isValid());
     BOOST_CHECK(reader->getName() == "main_element");
 
     auto main = reader->clone();
@@ -192,7 +194,7 @@ BOOST_AUTO_TEST_CASE (jsonElementReader_test4)
     BOOST_CHECK(main->getText() == "45.3echo");
     main->restore();
     BOOST_CHECK(main->getName() == "main_element");
-    */
+
 }
 
 BOOST_AUTO_TEST_SUITE_END ()

@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE (test_gain_block)
 {
     std::string fileName = block_test_directory + "block_tests1.xml";
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 
     dynamicInitializationCheck (fileName);
     gds->set ("recorddirectory", BLOCK_TEST_DIRECTORY);
@@ -172,7 +172,7 @@ BOOST_AUTO_TEST_CASE (deadband_block_test)
 {
     std::string fileName = std::string (BLOCK_TEST_DIRECTORY "block_tests_deadband.xml");
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->solverSet ("powerflow", "printlevel", 0);
     gds->solverSet ("dynamic", "printlevel", 0);
     int retval = gds->dynInitialize ();

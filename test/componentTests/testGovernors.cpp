@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_CASE (gov_stability_test)
     std::string fileName = std::string (GOVERNOR_TEST_DIRECTORY "test_gov_stability.xml");
 
     gds->resetObjectCounters ();
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     Generator *gen = static_cast<Generator *> (gds->findByUserID ("gen", 2));
 
     auto cof = coreObjectFactory::instance ();

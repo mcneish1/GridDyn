@@ -29,7 +29,7 @@ BOOST_AUTO_TEST_CASE (dyn_test_simpleEvent)
 {
     std::string fileName = std::string (DYN2_TEST_DIRECTORY "test_2m4bDyn.xml");
 
-    gds = readSimXMLFile (fileName);
+    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->consolePrintLevel = print_level::warning;
     gds->powerflow ();
     BOOST_REQUIRE (gds->currentProcessState () == gridDynSimulation::gridState_t::POWERFLOW_COMPLETE);
@@ -60,7 +60,7 @@ BOOST_AUTO_TEST_CASE (dyn_test_simpleChunked)
 
 
     fileName = std::string (DYN2_TEST_DIRECTORY "test_2m4bDyn.xml");
-    gds2 = readSimXMLFile (fileName);
+    gds2 = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds2->consolePrintLevel = print_level::warning;
     gds2->run (1.5);
     gds2->run (3.7);
