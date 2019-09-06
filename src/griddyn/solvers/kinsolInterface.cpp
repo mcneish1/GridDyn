@@ -23,6 +23,7 @@
 #include <kinsol/kinsol_direct.h>
 #include <sunlinsol/sunlinsol_dense.h>
 
+
 #ifdef ENABLE_KLU
 #include <sunlinsol/sunlinsol_klu.h>
 #endif
@@ -170,6 +171,10 @@ void kinsolInterface::initialize (coreTime /*t0*/)
     {
         throw (InvalidSolverOperation ());
     }
+
+    int retval = KINInit (solverMem, kinsolFunc, state);
+    check_flag (&retval, "KINInit", 1);
+
     if (flags[directLogging_flag])
     {
         if (!(solverLogFile.empty ()))
@@ -193,7 +198,7 @@ void kinsolInterface::initialize (coreTime /*t0*/)
         check_flag (&retval, "KINSetPrintLevel", 1);
     }
 
-    int retval = KINSetUserData (solverMem, this);
+    retval = KINSetUserData (solverMem, this);
     check_flag (&retval, "KINSetUserData", 1);
 
     // retval = KINSetFuncNormTol (solverMem, 1.e-9);
@@ -206,10 +211,6 @@ void kinsolInterface::initialize (coreTime /*t0*/)
 
     retval = KINSetNoInitSetup (solverMem, SUNTRUE);
     check_flag (&retval, "KINSetNoInitSetup", 1);
-
-    retval = KINInit (solverMem, kinsolFunc, state);
-
-    check_flag (&retval, "KINInit", 1);
 
 #ifdef ENABLE_KLU
     if (flags[dense_flag])

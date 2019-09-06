@@ -1,10 +1,11 @@
-#- commented out tests are passing
-#* commented out tests are broken due to a segfault in griddyn::solvers::sundialsJac
-#$ commented out tests have flags hiding all functionality
+#- tests are passing
+#$ tests have flags hiding all functionality
+## tests are undiagnosed
+
 library_tests = [
     #- 'testString_viewConversion',
     #- 'testOperatingBounds',
-    #* 'testXML',
+    #- 'testXML',
     #- 'testElementReaders',
     #- 'testGridDynRunner',
     #- 'testCore',
@@ -24,48 +25,48 @@ library_tests = [
 system_tests = [
     #$ 'testRoots',
     #$ 'testGridDynRunner',
-    #* 'testInputs',
-    #* 'testContingency',
-    #* 'testDyn1',
-    #* 'validationTests',
-    #* 'testDyn2',
-    #* 'testCloning',
-    #* 'faultTests',
-    #* 'testConstraints',
-    #* 'testOutputs',
-    #* 'testpFlow',
+    ## 'testInputs',
+    ## 'testContingency',
+    ## 'testDyn1',
+    ## 'validationTests',
+    #- 'testDyn2',
+    ## 'testCloning',
+    ## 'faultTests',
+    #- 'testConstraints',
+    #- 'testOutputs',
+    ## 'testpFlow',
 ]
 
 component_tests = [
-    #* 'testGenModels',
-    #* 'testBlocks',
+    #- 'testGenModels',
+    ## 'testBlocks',
     #- 'ConditionTests',
-    #* 'testArea',
+    #- 'testArea',
     #$ 'testdcLinks',
-    #* 'testExtraModels',
-    #* 'testRecorders',
-    #* 'testGridLab',
-    #* 'testGovernors',
-    #* 'testGenerators',
-    #* 'testLoads',
-    #* 'testRelays',
-    #* 'testLinks',
+    ## 'testExtraModels',
+    ## 'testRecorders',
+    #- 'testGridLab',
+    #- 'testGovernors',
+    ## 'testGenerators',
+    #- 'testLoads',
+    ## 'testRelays',
+    #- 'testLinks',
     #- 'testSource',
     #- 'testEvents',
-    #* 'testExciters',
-    #* 'testAdjustableTX',
+    #- 'testExciters',
+    #- 'testAdjustableTX',
 ]
 
 extra_tests = [
-    #* 'performanceTests',
+    ## 'performanceTests',
     #- 'objectSizeReport',
     #- 'largeInputTests',
-    #* 'largeContingencyTests',
+    ## 'largeContingencyTests',
     #$ 'testExtra',
 ]
 
 shared_library_tests = [
-    #* 'basic_tests',
+    #- 'basic_tests',
 ]
 
 folder_map = [

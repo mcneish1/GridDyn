@@ -298,7 +298,7 @@ BOOST_AUTO_TEST_CASE (xml_test7)
     BOOST_REQUIRE (gm != nullptr);
 }
 
-/**test case for making sure library call work exactly like full specification calls*/
+// test case for making sure library call work exactly like full specification calls
 BOOST_AUTO_TEST_CASE (xml_test_dynLib)
 {
     std::string fileName = xmlTestDirectory + "test_2m4bDyn.xml";
@@ -321,7 +321,7 @@ BOOST_AUTO_TEST_CASE (xml_test_dynLib)
     BOOST_CHECK_EQUAL (sdiffs, 0u);
 }
 
-/**test case for generators and loads in the main element*/
+// test case for generators and loads in the main element
 BOOST_AUTO_TEST_CASE (xml_test_maingen)
 {
     std::string fileName = xmlTestDirectory + "test_2m4bDyn.xml";
@@ -345,7 +345,7 @@ BOOST_AUTO_TEST_CASE (xml_test_maingen)
     BOOST_CHECK_EQUAL (sdiffs, 0u);
 }
 
-/**test case for property override and object reloading*/
+// test case for property override and object reloading
 BOOST_AUTO_TEST_CASE (xml_test_rload)
 {
     std::string fileName = xmlTestDirectory + "test_2m4bDyn.xml";
@@ -368,7 +368,7 @@ BOOST_AUTO_TEST_CASE (xml_test_rload)
     BOOST_CHECK_EQUAL (sdiffs, 0u);
 }
 
-/**test case for seperate source file*/
+// test case for seperate source file
 BOOST_AUTO_TEST_CASE (xml_test_source1)
 {
     std::string fileName = xmlTestDirectory + "test_2m4bDyn.xml";
@@ -439,7 +439,7 @@ BOOST_AUTO_TEST_CASE (test_bad_xml)
 {
     // test the define functionality
     std::string fileName = xmlTestDirectory + "test_bad_xml.xml";
-    gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
+    gds = readSimXMLFile (fileName);
     BOOST_REQUIRE (gds == nullptr);
     std::cout << "NOTE: this was supposed to have a failed file load to check error recovery\n";
 }
