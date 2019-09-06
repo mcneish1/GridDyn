@@ -169,32 +169,4 @@ BOOST_AUTO_TEST_CASE (jsonElementReader_test3)
     BOOST_CHECK_CLOSE (main->getAttributeValue ("p"), 0.7160, 0.0000001);
 }
 
-BOOST_AUTO_TEST_CASE (jsonElementReader_test4)
-{
-    using griddyn::kNullVal;
-    auto reader = std::make_shared<jsonReaderElement>(elementReaderTestDirectory + "xmlElementReader_test3.xml");
-    BOOST_REQUIRE (reader->isValid());
-    BOOST_CHECK(reader->getName() == "main_element");
-
-    auto main = reader->clone();
-    reader = nullptr;
-    BOOST_CHECK(main->getName() == "main_element");
-    main->bookmark();
-    main->moveToFirstChild();
-    auto tstr = main->getMultiText(", ");
-    BOOST_CHECK(tstr == "part1, part2, part3");
-    main->moveToFirstChild();
-    //att1 is 23t"  should return as not a value
-    double val = main->getAttributeValue("att1");
-    BOOST_CHECK(val == kNullVal);
-    main->moveToFirstChild();
-
-    val = main->getValue();
-    BOOST_CHECK(val == kNullVal);
-    BOOST_CHECK(main->getText() == "45.3echo");
-    main->restore();
-    BOOST_CHECK(main->getName() == "main_element");
-
-}
-
 BOOST_AUTO_TEST_SUITE_END ()
