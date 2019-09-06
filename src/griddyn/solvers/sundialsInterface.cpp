@@ -195,6 +195,16 @@ void sundialsInterface::allocate (count_t stateCount, count_t /*numRoots*/)
         N_VConst (ONE, types);
     }
 
+    // Allocate really means reset, so these might have previously been set
+    if (LS != nullptr)
+    {
+        SUNLinSolFree (LS);
+    }
+    if (J != nullptr)
+    {
+        SUNMatDestroy (J);
+    }
+
     svsize = stateCount;
 
     flags.set (allocated_flag);

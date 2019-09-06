@@ -66,7 +66,7 @@ BOOST_AUTO_TEST_CASE (cloning_test2)
     BOOST_CHECK_EQUAL (diffc, 0u);
 }
 
-/* clone test 3 has an approximation in the solver that should get cloned over to powerflow 2*/
+// clone test 3 has an approximation in the solver that should get cloned over to powerflow 2
 BOOST_AUTO_TEST_CASE (cloning_test_solver_approx)
 {
     std::string fileName = clone_test_directory + "clone_test3.xml";
@@ -109,7 +109,6 @@ BOOST_AUTO_TEST_CASE (cloning_test_solver_approx)
     BOOST_CHECK (ret == FUNCTION_EXECUTION_SUCCESS);
 }
 
-
 BOOST_AUTO_TEST_CASE (cloning_test_events)
 {
     std::string fileName = clone_test_directory + "test_griddyn39_events.xml";
@@ -136,7 +135,7 @@ BOOST_AUTO_TEST_CASE (cloning_test_events)
     auto res = checkObjectEquivalence (gds.get (), gds2.get (), true);
     BOOST_REQUIRE (res);
 
-    /** get the event objects and make sure they are independent*/
+    // get the event objects and make sure they are independent
     std::vector<coreObject *> obj1;
     std::vector<coreObject *> obj2;
     gds->getEventObjects (obj1);

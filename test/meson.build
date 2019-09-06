@@ -25,13 +25,13 @@ library_tests = [
 system_tests = [
     #$ 'testRoots',
     #$ 'testGridDynRunner',
-    ## 'testInputs',
-    ## 'testContingency',
+    ## 'testInputs', # timeout
+    ## 'testContingency', # timeout
     ## 'testDyn1',
-    ## 'validationTests',
+    ## 'validationTests', # timeout
     #- 'testDyn2',
-    ## 'testCloning',
-    ## 'faultTests',
+    #- 'testCloning',
+    ## 'faultTests', # timeout
     #- 'testConstraints',
     #- 'testOutputs',
     ## 'testpFlow',
@@ -44,12 +44,12 @@ component_tests = [
     #- 'testArea',
     #$ 'testdcLinks',
     ## 'testExtraModels',
-    ## 'testRecorders',
+    ## 'testRecorders', # timeout
     #- 'testGridLab',
     #- 'testGovernors',
     ## 'testGenerators',
     #- 'testLoads',
-    ## 'testRelays',
+    ## 'testRelays', # timeout
     #- 'testLinks',
     #- 'testSource',
     #- 'testEvents',
@@ -58,10 +58,10 @@ component_tests = [
 ]
 
 extra_tests = [
-    ## 'performanceTests',
+    ## 'performanceTests', # timeout
     #- 'objectSizeReport',
     #- 'largeInputTests',
-    ## 'largeContingencyTests',
+    ## 'largeContingencyTests', # timeout
     #$ 'testExtra',
 ]
 
