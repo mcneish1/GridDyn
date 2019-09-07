@@ -101,11 +101,9 @@ void loadBusArray (coreObject *parentObject,
     Load *ld = nullptr;
     auto busFactory =
       dynamic_cast<typeFactory<gridBus> *> (coreObjectFactory::instance ()->getFactory ("bus")->getFactory (""));
-    busFactory->prepObjects (static_cast<count_t> (buses.size ()), parentObject);
 
     auto loadFactory =
       dynamic_cast<typeFactory<Load> *> (coreObjectFactory::instance ()->getFactory ("load")->getFactory (""));
-    loadFactory->prepObjects (static_cast<count_t> (buses.size ()), parentObject);
     for (const auto &busData : buses)
     {
         auto ind1 = static_cast<index_t> (busData[0]);
@@ -211,7 +209,6 @@ int loadGenArray (coreObject *parentObject, mArray &gens, std::vector<gridBus *>
 	std::string gtype = (bri.checkFlag(assume_powerflow_only)) ? "simple" : "";
     auto genFactory = dynamic_cast<typeFactory<Generator> *> (
       coreObjectFactory::instance ()->getFactory ("generator")->getFactory (gtype));
-    genFactory->prepObjects (static_cast<count_t> (gens.size ()), parentObject);
 
     for (auto &genLine : gens)
     {
@@ -335,7 +332,6 @@ void loadGenCostArray (coreObject *parentObject, mArray &genCost, int gencount)
 
     auto genOptFactory = dynamic_cast<optObjectFactory<gridGenOpt, Generator> *> (
       coreOptObjectFactory::instance ()->getFactory ("")->getFactory ("generator"));
-    genOptFactory->prepObjects (static_cast<count_t> (genCost.size ()), parentObject);
 
     std::vector<gridGenOpt *> genOptList (gencount);
 
@@ -414,7 +410,6 @@ void loadLinkArray (coreObject *parentObject,
 {
     auto linkFactory =
       dynamic_cast<typeFactory<Link> *> (coreObjectFactory::instance ()->getFactory ("link")->getFactory (""));
-    linkFactory->prepObjects (static_cast<count_t> (lnks.size ()), parentObject);
     index_t kk = 0;
     for (const auto &linkData : lnks)
     {

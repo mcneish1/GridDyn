@@ -1,6 +1,9 @@
 #- tests are passing
 #$ tests have flags hiding all functionality
+#:( tests time out
 ## tests are undiagnosed
+#! tests fail to converge
+#:/ tests time out but work otherwise
 
 library_tests = [
     #- 'testString_viewConversion',
@@ -25,13 +28,13 @@ library_tests = [
 system_tests = [
     #$ 'testRoots',
     #$ 'testGridDynRunner',
-    ## 'testInputs', # timeout
-    ## 'testContingency', # timeout
-    ## 'testDyn1',
-    ## 'validationTests', # timeout
+    #:/ 'testInputs',
+    #:( 'testContingency',
+    #! 'testDyn1',
+    #:( 'validationTests',
     #- 'testDyn2',
     #- 'testCloning',
-    ## 'faultTests', # timeout
+    #:( 'faultTests',
     #- 'testConstraints',
     #- 'testOutputs',
     ## 'testpFlow',
@@ -44,12 +47,12 @@ component_tests = [
     #- 'testArea',
     #$ 'testdcLinks',
     ## 'testExtraModels',
-    ## 'testRecorders', # timeout
+    #:( 'testRecorders',
     #- 'testGridLab',
     #- 'testGovernors',
     ## 'testGenerators',
     #- 'testLoads',
-    ## 'testRelays', # timeout
+    #- 'testRelays',
     #- 'testLinks',
     #- 'testSource',
     #- 'testEvents',
@@ -58,10 +61,10 @@ component_tests = [
 ]
 
 extra_tests = [
-    ## 'performanceTests', # timeout
+    #:( 'performanceTests', # timeout
     #- 'objectSizeReport',
     #- 'largeInputTests',
-    ## 'largeContingencyTests', # timeout
+    #:( 'largeContingencyTests', # timeout
     #$ 'testExtra',
 ]
 

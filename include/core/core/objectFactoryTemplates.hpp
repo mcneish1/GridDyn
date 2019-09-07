@@ -303,16 +303,12 @@ class childTypeFactory : public typeFactory<Btype>
     }
     coreObject *makeObject () override
     {
-        coreObject *ret = makeTypeObject ();
-
-        return ret;
+        return makeTypeObject ();
     }
 
     coreObject *makeObject (const std::string &objName) override
     {
-        coreObject *ret = makeTypeObject (objName);
-
-        return ret;
+        return makeTypeObject (objName);
     }
 
     Btype *

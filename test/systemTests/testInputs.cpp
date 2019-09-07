@@ -74,11 +74,9 @@ BOOST_DATA_TEST_CASE_F (gridDynSimulationTestFixture, test_power_flow_inputs, da
     loadFile (gds, fileName);
     requireState(gridDynSimulation::gridState_t::STARTUP);
     // gds->set("consoleprintlevel", "trace");
-    int count = gds->getInt ("totalbuscount");
-    BOOST_CHECK_EQUAL (count, mp.second[0]);
+    BOOST_CHECK_EQUAL (gds->getInt ("totalbuscount"), mp.second[0]);
     // check the linkcount
-    count = gds->getInt ("totallinkcount");
-    BOOST_CHECK_EQUAL (count, mp.second[1]);
+    BOOST_CHECK_EQUAL (gds->getInt ("totallinkcount"), mp.second[1]);
     volts1.resize (0);
     ang1.resize (0);
     volts2.resize (0);
@@ -153,7 +151,7 @@ BOOST_DATA_TEST_CASE_F (gridDynSimulationTestFixture, test_power_flow_inputs, da
 
         // do a manual reset of the voltages
         // gds->consolePrintLevel = print_level::trace;
-        BOOST_REQUIRE(count == 300);
+        BOOST_REQUIRE_EQUAL(gds->getInt ("totalbuscount"), 300);
         for (int ii = 0; ii < 300; ++ii)
         {
             gridBus *bus = gds->getBus (ii);
