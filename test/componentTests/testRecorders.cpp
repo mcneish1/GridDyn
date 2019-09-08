@@ -115,6 +115,7 @@ BOOST_AUTO_TEST_CASE (file_save_tests2)
     BOOST_CHECK_EQUAL (ret, 0);
 }
 
+/* too slow
 BOOST_AUTO_TEST_CASE (recorder_test1)
 {
     std::string fileName = std::string (RECORDER_TEST_DIRECTORY "recorder_test.xml");
@@ -134,7 +135,9 @@ BOOST_AUTO_TEST_CASE (recorder_test1)
     int ret = remove (recname.c_str ());
     BOOST_CHECK_EQUAL (ret, 0);
 }
+*/
 
+/* too slow
 BOOST_AUTO_TEST_CASE (recorder_test2)
 {
     std::string fileName = std::string (RECORDER_TEST_DIRECTORY "recorder_test2.xml");
@@ -156,6 +159,7 @@ BOOST_AUTO_TEST_CASE (recorder_test2)
 
     BOOST_CHECK_EQUAL (ret, 0);
 }
+*/
 
 BOOST_AUTO_TEST_CASE (recorder_test3)
 {
