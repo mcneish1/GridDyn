@@ -74,22 +74,22 @@ static const std::vector<file_pair_t> compare_cases{
   {"case1354pegase.m", "case1354pegase_res.m"},
   { "case1888rte_res.m", "case1888rte_res.m" },
   { "case1951rte_res.m", "case1951rte_res.m" },
-  {"case2383wp.m", "case2383wp_res.m"},
-  {"case2736sp.m", "case2736sp_res.m"},
-  {"case2737sop.m", "case2737sop_res.m"},
-  {"case2746wop.m", "case2746wop_res.m"},
-  {"case2746wp.m", "case2746wp_res.m"},
-  { "case2848rte_res.m", "case2848rte_res.m" },
-  { "case2868rte_res.m", "case2868rte_res.m" },
-  {"case2869pegase.m", "case2869pegase_res.m"},
-  {"case3012wp.m", "case3012wp_res.m"},
-  {"case3120sp.m", "case3120sp_res.m"},
-  {"case3375wp.m", "case3375wp_res.m"},
-  { "case6468rte_res.m", "case6468rte_res.m" },
+  // {"case2383wp.m", "case2383wp_res.m"}, // these all take a minute or longer, and shouldn't be part of the standard testset
+  // {"case2736sp.m", "case2736sp_res.m"},
+  // {"case2737sop.m", "case2737sop_res.m"},
+  // {"case2746wop.m", "case2746wop_res.m"},
+  // {"case2746wp.m", "case2746wp_res.m"},
+  // { "case2848rte_res.m", "case2848rte_res.m" },
+  // { "case2868rte_res.m", "case2868rte_res.m" },
+  // {"case2869pegase.m", "case2869pegase_res.m"},
+  // {"case3012wp.m", "case3012wp_res.m"},
+  // {"case3120sp.m", "case3120sp_res.m"},
+  // {"case3375wp.m", "case3375wp_res.m"},
+  // { "case6468rte_res.m", "case6468rte_res.m" },
   //{ "case6470rte_res.m", "case6470rte_res.m" },
-  { "case6515rte_res.m", "case6515rte_res.m" },
-  {"case9241pegase.m", "case9241pegase_res.m"},
-  { "case13659pegase.m", "case13659pegase_res.m" },
+  // { "case6515rte_res.m", "case6515rte_res.m" },
+  // {"case9241pegase.m", "case9241pegase_res.m"},
+  // { "case13659pegase.m", "case13659pegase_res.m" },
 };
 
 
@@ -299,7 +299,7 @@ BOOST_DATA_TEST_CASE_F (gridDynSimulationTestFixture,
 #ifdef ENABLE_EXPERIMENTAL_TEST_CASES
 BOOST_AUTO_TEST_CASE (matpower_validation_tests_withq)
 {
-    
+
     const std::map<std::string, std::string> compare_cases{
       {"case4gs.m", "case4gs_resqlim.m"},
       {"case5.m", "case5_resqlim.m"},
@@ -329,7 +329,7 @@ BOOST_AUTO_TEST_CASE (matpower_validation_tests_withq)
       {"case3375wp.m", "case3375wp_resqlim.m"},
       {"case9241pegase.m", "case9241pegase_resqlim.m"},
     };
-    
+
 
     std::vector<double> volts1;
     std::vector<double> ang1;
@@ -444,13 +444,13 @@ BOOST_AUTO_TEST_CASE (matpower_validation_tests_withq)
 #ifdef ENABLE_PROBLEM_VALIDATION_TEST
 BOOST_AUTO_TEST_CASE (matpower_validation_tests_problems)
 {
-    
+
     const std::map<std::string, std::string> compare_p_cases{
       //{ "case3012wp.m","case3012wp_res.m" },
       //{ "case3120sp.m","case3120sp_res.m" },
       {"case1888rte.m", "case1888rte_res.m"},
     };
-    
+
 
     std::vector<double> volts1;
     std::vector<double> ang1;
