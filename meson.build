@@ -24,7 +24,10 @@ boost_dep = dependency('boost', modules : [
         'program_options',
         'thread',
         'unit_test_framework',
+        'stacktrace_backtrace',
     ])
+cc = meson.get_compiler('c')
+dl_lib = cc.find_library('dl')
 threads_dep = dependency('threads')
 mpi_dep = dependency('mpi', language: 'cpp')
 
@@ -290,6 +293,7 @@ griddyn_lib = library('griddyn', [
         ticpp_dep,
         sundials_dep,
         boost_dep,
+        dl_lib,
     ])
 griddyn_dep = declare_dependency(link_with : griddyn_lib, include_directories : griddyn_inc)
 

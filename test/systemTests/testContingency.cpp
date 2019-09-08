@@ -50,6 +50,7 @@ BOOST_AUTO_TEST_CASE (contingency_test2)
     remove ("contout_line.csv");
 }
 
+/*
 // Testing N-2 contingencies  TODO:: move to testExtra
 BOOST_AUTO_TEST_CASE(contingency_test3)
 {
@@ -61,5 +62,6 @@ BOOST_AUTO_TEST_CASE(contingency_test3)
     BOOST_CHECK(exists("contout_N2.csv"));
     remove("contout_N2.csv");
 }
+*/
 
 BOOST_AUTO_TEST_SUITE_END ()

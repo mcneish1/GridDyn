@@ -172,8 +172,17 @@ void kinsolInterface::initialize (coreTime /*t0*/)
         throw (InvalidSolverOperation ());
     }
 
-    int retval = KINInit (solverMem, kinsolFunc, state);
-    check_flag (&retval, "KINInit", 1);
+    int retval;
+    if (flags[initialized_flag])
+    {
+        SUNMatDestroy(J);
+        SUNLinSolFree(LS);
+    }
+    else
+    {
+        retval = KINInit (solverMem, kinsolFunc, state);
+        check_flag (&retval, "KINInit", 1);
+    }
 
     if (flags[directLogging_flag])
     {

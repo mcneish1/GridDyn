@@ -29,9 +29,9 @@ system_tests = [
     #$ 'testRoots',
     #$ 'testGridDynRunner',
     #:/ 'testInputs',
-    #:( 'testContingency',
+    #- 'testContingency',
     #! 'testDyn1',
-    #:( 'validationTests',
+    #- 'validationTests',
     #- 'testDyn2',
     #- 'testCloning',
     #:( 'faultTests',
@@ -61,10 +61,10 @@ component_tests = [
 ]
 
 extra_tests = [
-    #:( 'performanceTests', # timeout
+    #:( 'performanceTests',
     #- 'objectSizeReport',
     #- 'largeInputTests',
-    #:( 'largeContingencyTests', # timeout
+    #:( 'largeContingencyTests',
     #$ 'testExtra',
 ]
 
