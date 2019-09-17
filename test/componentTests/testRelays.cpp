@@ -42,7 +42,6 @@ BOOST_AUTO_TEST_CASE (relay_test1)
     BOOST_CHECK (Yp != nullptr);
 }
 
-#ifdef ENABLE_EXPERIMENTAL_TEST_CASES
 BOOST_AUTO_TEST_CASE (relay_test2)
 {
     // test a bunch of different link parameters to make sure all the solve properly
@@ -52,9 +51,9 @@ BOOST_AUTO_TEST_CASE (relay_test2)
 
     gds->dynInitialize (timeZero);
 
-    zonalRelay *Yp = dynamic_cast<zonalRelay *> (gds->getRelay (0));
+    auto Yp = dynamic_cast<relays::zonalRelay *> (gds->getRelay (0));
     BOOST_CHECK (Yp != nullptr);
-    Yp = dynamic_cast<zonalRelay *> (gds->getRelay (1));
+    Yp = dynamic_cast<relays::zonalRelay *> (gds->getRelay (1));
     BOOST_CHECK (Yp != nullptr);
 
     auto obj = dynamic_cast<Link *> (gds->find ("bus2_to_bus3"));
@@ -66,9 +65,7 @@ BOOST_AUTO_TEST_CASE (relay_test2)
 
     requireState(gridDynSimulation::gridState_t::DYNAMIC_COMPLETE);
 }
-#endif
 
-#ifdef ENABLE_EXPERIMENTAL_TEST_CASES
 BOOST_AUTO_TEST_CASE (relay_test_multi)
 {
     // test a bunch of different link parameters to make sure all the solve properly
@@ -94,7 +91,6 @@ BOOST_AUTO_TEST_CASE (relay_test_multi)
     BOOST_REQUIRE ((ps == gridDynSimulation::gridState_t::DYNAMIC_COMPLETE) ||
                    (ps == gridDynSimulation::gridState_t::DYNAMIC_PARTIAL));
 }
-#endif
 
 BOOST_AUTO_TEST_CASE (test_bus_relay)
 {

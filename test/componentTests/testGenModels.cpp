@@ -118,7 +118,6 @@ BOOST_AUTO_TEST_CASE (model_test2_withr)  // Jacobian code check
     }
 }
 
-#ifdef LOAD_CVODE
 BOOST_AUTO_TEST_CASE (model_test2_alg_diff_tests)  // test the algebraic updates and derivative updates
 {
     std::string fileName = std::string (GENMODEL_TEST_DIRECTORY "test_model1.xml");
@@ -161,7 +160,6 @@ BOOST_AUTO_TEST_CASE (model_test2_alg_diff_tests)  // test the algebraic updates
 
     }
 }
-#endif
 
 BOOST_AUTO_TEST_CASE (model_test3)  // Jacobian code check
 {

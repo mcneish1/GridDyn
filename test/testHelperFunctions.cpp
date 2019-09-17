@@ -226,19 +226,9 @@ gridLoadTestFixture::~gridLoadTestFixture()
     }
 }
 
+glbconfig::glbconfig() {}
 
-glbconfig::glbconfig()
-{
-
-}
-
-glbconfig::~glbconfig()
-{
-#ifdef _CRTDBG_MAP_ALLOC
-	_CrtDumpMemoryLeaks();
-#endif
-}
-
+glbconfig::~glbconfig() {}
 
 int runJacobianCheck(std::unique_ptr<gridDynSimulation> &gds, const solverMode &sMode,bool checkRequired)
 {

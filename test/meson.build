@@ -1,9 +1,8 @@
 #- tests are passing
-#$ tests have flags hiding all functionality
+#! tests fail with status 201
+#@ tests fail with status 200
+## tests fail with status 1
 #:( tests time out
-## tests are undiagnosed
-#! tests fail to converge
-#:/ tests time out but work otherwise
 
 library_tests = [
     #- 'testString_viewConversion',
@@ -22,22 +21,22 @@ library_tests = [
     #- 'testGridParameter',
     #- 'testStringOps',
     #- 'testValuePredictors',
-    #- 'testWorkQueue',
+    #! 'testWorkQueue',
 ]
 
 system_tests = [
-    #$ 'testRoots',
-    #$ 'testGridDynRunner',
-    #:/ 'testInputs',
+    #- 'testRoots',
+    ## 'testGridDynRunner',
+    #:( 'testInputs',
     #- 'testContingency',
     #! 'testDyn1',
-    #- 'validationTests',
-    #- 'testDyn2',
+    #:( 'validationTests',
+    #:( 'testDyn2',
     #- 'testCloning',
-    #- 'faultTests',
+    #:( 'faultTests',
     #- 'testConstraints',
     #- 'testOutputs',
-    ## 'testpFlow',
+    #- 'testpFlow',
 ]
 
 component_tests = [
@@ -45,14 +44,14 @@ component_tests = [
     ## 'testBlocks',
     #- 'ConditionTests',
     #- 'testArea',
-    #$ 'testdcLinks',
-    ## 'testExtraModels',
+    ## 'testdcLinks',
+    #! 'testExtraModels',
     #- 'testRecorders',
     #- 'testGridLab',
     #- 'testGovernors',
     ## 'testGenerators',
     #- 'testLoads',
-    #- 'testRelays',
+    #! 'testRelays',
     #- 'testLinks',
     #- 'testSource',
     #- 'testEvents',
@@ -65,7 +64,7 @@ extra_tests = [
     #- 'objectSizeReport',
     #- 'largeInputTests',
     #:( 'largeContingencyTests',
-    #$ 'testExtra',
+    #@ 'testExtra',
 ]
 
 shared_library_tests = [

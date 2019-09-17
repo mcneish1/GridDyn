@@ -141,7 +141,6 @@ BOOST_AUTO_TEST_CASE (fault_test2, *boost::unit_test::label("quick"))
         BOOST_CHECK_MESSAGE (volts[1] > 0.96, "Model " << gname << " voltage issue v=" << volts[1]);
     }
 }
-//#endif
 
 // testing with a governor added
 BOOST_AUTO_TEST_CASE (fault_test3, *boost::unit_test::label("quick"))
@@ -217,7 +216,6 @@ BOOST_AUTO_TEST_CASE (geco_fault_case)
     // simpleRunTestXML(fileName);
 }
 
-#ifdef ENABLE_EXPERIMENTAL_TEST_CASES
 BOOST_AUTO_TEST_CASE (link_test_fault_dynamic)
 {
     //_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF | _CRTDBG_CHECK_ALWAYS_DF);
@@ -239,9 +237,6 @@ BOOST_AUTO_TEST_CASE (link_test_fault_dynamic)
     BOOST_REQUIRE (gds->currentProcessState () == gridDynSimulation::gridState_t::DYNAMIC_COMPLETE);
 }
 
-#endif
-
-#ifdef ENABLE_EXPERIMENTAL_TEST_CASES
 BOOST_AUTO_TEST_CASE (link_test_fault_fuse)
 {
     // test a fuse
@@ -249,7 +244,7 @@ BOOST_AUTO_TEST_CASE (link_test_fault_fuse)
 
     gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->consolePrintLevel = print_level::warning;
-    auto obj = dynamic_cast<fuse *> (gds->getRelay (0));
+    auto obj = dynamic_cast<relays::fuse *> (gds->getRelay (0));
     BOOST_REQUIRE (obj != nullptr);
     gds->run ();
     auto lobj = dynamic_cast<Link *> (gds->find ("bus2_to_bus3"));
@@ -261,9 +256,7 @@ BOOST_AUTO_TEST_CASE (link_test_fault_fuse)
 
     BOOST_REQUIRE (gds->currentProcessState () == gridDynSimulation::gridState_t::DYNAMIC_COMPLETE);
 }
-#endif
 
-#ifdef ENABLE_EXPERIMENTAL_TEST_CASES
 BOOST_AUTO_TEST_CASE (link_test_fault_fuse2)
 {
     // test whether fuses are working properly
@@ -282,9 +275,7 @@ BOOST_AUTO_TEST_CASE (link_test_fault_fuse2)
 
     BOOST_REQUIRE (gds->currentProcessState () == gridDynSimulation::gridState_t::DYNAMIC_COMPLETE);
 }
-#endif
 
-#ifdef ENABLE_EXPERIMENTAL_TEST_CASES
 BOOST_AUTO_TEST_CASE (link_test_fault_fuse3)
 {
     // test a bunch of different link parameters to make sure all the solve properly
@@ -294,10 +285,10 @@ BOOST_AUTO_TEST_CASE (link_test_fault_fuse3)
     gds->consolePrintLevel = print_level::debug;
     // auto obj = dynamic_cast<Link *>(gds->find("bus2_to_bus3"));
     gds->dynInitialize ();
-    int mmatch = JacobianCheck (gds, cDaeSolverMode);
+    int mmatch = JacobianCheck (gds.get(), cDaeSolverMode);
     if (mmatch > 0)
     {
-        printStateNames (gds, cDaeSolverMode);
+        printStateNames (gds.get(), cDaeSolverMode);
     }
     // BOOST_REQUIRE(obj != nullptr);
     gds->run ();
@@ -309,9 +300,7 @@ BOOST_AUTO_TEST_CASE (link_test_fault_fuse3)
 
     BOOST_REQUIRE (gds->currentProcessState () == gridDynSimulation::gridState_t::DYNAMIC_COMPLETE);
 }
-#endif
 
-#ifdef ENABLE_EXPERIMENTAL_TEST_CASES
 BOOST_AUTO_TEST_CASE (link_test_fault_breaker)
 {
     // test a bunch of different link parameters to make sure all the solve properly
@@ -319,7 +308,7 @@ BOOST_AUTO_TEST_CASE (link_test_fault_breaker)
 
     gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->consolePrintLevel = print_level::warning;
-    auto obj = dynamic_cast<breaker *> (gds->getRelay (0));
+    auto obj = dynamic_cast<relays::breaker *> (gds->getRelay (0));
     BOOST_REQUIRE (obj != nullptr);
     gds->run ();
     auto lobj = dynamic_cast<Link *> (gds->find ("bus2_to_bus3"));
@@ -331,9 +320,7 @@ BOOST_AUTO_TEST_CASE (link_test_fault_breaker)
 
     BOOST_REQUIRE (gds->currentProcessState () == gridDynSimulation::gridState_t::DYNAMIC_COMPLETE);
 }
-#endif
 
-#ifdef ENABLE_EXPERIMENTAL_TEST_CASES
 BOOST_AUTO_TEST_CASE (link_test_fault_breaker2)
 {
     // test a bunch of different link parameters to make sure all the solve properly
@@ -341,7 +328,7 @@ BOOST_AUTO_TEST_CASE (link_test_fault_breaker2)
 
     gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->consolePrintLevel = print_level::warning;
-    auto obj = dynamic_cast<breaker *> (gds->getRelay (0));
+    auto obj = dynamic_cast<relays::breaker *> (gds->getRelay (0));
     BOOST_REQUIRE (obj != nullptr);
     gds->run ();
     auto lobj = dynamic_cast<Link *> (gds->find ("bus8_to_bus9"));
@@ -353,9 +340,7 @@ BOOST_AUTO_TEST_CASE (link_test_fault_breaker2)
 
     BOOST_REQUIRE (gds->currentProcessState () == gridDynSimulation::gridState_t::DYNAMIC_COMPLETE);
 }
-#endif
 
-#ifdef ENABLE_EXPERIMENTAL_TEST_CASES
 BOOST_AUTO_TEST_CASE (link_test_fault_breaker3)
 {
     // test a bunch of different link parameters to make sure all the solve properly
@@ -363,7 +348,7 @@ BOOST_AUTO_TEST_CASE (link_test_fault_breaker3)
 
     gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->consolePrintLevel = print_level::warning;
-    auto obj = dynamic_cast<breaker *> (gds->getRelay (0));
+    auto obj = dynamic_cast<relays::breaker *> (gds->getRelay (0));
     BOOST_REQUIRE (obj != nullptr);
     gds->run ();
     auto lobj = dynamic_cast<Link *> (gds->find ("bus8_to_bus9"));
@@ -375,9 +360,7 @@ BOOST_AUTO_TEST_CASE (link_test_fault_breaker3)
 
     BOOST_REQUIRE (gds->currentProcessState () == gridDynSimulation::gridState_t::DYNAMIC_COMPLETE);
 }
-#endif
 
-#ifdef ENABLE_EXPERIMENTAL_TEST_CASES
 BOOST_AUTO_TEST_CASE (link_test_fault_breaker4)
 {
     // test a bunch of different link parameters to make sure all the solve properly
@@ -385,7 +368,7 @@ BOOST_AUTO_TEST_CASE (link_test_fault_breaker4)
 
     gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
     gds->consolePrintLevel = print_level::warning;
-    auto obj = dynamic_cast<breaker *> (gds->getRelay (0));
+    auto obj = dynamic_cast<relays::breaker *> (gds->getRelay (0));
     BOOST_REQUIRE (obj != nullptr);
     gds->run ();
     auto lobj = dynamic_cast<Link *> (gds->find ("bus8_to_bus9"));
@@ -397,5 +380,5 @@ BOOST_AUTO_TEST_CASE (link_test_fault_breaker4)
 
     BOOST_REQUIRE (gds->currentProcessState () == gridDynSimulation::gridState_t::DYNAMIC_COMPLETE);
 }
-#endif
+
 BOOST_AUTO_TEST_SUITE_END ()

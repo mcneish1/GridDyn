@@ -23,7 +23,6 @@ using namespace griddyn;
 
 BOOST_FIXTURE_TEST_SUITE (root_tests, gridDynSimulationTestFixture, * boost::unit_test::label("quick"))
 
-#ifdef ENABLE_EXPERIMENTAL_TEST_CASES
 BOOST_AUTO_TEST_CASE (root_test1)
 {
     std::string fileName = std::string (ROOTS_TEST_DIRECTORY "test_roots1.xml");
@@ -42,15 +41,13 @@ BOOST_AUTO_TEST_CASE (root_test1)
     BOOST_CHECK_EQUAL (alerts, 2);
     BOOST_CHECK (gds->currentProcessState () == gridDynSimulation::gridState_t::DYNAMIC_COMPLETE);
 }
-#endif
 
-#ifdef ENABLE_EXPERIMENTAL_TEST_CASES
 BOOST_AUTO_TEST_CASE (test_RampLoadChange2)
 {
     std::string fileName = std::string (ROOTS_TEST_DIRECTORY "test_rampLoadChange2.xml");
     simpleRunTestXML (fileName);
 }
-#endif
+
 /* TODO :: getting this working again will require finishing the updates to governors
 which requires the updates to control system logic
 */
@@ -85,11 +82,10 @@ BOOST_AUTO_TEST_CASE(test_governor_roots)
 }
 */
 
-#ifdef ENABLE_EXPERIMENTAL_TEST_CASES
 BOOST_AUTO_TEST_CASE (test_bus_disable)
 {
     std::string fileName = std::string (ROOTS_TEST_DIRECTORY "test_bus_disable.xml");
     simpleRunTestXML (fileName);
 }
-#endif
+
 BOOST_AUTO_TEST_SUITE_END ()

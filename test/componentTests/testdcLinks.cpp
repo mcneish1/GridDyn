@@ -20,9 +20,10 @@
 
 #define HVDC_TEST_DIRECTORY GRIDDYN_TEST_DIRECTORY "/dcLink_tests/"
 
+using namespace griddyn;
+
 BOOST_FIXTURE_TEST_SUITE (hvdc_tests, gridDynSimulationTestFixture, * boost::unit_test::label("quick"))
 
-#ifdef ENABLE_EXPERIMENTAL_TEST_CASES
 BOOST_AUTO_TEST_CASE (hvdc_test1)
 {
     std::string fileName = std::string (HVDC_TEST_DIRECTORY "test_hvdc1.xml");
@@ -33,10 +34,10 @@ BOOST_AUTO_TEST_CASE (hvdc_test1)
     requireState(gridDynSimulation::gridState_t::INITIALIZED);
 
 
-    int mmatch = JacobianCheck (gds, cPflowSolverMode);
+    int mmatch = JacobianCheck (gds.get(), cPflowSolverMode);
     if (mmatch > 0)
     {
-        printStateNames (gds, cPflowSolverMode);
+        printStateNames (gds.get(), cPflowSolverMode);
     }
     BOOST_REQUIRE (mmatch == 0);
 
@@ -46,23 +47,21 @@ BOOST_AUTO_TEST_CASE (hvdc_test1)
     requireState(gridDynSimulation::gridState_t::POWERFLOW_COMPLETE);
     gds->dynInitialize ();
     requireState(gridDynSimulation::gridState_t::DYNAMIC_INITIALIZED);
-    mmatch = residualCheck (gds, cDaeSolverMode);
+    mmatch = residualCheck (gds.get(), cDaeSolverMode);
     if (mmatch > 0)
     {
-        printStateNames (gds, cDaeSolverMode);
+        printStateNames (gds.get(), cDaeSolverMode);
     }
     BOOST_REQUIRE (mmatch == 0);
 
-    mmatch = JacobianCheck (gds, cDaeSolverMode);
+    mmatch = JacobianCheck (gds.get(), cDaeSolverMode);
     if (mmatch > 0)
     {
-        printStateNames (gds, cDaeSolverMode);
+        printStateNames (gds.get(), cDaeSolverMode);
     }
     BOOST_REQUIRE (mmatch == 0);
 }
-#endif
 
-#ifdef ENABLE_EXPERIMENTAL_TEST_CASES
 BOOST_AUTO_TEST_CASE (hvdc_test2)
 {
     std::string fileName = std::string (HVDC_TEST_DIRECTORY "test_hvdc2.xml");
@@ -71,17 +70,17 @@ BOOST_AUTO_TEST_CASE (hvdc_test2)
 
     gds->dynInitialize ();
     requireState(gridDynSimulation::gridState_t::DYNAMIC_INITIALIZED);
-    int mmatch = residualCheck (gds, cDaeSolverMode);
+    int mmatch = residualCheck (gds.get(), cDaeSolverMode);
     if (mmatch > 0)
     {
-        printStateNames (gds, cDaeSolverMode);
+        printStateNames (gds.get(), cDaeSolverMode);
     }
     BOOST_REQUIRE (mmatch == 0);
 
-    mmatch = JacobianCheck (gds, cDaeSolverMode);
+    mmatch = JacobianCheck (gds.get(), cDaeSolverMode);
     if (mmatch > 0)
     {
-        printStateNames (gds, cDaeSolverMode);
+        printStateNames (gds.get(), cDaeSolverMode);
     }
     BOOST_REQUIRE (mmatch == 0);
 
@@ -101,17 +100,17 @@ BOOST_AUTO_TEST_CASE (hvdc_test3)
 
     gds->dynInitialize ();
     requireState(gridDynSimulation::gridState_t::DYNAMIC_INITIALIZED);
-    int mmatch = residualCheck (gds, cDaeSolverMode);
+    int mmatch = residualCheck (gds.get(), cDaeSolverMode);
     if (mmatch > 0)
     {
-        printStateNames (gds, cDaeSolverMode);
+        printStateNames (gds.get(), cDaeSolverMode);
     }
     BOOST_REQUIRE (mmatch == 0);
 
-    mmatch = JacobianCheck (gds, cDaeSolverMode);
+    mmatch = JacobianCheck (gds.get(), cDaeSolverMode);
     if (mmatch > 0)
     {
-        printStateNames (gds, cDaeSolverMode);
+        printStateNames (gds.get(), cDaeSolverMode);
     }
     BOOST_REQUIRE (mmatch == 0);
     gds->run (20);
@@ -120,5 +119,5 @@ BOOST_AUTO_TEST_CASE (hvdc_test3)
     gds->run (40);
     requireState(gridDynSimulation::gridState_t::DYNAMIC_COMPLETE);
 }
-#endif
+
 BOOST_AUTO_TEST_SUITE_END ()

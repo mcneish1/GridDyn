@@ -19,9 +19,6 @@
 #include <iostream>
 BOOST_AUTO_TEST_SUITE (workQueue_tests, * boost::unit_test::label("quick"))
 
-// some tests only make sense if multithreading is enabled
-
-#ifdef ENABLE_MULTITHREADING
 BOOST_AUTO_TEST_CASE (workQueue_test1)
 {
     int check = workQueue::getWorkerCount ();
@@ -66,8 +63,6 @@ BOOST_AUTO_TEST_CASE (workQueue_test1)
     wq->destroyWorkerQueue ();
 }
 
-#endif
-
 BOOST_AUTO_TEST_CASE (workQueue_test2)
 {
     // Test a zero worker count
@@ -99,7 +94,7 @@ BOOST_AUTO_TEST_CASE (workQueue_test2)
     BOOST_CHECK_GE (elapsed_time.count (), 0.125);
 
     wq->destroyWorkerQueue ();
-#ifdef ENABLE_MULTITHREADING
+
     wq = workQueue::instance (1);
     b1->reset ();
     start_t = std::chrono::high_resolution_clock::now ();
@@ -109,10 +104,8 @@ BOOST_AUTO_TEST_CASE (workQueue_test2)
     // verifying the block was run immediately
     BOOST_CHECK_LT (elapsed_time.count (), 0.05);
     wq->destroyWorkerQueue ();
-#endif
 }
 
-#ifdef ENABLE_MULTITHREADING
 BOOST_AUTO_TEST_CASE (workQueue_test3)
 {
     // Test a queue priority mechanisms
@@ -164,7 +157,5 @@ BOOST_AUTO_TEST_CASE (workQueue_test3)
     }
     BOOST_CHECK_MESSAGE (cdiff == 0, "Execution out of order");
 }
-
-#endif
 
 BOOST_AUTO_TEST_SUITE_END ()

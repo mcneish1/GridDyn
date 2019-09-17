@@ -99,30 +99,23 @@ BOOST_AUTO_TEST_CASE (dyn_test_pulseLoadChange2)
     simpleRunTestXML (fileName);
 }
 
-#ifdef LOAD_CVODE
 BOOST_AUTO_TEST_CASE (dyn_test_sinLoadChange_part_cvode)
 {  // using cvode
     std::string fileName = std::string (DYN2_TEST_DIRECTORY "test_sineLoad_partitioned1.xml");
     simpleRunTestXML (fileName);
 }
 
-
-#endif
 BOOST_AUTO_TEST_CASE (dyn_test_sinLoadChange_part_basic_ode)
 {  // using basicode
     std::string fileName = std::string (DYN2_TEST_DIRECTORY "test_sineLoad_partitioned2.xml");
     simpleRunTestXML (fileName);
 }
 
-#ifdef LOAD_ARKODE
 BOOST_AUTO_TEST_CASE (dyn_test_sinLoadChange_part_arkode)
 {  // using arkode
     std::string fileName = std::string (DYN2_TEST_DIRECTORY "test_sineLoad_partitioned3.xml");
     simpleRunTestXML (fileName);
 }
-
-
-#endif
 
 // now check if all the different solvers all produce the same results
 BOOST_AUTO_TEST_CASE (dyn_test_compare_ode)
@@ -130,12 +123,10 @@ BOOST_AUTO_TEST_CASE (dyn_test_compare_ode)
     std::string fileName = std::string (DYN2_TEST_DIRECTORY "test_sineLoadChange.xml");
 }
 
-
-#ifdef ENABLE_EXPERIMENTAL_TEST_CASES
 BOOST_AUTO_TEST_CASE (dyn_test_pulseLoadChange_part)
 {
     std::string fileName = std::string (DYN2_TEST_DIRECTORY "test_pulseLoadChange1_partitioned.xml");
     simpleRunTestXML (fileName);
 }
-#endif
+
 BOOST_AUTO_TEST_SUITE_END ()

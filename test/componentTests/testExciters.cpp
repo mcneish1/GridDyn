@@ -331,7 +331,6 @@ BOOST_AUTO_TEST_CASE (basic_stability_test4)
     }
 }
 
-#ifdef LOAD_CVODE
 BOOST_AUTO_TEST_CASE (exciter_test2_alg_diff_tests)  // test the algebraic updates and derivative updates
 {
     static const std::map<std::string, std::vector<std::pair<std::string, double>>> parameters{
@@ -428,6 +427,5 @@ BOOST_AUTO_TEST_CASE (exciter_alg_diff_jacobian_tests)  // test the algebraic up
         BOOST_REQUIRE_MESSAGE (mmatch == 0, "Exciter " << excname << " Jacobian dynAlg issue");
     }
 }
-#endif
 
 BOOST_AUTO_TEST_SUITE_END ()

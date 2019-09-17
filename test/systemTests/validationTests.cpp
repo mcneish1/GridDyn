@@ -296,7 +296,7 @@ BOOST_DATA_TEST_CASE_F (gridDynSimulationTestFixture,
     BOOST_CHECK_EQUAL (vdiff, 0u);
     BOOST_CHECK_EQUAL (adiff, 0u);
 }
-#ifdef ENABLE_EXPERIMENTAL_TEST_CASES
+
 BOOST_AUTO_TEST_CASE (matpower_validation_tests_withq)
 {
 
@@ -344,7 +344,7 @@ BOOST_AUTO_TEST_CASE (matpower_validation_tests_withq)
     for (const auto &mp : compare_cases)
     {
         gds = std::make_unique<gridDynSimulation> ();
-        gds->set ("consoleprintlevel", print_level::summary);
+        gds->set ("consoleprintlevel", "summary");
         std::string fileName;
         if (mp.first.length () > 25)
         {
@@ -384,7 +384,7 @@ BOOST_AUTO_TEST_CASE (matpower_validation_tests_withq)
         double maxadiffbus = 0;
         double mvdiff = 0;
         double madiff = 0;
-        gds2 = new gridDynSimulation ();
+        gds2 = std::make_unique<gridDynSimulation> ();
         if (mp.second.length () > 25)
         {
             fileName = mp.second;
@@ -393,7 +393,7 @@ BOOST_AUTO_TEST_CASE (matpower_validation_tests_withq)
         {
             fileName = validationTestDirectory + mp.second;
         }
-        gds2->set ("consoleprintlevel", print_level::summary);
+        gds2->set ("consoleprintlevel", "summary");
         loadFile (gds2, fileName);
         BOOST_REQUIRE (gds2->currentProcessState () == gridDynSimulation::gridState_t::STARTUP);
         gds2->pFlowInitialize ();
@@ -438,10 +438,7 @@ BOOST_AUTO_TEST_CASE (matpower_validation_tests_withq)
         BOOST_CHECK_EQUAL (adiff, 0);
     }
 }
-#endif
 
-//#define ENABLE_PROBLEM_VALIDATION_TEST
-#ifdef ENABLE_PROBLEM_VALIDATION_TEST
 BOOST_AUTO_TEST_CASE (matpower_validation_tests_problems)
 {
 
@@ -577,6 +574,5 @@ BOOST_AUTO_TEST_CASE (matpower_validation_tests_problems)
 
     }
 }
-#endif
 
 BOOST_AUTO_TEST_SUITE_END ()

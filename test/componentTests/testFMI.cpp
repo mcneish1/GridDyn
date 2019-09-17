@@ -84,7 +84,6 @@ BOOST_AUTO_TEST_CASE (test_fmi_xml)
     }
 }
 
-#ifdef _WIN32
 BOOST_AUTO_TEST_CASE (test_fmi_load_shared)
 {
     std::string fmu = fmu_directory + "rectifier.fmu";
@@ -116,10 +115,6 @@ BOOST_AUTO_TEST_CASE (test_fmi_load_shared)
     }
 }
 
-#endif
-
-#ifdef _WIN32
-#ifndef _WIN64
 BOOST_AUTO_TEST_CASE(test_3phase_fmu)
 {
 	std::string fmu = fmu_directory+"DUMMY_0CYMDIST.fmu";
@@ -157,7 +152,6 @@ BOOST_AUTO_TEST_CASE(test_3phase_fmu)
 	BOOST_CHECK_LT(out2[0], out[0]);
 	loadFmu.close();
 }
-
 
 BOOST_AUTO_TEST_CASE(test_fmi_approx_load)
 {
@@ -212,7 +206,6 @@ BOOST_AUTO_TEST_CASE(test_fmi_approx_load)
 	ld1 = nullptr;
 }
 
-
 BOOST_AUTO_TEST_CASE(test_fmi_approx_load_xml)
 {
     using namespace griddyn::loads;
@@ -251,11 +244,6 @@ BOOST_AUTO_TEST_CASE(test_fmi_approx_load_xml)
     ld1 = nullptr;
 }
 
-
-#endif
-#endif
-
-#ifdef ENABLE_EXPERIMENTAL_TEST_CASES
 BOOST_AUTO_TEST_CASE (fmi_test1)
 {
     loadFmiLibrary ();
@@ -444,8 +432,5 @@ BOOST_AUTO_TEST_CASE (fmi_array)
     auto bus = static_cast<gridBus *> (gds->find ("bus_1_1"));
     printf ("slk bus p=%f min v= %f\n", bus->getGenerationReal (), *std::min_element (v.begin (), v.end ()));
 }
-
-#endif
-
 
 BOOST_AUTO_TEST_SUITE_END ()

@@ -309,7 +309,6 @@ BOOST_DATA_TEST_CASE_F (gridDynSimulationTestFixture, compare_block_test, data::
     BOOST_CHECK_EQUAL (ret, 0);
 }
 
-#ifdef LOAD_CVODE
 /** test the control block if they can handle a differential only Jacobian and an algebraic only Jacobian
  */
 // BOOST_AUTO_TEST_CASE (block_alg_diff_jac_test)
@@ -369,5 +368,4 @@ BOOST_DATA_TEST_CASE_F (gridDynSimulationTestFixture, block_alg_diff_jac_test, d
     BOOST_REQUIRE_MESSAGE (mmatch == 0, "Block " << plist.first << " Jacobian dynAlg issue");
 }
 
-#endif
 BOOST_AUTO_TEST_SUITE_END ()

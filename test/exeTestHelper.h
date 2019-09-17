@@ -10,8 +10,6 @@
 * LLNS Copyright End
 */
 
-#ifndef EXE_HELPER_HEADER_
-#define EXE_HELPER_HEADER_
 #pragma once
 
 #include <string>
@@ -40,7 +38,3 @@ public:
 private:
    void buildOutFile();
 };
-
-
-
-#endif

@@ -31,8 +31,6 @@ BOOST_FIXTURE_TEST_SUITE (large_validation_tests, gridDynSimulationTestFixture)
 static const std::string validationTestDirectory (GRIDDYN_TEST_DIRECTORY "/validation_tests/");
 using namespace griddyn;
 
-#ifdef ENABLE_IN_DEVELOPMENT_CASES
-#ifdef ENABLE_EXPERIMENTAL_TEST_CASES
 // test pjm case
 BOOST_AUTO_TEST_CASE (test_pjm_pflow)
 {
@@ -46,7 +44,7 @@ BOOST_AUTO_TEST_CASE (test_pjm_pflow)
     gds->getVoltage (gv1);
     gds->pFlowInitialize ();
     BOOST_REQUIRE (gds->currentProcessState () == gridDynSimulation::gridState_t::INITIALIZED);
-    int mmatch = residualCheck (gds, cPflowSolverMode, 0.2, true);
+    int mmatch = residualCheck (gds.get(), cPflowSolverMode, 0.2, true);
     if (mmatch > 0)
     {
         printf ("Mmatch failures=%d\n", mmatch);
@@ -80,10 +78,6 @@ BOOST_AUTO_TEST_CASE (test_pjm_pflow)
         printf ("%d diffs, difference bus %d orig=%f, result=%f\n", diffc, bdiffi, gv1[bdiffi], gv2[bdiffi]);
     }
 }
-
-#endif
-#endif
-
 
 BOOST_AUTO_TEST_CASE (test_pge_pflow)
 {

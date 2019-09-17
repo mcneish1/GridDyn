@@ -58,7 +58,7 @@ void exeTestRunner::buildOutFile ()
 	auto pth = boost::filesystem::temp_directory_path();
 	pth /= ("exeText_" + std::to_string(counter) + ".out");
 	outFile = pth.string();
-   
+
 }
 
 bool exeTestRunner::findFileLocation (const std::string &baseLocation, const std::string &target)
@@ -78,7 +78,7 @@ bool exeTestRunner::findFileLocation (const std::string &baseLocation, const std
         exeString = tryPath2.string ();
         return true;
     }
-#ifndef NDEBUG
+
     auto tryPathD1 = sourcePath / "Debug" / target;
     if (boost::filesystem::exists (tryPathD1))
     {
@@ -92,7 +92,7 @@ bool exeTestRunner::findFileLocation (const std::string &baseLocation, const std
         exeString = tryPathD2.string ();
         return true;
     }
-#endif
+
     auto tryPathR1 = sourcePath / "Release" / target;
     if (boost::filesystem::exists (tryPathR1))
     {
@@ -167,7 +167,7 @@ std::string exeTestRunner::runCaptureOutput (const std::string &args) const
         str.append (std::to_string (out));
         str.push_back ('\n');
 	}
-   
+
     remove (outFile.c_str ());
     return str;
 }

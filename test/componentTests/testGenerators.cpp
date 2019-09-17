@@ -50,7 +50,6 @@ BOOST_AUTO_TEST_CASE (gen_test_remote2b)
     detailedStageCheck (fileName, gridDynSimulation::gridState_t::DYNAMIC_INITIALIZED);
 }
 
-#ifdef ENABLE_EXPERIMENTAL_TEST_CASES
 BOOST_AUTO_TEST_CASE (gen_test_isoc)
 {
     std::string fileName = std::string (GEN_TEST_DIRECTORY "test_isoc2.xml");
@@ -70,5 +69,5 @@ BOOST_AUTO_TEST_CASE (gen_test_isoc)
     BOOST_CHECK ((ts3.data (1, 0) - ts3[1].back ()) > 0.199);
     remove (recname.c_str ());
 }
-#endif
+
 BOOST_AUTO_TEST_SUITE_END ()

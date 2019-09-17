@@ -1,8 +1,8 @@
 /*
 * LLNS Copyright Start
  * Copyright (c) 2014-2018, Lawrence Livermore National Security
- * This work was performed under the auspices of the U.S. Department 
- * of Energy by Lawrence Livermore National Laboratory in part under 
+ * This work was performed under the auspices of the U.S. Department
+ * of Energy by Lawrence Livermore National Laboratory in part under
  * Contract W-7405-Eng-48 and in part under Contract DE-AC52-07NA27344.
  * Produced at the Lawrence Livermore National Laboratory.
  * All rights reserved.
@@ -25,7 +25,6 @@
 
 BOOST_AUTO_TEST_SUITE(runner_tests)
 
-#ifdef ENABLE_THIS_CASE
 BOOST_AUTO_TEST_CASE(runner_test1)
 {
 	std::string fileName = std::string(GRIDDYN_TEST_DIRECTORY "/runnerTests/test_180_trip.xml");
@@ -70,7 +69,7 @@ BOOST_AUTO_TEST_CASE(runner_test1)
 				std::cout << line << "\t\t" << simTime << std::endl;
 			}
 			if (prevTime < simTime) {
-			//Try explicit (double) casting of simTime and see if crashes 
+			//Try explicit (double) casting of simTime and see if crashes
 			m_currentGDTime = gdr->Step((double)simTime * 1.0E-9);
 			prevTime = simTime;
 			} else std::cout << "suppressing duplicate" << std::endl;
@@ -80,13 +79,12 @@ BOOST_AUTO_TEST_CASE(runner_test1)
 
 
 	for (; simTime < 61000000000; simTime+=10000000) {
- 		std::cout<<simTime<<std::endl; 
+ 		std::cout<<simTime<<std::endl;
 		m_currentGDTime = gdr->Step(simTime * 1.0E-9);
 		m_currentGDTime = gdr->Step(simTime * 1.0E-9);
 	}
-	
+
 	gdr->Finalize();
 }
 
-#endif
 BOOST_AUTO_TEST_SUITE_END()

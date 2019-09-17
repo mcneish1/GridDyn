@@ -10,12 +10,7 @@
 * LLNS Copyright End
 */
 
-
 #include "griddyn-config.h"
-#ifndef BOOST_STATIC
-#define BOOST_TEST_DYN_LINK
-#endif
-
 
 #define BOOST_TEST_MODULE testExtra
 #define BOOST_TEST_DETECT_MEMORY_LEAK 0

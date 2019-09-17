@@ -9,6 +9,7 @@
  * For details, see the LICENSE file.
  * LLNS Copyright End
  */
+
 #pragma once
 
 #include "fileInput/fileInput.h"
@@ -16,19 +17,9 @@
 #include <iosfwd>
 #include <string>
 #include <vector>
-//#define WINDOWS_MEMORY_DEBUG
-
-#ifdef WINDOWS_MEMORY_DEBUG
-#ifdef WIN32
-#define _CRTDBG_MAP_ALLOC
-#include <crtdbg.h>
-#include <stdlib.h>
-
-#endif
-#endif
 
 #ifndef GRIDDYN_TEST_DIRECTORY
-#define GRIDDYN_TEST_DIRECTORY "./test_files/"
+#error Please define GRIDDYN_TEST_DIRECTORY
 #endif
 
 #define IEEE_TEST_DIRECTORY GRIDDYN_TEST_DIRECTORY "/IEEE_test_cases/"
@@ -38,8 +29,6 @@
 static const std::string ieee_test_directory = std::string (GRIDDYN_TEST_DIRECTORY "/IEEE_test_cases/");
 static const std::string matlab_test_directory = std::string (GRIDDYN_TEST_DIRECTORY "/matlab_test_files/");
 static const std::string other_test_directory = std::string (GRIDDYN_TEST_DIRECTORY "/other_test_cases/");
-
-#define ENABLE_IN_DEVELOPMENT_CASES
 
 namespace griddyn
 {

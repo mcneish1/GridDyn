@@ -380,7 +380,7 @@ BOOST_AUTO_TEST_CASE(file_load_test2)
 	BOOST_CHECK_CLOSE(val, tod, 0.0001);
 
 }
-#ifndef ENABLE_MPI
+
 BOOST_AUTO_TEST_CASE (gridDynLoad_test1)
 {
     std::string fileName = gridlabd_test_directory + "IEEE_13_mod.xml";
@@ -395,7 +395,6 @@ BOOST_AUTO_TEST_CASE (gridDynLoad_test1)
     gds->run ();
     requireStates (gds->currentProcessState (), gridDynSimulation::gridState_t::DYNAMIC_COMPLETE);
 }
-#endif
 
 BOOST_AUTO_TEST_CASE (motor_test1)
 {
@@ -469,11 +468,9 @@ BOOST_AUTO_TEST_CASE (motor_test3_stall)
     BOOST_CHECK (!mtld->checkFlag (motorLoad::stalled));
 }
 
-#ifdef ENABLE_IN_DEVELOPMENT_CASES
-#ifdef ENABLE_EXPERIMENTAL_TEST_CASES
 BOOST_AUTO_TEST_CASE (motor_test5)
 {
-    std::string fileName = std::string (LOAD_TEST_DIRECTORY "motorload_test5.xml");
+    std::string fileName = load_test_directory + "motorload_test5.xml";
     readerConfig::setPrintMode (0);
     auto gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
 
@@ -493,9 +490,6 @@ BOOST_AUTO_TEST_CASE (motor_test5)
     gds->run ();
     requireStates (gds->currentProcessState (), gridDynSimulation::gridState_t::DYNAMIC_COMPLETE);
 }
-
-#endif
-#endif
 
 BOOST_AUTO_TEST_CASE (fdep_test)
 {
@@ -638,4 +632,5 @@ BOOST_AUTO_TEST_CASE (secondary_3phase_load_test)
     auto Pa2 = ld3->get ("pa");
     BOOST_CHECK_CLOSE (Pa * 2.0, Pa2, 0.00001);
 }
+
 BOOST_AUTO_TEST_SUITE_END ()
