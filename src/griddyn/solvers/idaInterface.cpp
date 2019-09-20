@@ -305,7 +305,6 @@ void idaInterface::initialize (coreTime t0)
     {
         throw (InvalidSolverOperation ());
     }
-    auto jsize = m_gds->jacSize (mode);
 
     // dynInitializeB IDA - Sundials
 

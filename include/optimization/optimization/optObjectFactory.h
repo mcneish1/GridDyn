@@ -36,6 +36,7 @@ class optFactory
         : name (objName), m_level (level)
     {
     }
+    virtual ~optFactory() = default;
     virtual gridOptObject *makeObject (coreObject *obj) = 0;
     virtual gridOptObject *makeObject () = 0;
     virtual void prepObjects (count_t /*count*/, coreObject * /*obj*/) {}

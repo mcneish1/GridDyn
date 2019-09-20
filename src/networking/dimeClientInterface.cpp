@@ -58,11 +58,11 @@ void dimeClientInterface::init ()
     delete writer;
 
     std::string contents = sstr.str();
-    socket->send (contents.c_str(), contents.size());
+    socket->send (zmq::const_buffer(contents.c_str(), contents.size()));
 
     char buffer[3] = {};
-    auto sz = socket->recv (buffer, 3, 0);
-    if ((sz != 2) || (strncmp (buffer, "OK", 3) != 0))
+    auto sz = socket->recv (zmq::mutable_buffer(buffer, sizeof(buffer)));
+    if (!sz or (sz->size != 2) or (strncmp (buffer, "OK", 3) != 0))
     {
         throw initFailure ();
     }
@@ -86,7 +86,7 @@ void dimeClientInterface::close ()
         delete writer;
 
         std::string contents = ss.str();
-        socket->send (contents.c_str(), contents.size());
+        socket->send (zmq::const_buffer(contents.c_str(), contents.size()));
 
         socket->close ();
     }
@@ -132,10 +132,10 @@ void dimeClientInterface::send_var (const std::string &varName, double val, cons
     delete writer;
 
     std::string contents = ss.str();
-    socket->send (contents.c_str(), contents.size());
+    socket->send (zmq::const_buffer(contents.c_str(), contents.size()));
 
     char buffer[3];
-    auto sz = socket->recv (buffer, 3, 0);
+    auto sz = socket->recv (zmq::mutable_buffer(buffer, sizeof(buffer)));
     // TODO check recv value
 
     Json_gd::Value outgoingData;
@@ -158,10 +158,10 @@ void dimeClientInterface::send_var (const std::string &varName, double val, cons
     delete writer;
 
     contents = ss.str();
-    socket->send (contents.c_str(), contents.size());
+    socket->send (zmq::const_buffer(contents.c_str(), contents.size()));
 
-    sz = socket->recv (buffer, 3, 0);
-    if (sz != 2)  // TODO check for "OK"
+    sz = socket->recv (zmq::mutable_buffer(buffer, sizeof(buffer)));
+    if (!sz or (sz->size != 2) or (strncmp (buffer, "OK", 3) != 0))
     {
         throw (sendFailure ());
     }

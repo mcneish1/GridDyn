@@ -332,7 +332,6 @@ void gridDynServer::pmu_udp(const boost::system::error_code &error, std::size_t 
 {
 	unsigned char c;
 	ptime currTime;
-	int id_pdc;
 
 	 if(error)
 	 {

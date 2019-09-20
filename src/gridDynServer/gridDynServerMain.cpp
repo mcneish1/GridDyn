@@ -48,15 +48,6 @@ int main (int argc, char *argv[])
       return (-5);
     }
 
-  bool isMpiCountMode = false;
-  //check for an MPI run setup
-  for (int ii = 0; ii < argc; ++ii)
-    {
-      if (!strcmp ("--mpicount", argv[ii]))
-        {
-          isMpiCountMode = true;
-        }
-    }
 
   po::variables_map vm;
   int ret = griddyn::argumentParser (argc, argv, vm);

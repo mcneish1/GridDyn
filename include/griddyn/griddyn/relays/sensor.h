@@ -71,7 +71,6 @@ class sensor : public Relay
     std::vector<std::shared_ptr<grabberSet>> dataSources;  // the data sources for the output
     std::vector<Block *> filterBlocks;  //!< the filtered blocks
     std::vector<std::shared_ptr<grabberSet>> outGrabbers;  //!< Grabbers for the output;
-    std::vector<std::shared_ptr<Block>> blkptrs;  //!< storage locations for the shared_ptr of blocks
   public:
     /** @brief default constructor*/
     explicit sensor (const std::string &objName = "sensor_$");

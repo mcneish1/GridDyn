@@ -24,15 +24,10 @@ void numericJacobianCalculation (gridComponent * /* comp */,
                                  const IOlocs & /*inputLocs*/,
                                  const solverMode & /*sMode*/)
 {
-    stateData sDtest = sD;
     std::vector<double> test;
     std::vector<double> testState;
-    double *residTest;
-    double *stateTest;
     if (sD.hasScratch ())
     {
-        residTest = sD.scratch1;
-        stateTest = sD.scratch2;
     }
     else
     {
@@ -45,12 +40,7 @@ void numericJacobianCalculation (gridComponent * /* comp */,
         else
         {
         }
-        residTest = test.data ();
-        stateTest = testState.data ();
     }
-    sDtest.scratch1 = nullptr;
-    sDtest.scratch2 = nullptr;
-    sDtest.state = stateTest;
 
     IOdata testInputs = inputs;
 }

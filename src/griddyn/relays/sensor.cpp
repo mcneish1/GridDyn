@@ -53,66 +53,25 @@ coreObject *sensor::clone (coreObject *obj) const
     nobj->outputStrings = outputStrings;
     nobj->outputMode = outputMode;
     nobj->processStatus = processStatus;
+
+    nobj->instructionCounter = instructionCounter;
     // clone the dataSources
 
-    for (index_t kk = 0; kk < static_cast<index_t> (dataSources.size ()); ++kk)
-    {
-        if (dataSources[kk])
-        {
-            if (static_cast<index_t> (nobj->dataSources.size ()) > kk)
-            {
-                if (nobj->dataSources[kk])
-                {
-                    dataSources[kk]->cloneTo (nobj->dataSources[kk].get ());
-                }
-                else
-                {
-                    nobj->dataSources[kk] = dataSources[kk]->clone ();
-                }
-            }
-            else
-            {
-                nobj->dataSources.push_back (dataSources[kk]->clone ());
-            }
-        }
-        else
-        {
-            if (static_cast<index_t> (nobj->dataSources.size ()) <= kk)
-            {
-                nobj->dataSources.push_back (nullptr);
-            }
-        }
-    }
+    nobj->dataSources = {};
+    std::transform(
+        dataSources.begin(),
+        dataSources.end(),
+        std::back_inserter(nobj->dataSources),
+        [](auto const& x){ return x->clone(); });
 
-    for (index_t kk = 0; kk < static_cast<index_t> (outGrabbers.size ()); ++kk)
-    {
-        if (outGrabbers[kk])
-        {
-            if (static_cast<index_t> (nobj->outGrabbers.size ()) > kk)
-            {
-                if (nobj->outGrabbers[kk])
-                {
-                    outGrabbers[kk]->cloneTo (nobj->outGrabbers[kk].get ());
-                }
-                else
-                {
-                    nobj->outGrabbers[kk] = outGrabbers[kk]->clone ();
-                }
-            }
-            else
-            {
-                nobj->outGrabbers.push_back (outGrabbers[kk]->clone ());
-            }
-            nobj->outGrabbers[kk]->updateObject (nobj);
-        }
-        else
-        {
-            if (static_cast<index_t> (nobj->outGrabbers.size ()) <= kk)
-            {
-                nobj->outGrabbers.push_back (nullptr);
-            }
-        }
-    }
+    nobj->outGrabbers = {};
+    std::transform(
+        outGrabbers.begin(),
+        outGrabbers.end(),
+        std::back_inserter(nobj->outGrabbers),
+        [](auto const& x){ return x->clone(); });
+
+    std::for_each(nobj->outGrabbers.begin(), nobj->outGrabbers.end(), [&](auto const& x){ x->updateObject(nobj); });
 
     return nobj;
 }
@@ -736,6 +695,12 @@ void sensor::dynObjectInitializeB (const IOdata &inputs, const IOdata & /*desire
     // do a verification check on the output codes
     int blkcnt = 0;
     int ocount = 0;
+
+    if (outputMode.size() <= static_cast<size_t>(m_outputSize) and m_outputSize > 0)
+    {
+        throw std::logic_error("outputMode not large enough");
+    }
+
     for (int kk = 0; kk < m_outputSize; ++kk)
     {
         switch (outputMode[kk])

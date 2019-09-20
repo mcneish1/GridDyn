@@ -1,74 +1,72 @@
-#- tests are passing
-#! tests fail with status 201
-#@ tests fail with status 200
-## tests fail with status 1
-#:( tests time out
+#1 tests are passing
+#2 tests fail with status 201
+#3 tests fail with status 1
+#4 tests time out
 
 library_tests = [
-    #- 'testString_viewConversion',
-    #- 'testOperatingBounds',
-    #- 'testXML',
-    #- 'testElementReaders',
-    #- 'testGridDynRunner',
-    #- 'testCore',
-    #- 'testMatrixData',
-    #- 'simpleQueueTests',
-    #- 'testReaderInfo',
-    #- 'testZipUtilities',
-    #- 'testJsonReader',
-    #- 'testStringConversion',
-    #- 'testString_viewOps',
-    #- 'testGridParameter',
-    #- 'testStringOps',
-    #- 'testValuePredictors',
-    #! 'testWorkQueue',
+    #1 'testString_viewConversion',
+    #1 'testOperatingBounds',
+    #1 'testXML',
+    #1 'testElementReaders',
+    #1 'testGridDynRunner',
+    #1 'testCore',
+    #1 'testMatrixData',
+    #1 'simpleQueueTests',
+    #1 'testReaderInfo',
+    #1 'testZipUtilities',
+    #1 'testJsonReader',
+    #1 'testStringConversion',
+    #1 'testString_viewOps',
+    #1 'testGridParameter',
+    #1 'testStringOps',
+    #1 'testValuePredictors',
+    #1 'testWorkQueue',
 ]
 
 system_tests = [
-    #- 'testRoots',
-    ## 'testGridDynRunner',
-    #:( 'testInputs',
-    #- 'testContingency',
-    #! 'testDyn1',
-    #:( 'validationTests',
-    #:( 'testDyn2',
-    #- 'testCloning',
-    #:( 'faultTests',
-    #- 'testConstraints',
-    #- 'testOutputs',
-    #- 'testpFlow',
+    #1 'testRoots',
+    #3 'testGridDynRunner',
+    #4 'testInputs',
+    #1 'testContingency',
+    #2 'testDyn1',
+    #4 'validationTests',
+    #4 'testDyn2',
+    #1 'testCloning',
+    #4 'faultTests',
+    #1 'testConstraints',
+    #1 'testOutputs',
+    #1 'testpFlow',
 ]
 
 component_tests = [
-    #- 'testGenModels',
-    ## 'testBlocks',
-    #- 'ConditionTests',
-    #- 'testArea',
-    ## 'testdcLinks',
-    #! 'testExtraModels',
-    #- 'testRecorders',
-    #- 'testGridLab',
-    #- 'testGovernors',
-    ## 'testGenerators',
-    #- 'testLoads',
-    #! 'testRelays',
-    #- 'testLinks',
-    #- 'testSource',
-    #- 'testEvents',
-    #- 'testExciters',
-    #- 'testAdjustableTX',
+    #1 'testGenModels',
+    #3 'testBlocks',
+    #1 'ConditionTests',
+    #1 'testArea',
+    #3 'testdcLinks',
+    #3 'testExtraModels',
+    #1 'testRecorders',
+    #1 'testGridLab',
+    #1 'testGovernors',
+    #3 'testGenerators',
+    #1 'testLoads',
+    #3 'testRelays',
+    #1 'testLinks',
+    #1 'testSource',
+    #1 'testEvents',
+    #1 'testExciters',
+    #1 'testAdjustableTX',
 ]
 
 extra_tests = [
-    #:( 'performanceTests',
-    #- 'objectSizeReport',
-    #- 'largeInputTests',
-    #:( 'largeContingencyTests',
-    #@ 'testExtra',
+    #4 'performanceTests',
+    #1 'objectSizeReport',
+    #1 'largeInputTests',
+    #4 'largeContingencyTests',
 ]
 
 shared_library_tests = [
-    #- 'basic_tests',
+    #1 'basic_tests',
 ]
 
 folder_map = [
@@ -106,6 +104,7 @@ foreach test_name_folder_name : folder_map
                 griddyn_coupling_dep,
                 griddyn_shared_dep,
                 cereal_dep,
+                minizip_dep,
             ])
         test('test_' + folder_name + '_' + test_name, test_exe)
     endforeach

@@ -327,7 +327,6 @@ void arkodeInterface::initialize (coreTime time0)
     {
         throw (InvalidSolverOperation ());
     }
-    auto jsize = m_gds->jacSize (mode);
 
     // dynInitializeB CVode - Sundials
 

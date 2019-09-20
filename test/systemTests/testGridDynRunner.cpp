@@ -17,6 +17,7 @@
 #include "runner/gridDynRunner.h"
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
+#include <minizip/argv.h>
 #include <iostream>
 #include <cstdlib>
 
@@ -33,14 +34,16 @@ BOOST_AUTO_TEST_CASE(runner_test1)
 
 	auto gdr = std::make_shared<griddyn::GriddynRunner>();
 	int argc = 4;
-	char *argv[] = { "griddyn", "-v", "0", (char*)fileName.data() };
 
+	char const* argv_const[] = { "griddyn", "-v", "0", (char*)fileName.data() };
+
+	char** argv = copy_argv(argc, argv_const);
 	gdr->Initialize(argc, argv);
+	free_argv(argc, argv);
 
 	gdr->simInitialize();
 
 	long simTime = 0;
-	double m_currentGDTime;
 	long prevTime = -1;
 
 	std::string line;
@@ -70,7 +73,7 @@ BOOST_AUTO_TEST_CASE(runner_test1)
 			}
 			if (prevTime < simTime) {
 			//Try explicit (double) casting of simTime and see if crashes
-			m_currentGDTime = gdr->Step((double)simTime * 1.0E-9);
+			gdr->Step((double)simTime * 1.0E-9);
 			prevTime = simTime;
 			} else std::cout << "suppressing duplicate" << std::endl;
 		}
@@ -80,8 +83,8 @@ BOOST_AUTO_TEST_CASE(runner_test1)
 
 	for (; simTime < 61000000000; simTime+=10000000) {
  		std::cout<<simTime<<std::endl;
-		m_currentGDTime = gdr->Step(simTime * 1.0E-9);
-		m_currentGDTime = gdr->Step(simTime * 1.0E-9);
+		gdr->Step(simTime * 1.0E-9);
+		gdr->Step(simTime * 1.0E-9);
 	}
 
 	gdr->Finalize();

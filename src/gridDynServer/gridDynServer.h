@@ -34,8 +34,8 @@ public:
 class pmu_tcp_acc
 {
 public:
-	boost::asio::ip::tcp::acceptor acceptor_;
 	boost::asio::io_service& io_service_;
+	boost::asio::ip::tcp::acceptor acceptor_;
 	pmu_tcp_acc(boost::asio::io_service &ios, boost::asio::ip::tcp::endpoint ep)
 		:io_service_(ios), acceptor_(ios, ep) {};
 };
@@ -119,7 +119,7 @@ protected:
 
 public:
 	gridDynServer();
-	~gridDynServer();
+	virtual ~gridDynServer();
 
 	//threaded loop for transmitting data
 	virtual void send_data();

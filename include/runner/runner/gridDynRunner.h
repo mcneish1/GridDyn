@@ -11,8 +11,6 @@
  * -----------------------------------------------------------------
  */
 
-#ifndef GRIDDYN_GRIDDYN_RUNNER_H
-#define GRIDDYN_GRIDDYN_RUNNER_H
 #pragma once
 
 #include "griddyn/gridDynDefinitions.hpp"
@@ -174,4 +172,3 @@ int processCommandArguments (std::shared_ptr<gridDynSimulation> &gds,
                              boost::program_options::variables_map &vm);
 
 }  // namespace griddyn
-#endif

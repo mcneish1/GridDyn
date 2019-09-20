@@ -2,7 +2,15 @@ project('griddyn', ['c', 'cpp'], version : '0.9.x', default_options: ['cpp_std=c
 
 subdir('ThirdParty')
 
-griddyn_conf = configuration_data()
+griddyn_conf = configuration_data({
+        'GRIDDYN_DATE' : 'September 2019',
+        'GRIDDYN_VERSION_BUILD' : 'v1',
+        'GRIDDYN_VERSION_MAJOR' : '1',
+        'GRIDDYN_VERSION_MINOR' : '0',
+        'GRIDDYN_VERSION_PATCH' : '0',
+        'GRIDDYN_VERSION_STRING' : 'v1',
+        'GRIDDYN_VERSION_STRING_SHORT' : 'v1',
+    })
 
 griddyn_compiler_config = configure_file(
     input : 'config/cmake/compiler-config.h.in',
