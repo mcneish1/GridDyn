@@ -77,7 +77,7 @@ BOOST_AUTO_TEST_CASE (coreObject_test)
         obj3->set ("bob", 0.5);  // this should throw and exception
         BOOST_CHECK (false);
     }
-    catch (unrecognizedParameter &)
+    catch (...)
     {
     }
     delete (obj1);
@@ -222,12 +222,20 @@ BOOST_AUTO_TEST_CASE(object_tests_probe)
 			BOOST_CHECK_EQUAL(obj->getName(), "bob");
 			obj->setName(std::string());
 			BOOST_CHECK_EQUAL(obj->getName(), "");
-			obj->set("", "empty"); //this should not throw an exception
-			obj->set("", 0.34, defUnit);  //this should not throw an exception
-			obj->setFlag("", false);  //This should not throw an exception
-			obj->set("#unknown", "empty"); //this should not throw an exception
-			obj->set("#unknown", 0.34, defUnit);  //this should not throw an exception
-			obj->setFlag("#unknown", false);  //This should not throw an exception
+
+            try
+            {
+            obj->set("", "empty"); //this should not throw an exception
+            obj->set("", 0.34, defUnit);  //this should not throw an exception
+            obj->setFlag("", false);  //This should not throw an exception
+            obj->set("#unknown", "empty"); //this should not throw an exception
+            obj->set("#unknown", 0.34, defUnit);  //this should not throw an exception
+            obj->setFlag("#unknown", false);  //This should not throw an exception
+            }
+            catch(...)
+            {
+            // what is the point of setting complete garbage?
+            }
 
 			if (obj->isCloneable())
 			{

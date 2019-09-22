@@ -14,7 +14,7 @@
 #define GRIDLOADOPT_H_
 
 // headers
-#include "optimization/gridOptObjects.h"
+#include "optimization/gridOptObject.h"
 // forward classes
 
 namespace griddyn

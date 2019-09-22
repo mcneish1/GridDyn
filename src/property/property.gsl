@@ -1,0 +1,72 @@
+.output "$(switches.arg1)"
+.[gsl].ignorecase = 0
+.- Target output:
+.- std::string status_transform(std::string const& val)
+.- {
+.-     if (val == "enabled" or val == "on" or val == "in") return "enabled";
+.-     if (val == "disabled" or val == "off" or val == "off") return "disabled";
+.-     throw std::runtime_error(std::string("Could not translate ") + val + " into a status");
+.- }
+#include <string>
+#include <stdexcept>
+
+.for transform
+std::string $(name)_transform(std::string const& val)
+{
+.   for map
+    if (val == "$(map.target)"
+.       for alias
+     or val == "$(alias.name)"
+.       endfor
+    ) return "$(map.target)";
+.   endfor
+    throw std::runtime_error(std::string("Could not translate ") + val + " into a $(name)");
+}
+.endfor
+
+.- Target output:
+.- void coreObject::set (const std::string &param, const std::string &val)
+.- {
+.-     if ((param == "name") || (param == "rename") || (param == "id"))
+.-     {
+.-         setName (val);
+.-     }
+.-     else if (param == "description")
+.-     {
+.-         setDescription (val);
+.-     }
+.-     else if ((param.empty ()) || (param.front () == '#'))
+.-     {
+.-         // comment parameter meant to do nothing
+.-     }
+.-     else
+.-     [...]
+.for class
+#include "$(class.path)/$(class.name).$(class.extension?"hpp")"
+namespace $(class.namespace?"griddyn") {
+void $(class.name)::set(std::string const& param, std::string const& val)
+{
+.   for property
+    if (param == "$(property.name)"
+.       for alias
+     or param == "$(alias.name)"
+.       endfor
+    )
+    {
+.   if defined(property.transform)
+        $(class.name)::$(property.action)($(property.transform)_transform(val));
+.   else
+        $(class.name)::$(property.action)(val);
+.   endif
+        return;
+    }
+.   endfor
+.if defined(class.parent)
+    $(class.parent)::set(param, val);
+.else
+    throw std::runtime_error(std::string("Parameter ") + param + " does not exist");
+.endif
+}
+} // namespace griddyn
+
+.endfor

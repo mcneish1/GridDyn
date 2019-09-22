@@ -221,8 +221,6 @@ void AGControl::remove (coreObject *obj)
     }
 }
 
-void AGControl::set (const std::string &param, const std::string &val) { coreObject::set (param, val); }
-
 void AGControl::set (const std::string &param, double val, gridUnits::units_t unitType)
 {
     if (param == "deadband")

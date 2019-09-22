@@ -110,7 +110,6 @@ void gridSecondary::pFlowObjectInitializeA (coreTime time0, std::uint32_t flags)
     prevTime = time0;
 }
 
-void gridSecondary::set (const std::string &param, const std::string &val) { gridComponent::set (param, val); }
 void gridSecondary::set (const std::string &param, double val, gridUnits::units_t unitType)
 {
     if (!param.empty ())

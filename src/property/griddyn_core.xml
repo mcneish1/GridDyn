@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<classes>
+
+<class name = "coreObject" path = "core" extension = "h">
+    <property name = "name" action = "setName">
+        <alias name = "rename" />
+        <alias name = "id" />
+    </property>
+
+    <property name = "description" action = "setDescription" />
+
+</class>
+
+</classes>

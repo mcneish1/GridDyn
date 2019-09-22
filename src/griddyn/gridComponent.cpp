@@ -594,65 +594,49 @@ void gridComponent::getParameterStrings (stringVec &pstr, paramStringType pstype
     getParamString<gridComponent, coreObject> (this, pstr, locNumStrings, locStrStrings, {}, pstype);
 }
 
-void gridComponent::set (const std::string &param, const std::string &val)
+void gridComponent::setStatus (std::string const& val)
 {
-    if (opFlags[no_gridcomponent_set])
+    if (val == "enabled")
     {
-        throw (unrecognizedParameter (param));
+        if (!isEnabled ())
+        {
+            enable ();
+            if ((opFlags[has_pflow_states]) || (opFlags[has_dyn_states]))
+            {
+                alert (this, STATE_COUNT_CHANGE);
+            }
+        }
     }
+    else if (val == "disabled")
+    {
+        if (isEnabled ())
+        {
+            if ((opFlags[has_pflow_states]) || (opFlags[has_dyn_states]))
+            {
+                alert (this, STATE_COUNT_CHANGE);
+            }
+            disable ();
+        }
+    }
+    else if (val == "connected")
+    {
+        if (!isConnected ())
+        {
+            reconnect ();
+        }
+    }
+    else if (val == "disconnected")
+    {
+        if (isConnected ())
+        {
+            disconnect ();
+        }
+    }
+}
 
-    if (param == "status")
-    {
-        auto v2 = convertToLowerCase (val);
-        if ((v2 == "on") || (v2 == "in") || (v2 == "enabled"))
-        {
-            if (!isEnabled ())
-            {
-                enable ();
-                if ((opFlags[has_pflow_states]) || (opFlags[has_dyn_states]))
-                {
-                    alert (this, STATE_COUNT_CHANGE);
-                }
-            }
-        }
-        else if ((v2 == "off") || (v2 == "out") || (v2 == "disabled"))
-        {
-            if (isEnabled ())
-            {
-                if ((opFlags[has_pflow_states]) || (opFlags[has_dyn_states]))
-                {
-                    alert (this, STATE_COUNT_CHANGE);
-                }
-                disable ();
-            }
-        }
-        else if (v2 == "connected")
-        {
-            if (!isConnected ())
-            {
-                reconnect ();
-            }
-        }
-        else if (v2 == "disconnected")
-        {
-            if (isConnected ())
-            {
-                disconnect ();
-            }
-        }
-    }
-    else if (param == "flags")
-    {
-        setMultipleFlags (this, val);
-    }
-    else if (subObjectSet (param, val))
-    {
-        return;
-    }
-    else
-    {
-        coreObject::set (param, val);
-    }
+void gridComponent::setFlags(std::string const& val)
+{
+    setMultipleFlags(this, val);
 }
 
 auto hasParameterPath (const std::string &param) { return (param.find_last_of (":?") != std::string::npos); }

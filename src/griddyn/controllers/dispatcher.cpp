@@ -31,7 +31,6 @@ void dispatcher::add (scheduler * /*sched*/) { throw (objectAddFailure (this)); 
 void dispatcher::remove (coreObject * /*obj*/) {}
 void dispatcher::remove (scheduler * /*sched*/) {}
 
-void dispatcher::set (const std::string &param, const std::string &val) { return coreObject::set (param, val); }
 void dispatcher::set (const std::string &param, double val, gridUnits::units_t unitType)
 {
     return coreObject::set (param, val, unitType);

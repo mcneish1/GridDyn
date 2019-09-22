@@ -12,7 +12,7 @@
 
 #pragma once
 
-#include "gridOptObjects.h"
+#include "gridOptObject.h"
 #include <map>
 #include <memory>
 #include <vector>

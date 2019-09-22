@@ -288,6 +288,9 @@ class gridOptObject : public coreObject
     @return the gridOptObject represented by the link  index
     */
     virtual gridOptObject *getRelay (index_t index) const;
+
+private:
+    void setStatus(std::string const& val);
 };
 
 void printObjStateNames (gridOptObject *obj, const optimMode &oMode);

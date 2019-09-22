@@ -14,7 +14,7 @@
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"
-#include "optimization/gridOptObjects.h"
+#include "optimization/gridOptObject.h"
 #include "models/gridAreaOpt.h"
 #include "optimization/optObjectFactory.h"
 #include "utilities/stringOps.h"

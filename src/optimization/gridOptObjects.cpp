@@ -10,7 +10,7 @@
  * LLNS Copyright End
  */
 
-#include "optimization/gridOptObjects.h"
+#include "optimization/gridOptObject.h"
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/stringOps.h"
 #include <cstdio>
@@ -232,33 +232,21 @@ void gridOptObject::setOffset (index_t offset, index_t constraintOffset, const o
     offsets.setConstraintOffset (constraintOffset, oMode);
 }
 
-void gridOptObject::set (const std::string &param, const std::string &val)
+void gridOptObject::setStatus(std::string const& val)
 {
-    if (param == "status")
+    if (val == "disabled")
     {
-        auto v2 = convertToLowerCase (val);
-        if (val == "out")
+        if (isEnabled ())
         {
-            if (isEnabled ())
-            {
-                disable ();
-            }
-        }
-        else if (val == "in")
-        {
-            if (!isEnabled ())
-            {
-                enable ();
-            }
-        }
-        else
-        {
-            coreObject::set (param, val);
+            disable ();
         }
     }
-    else
+    else if (val == "enabled")
     {
-        coreObject::set (param, val);
+        if (!isEnabled ())
+        {
+            enable ();
+        }
     }
 }
 

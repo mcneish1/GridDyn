@@ -454,7 +454,6 @@ static const stringVec genModelClassicStateNames{"id", "iq", "delta", "freq"};
 
 stringVec GenModelClassical::localStateNames () const { return genModelClassicStateNames; }
 // set parameters
-void GenModelClassical::set (const std::string &param, const std::string &val) { coreObject::set (param, val); }
 void GenModelClassical::set (const std::string &param, double val, gridUnits::units_t unitType)
 {
     if (param.length () == 1)

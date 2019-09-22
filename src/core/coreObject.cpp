@@ -156,47 +156,6 @@ void coreObject::getParameterStrings (stringVec &pstr, paramStringType pstype) c
     }
 }
 
-void coreObject::set (const std::string &param, const std::string &val)
-{
-    if ((param == "name") || (param == "rename") || (param == "id"))
-    {
-        setName (val);
-    }
-    else if (param == "description")
-    {
-        setDescription (val);
-    }
-    else if ((param.empty ()) || (param.front () == '#'))
-    {
-        // comment parameter meant to do nothing
-    }
-    else
-    {
-        if (val == "true")
-        {
-            setFlag (param, true);
-        }
-        else if (val == "false")
-        {
-            setFlag (param, false);
-        }
-        else
-        {
-            auto lower = convertToLowerCase (param);
-            if (lower != param)
-            {
-                set (lower, val);
-                LOG_WARNING (std::string ("parameters should be lower case \"") + param + "\" is not");
-            }
-            else
-            {
-                LOG_WARNING ("parameter " + param + " not found");
-                throw (unrecognizedParameter (param));
-            }
-        }
-    }
-}
-
 void coreObject::setDescription (const std::string &description)
 {
     descriptionDictionary.update (m_oid, description);

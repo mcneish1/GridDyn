@@ -39,7 +39,12 @@ dl_lib = cc.find_library('dl')
 threads_dep = dependency('threads')
 mpi_dep = dependency('mpi', language: 'cpp')
 
+griddyn_core_inc = include_directories('include/core')
 griddyn_utility_inc = include_directories('include/utilities')
+griddyn_inc = include_directories('include/griddyn')
+griddyn_optimization_inc = include_directories('include/optimization')
+subdir('src/property')
+
 griddyn_utility_lib = library('griddyn_utility', [
         'src/utilities/argParser.cpp',
         'src/utilities/gridRandom.cpp',
@@ -98,7 +103,6 @@ griddyn_plugin_lib = library('griddyn_plugin',
     include_directories : griddyn_plugin_inc)
 griddyn_plugin_dep = declare_dependency(link_with : griddyn_plugin_lib, include_directories : griddyn_plugin_inc)
 
-griddyn_core_inc = include_directories('include/core')
 griddyn_core_lib = library('griddyn_core', [
         'src/core/coreExceptions.cpp',
         'src/core/coreObject.cpp',
@@ -108,6 +112,7 @@ griddyn_core_lib = library('griddyn_core', [
         'src/core/objectFactory.cpp',
         'src/core/objectInterpreter.cpp',
         'src/core/propertyBuffer.cpp',
+        griddyn_core_gen,
     ],
     include_directories : griddyn_core_inc,
     dependencies : griddyn_utility_dep)
@@ -126,7 +131,6 @@ griddyn_coupling_lib = library('griddyn_coupling', [
     include_directories : griddyn_coupling_inc)
 griddyn_coupling_dep = declare_dependency(link_with : griddyn_coupling_lib, include_directories : griddyn_coupling_inc)
 
-griddyn_inc = include_directories('include/griddyn')
 griddyn_lib = library('griddyn', [
         'src/griddyn/loads/fileLoad.cpp',
         'src/griddyn/loads/motorLoad5.cpp',
@@ -291,6 +295,7 @@ griddyn_lib = library('griddyn', [
         'src/griddyn/governors/GovernorSteamNR.cpp',
         'src/griddyn/governors/GovernorIeeeSimple.cpp',
         'src/griddyn/governors/GovernorHydro.cpp',
+        griddyn_gen,
     ],
     include_directories : griddyn_inc,
     dependencies : [
@@ -375,7 +380,6 @@ griddyn_loader_lib = library('griddyn_loader',
     include_directories : griddyn_loader_inc)
 griddyn_loader_dep = declare_dependency(link_with : griddyn_loader_lib, include_directories : griddyn_loader_inc)
 
-griddyn_optimization_inc = include_directories('include/optimization')
 library('griddyn_optimization', [
         'src/optimization/optimizerInterface.cpp',
         'src/optimization/optHelperClasses.cpp',
@@ -388,6 +392,7 @@ library('griddyn_optimization', [
         'src/optimization/models/gridLinkOpt.cpp',
         'src/optimization/models/gridGenOpt.cpp',
         'src/optimization/gridDynOpt.cpp',
+        griddyn_optimization_gen,
     ],
     dependencies : [
         griddyn_core_dep,

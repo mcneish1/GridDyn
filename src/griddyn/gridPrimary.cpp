@@ -52,7 +52,6 @@ void gridPrimary::dynInitializeB (const IOdata &inputs, const IOdata &desiredOut
     }
 }
 
-void gridPrimary::set (const std::string &param, const std::string &val) { gridComponent::set (param, val); }
 void gridPrimary::set (const std::string &param, double val, gridUnits::units_t unitType)
 {
     if ((param == "zone") || (param == "zone number"))

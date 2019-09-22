@@ -790,6 +790,10 @@ see gridComponent::dynInitializeA for more details
     */
     virtual change_code powerFlowAdjust (const IOdata &inputs, std::uint32_t flags, check_level_t level);
     friend class offsetTable;
+
+private:
+    void setStatus(std::string const& val);
+    void setFlags(std::string const& val);
 };
 
 /** @brief display all the state names to the screen
