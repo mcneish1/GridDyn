@@ -17,12 +17,6 @@
 #include "utilities/mapOps.hpp"
 #include <utility>
 
-// disable a funny warning (bug in visual studio 2015)
-#ifdef _MSC_VER
-#if _MSC_VER >= 1900
-#pragma warning(disable : 4592)
-#endif
-#endif
 /*
 defUnit = 0,
 // Power system units
@@ -304,14 +298,14 @@ unitConversionPower (double val, const units_t in, const units_t out, double bas
     {
     case Watt:
         val = val / 1000.0;  // I know this looks funny, there really shouldn't be a break here convert to KW
-        FALLTHROUGH
+        // fallthrough
     case kW:
         val = val / 1000.0;  // then convert to MW
-        FALLTHROUGH
+        // fallthrough
     case MW:
     case MVAR:
         val = val / basePower;  // now convert to puMW
-        FALLTHROUGH
+        // fallthrough
     case puMW:
     case pu:
         switch (out)
@@ -352,10 +346,10 @@ unitConversionPower (double val, const units_t in, const units_t out, double bas
         break;
     case puV:
         val = val * localBaseVoltage;  // convert to kV --localBaseVoltage is defined in kV
-        FALLTHROUGH
+        // fallthrough
     case kV:
         val = val * 1000.0;  // convert to V
-        FALLTHROUGH
+        // fallthrough
     case Volt:
         switch (out)
         {
@@ -375,7 +369,7 @@ unitConversionPower (double val, const units_t in, const units_t out, double bas
         break;
     case Ohm:
         val = val / (basePower * 1000000.0 / localBaseVoltage / localBaseVoltage);  // convert to puOhms
-        FALLTHROUGH
+        // fallthrough
     case puOhm:
 
         switch (out)
@@ -411,7 +405,7 @@ unitConversionPower (double val, const units_t in, const units_t out, double bas
         break;
     case Amp:
         val = val * localBaseVoltage / basePower / 1000.0;  // convert to puA
-        FALLTHROUGH
+        // fallthrough
     case puA:
 
         switch (out)
@@ -435,10 +429,10 @@ unitConversionPower (double val, const units_t in, const units_t out, double bas
         break;
     case MWph:
         val = val / 60.0;
-        FALLTHROUGH
+        // fallthrough
     case MWpmin:
         val = val / 60.0;
-        FALLTHROUGH
+        // fallthrough
     case MWps:
         switch (out)
         {
@@ -466,10 +460,10 @@ unitConversionPower (double val, const units_t in, const units_t out, double bas
         break;
     case puMWph:
         val = val / 60.0;
-        FALLTHROUGH
+        // fallthrough
     case puMWpmin:
         val = val / 60.0;
-        FALLTHROUGH
+        // fallthrough
     case puMWps:
         switch (out)
         {
@@ -696,7 +690,7 @@ double unitConversionDistance (double val, const units_t in, const units_t out)
     {
     case km:
         val = val * 1000;
-        FALLTHROUGH
+        // fallthrough
     case meter:
         switch (out)
         {
@@ -718,7 +712,7 @@ double unitConversionDistance (double val, const units_t in, const units_t out)
         break;
     case mile:
         ret = val * 5280;
-        FALLTHROUGH
+        // fallthrough
     case ft:
         switch (out)
         {

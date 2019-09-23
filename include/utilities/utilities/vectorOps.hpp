@@ -56,14 +56,6 @@ std::vector<double> interpolateLinear (const std::vector<double> &timeIn,
                                        const std::vector<double> &valIn,
                                        const std::vector<double> &timeOut);
 
-#ifdef _MSC_VER
-#if _MSC_VER < 1900
-#define KEY_QUAL inline const
-#endif
-#endif
-#ifndef KEY_QUAL
-#define KEY_QUAL constexpr
-#endif
 /** force a value to be between two limits
 @details if val is between the two limits it returns val if it is not it returns the appropriate limit
 requires that the < operator be defined on the type
@@ -73,7 +65,7 @@ requires that the < operator be defined on the type
 @param[in] UpperLim the upper limit of the valid range
 @return the clamped value */
 template <class valType>
-KEY_QUAL valType valLimit (valType val, valType lowerLim, valType upperLim)
+constexpr valType valLimit (valType val, valType lowerLim, valType upperLim)
 {
     return (val < upperLim) ? ((val < lowerLim) ? lowerLim : val) : upperLim;
 }
@@ -85,7 +77,7 @@ KEY_QUAL valType valLimit (valType val, valType lowerLim, valType upperLim)
 @param[in] upperLim the upper limit of the valid range
 @return the clamped value */
 template <class valType>
-KEY_QUAL valType valUpperLimit (valType val, valType upperLim)
+constexpr valType valUpperLimit (valType val, valType upperLim)
 {
     return (val < upperLim) ? val : upperLim;
 }
@@ -97,7 +89,7 @@ KEY_QUAL valType valUpperLimit (valType val, valType upperLim)
 @param[in] lowerLim the upper limit of the valid range
 @return the clamped value */
 template <class valType>
-KEY_QUAL valType valLowerLimit (valType val, valType lowerLim)
+constexpr valType valLowerLimit (valType val, valType lowerLim)
 {
     return (val < lowerLim) ? lowerLim : val;
 }
@@ -109,7 +101,7 @@ and a less than operator and != operator
 @param[in] x the value to operate on
 @return the sign of the value*/
 template <typename M>
-KEY_QUAL M signn (M x)
+constexpr M signn (M x)
 {
     return ((x < M (0)) ? M (-1) : ((x != M (0)) ? M (1) : M (0)));
 }

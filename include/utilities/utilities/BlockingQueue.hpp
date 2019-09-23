@@ -6,7 +6,7 @@ All rights reserved. See LICENSE file and DISCLAIMER for more details.
 
 #pragma once
 
-#include "optionalDef.hpp"
+#include <optional>
 #include <algorithm>
 #include <atomic>
 #include <condition_variable>
@@ -16,7 +16,7 @@ All rights reserved. See LICENSE file and DISCLAIMER for more details.
 #include <vector>
 
 template <typename T>
-using opt = utilities::optional<T>;
+using opt = std::optional<T>;
 
 /** NOTES:: PT Went with unlocking after signaling on the basis of this page
 http://www.domaigne.com/blog/computing/condvars-signal-with-mutex-locked-or-not/

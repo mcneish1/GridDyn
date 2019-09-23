@@ -51,17 +51,7 @@ enum class approxKeyMask : unsigned int
     linear = (1 << approxkey::linear),
 };
 
-#ifdef _MSC_VER
-#if _MSC_VER < 1900
-#define KEY_QUAL inline const
-#endif
-#endif
-
-#ifndef KEY_QUAL
-#define KEY_QUAL constexpr
-#endif
-
-KEY_QUAL unsigned int indexVal (approxKeyMask key) { return static_cast<unsigned int> (key); }
+constexpr unsigned int indexVal (approxKeyMask key) { return static_cast<unsigned int> (key); }
 
 enum defindedSolverModes : index_t
 {

@@ -15,13 +15,6 @@
 #include <atomic>
 #include <string>
 
-// disable a funny warning (bug in visual studio 2015)
-#ifdef _MSC_VER
-#if _MSC_VER >= 1900
-#pragma warning(disable : 4592)
-#endif
-#endif
-
 namespace griddyn
 {
 class coreObject;

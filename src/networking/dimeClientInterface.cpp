@@ -13,14 +13,7 @@
 #include "networking/dimeClientInterface.h"
 #include "networking/zmqLibrary/zmqContextManager.h"
 
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable : 4702)
 #include "json/jsoncpp.h"
-#pragma warning(pop)
-#else
-#include "json/jsoncpp.h"
-#endif
 
 dimeClientInterface::dimeClientInterface (const std::string &dimeName, const std::string &dimeAddress)
     : name (dimeName), address (dimeAddress)

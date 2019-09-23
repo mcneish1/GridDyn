@@ -13,19 +13,8 @@
 
 #include "charMapper.h"
 #include "string_viewOps.h"
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable : 4127 4459)
-#endif
-#include <boost/version.hpp>
-#if BOOST_VERSION / 100 % 1000 >= 60
+
 #include <boost/spirit/home/x3.hpp>
-#else
-#define NO_SPIRIT 1
-#endif
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 #include <stdexcept>
 extern const utilities::charMapper<bool> numCheck;

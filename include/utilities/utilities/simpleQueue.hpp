@@ -23,10 +23,10 @@ All rights reserved. See LICENSE file and DISCLAIMER for more details.
 #include <type_traits>
 #include <vector>
 
-#include "utilities/optionalDef.hpp"
+#include <optional>
 
 template <typename T>
-using opt = utilities::optional<T>;
+using opt = std::optional<T>;
 
 /** class for very simple thread safe queue
 @details  uses two vectors for the operations,  once the pull vector is empty it swaps the vectors
@@ -251,7 +251,7 @@ class SimpleQueue
                 std::swap (pushElements, pullElements);
                 pushLock.unlock ();  // we can free the push function to accept more elements after the swap call;
                 std::reverse (pullElements.begin (), pullElements.end ());
-                utilities::optional<X> val (
+                opt<X> val (
                   std::move (pullElements.back ()));  // do it this way to allow moveable only types
                 pullElements.pop_back ();
                 if (pullElements.empty ())
@@ -274,7 +274,7 @@ class SimpleQueue
             queueEmptyFlag = true;
             return {};  // return the empty optional
         }
-        utilities::optional<X> val (std::move (pullElements.back ()));  // do it this way to allow moveable only types
+        opt<X> val (std::move (pullElements.back ()));  // do it this way to allow moveable only types
         pullElements.pop_back ();
         if (pullElements.empty ())
         {
