@@ -46,7 +46,6 @@ griddyn_optimization_inc = include_directories('include/optimization')
 subdir('src/property')
 
 griddyn_utility_lib = library('griddyn_utility', [
-        'src/utilities/argParser.cpp',
         'src/utilities/gridRandom.cpp',
         'src/utilities/saturation.cpp',
         'src/utilities/stringOps.cpp',
@@ -60,7 +59,6 @@ griddyn_utility_lib = library('griddyn_utility', [
         'src/utilities/charMapper.cpp',
         'src/utilities/workQueue.cpp',
         'src/utilities/zipUtilities.cpp',
-        'src/utilities/base64.cpp',
         'src/utilities/matrixCreation.cpp',
         'src/utilities/logger.cpp',
         'src/utilities/matrixDataSparse.cpp',
@@ -256,7 +254,6 @@ griddyn_lib = library('griddyn', [
         'src/griddyn/generators/Generator.cpp',
         'src/griddyn/generators/DynamicGenerator.cpp',
         'src/griddyn/generators/isocController.cpp',
-        # 'src/griddyn/comms/relayMessage.cpp', # broken
         'src/griddyn/comms/controlMessage.cpp',
         'src/griddyn/comms/commMessage.cpp',
         'src/griddyn/comms/communicationsCore.cpp',
@@ -267,9 +264,7 @@ griddyn_lib = library('griddyn', [
         'src/griddyn/events/eventAdapters.cpp',
         'src/griddyn/events/interpolatingPlayer.cpp',
         'src/griddyn/events/Event.cpp',
-        # 'src/griddyn/events/gridPlayer.cpp', # broken
         'src/griddyn/events/Player.cpp',
-        # 'src/griddyn/events/gridEvent.cpp', # broken
         'src/griddyn/events/reversibleEvent.cpp',
         'src/griddyn/events/eventQueue.cpp',
         'src/griddyn/events/compoundEvent.cpp',
