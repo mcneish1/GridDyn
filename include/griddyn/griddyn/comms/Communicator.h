@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef _GRID_COMMUNICATOR__
-#define _GRID_COMMUNICATOR__
 #pragma once
 
 #include "core/coreDefinitions.hpp"
@@ -114,4 +112,3 @@ class Communicator : public griddyn::helperObject, public std::enable_shared_fro
 std::unique_ptr<Communicator>
 makeCommunicator (const std::string &commType, const std::string &commName, const std::uint64_t id);
 }  // namespace griddyn
-#endif

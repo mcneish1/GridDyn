@@ -10,8 +10,6 @@
 * LLNS Copyright End
 */
 
-#ifndef _MATRIX_DATA_BOOST_H_
-#define _MATRIX_DATA_BOOST_H_
 #pragma once
 
 #include "utilities/matrixData.hpp"
@@ -126,5 +124,3 @@ class matrixDataBoost : public matrixData<type>
         decltype (cptr->end ()) cptr2end;
     };
 };
-
-#endif

@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef MOTOR_LOAD3_H_
-#define MOTOR_LOAD3_H_
+#pragma once
 
 #include "motorLoad.h"
 namespace griddyn
@@ -107,4 +106,3 @@ class motorLoad3 : public motorLoad
 
 }  // namespace loads
 }  // namespace griddyn
-#endif

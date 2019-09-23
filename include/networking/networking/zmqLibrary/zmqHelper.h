@@ -19,8 +19,7 @@ Lawrence Livermore National Laboratory, operated by Lawrence Livermore National 
  * LLNS Copyright End
  */
 
-#ifndef ZMQ_HELPER_HEADER_
-#define ZMQ_HELPER_HEADER_
+#pragma once
 
 #include <string>
 
@@ -33,4 +32,3 @@ namespace zmqlib
 {
 zmq::socket_type socketTypeFromString (const std::string &socketType);
 }
-#endif

@@ -10,8 +10,7 @@
 * LLNS Copyright End
 */
 
-#ifndef YAMLREADERELEMENT_H_
-#define YAMLREADERELEMENT_H_
+#pragma once
 
 #include "formatInterpreters/readerElement.h"
 
@@ -82,7 +81,3 @@ private:
 	int iteratorCount = 0;
 	std::vector<std::shared_ptr<yamlReaderElement> > bookmarks;
 };
-
-#endif
-
-

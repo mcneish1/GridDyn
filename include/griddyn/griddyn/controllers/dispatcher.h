@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef DISPATCHER_H_
-#define DISPATCHER_H_
 #pragma once
 
 #include "griddyn/gridSubModel.h"
@@ -62,4 +60,3 @@ class dispatcher : public coreObject
 };
 
 }  // namespace griddyn
-#endif

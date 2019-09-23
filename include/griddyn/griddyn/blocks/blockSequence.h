@@ -10,24 +10,23 @@
 * LLNS Copyright End
 */
 
-#ifndef BLOCK_SEQUENCE_H_
-#define BLOCK_SEQUENCE_H_
 #pragma once
+
 #include "../Block.h"
 
 namespace griddyn
 {
 namespace blocks
 {
-/** @brief class implementing a sequence of blocks as a single block 
+/** @brief class implementing a sequence of blocks as a single block
 A block is defined as a single input single output subModel.  This object takes any number of blocks in a sequence
-and processes them in the appropriate fashion.  
+and processes them in the appropriate fashion.
 */
 class blockSequence: public Block
 {
 
 public:
-	
+
 protected:
 	enum sequence_flags
 	{
@@ -59,21 +58,21 @@ public:
 
 	virtual void blockResidual(double input, double didt, const stateData &sD, double resid[], const solverMode &sMode) override;
 
-	
+
 	virtual void blockDerivative(double input, double didt, const stateData &sD, double deriv[], const solverMode &sMode) override;
-	
+
 	virtual void blockAlgebraicUpdate(double input, const stateData &sD, double update[], const solverMode &sMode) override;
-	
+
 	virtual void blockJacobianElements(double input, double didt, const stateData &sD, matrixData<double> &md, index_t argLoc, const solverMode &sMode) override;
 
-	
+
 	virtual double step(coreTime time, double input) override;
 	virtual void rootTest(const IOdata &inputs, const stateData &sD, double roots[], const solverMode &sMode) override;
 	virtual void rootTrigger(coreTime time, const IOdata &inputs, const std::vector<int> &rootMask, const solverMode &sMode) override;
 	virtual change_code rootCheck(const IOdata &inputs, const stateData &sD, const solverMode &sMode, check_level_t level) override;
 	//virtual void setTime(coreTime time){prevTime=time;};
 	/** get the output of one of the component blocks
-	*@param[in] blockNum the index of the block to the get the output of 
+	*@param[in] blockNum the index of the block to the get the output of
 	@return the output value of the requested block
 	*/
 	double subBlockOutput(index_t blockNum) const;
@@ -91,4 +90,3 @@ public:
 };
 }//namespace blocks
 }//namespace griddyn
-#endif

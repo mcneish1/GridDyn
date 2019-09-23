@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef NULLOBJECT_H_
-#define NULLOBJECT_H_
 #pragma once
 
 #include "core/coreObject.h"
@@ -55,5 +53,3 @@ class nullObject final : public coreObject
     virtual void setParent (coreObject *parentObj) override;
 };
 }  // namespace griddyn
-
-#endif

@@ -10,8 +10,7 @@
 * LLNS Copyright End
 */
 
-#ifndef LONG_LINE_H_
-#define LONG_LINE_H_
+#pragma once
 
 #include "subsystem.h"
 #include "acLine.h"
@@ -58,4 +57,3 @@ private:
 
 }//namespace links
 }//namespace griddyn
-#endif

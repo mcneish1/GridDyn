@@ -13,8 +13,7 @@
 /** @file
  *  @brief define template operations on vectors
  */
-#ifndef VECTOR_OPS_H
-#define VECTOR_OPS_H
+
 #pragma once
 
 #include <algorithm>
@@ -1071,5 +1070,3 @@ std::vector<X> vectorConvert (const std::vector<Y> &dvec)
 {
     return vectorConvertDetail::vectorConvertActual<X, Y> (dvec, std::is_same<X, Y>{});
 }
-
-#endif

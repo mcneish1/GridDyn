@@ -10,8 +10,7 @@
 * LLNS Copyright End
 */
 
-#ifndef FUNCTION_SOURCE_H_
-#define FUNCTION_SOURCE_H_
+#pragma once
 
 #include "griddyn/Source.h"
 #include <functional>
@@ -49,6 +48,3 @@ public:
 };
 }//namespace sources
 }//namespace griddyn
-
-#endif
-

@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef DELAYBLOCK_H_
-#define DELAYBLOCK_H_
 #pragma once
 
 #include "../Block.h"
@@ -74,4 +72,3 @@ class delayBlock : public Block
 
 }  // namespace blocks
 }  // namespace griddyn
-#endif  // DELAYBLOCK_H_

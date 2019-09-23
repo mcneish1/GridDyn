@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef WORKQUEUE_H_
-#define WORKQUEUE_H_
 #pragma once
 
 #include "simpleQueue.hpp"
@@ -319,5 +317,3 @@ class workQueue
     std::condition_variable queueCondition;  //!< condition variable for waking the threads
     std::atomic<bool> halt{false};  //!< flag indicating the threads should halt
 };
-
-#endif

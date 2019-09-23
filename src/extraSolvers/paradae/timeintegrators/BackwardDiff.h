@@ -10,8 +10,7 @@
 * LLNS Copyright End
 */
 
-#ifndef BackwardDiff_h
-#define BackwardDiff_h
+#pragma once
 
 #include <list>
 #include "math/Vector.h"
@@ -98,5 +97,3 @@ public:
 };
 } // namespace paradae
 } // namespace griddyn
-
-#endif

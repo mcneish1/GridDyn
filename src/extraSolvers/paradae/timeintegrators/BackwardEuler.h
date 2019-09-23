@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef BackwardEuler_h
-#define BackwardEuler_h
+
+#pragma once
 
 #include "RungeKutta_DIRK.h"
 namespace griddyn {
@@ -30,5 +30,3 @@ public:
 };
 } // namespace paradae
 } // namespace griddyn
-
-#endif

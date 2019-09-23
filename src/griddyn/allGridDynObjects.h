@@ -10,9 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef ALL_GD_OBJECTS
-#define ALL_GD_OBJECTS
-
 #include "Block.h"
 #include "Exciter.h"
 #include "GenModel.h"
@@ -31,5 +28,3 @@
 #include "loads/zipLoad.h"
 #include "measurement/collector.h"
 #include "relays/zonalRelay.h"
-
-#endif

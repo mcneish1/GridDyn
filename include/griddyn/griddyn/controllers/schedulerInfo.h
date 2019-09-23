@@ -10,8 +10,7 @@
 * LLNS Copyright End
 */
 
-#ifndef SCHEDULERINFO_H_
-#define SCHEDULERINFO_H_
+#pragma once
 
 #include "griddyn/gridDynDefinitions.hpp"
 
@@ -63,5 +62,3 @@ bool operator!= (const tsched &td1, coreTime timeC);
 
 
 }//namespace griddyn
-
-#endif

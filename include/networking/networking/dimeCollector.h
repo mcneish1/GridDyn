@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef DIME_COLLECTOR_HEADER_
-#define DIME_COLLECTOR_HEADER_
+#pragma once
 
 #include "griddyn/measurement/collector.h"
 
@@ -46,4 +45,3 @@ class dimeCollector : public collector
 
 }  // namespace dimeLib
 }  // namespace griddyn
-#endif

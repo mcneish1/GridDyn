@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef paradaeArrayData_h
-#define paradaeArrayData_h
+
+#pragma once
 
 #include "utilities/matrixData.hpp"
 #include "math/SparseMatrix.h"
@@ -38,5 +38,3 @@ class paradaeArrayData : public matrixData<double>
 };
 } // namespace paradae
 } // namespace griddyn
-
-#endif

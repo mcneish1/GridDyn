@@ -123,7 +123,6 @@ griddyn_core_dep = declare_dependency(
 
 griddyn_coupling_inc = include_directories('include/coupling')
 griddyn_coupling_lib = library('griddyn_coupling', [
-        'src/coupling/GhostSwingBus.cpp',
         'src/coupling/GhostSwingBusManager.cpp',
         'src/coupling/MpiService.cpp',
     ],

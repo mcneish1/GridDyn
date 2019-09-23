@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef STATE_GRABBER_H_
-#define STATE_GRABBER_H_
 #pragma once
 
 #include "griddyn/events/eventInterface.hpp"
@@ -188,5 +186,3 @@ class stateOpGrabber : public stateGrabber
 };
 
 }  // namespace griddyn
-
-#endif

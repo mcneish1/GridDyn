@@ -9,8 +9,8 @@
  * For details, see the LICENSE file.
  * LLNS Copyright End
  */
-#ifndef CONTROL_RELAY_H_
-#define CONTROL_RELAY_H_
+
+#pragma once
 
 #include "griddyn/Link.h"  //some special features for links
 #include "griddyn/Relay.h"
@@ -113,5 +113,3 @@ class controlRelay : public Relay
 };
 }  // namespace relays
 }  // namespace griddyn
-
-#endif

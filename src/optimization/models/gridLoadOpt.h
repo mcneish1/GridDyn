@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef GRIDLOADOPT_H_
-#define GRIDLOADOPT_H_
+#pragma once
 
 // headers
 #include "optimization/gridOptObject.h"
@@ -85,4 +84,3 @@ class gridLoadOpt : public gridOptObject
 };
 
 }  // namespace griddyn
-#endif

@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef RungeKutta_DIRK_h
-#define RungeKutta_DIRK_h
+
+#pragma once
 
 #include "RungeKutta_Implicit.h"
 namespace griddyn {
@@ -33,5 +33,3 @@ public:
 };
 } // namespace paradae
 } // namespace griddyn
-
-#endif

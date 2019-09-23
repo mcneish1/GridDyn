@@ -10,8 +10,8 @@
  * LLNS Copyright End
  */
 
-#ifndef GRIDSECONDARY_H_
-#define GRIDSECONDARY_H_
+#pragma once
+
 #include "gridComponent.h"
 
 namespace griddyn
@@ -163,4 +163,3 @@ class gridSecondary : public gridComponent
 };
 
 }  // namespace griddyn
-#endif

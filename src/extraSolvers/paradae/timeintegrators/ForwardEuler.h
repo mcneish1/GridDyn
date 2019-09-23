@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef ForwardEuler_h
-#define ForwardEuler_h
+
+#pragma once
 
 #include "RungeKutta_Explicit.h"
 namespace griddyn {
@@ -30,5 +30,3 @@ public:
 };
 } // namespace paradae
 } // namespace griddyn
-
-#endif

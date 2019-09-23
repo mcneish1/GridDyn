@@ -10,9 +10,7 @@
 * LLNS Copyright End
 */
 
-#ifndef GRID_HVDC_H_
-#define GRID_HVDC_H_
-
+#pragma once
 
 #include "subsystem.h"
 
@@ -51,4 +49,3 @@ protected:
 };
 }//namespace links
 }//namespace griddyn
-#endif

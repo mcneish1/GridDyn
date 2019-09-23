@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef Gauss6_h
-#define Gauss6_h
+
+#pragma once
 
 #include "RungeKutta_Implicit.h"
 namespace griddyn {
@@ -32,5 +32,3 @@ public:
 };
 } // namespace paradae
 } // namespace griddyn
-
-#endif

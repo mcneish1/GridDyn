@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef BLOCKLIBRARY_H_
-#define BLOCKLIBRARY_H_
 /** @file
 @brief helper header file defining all the different block types
 */
@@ -27,5 +25,3 @@
 #include "nullBlock.h"
 #include "pidBlock.h"
 #include "transferFunctionBlock.h"
-
-#endif

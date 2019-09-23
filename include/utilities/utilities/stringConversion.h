@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef STRINGCONVERSION_H_
-#define STRINGCONVERSION_H_
+#pragma once
 
 #include "utilities/charMapper.h"
 #include "stringOps.h"
@@ -208,5 +207,3 @@ std::vector<X> str2vector (const stringVector &tokens, const X defValue)
     }
     return av;
 }
-
-#endif

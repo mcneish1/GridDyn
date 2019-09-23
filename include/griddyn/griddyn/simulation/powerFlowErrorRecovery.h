@@ -10,10 +10,7 @@
 * LLNS Copyright End
 */
 
-#ifndef POWER_FLOW_ERROR_RECOVERY_H_
-#define POWER_FLOW_ERROR_RECOVERY_H_
-
-
+#pragma once
 
 #include <memory>
 
@@ -76,5 +73,3 @@ protected:
 };
 
 }//namespace griddyn
-
-#endif

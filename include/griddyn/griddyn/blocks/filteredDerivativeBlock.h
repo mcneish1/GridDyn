@@ -10,9 +10,8 @@
  * LLNS Copyright End
  */
 
-#ifndef FILTERED_DERIVATIVE_BLOCK_H_
-#define FILTERED_DERIVATIVE_BLOCK_H_
 #pragma once
+
 #include "griddyn/Block.h"
 
 namespace griddyn
@@ -68,5 +67,3 @@ class filteredDerivativeBlock : public Block
 };
 }  // namespace blocks
 }  // namespace griddyn
-
-#endif  // FILTERED_DERIVATIVE_BLOCK_H_

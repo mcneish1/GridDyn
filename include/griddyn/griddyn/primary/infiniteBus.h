@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef INFINITEBUS_H_
-#define INFINITEBUS_H_
+#pragma once
 
 #include "griddyn/gridBus.h"
 namespace griddyn
@@ -63,4 +62,3 @@ class infiniteBus : public gridBus
 };
 
 }  // namespace griddyn
-#endif

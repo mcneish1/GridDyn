@@ -10,8 +10,7 @@
 * LLNS Copyright End
 */
 
-#ifndef RANDOM_SOURCE_H_
-#define RANDOM_SOURCE_H_
+#pragma once
 
 #include "griddyn/sources/rampSource.h"
 namespace utilities
@@ -86,6 +85,3 @@ private:
 };
 }//namespace sources
 }//namespace griddyn
-
-#endif
-

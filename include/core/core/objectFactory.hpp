@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef GD_OBJECT_FACTORY_H_
-#define GD_OBJECT_FACTORY_H_
+#pragma once
 
 #include "core/coreObject.h"
 #include <map>
@@ -178,4 +177,3 @@ class coreObjectFactory
     fMap m_factoryMap;  //!< the main map from string to the typeFactory
 };
 }  // namespace griddyn
-#endif

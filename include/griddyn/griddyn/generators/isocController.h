@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef ISOCCONTROLLER_H_
-#define ISOCCONTROLLER_H_
+#pragma once
 
 #include "griddyn/gridSubModel.h"
 namespace griddyn
@@ -64,4 +63,3 @@ class isocController : public gridSubModel
 };
 
 }  // namespace griddyn
-#endif

@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef Newton_h
-#define Newton_h
+
+#pragma once
 
 #include "common/def.h"
 #include "Solver.h"
@@ -29,5 +29,3 @@ public:
 };
 } // namespace paradae
 } // namespace griddyn
-
-#endif

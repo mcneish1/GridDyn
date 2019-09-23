@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef ImpTrapezoidal_h
-#define ImpTrapezoidal_h
+
+#pragma once
 
 #include "RungeKutta_DIRK.h"
 namespace griddyn {
@@ -31,5 +31,3 @@ public:
 };
 } // namespace paradae
 } // namespace griddyn
-
-#endif

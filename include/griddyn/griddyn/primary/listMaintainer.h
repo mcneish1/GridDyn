@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef LISTMAINTAINER_H_
-#define LISTMAINTAINER_H_
+#pragma once
 
 #include <functional>
 #include <vector>
@@ -102,4 +101,3 @@ class listMaintainer
 };
 
 }  // namespace griddyn
-#endif

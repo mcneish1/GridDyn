@@ -10,8 +10,6 @@
  * LLNS Copyright End
 */
 
-#ifndef FUNCTION_BLOCK_H_
-#define FUNCTION_BLOCK_H_
 #pragma once
 
 #include "../Block.h"
@@ -67,5 +65,3 @@ protected:
 };
 }//namespace blocks
 }//namespace griddyn
-#endif //FUNCTION_BLOCK_H_
-

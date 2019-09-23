@@ -10,9 +10,7 @@
 * LLNS Copyright End
 */
 
-#ifndef ZBREAKER_H_
-#define ZBREAKER_H_
-
+#pragma once
 
 #include "griddyn/Link.h"
 
@@ -61,4 +59,3 @@ protected:
 
 }//namespace links
 }//namespace griddyn
-#endif

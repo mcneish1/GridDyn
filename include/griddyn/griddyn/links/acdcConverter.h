@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef GRID_ACDCCONVERTER_H_
-#define GRID_ACDCCONVERTER_H_
+#pragma once
 
 #include "griddyn/Link.h"
 #include "core/coreOwningPtr.hpp"
@@ -155,4 +154,3 @@ class acdcConverter : public Link
 
 }  // namespace links
 }  // namespace griddyn
-#endif

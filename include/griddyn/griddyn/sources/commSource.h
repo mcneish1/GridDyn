@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef COMM_SOURCE_H_
-#define COMM_SOURCE_H_
+#pragma once
 
 #include "griddyn/comms/commManager.h"
 #include "rampSource.h"
@@ -58,5 +57,3 @@ class commSource : public rampSource
 
 }  // namespace sources
 }  // namespace griddyn
-
-#endif

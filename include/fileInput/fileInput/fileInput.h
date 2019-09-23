@@ -13,8 +13,7 @@
 /** @file
 define some functions and operations for configuring file reader operations and loading files
 */
-#ifndef GRIDDYNINPUT_H_
-#define GRIDDYNINPUT_H_
+
 #pragma once
 
 #include "griddyn/gridDynDefinitions.hpp"
@@ -155,4 +154,3 @@ void addToParent (coreObject *objectToAdd, coreObject *parentObject);
 void addToParentRename (coreObject *objectToAdd, coreObject *parentObject);
 
 }  // namespace griddyn
-#endif

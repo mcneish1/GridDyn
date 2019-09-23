@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef DormPrince_45_h
-#define DormPrince_45_h
+
+#pragma once
 
 #include "RungeKutta_Explicit.h"
 namespace griddyn {
@@ -37,5 +37,3 @@ public:
 };
 } // namespace paradae
 } // namespace griddyn
-
-#endif

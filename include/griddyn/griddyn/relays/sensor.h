@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef SENSOR_RELAY_H_
-#define SENSOR_RELAY_H_
+#pragma once
 
 #include "griddyn/Relay.h"
 
@@ -193,4 +192,3 @@ class sensor : public Relay
     double getBlockInput (index_t blockNum, const IOdata &inputs) const;
 };
 }  // namespace griddyn
-#endif

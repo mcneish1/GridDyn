@@ -9,8 +9,8 @@
  * For details, see the LICENSE file.
  * LLNS Copyright End
  */
-#ifndef LOAD_RELAY_H_
-#define LOAD_RELAY_H_
+
+#pragma once
 
 #include "griddyn/Relay.h"
 namespace griddyn
@@ -54,4 +54,3 @@ class loadRelay : public Relay
 };
 }  // namespace relays
 }  // namespace griddyn
-#endif

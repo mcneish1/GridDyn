@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef DBlockTriMatrix_h
-#define DBlockTriMatrix_h
+
+#pragma once
 
 #include "VirtualMatrix.h"
 #include "DenseMatrix.h"
@@ -51,5 +51,3 @@ public:
 };
 } // namespace paradae
 } // namespace griddyn
-
-#endif

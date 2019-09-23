@@ -10,8 +10,6 @@
 * LLNS Copyright End
 */
 
-#ifndef DATA_DICTIONARY_H_
-#define DATA_DICTIONARY_H_
 #pragma once
 
 #include "mapOps.hpp"
@@ -65,10 +63,10 @@ class dataDictionary
         }
     }
 	/** thread safe function to get the values */
-    dataType query (keyType key) const 
-	{ 
+    dataType query (keyType key) const
+	{
 		std::lock_guard<std::mutex> updateLock(datalock);
-		return mapFind (Vals, key, dataType ()); 
+		return mapFind (Vals, key, dataType ());
 	}
 	/** same as query but not really threadsafe on read
 	@details intended to be used if all the writes happen then just reads in a multithreaded context
@@ -77,4 +75,3 @@ class dataDictionary
 };
 
 }  // namespace utilities
-#endif

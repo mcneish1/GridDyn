@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef RungeKutta_hxx
-#define RungeKutta_hxx
+
+#pragma once
 
 #include <list>
 #include "math/Vector.h"
@@ -69,5 +69,3 @@ public:
 };
 } // namespace paradae
 } // namespace griddyn
-
-#endif

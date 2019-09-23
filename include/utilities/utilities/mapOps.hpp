@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef MAP_OPS_H_
-#define MAP_OPS_H_
 #pragma once
 
 #include "optionalDef.hpp"
@@ -53,4 +51,3 @@ utilities::optional<X2> mapFind (const std::unordered_map<X1, X2> &mapS, const X
     }
     return {};
 }
-#endif

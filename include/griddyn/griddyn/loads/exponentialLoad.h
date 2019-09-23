@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef EXPONENTIALLOAD_H_
-#define EXPONENTIALLOAD_H_
+#pragma once
 
 #include "../Load.h"
 
@@ -58,5 +57,3 @@ class exponentialLoad : public Load
 };
 }  // namespace loads
 }  // namespace griddyn
-
-#endif

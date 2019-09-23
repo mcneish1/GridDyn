@@ -10,8 +10,7 @@
 * LLNS Copyright End
 */
 
-#ifndef TRANSFER_FUNCTION_BLOCK_H_
-#define TRANSFER_FUNCTION_BLOCK_H_
+#pragma once
 
 #include "griddyn/Block.h"
 
@@ -71,4 +70,3 @@ public:
 };
 }//namespace blocks
 }//namespace griddyn
-#endif

@@ -10,6 +10,7 @@
  * LLNS Copyright End
  */
 #pragma once
+
 #include "griddyn/Generator.h"
 
 namespace griddyn

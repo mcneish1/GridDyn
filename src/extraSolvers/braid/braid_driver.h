@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef braid_driver_h
-#define braid_driver_h
+
+#pragma once
 
 #include <list>
 #include <map>
@@ -92,4 +92,3 @@ int my_TimeGrid(braid_App app, braid_Real *ta, braid_Int *ilower, braid_Int *iup
 
 } //namespace braid
 } //namespace griddyn
-#endif

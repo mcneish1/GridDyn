@@ -9,8 +9,8 @@
  * For details, see the LICENSE file.
  * LLNS Copyright End
  */
-#ifndef ZONAL_RELAY_H_
-#define ZONAL_RELAY_H_
+
+#pragma once
 
 #include "griddyn/Relay.h"
 
@@ -67,4 +67,3 @@ class zonalRelay : public Relay
 };
 }  // namespace relays
 }  // namespace griddyn
-#endif

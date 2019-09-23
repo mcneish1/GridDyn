@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef _ARKODE_SOLVER_INTERFACE_H_
-#define _ARKODE_SOLVER_INTERFACE_H_
+#pragma once
 
 #include "sundialsInterface.h"
 
@@ -82,5 +81,3 @@ class arkodeInterface : public sundialsInterface
 
 }  // namespace solvers
 }  // namespace griddyn
-
-#endif

@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef _MATRIX_DATA_SPARSE_H_
-#define _MATRIX_DATA_SPARSE_H_
 #pragma once
 
 #include "matrixData.hpp"
@@ -242,5 +240,3 @@ std::vector<index_t> findMissing (matrixDataSparse<ValueT> &md);
 
 template <class ValueT>
 std::vector<std::vector<index_t>> findRank (matrixDataSparse<ValueT> &md);
-
-#endif

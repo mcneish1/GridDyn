@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef FREQSENSITIVELOAD_H_
-#define FREQSENSITIVELOAD_H_
+#pragma once
 
 #include "../Load.h"
 namespace griddyn
@@ -79,4 +78,3 @@ class frequencySensitiveLoad : public Load
 
 }  // namespace loads
 }  // namespace griddyn
-#endif

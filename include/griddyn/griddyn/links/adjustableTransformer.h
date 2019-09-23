@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef ADJUSTABLE_LINKS_H_
-#define ADJUSTABLE_LINKS_H_
+#pragma once
 
 #include "acLine.h"
 
@@ -209,4 +208,3 @@ class adjustableTransformer : public acLine
 
 }  // namespace links
 }  // namespace griddyn
-#endif

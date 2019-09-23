@@ -10,8 +10,6 @@
 * LLNS Copyright End
 */
 
-#ifndef BUSCONTROLS_H_
-#define BUSCONTROLS_H_
 #pragma once
 
 #include "griddyn/gridDynDefinitions.hpp"
@@ -92,9 +90,4 @@ public:
   void checkMerge ();
 };
 
-
-
-
-
 }//namespace griddyn
-#endif

@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef timer_h
-#define timer_h
+
+#pragma once
 
 #include <map>
 #include <string>
@@ -84,5 +84,3 @@ extern Timer global_timer;
 
 } //namespace paradae
 } //namespace griddyn
-
-#endif

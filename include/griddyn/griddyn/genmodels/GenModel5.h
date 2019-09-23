@@ -10,8 +10,7 @@
 * LLNS Copyright End
 */
 
-#ifndef GENMODEL5_H_
-#define GENMODEL5_H_
+#pragma once
 
 #include "GenModel4.h"
 
@@ -51,4 +50,3 @@ public:
 
 }//namespace genmodels
 }//namespace griddyn
-#endif //GENMODEL5_H_

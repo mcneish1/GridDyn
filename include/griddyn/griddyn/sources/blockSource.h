@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef BLOCK_SOURCE_H_
-#define BLOCK_SOURCE_H_
+#pragma once
 
 #include "griddyn/Source.h"
 
@@ -96,5 +95,3 @@ class blockSource : public Source
 };
 }  // namespace sources
 }  // namespace griddyn
-
-#endif

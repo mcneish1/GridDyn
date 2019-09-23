@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef CONTINUATION_H_
-#define CONTINUATION_H_
+#pragma once
 
 #include "griddyn/events/Event.h"
 #include "griddyn/measurement/collector.h"
@@ -56,4 +55,3 @@ public:
 };
 
 }//namespace griddyn
-#endif

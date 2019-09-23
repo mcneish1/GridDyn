@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef ELEMENT_READER_TEMPLATES_H_
-#define ELEMENT_READER_TEMPLATES_H_
 #pragma once
 
 #include "core/coreExceptions.h"
@@ -313,5 +311,3 @@ COMPONENT *ElementReader (std::shared_ptr<readerElement> &element,
 }
 
 }  // namespace griddyn
-
-#endif

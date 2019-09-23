@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef GRABBER_INTERPRETER_H_
-#define GRABBER_INTERPRETER_H_
+#pragma once
 
 #include "utilities/stringConversion.h"
 
@@ -381,4 +380,3 @@ class grabberInterpreter
 };
 
 }  // namespace griddyn
-#endif

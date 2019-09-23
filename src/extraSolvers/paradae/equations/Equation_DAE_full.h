@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef Equation_DAE_full_h
-#define Equation_DAE_full_h
+
+#pragma once
 
 #include "Equation_DAE.h"
 
@@ -24,5 +24,3 @@ public:
 };
 } // namespace paradae
 } // namespace griddyn
-
-#endif

@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef GRIDDYN_COLLECTOR_H_
-#define GRIDDYN_COLLECTOR_H_
+#pragma once
 
 #include "griddyn/events/eventInterface.hpp"
 #include "core/helperObject.h"
@@ -187,4 +186,3 @@ class collector : public helperObject, public eventInterface, public objectOpera
 std::unique_ptr<collector> makeCollector (const std::string &type, const std::string &name = "");
 
 }  // namespace griddyn
-#endif

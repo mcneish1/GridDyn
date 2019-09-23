@@ -10,8 +10,7 @@
 * LLNS Copyright End
 */
 
-#ifndef TX_THERMAL_MODEL_H_
-#define TX_THERMAL_MODEL_H_
+#pragma once
 
 #include "griddyn/relays/sensor.h"
 
@@ -68,4 +67,3 @@ public:
 
 }//namespace extra
 }//namespace griddyn
-#endif

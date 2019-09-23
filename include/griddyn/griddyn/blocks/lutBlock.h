@@ -10,8 +10,6 @@
  * LLNS Copyright End
 */
 
-#ifndef LUT_BLOCK_H_
-#define LUT_BLOCK_H_
 #pragma once
 
 #include "griddyn/Block.h"
@@ -51,4 +49,3 @@ public:
 };
 }//namespace blocks
 }//namespace griddyn
-#endif //LUT_BLOCK_H_

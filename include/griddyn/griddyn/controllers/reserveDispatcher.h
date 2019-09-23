@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef RESERVEDISPATCHER_H_
-#define RESERVEDISPATCHER_H_
 #pragma once
 
 #include "griddyn/gridSubModel.h"
@@ -73,4 +71,3 @@ class reserveDispatcher : public coreObject
 };
 
 }  // namespace griddyn
-#endif

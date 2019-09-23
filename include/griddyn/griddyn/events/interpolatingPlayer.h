@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 #pragma once
-#ifndef GRIDDYN_INTERPOLATING_PLAYER_H_
-#define GRIDDYN_INTERPOLATING_PLAYER_H_
 
 // headers
 //#include "gridDynSimulation.h"
@@ -55,4 +53,3 @@ class interpolatingPlayer : public Player
 };
 }  // namespace events
 }  // namespace griddyn
-#endif

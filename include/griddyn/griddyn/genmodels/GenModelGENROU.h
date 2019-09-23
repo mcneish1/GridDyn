@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef GENMODELGENROU_H_
-#define GENMODELGENROU_H_
+#pragma once
 
 #include "GenModel5.h"
 
@@ -49,4 +48,3 @@ class GenModelGENROU : public GenModel5
 
 }  // namespace genmodels
 }  // namespace griddyn
-#endif  // GENMODELGENROU_H_

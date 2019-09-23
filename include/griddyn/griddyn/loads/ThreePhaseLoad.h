@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef GRIDLOAD3PHASE_H_
-#define GRIDLOAD3PHASE_H_
+#pragma once
 
 #include "../Load.h"
 namespace griddyn
@@ -108,4 +107,3 @@ class ThreePhaseLoad : public Load
 };
 }  // namespace loads
 }  // namespace griddyn
-#endif

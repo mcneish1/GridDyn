@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef GRIDDYN_COMPOUND_EVENT_H_
-#define GRIDDYN_COMPOUND_EVENT_H_
 #pragma once
 
 #include "griddyn/events/Event.h"
@@ -54,4 +52,3 @@ class compoundEvent : public Event
 };
 }  // namespace events
 }  // namespace griddyn
-#endif

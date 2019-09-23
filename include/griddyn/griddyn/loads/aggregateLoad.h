@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef COMPOSITELOAD_H_
-#define COMPOSITELOAD_H_
+#pragma once
 
 #include "zipLoad.h"
 namespace griddyn
@@ -81,4 +80,3 @@ class aggregateLoad : public zipLoad
 };
 }  // namespace loads
 }  // namespace griddyn
-#endif

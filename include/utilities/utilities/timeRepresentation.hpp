@@ -11,9 +11,9 @@
 
 /* @file  define a representation of time that works well for simulation environments*/
 // the include guards are left in place as this file might be used in multiple places
-#ifndef TIME_REPRESENTATION_H_
-#define TIME_REPRESENTATION_H_
+
 #pragma once
+
 #include <chrono>
 #include <cmath>
 #include <cstdint>
@@ -688,5 +688,3 @@ inline bool operator<= (double lhs, TimeRepresentation<Tconv> t1)
 {
     return (TimeRepresentation<Tconv> (lhs) <= t1);
 }
-
-#endif

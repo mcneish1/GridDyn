@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef Cash_34_h
-#define Cash_34_h
+
+#pragma once
 
 #include "RungeKutta_SDIRK.h"
 
@@ -38,5 +38,3 @@ public:
 };
 } // namespace paradae
 } // namespace griddyn
-
-#endif

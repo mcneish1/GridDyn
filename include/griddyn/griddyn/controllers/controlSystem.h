@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef CONTROLSYSTEM_H_
-#define CONTROLSYSTEM_H_
+#pragma once
 
 #include "griddyn/gridSubModel.h"
 
@@ -71,4 +70,3 @@ class controlSystem : public gridSubModel
 };
 
 }  // namespace griddyn
-#endif

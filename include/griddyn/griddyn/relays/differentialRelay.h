@@ -9,6 +9,9 @@
  * For details, see the LICENSE file.
  * LLNS Copyright End
  */
+
+#pragma once
+
 #include "griddyn/Relay.h"
 #include "griddyn/comms/commMessage.h"
 namespace griddyn

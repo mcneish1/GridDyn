@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef FUSE_RELAY_H_
-#define FUSE_RELAY_H_
+#pragma once
 
 #include "griddyn/Relay.h"
 #include <cstdint>
@@ -93,4 +92,3 @@ class fuse : public Relay
 };
 }  // namespace relays
 }  // namespace griddyn
-#endif

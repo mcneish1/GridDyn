@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef UTILITY_RANDOM_H_
-#define UTILITY_RANDOM_H_
+#pragma once
 
 #include <memory>
 #include <random>
@@ -159,4 +158,3 @@ class randomDistributionObject1<void> : public distributionObject
 gridRandom::dist_type_t getDist (const std::string &dist_name);
 
 }  // namespace utilities
-#endif

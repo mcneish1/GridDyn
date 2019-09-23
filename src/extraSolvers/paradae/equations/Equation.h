@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef Equation_h
-#define Equation_h
+
+#pragma once
 
 #include "common/def.h"
 #include "math/Vector.h"
@@ -135,5 +135,3 @@ public:
 };
 } // namespace paradae
 } // namespace griddyn
-
-#endif

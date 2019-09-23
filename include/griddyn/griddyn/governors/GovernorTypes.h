@@ -10,12 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef GRIDDYN_OTHER_GOVERNORS_H_
-#define GRIDDYN_OTHER_GOVERNORS_H_
-
 #include "griddyn/governors/GovernorHydro.h"
 #include "griddyn/governors/GovernorReheat.h"
 #include "griddyn/governors/GovernorSteamTCSR.h"
 #include "griddyn/governors/GovernorTgov1.h"
-
-#endif

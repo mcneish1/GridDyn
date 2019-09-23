@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef EVENTINTERFACE_H_
-#define EVENTINTERFACE_H_
 #pragma once
 
 #include "griddyn/gridDynDefinitions.hpp"
@@ -57,4 +55,3 @@ class eventInterface
 };
 
 }  // namespace griddyn
-#endif

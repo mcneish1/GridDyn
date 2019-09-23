@@ -10,10 +10,6 @@
 * LLNS Copyright End
 */
 
-
-#ifndef YAML_ELEMENT_H_
-#define YAML_ELEMENT_H_
-
 #pragma once
 #include "yaml-cpp/yaml.h"
 class yamlElement
@@ -43,11 +39,9 @@ public:
 		}
 		return true;
 	}
-	
+
 private:
 	YAML::Node element; //!< pointer to the actual YAML element
 	bool arraytype = false;		//!< indicator if the element is a sequence
 
 };
-
-#endif

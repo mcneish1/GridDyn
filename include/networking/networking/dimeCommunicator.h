@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef DIME_COMMUNICATOR_HEADER_
-#define DIME_COMMUNICATOR_HEADER_
+#pragma once
 
 #include "zmqCommunicator.h"
 
@@ -46,4 +45,3 @@ class dimeCommunicator : public zmqInterface::zmqCommunicator
 
 }  // namespace dimeLib
 }  // namespace griddyn
-#endif

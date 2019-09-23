@@ -9,8 +9,7 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef STRING_TO_CMD_LINE
-#define STRING_TO_CMD_LINE
+
 #pragma once
 
 #include <string>
@@ -40,4 +39,3 @@ class StringToCmdLine
     int argCount = 0;                   //!< the number of arguments
 };
 } // namespace utilities
-#endif

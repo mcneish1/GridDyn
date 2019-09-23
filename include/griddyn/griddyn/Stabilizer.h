@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef GRIDDYNSTABILIZER_H_
-#define GRIDDYNSTABILIZER_H_
+#pragma once
 
 #include "gridSubModel.h"
 
@@ -55,5 +54,3 @@ class Stabilizer : public gridSubModel
 };
 
 }  // namespace griddyn
-
-#endif  // GRIDDYNPSS_H_

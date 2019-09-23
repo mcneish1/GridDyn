@@ -19,8 +19,7 @@ Lawrence Livermore National Laboratory, operated by Lawrence Livermore National 
  * LLNS Copyright End
  */
 
-#ifndef ZMQ_CONTEXT_MANAGER_HEADER_
-#define ZMQ_CONTEXT_MANAGER_HEADER_
+#pragma once
 
 #include <map>
 #include <memory>
@@ -66,4 +65,3 @@ class zmqContextManager
 };
 
 }  // namespace zmqlib
-#endif

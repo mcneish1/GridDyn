@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef IPoly_h
-#define IPoly_h
+
+#pragma once
 
 #include "common/def.h"
 #include "Vector.h"
@@ -42,5 +42,3 @@ public:
 };
 } // namespace paradae
 } // namespace griddyn
-
-#endif

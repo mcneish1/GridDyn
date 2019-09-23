@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef GRIDDYN_RECORDER_H_
-#define GRIDDYN_RECORDER_H_
+#pragma once
 
 #include "collector.h"
 #include "utilities/timeSeriesMulti.hpp"
@@ -90,4 +89,3 @@ class Recorder : public collector
 };
 
 }  // namespace griddyn
-#endif

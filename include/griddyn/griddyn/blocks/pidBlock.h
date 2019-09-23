@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef PID_BLOCK_H_
-#define PID_BLOCK_H_
 #pragma once
 
 #include "griddyn/Block.h"
@@ -70,5 +68,3 @@ class pidBlock : public Block
 
 }//namespace blocks
 }//namespace griddyn
-
-#endif  // PID_BLOCK_H_

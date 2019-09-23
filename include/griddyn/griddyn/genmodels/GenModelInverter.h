@@ -10,8 +10,7 @@
 * LLNS Copyright End
 */
 
-#ifndef GENMODELINVERTER_H_
-#define GENMODELINVERTER_H_
+#pragma once
 
 #include "griddyn/GenModel.h"
 
@@ -88,4 +87,3 @@ private:
 
 }//namespace genmodels
 }//namespace griddyn
-#endif //GRIDDYNGENMODEL_H_

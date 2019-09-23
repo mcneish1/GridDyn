@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef BogaSham_23_h
-#define BogaSham_23_h
+
+#pragma once
 
 #include "RungeKutta_Explicit.h"
 namespace griddyn {
@@ -34,5 +34,3 @@ public:
 };
 } // namespace paradae
 } // namespace griddyn
-
-#endif

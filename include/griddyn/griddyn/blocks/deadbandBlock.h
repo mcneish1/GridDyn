@@ -10,9 +10,8 @@
  * LLNS Copyright End
  */
 
-#ifndef DEADBANDBLOCK_H_
-#define DEADBANDBLOCK_H_
 #pragma once
+
 #include "../Block.h"
 
 namespace griddyn
@@ -114,4 +113,3 @@ class deadbandBlock : public Block
 
 }  // namespace blocks
 }  // namespace griddyn
-#endif  // DEADBANDBLOCK_H_

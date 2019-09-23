@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef GOVERNOR_REHEAT_H_
-#define GOVERNOR_REHEAT_H_
 #pragma once
 
 #include "griddyn/Governor.h"
@@ -52,5 +50,3 @@ class GovernorReheat : public Governor
 
 }  // namespace governors
 }  // namespace griddyn
-
-#endif  // GOVERNOR_REHEAT_H_

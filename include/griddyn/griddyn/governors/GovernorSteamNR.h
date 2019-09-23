@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef GOVERNOR_IEEE_SIMPLE_H_
-#define GOVERNOR_IEEE_SIMPLE_H_
 #pragma once
 
 #include "GovernorIeeeSimple.h"
@@ -49,5 +47,3 @@ class GovernorSteamNR : public GovernorIeeeSimple
 
 }  // namespace governors
 }  // namespace griddyn
-
-#endif  // GOVERNOR_IEEE_SIMPLE_H_

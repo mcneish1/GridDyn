@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef IVander_h
-#define IVander_h
+
+#pragma once
 
 #include "DenseMatrix.h"
 #include "Vector.h"
@@ -31,5 +31,3 @@ public:
 };
 } // namespace paradae
 } // namespace griddyn
-
-#endif

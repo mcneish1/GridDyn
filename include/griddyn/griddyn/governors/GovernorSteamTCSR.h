@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef GOVERNORE_STEAM_TCSR_H_
-#define GOVERNORE_STEAM_TCSR_H_
 #pragma once
 
 #include "GovernorSteamNR.h"
@@ -54,5 +52,3 @@ class GovernorSteamTCSR : public GovernorSteamNR
 
 }  // namespace governors
 }  // namespace griddyn
-
-#endif  // GOVERNORE_STEAM_TCSR_H_

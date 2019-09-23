@@ -10,8 +10,7 @@
 * LLNS Copyright End
 */
 
-#ifndef ZMQ_COMMUNICATOR_HEADER_
-#define ZMQ_COMMUNICATOR_HEADER_
+#pragma once
 
 #include "griddyn/comms/Communicator.h"
 #include "zmqLibrary/zmqSocketDescriptor.h"
@@ -37,14 +36,14 @@ public:
 	explicit zmqCommunicator(std::uint64_t id);
 	/** destructor*/
 	virtual ~zmqCommunicator();
-	
+
 	virtual std::unique_ptr<Communicator> clone() const override;
 
 	virtual void cloneTo(Communicator *comm) const override;
 	virtual void transmit(const std::string &destName, std::shared_ptr<commMessage> message) override;
-	
+
 	virtual void transmit(std::uint64_t destID, std::shared_ptr<commMessage> message) override;
-	
+
 	virtual void initialize() override;
 
 	virtual void disconnect() override;
@@ -82,9 +81,8 @@ protected:
 	virtual void addHeader(zmq::multipart_t &msg, std::shared_ptr<commMessage> &message);
 	/** add the body from a regular commMessage*/
 	virtual void addMessageBody(zmq::multipart_t &msg, std::shared_ptr<commMessage> &message);
-	
+
 };
 
 }//namespace zmqInterface
 }//namespace griddyn
-#endif

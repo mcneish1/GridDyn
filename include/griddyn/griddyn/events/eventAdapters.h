@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef EVENTADAPTERS_H_
-#define EVENTADAPTERS_H_
 #pragma once
 
 #include "core/coreObject.h"
@@ -396,4 +394,3 @@ class functionEventAdapter : public eventAdapter
 };
 
 }  // namespace griddyn
-#endif

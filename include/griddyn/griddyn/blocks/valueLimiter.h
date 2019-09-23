@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef VALUE_LIMITER_H_
-#define VALUE_LIMITER_H_
 #pragma once
 
 #include <limits>
@@ -59,4 +57,3 @@ class valueLimiter
 };
 }  // namespace blocks
 }  // namespace griddyn
-#endif

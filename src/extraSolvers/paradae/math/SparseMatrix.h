@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef SparseMatrix_h
-#define SparseMatrix_h
+
+#pragma once
 
 #include "math/VirtualMatrix.h"
 
@@ -56,5 +56,3 @@ public:
 };
 } // namespace paradae
 } // namespace griddyn
-
-#endif

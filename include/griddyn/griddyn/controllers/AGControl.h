@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef AGCONTROL_H_
-#define AGCONTROL_H_
+#pragma once
 
 #include "core/coreOwningPtr.hpp"
 #include "griddyn/gridSubModel.h"
@@ -136,4 +135,3 @@ protected:
 
 */
 }  // namespace griddyn
-#endif

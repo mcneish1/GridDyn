@@ -10,8 +10,7 @@
 * LLNS Copyright End
 */
 
-#ifndef GRID_SUBSYSTEM_H_
-#define GRID_SUBSYSTEM_H_
+#pragma once
 
 #include "griddyn/Link.h"
 
@@ -181,4 +180,3 @@ protected:
 
 
 }//namespace griddyn
-#endif

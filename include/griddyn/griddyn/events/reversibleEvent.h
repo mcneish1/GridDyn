@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef REVERSIBLE_EVENT_H_
-#define REVERSIBLE_EVENT_H_
 #pragma once
 
 #include "griddyn/events/Event.h"
@@ -56,4 +54,3 @@ class reversibleEvent : public Event
 };
 }  // namespace events
 }  // namespace griddyn
-#endif

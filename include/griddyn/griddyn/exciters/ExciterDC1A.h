@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef EXCITER_DC1A_H_
-#define EXCITER_DC1A_H_
+#pragma once
 
 #include "ExciterIEEEtype1.h"
 namespace griddyn
@@ -67,5 +66,3 @@ class ExciterDC1A : public ExciterIEEEtype1
 };
 }  // namespace exciters
 }  // namespace griddyn
-
-#endif  // EXCITER_DC1A_H_

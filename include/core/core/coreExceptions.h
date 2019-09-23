@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef GRIDDYNEXCEPTIONS_H_
-#define GRIDDYNEXCEPTIONS_H_
+#pragma once
 
 #include "core/coreObject.h"
 #include <exception>
@@ -108,4 +107,3 @@ class invalidFileName : public fileOperationError
 };
 
 }  // namespace griddyn
-#endif

@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef FUNCTION_INTERPRETER_H_
-#define FUNCTION_INTERPRETER_H_
+#pragma once
 
 #include <functional>
 #include <string>
@@ -118,5 +117,3 @@ std::function<double(const std::vector<double> &)> getArrayFunction (const std::
 */
 std::function<double(const std::vector<double> &, const std::vector<double> &)>
 get2ArrayFunction (const std::string &functionName);
-
-#endif

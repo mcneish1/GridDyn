@@ -10,8 +10,6 @@
  * LLNS Copyright End
 */
 
-#ifndef INTEGRAL_BLOCK_H_
-#define INTEGRAL_BLOCK_H_
 #pragma once
 
 #include "griddyn/Block.h"
@@ -54,6 +52,3 @@ public:
 };
 }//namespace blocks
 }//namespace griddyn
-
-#endif //INTEGRAL_BLOCK_H_
-

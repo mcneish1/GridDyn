@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef GRIDDYN_CONDITION_H_
-#define GRIDDYN_CONDITION_H_
+#pragma once
 
 #include "griddyn/gridComponent.h"
 #include "core/objectOperatorInterface.hpp"
@@ -223,4 +222,3 @@ class compoundCondition : public Condition
 };
 
 }  // namespace griddyn
-#endif

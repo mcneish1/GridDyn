@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef _MATRIX_DATA_SCALE_H_
-#define _MATRIX_DATA_SCALE_H_
 #pragma once
 
 #include "matrixDataContainer.hpp"
@@ -40,5 +38,3 @@ class matrixDataScale : public matrixDataContainer<ValueT>
     */
     void setScale (ScaleT scaleFactor) { scalingFactor_ = scaleFactor; }
 };
-
-#endif

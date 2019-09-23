@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef COREOBJECTTEMPLATES_H_
-#define COREOBJECTTEMPLATES_H_
+#pragma once
 
 #include "coreObject.h"
 
@@ -111,4 +110,3 @@ void getParamString (const A *cobj,
 }
 
 }  // namespace griddyn
-#endif

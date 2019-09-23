@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef GD_OBJECT_FACTORY_TEMPLATES_H_
-#define GD_OBJECT_FACTORY_TEMPLATES_H_
 #pragma once
 
 #include "objectFactory.hpp"
@@ -433,4 +431,3 @@ A *cloneBaseFactory (const A *bobj, coreObject *obj, objectFactory *cfact)
 }
 
 }  // namespace griddyn
-#endif

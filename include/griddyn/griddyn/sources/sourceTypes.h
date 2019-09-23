@@ -10,9 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef SOURCE_TYPES_H_
-#define SOURCE_TYPES_H_
-
 /** @file
 convenience header file to load up all the other types of sources
 */
@@ -24,5 +21,3 @@ convenience header file to load up all the other types of sources
 #include "grabberSource.h"
 #include "randomSource.h"
 #include "sineSource.h"  //this will also load pulse source
-
-#endif

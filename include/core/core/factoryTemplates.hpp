@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef FACTORY_TEMPLATES_H_
-#define FACTORY_TEMPLATES_H_
 #pragma once
 
 #include <map>
@@ -234,4 +232,3 @@ class childClassFactoryArg : public classFactory<parentClass>
 };
 
 }  // namespace griddyn
-#endif

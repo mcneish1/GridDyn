@@ -11,6 +11,7 @@
  */
 
 #pragma once
+
 #include "commMessage.h"
 
 #include <cereal/types/vector.hpp>

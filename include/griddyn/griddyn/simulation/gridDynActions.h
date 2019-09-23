@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef GRIDDYN_ACTIONS_H_
-#define GRIDDYN_ACTIONS_H_
+#pragma once
 
 #include "griddyn/gridDynDefinitions.hpp"
 
@@ -78,5 +77,3 @@ class gridDynAction
     void reset ();
 };
 }  // namespace griddyn
-
-#endif

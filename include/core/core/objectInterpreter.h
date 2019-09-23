@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef OBJECT_INTERPRETER_H_
-#define OBJECT_INTERPRETER_H_
+#pragma once
 
 #include "core/coreObject.h"
 #include "utilities/units.h"
@@ -70,5 +69,3 @@ meant to target cloning operations where pointers need to be mapped to a new hie
 coreObject *findMatchingObject (coreObject *obj, coreObject *root);
 
 }  // namespace griddyn
-
-#endif

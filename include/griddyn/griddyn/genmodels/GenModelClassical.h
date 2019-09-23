@@ -10,8 +10,7 @@
 * LLNS Copyright End
 */
 
-#ifndef GENMODELCLASSICAL_H_
-#define GENMODELCLASSICAL_H_
+#pragma once
 
 #include "griddyn/GenModel.h"
 
@@ -72,4 +71,3 @@ protected:
 
 }//namespace genmodels
 }//namespace griddyn
-#endif //GENMODELCLASSICAL_H_

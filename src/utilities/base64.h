@@ -10,8 +10,7 @@
 * LLNS Copyright End
 */
 
-#ifndef BASE_64_ENCODING_H_
-#define BASE_64_ENCODING_H_
+#pragma once
 
 #include <string>
 #include <vector>
@@ -33,4 +32,3 @@ std::vector<vType> base64_decode_type(std::string const& encoded_string)
 }
 
 }//namespace utilities
-#endif

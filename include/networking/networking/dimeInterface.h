@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef DIME_INTERFACE_HEADER_
-#define DIME_INTERFACE_HEADER_
+#pragma once
 
 namespace griddyn
 {
@@ -21,5 +20,3 @@ void loadDimeLibrary ();
 
 void loadDimeReaderInfoDefinitions (readerInfo &ri);
 }  // namespace griddyn
-
-#endif

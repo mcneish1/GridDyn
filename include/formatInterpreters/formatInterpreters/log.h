@@ -4,8 +4,8 @@
  * Any differences from the original log.h file are indicated by #if 0
  * and comments.
  */
-#ifndef __LOG_H__
-#define __LOG_H__
+
+#pragma once
 
 #include <cstdio>
 #include <sstream>
@@ -159,13 +159,13 @@ static std::string NowTime()
 {
     const int MAX_LEN = 200;
     char buffer[MAX_LEN];
-    if (GetTimeFormatA(LOCALE_USER_DEFAULT, 0, 0, 
+    if (GetTimeFormatA(LOCALE_USER_DEFAULT, 0, 0,
             "HH':'mm':'ss", buffer, MAX_LEN) == 0)
         return "Error in NowTime()";
 
     char result[100] = {0};
     static DWORD first = GetTickCount();
-    std::sprintf(result, "%s.%03ld", buffer, (long)(GetTickCount() - first) % 1000); 
+    std::sprintf(result, "%s.%03ld", buffer, (long)(GetTickCount() - first) % 1000);
     return result;
 }
 
@@ -183,10 +183,8 @@ static std::string NowTime()
     struct timeval tv;
     gettimeofday(&tv, 0);
     char result[100] = {0};
-    std::sprintf(result, "%s.%03ld", buffer, (long)tv.tv_usec / 1000); 
+    std::sprintf(result, "%s.%03ld", buffer, (long)tv.tv_usec / 1000);
     return result;
 }
 
 #endif //WIN32
-
-#endif //__LOG_H__

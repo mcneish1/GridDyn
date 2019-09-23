@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef LineSearch_h
-#define LineSearch_h
+
+#pragma once
 
 #include "common/def.h"
 #include "math/Vector.h"
@@ -29,5 +29,3 @@ public:
 };
 } // namespace paradae
 } // namespace griddyn
-
-#endif

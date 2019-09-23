@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef VARIABLEGENERATOR_H_
-#define VARIABLEGENERATOR_H_
+#pragma once
 
 #include "DynamicGenerator.h"
 
@@ -84,4 +83,3 @@ class variableGenerator : public DynamicGenerator
 };
 
 }  // namespace griddyn
-#endif

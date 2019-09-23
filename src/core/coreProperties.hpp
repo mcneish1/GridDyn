@@ -10,8 +10,7 @@
 * LLNS Copyright End
 */
 
-#ifndef CORE_PROPERTIES_H_
-#define CORE_PROPERTIES_H_
+#pragma once
 
 #include "core/coreObject.h"
 #include "utilities/dataDictionary.h"
@@ -43,10 +42,3 @@ public:
 		dictionary.erase(obj->getID());
 	}
 };
-/** @brief loads a position object
-*@details I don't know what a grid Position object looks like yet
-@param[in] npos a gridPositionObject
-*/
-//void loadPosition (std::shared_ptr<gridPositionInfo> npos);
-
-#endif

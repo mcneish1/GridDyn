@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef FAULT_RESET_RECOVERY_H_
-#define FAULT_RESET_RECOVERY_H_
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -78,4 +77,3 @@ class faultResetRecovery
 };
 
 }  // namespace griddyn
-#endif

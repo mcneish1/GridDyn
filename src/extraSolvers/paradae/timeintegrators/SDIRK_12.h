@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef SDIRK_12_h
-#define SDIRK_12_h
+
+#pragma once
 
 #include "RungeKutta_SDIRK.h"
 namespace griddyn {
@@ -32,5 +32,3 @@ public:
 };
 } // namespace paradae
 } // namespace griddyn
-
-#endif

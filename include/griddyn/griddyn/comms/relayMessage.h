@@ -11,6 +11,7 @@
  */
 
 #pragma once
+
 #include "griddyn/comms/commMessage.h"
 #include <string>
 

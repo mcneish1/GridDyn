@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef _OPTIM_INTERFACE_H_
-#define _OPTIM_INTERFACE_H_
+#pragma once
 
 #include "griddyn-config.h"
 #include "optHelperClasses.h"
@@ -91,5 +90,3 @@ std::shared_ptr<optimizerInterface> makeOptimizer (gridDynOptimization *gdo, con
 std::shared_ptr<optimizerInterface> makeOptimizer (const std::string &type);
 
 }  // namespace griddyn
-
-#endif

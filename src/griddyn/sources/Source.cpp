@@ -13,7 +13,6 @@
 #include "griddyn/Source.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"
-#include "griddyn/sources/otherSources.h"
 #include "griddyn/sources/sourceTypes.h"
 
 namespace griddyn

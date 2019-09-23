@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef TimeIntegrator_h
-#define TimeIntegrator_h
+
+#pragma once
 
 #include <list>
 #include "common/def.h"
@@ -123,5 +123,3 @@ public:
 
 } // namespace paradae
 } // namespace griddyn
-
-#endif

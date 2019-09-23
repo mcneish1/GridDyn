@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef GRID_DC_LINK_H_
-#define GRID_DC_LINK_H_
+#pragma once
 
 #include "griddyn/Link.h"
 
@@ -102,5 +101,3 @@ class dcLink : public Link
 
 }  // namespace links
 }  // namespace griddyn
-
-#endif

@@ -13,8 +13,7 @@
 /** @file
 *  @brief define some operations related to matrixData objects
 */
-#ifndef MATRIX_OPS_H_
-#define MATRIX_OPS_H_
+
 #pragma once
 
 #include  "matrixData.hpp"
@@ -35,6 +34,3 @@ void matrixDataMultiply(matrixData<double> &md, const double vec[], double res[]
 @return a vector with the results the vector will be of length M
 */
 std::vector<double> matrixDataMultiply(matrixData<double> &md, const double vec[]);
-
-
-#endif

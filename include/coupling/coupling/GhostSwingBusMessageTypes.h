@@ -10,8 +10,7 @@
  * LLNS Copyright End
 */
 
-#ifndef GHOSTSWINGBUSMESSAGETYPES_H_
-#define GHOSTSWINGBUSMESSAGETYPES_H_
+#pragma once
 
 #include <climits>
 #include <vector>
@@ -73,4 +72,3 @@ typedef struct
 } CommandLineMessage;
 
 }//namespace griddyn
-#endif

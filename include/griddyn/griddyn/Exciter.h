@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef GRIDDYNEXCITER_H_
-#define GRIDDYNEXCITER_H_
+#pragma once
 
 #include "gridSubModel.h"
 namespace griddyn
@@ -88,5 +87,3 @@ class Exciter : public gridSubModel
 };
 
 }  // namespace griddyn
-
-#endif  // GRIDDYNEXCITER_H_

@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef GRIDDYN_CONTROL_MESSAGE_H_
-#define GRIDDYN_CONTROL_MESSAGE_H_
 #pragma once
 
 #include "griddyn/comms/commMessage.h"
@@ -90,4 +88,3 @@ class controlMessagePayload : public CommPayload
 }  // namespace griddyn
 
 CEREAL_REGISTER_TYPE (griddyn::comms::controlMessagePayload)
-#endif

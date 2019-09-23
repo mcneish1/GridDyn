@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef RungeKutta_Implicit_h
-#define RungeKutta_Implicit_h
+
+#pragma once
 
 #include "RungeKutta.h"
 #include "math/PVector.h"
@@ -50,5 +50,3 @@ public:
 };
 } // namespace paradae
 } // namespace griddyn
-
-#endif

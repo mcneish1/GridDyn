@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 #pragma once
-#ifndef READERHELPER_H_
-#define READERHELPER_H_
 
 #include "griddyn/gridDynDefinitions.hpp"
 #include <iostream>
@@ -60,4 +58,3 @@ void loadMatDyn (coreObject *parentObject, const std::string &filetext, const ba
 void loadMatDynEvent (coreObject *parentObject, const std::string &filetext, const basicReaderInfo &bri);
 
 }  // namespace griddyn
-#endif

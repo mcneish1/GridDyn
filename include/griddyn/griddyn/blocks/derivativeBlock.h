@@ -10,9 +10,8 @@
  * LLNS Copyright End
  */
 
-#ifndef DERIVATIVE_BLOCK_H_
-#define DERIVATIVE_BLOCK_H_
 #pragma once
+
 #include "griddyn/Block.h"
 
 namespace griddyn
@@ -68,5 +67,3 @@ class derivativeBlock : public Block
 };
 }  // namespace blocks
 }  // namespace griddyn
-
-#endif  // DERIVATIVE_BLOCK_H_

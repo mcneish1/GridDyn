@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef _MATRIX_DATA_SPARSESM_H_
-#define _MATRIX_DATA_SPARSESM_H_
 #pragma once
 
 #include "matrixData.hpp"
@@ -807,4 +805,3 @@ class matrixDataSparseSMB<1, X, ValueT, M> : public matrixData<ValueT>
         int ci = 0;  //!< indicator of which vector of the array we are sequencing on;
     };
 };
-#endif

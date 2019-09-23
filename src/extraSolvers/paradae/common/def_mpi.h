@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef def_mpi_h
-#define def_mpi_h
+
+#pragma once
 
 #ifdef CHECK_TIMING
 
@@ -54,7 +54,5 @@ int rk_MACRO,sz_MACRO;
 #define MPI_TIMER_1() do {} while(0);
 #define MPI_TIMER_2(str) do {} while(0);
 #define MPI_TIMER_CLEAN() do {} while(0);
-
-#endif
 
 #endif

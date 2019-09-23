@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef OBJECT_OPERATOR_INTERFACE_H_
-#define OBJECT_OPERATOR_INTERFACE_H_
+#pragma once
 
 #include <exception>
 #include <vector>
@@ -75,4 +74,3 @@ class objectOperatorInterface
 };
 
 }  // namespace griddyn
-#endif

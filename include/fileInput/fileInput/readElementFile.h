@@ -10,8 +10,6 @@
 * LLNS Copyright End
 */
 
-#ifndef READ_ELEMENT_FILE_H_
-#define READ_ELEMENT_FILE_H_
 #pragma once
 
 #include "readElement.h"
@@ -56,14 +54,14 @@ coreObject * loadElementFile (coreObject *parentObject, const std::string &fileN
       warnCount = 0;
     }
 
-  
+
   //May need to create a readerInfo object this to ensure it gets deleted even under exception
   std::unique_ptr<readerInfo> rip = (ri == nullptr) ? std::make_unique<readerInfo>() : nullptr;
   readerInfo::scopeID riScope=0;
   if (ri==nullptr)
     {
       ri = rip.get(); //we created the unique_ptr now
-     
+
     }
   else
   {
@@ -116,5 +114,3 @@ coreObject * loadElementFile (coreObject *parentObject, const std::string &fileN
 }
 
 }//namespace griddyn
-
-#endif

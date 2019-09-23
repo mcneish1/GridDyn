@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef GRIDDYN_DIAGNOSTICS_H_
-#define GRIDDYN_DIAGNOSTICS_H_
+#pragma once
 
 #include "core/coreDefinitions.hpp"
 #include <memory>
@@ -125,4 +124,3 @@ hiearchy
 */
 void printStateSizes (const gridComponent *comp, const solverMode &sMode);
 }  // namespace griddyn
-#endif

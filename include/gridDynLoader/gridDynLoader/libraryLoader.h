@@ -10,11 +10,9 @@
  * LLNS Copyright End
  */
 
-#ifndef LIBRARY_LOADER_H_
-#define LIBRARY_LOADER_H_
+#pragma once
 
 namespace griddyn
 {
 void loadLibraries ();
 }  // namespace griddyn
-#endif

@@ -12,7 +12,6 @@
  */
 
 #ifndef GRIDDYN_PLUGIN_API_H_
-
 #define GRIDDYN_PLUGIN_API_H_
 
 #include <string>
@@ -27,4 +26,4 @@ class gridDynPlugInApi
     virtual ~gridDynPlugInApi () {}
 };
 
-#endif
+#endif // GRIDDYN_PLUGIN_API_H_

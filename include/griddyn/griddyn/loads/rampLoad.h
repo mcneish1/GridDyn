@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef RAMPLOAD_H_
-#define RAMPLOAD_H_
 #pragma once
 
 #include "zipLoad.h"
@@ -48,5 +46,3 @@ class rampLoad : public zipLoad
 };
 }  // namespace loads
 }  // namespace griddyn
-
-#endif

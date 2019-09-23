@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef OPT_HELPER_CLASSES_
-#define OPT_HELPER_CLASSES_
+#pragma once
 
 #include "griddyn/gridDynDefinitions.hpp"
 #include <cstdio>
@@ -267,4 +266,3 @@ class optimData
 };
 
 }  // namespace griddyn
-#endif

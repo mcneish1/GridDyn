@@ -10,8 +10,7 @@
 * LLNS Copyright End
 */
 
-#ifndef GENMODEL6_TYPE2_H_
-#define GENMODEL6_TYPE2_H_
+#pragma once
 
 #include "GenModel5type2.h"
 
@@ -40,8 +39,5 @@ public:
 	virtual void algebraicUpdate(const IOdata &inputs, const stateData &sD, double update[], const solverMode &sMode, double alpha) override;
 };
 
-
-
 }//namespace genmodels
 }//namespace griddyn
-#endif //GENMODEL6_TYPE2_H_

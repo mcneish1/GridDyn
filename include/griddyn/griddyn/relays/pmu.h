@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef GRIDDYN_PMU_H_
-#define GRIDDYN_PMU_H_
+#pragma once
 
 #include "sensor.h"
 
@@ -69,4 +68,3 @@ class pmu : public sensor
 
 }  // namespace relays
 }  // namespace griddyn
-#endif

@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef GRIDDYN_PLAYER_H_
-#define GRIDDYN_PLAYER_H_
 #pragma once
 
 #include "griddyn/events/Event.h"
@@ -83,4 +81,3 @@ class Player : public Event
 };
 }  // namespace events
 }  // namespace griddyn
-#endif

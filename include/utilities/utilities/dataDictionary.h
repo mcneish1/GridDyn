@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef DATA_DICTIONARY_H_
-#define DATA_DICTIONARY_H_
 #pragma once
 
 #include "mapOps.hpp"
@@ -82,5 +80,3 @@ class dataDictionary
         }
     }
 };
-
-#endif

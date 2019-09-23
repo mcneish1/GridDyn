@@ -19,8 +19,7 @@ Lawrence Livermore National Laboratory, operated by Lawrence Livermore National 
  * LLNS Copyright End
  */
 
-#ifndef ZMQPROXYHUB_H_
-#define ZMQPROXYHUB_H_
+#pragma once
 
 #include "zmqContextManager.h"
 #include "zmqSocketDescriptor.h"
@@ -74,4 +73,3 @@ class zmqProxyHub
 };
 
 }  // namespace zmqlib
-#endif

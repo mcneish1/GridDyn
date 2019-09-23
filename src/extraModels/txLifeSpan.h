@@ -10,8 +10,7 @@
 * LLNS Copyright End
 */
 
-#ifndef TX_LIFESPAN_H_
-#define TX_LIFESPAN_H_
+#pragma once
 
 #include "griddyn/relays/sensor.h"
 
@@ -57,4 +56,3 @@ public:
 
 }//namespace extra
 }//namespace griddyn
-#endif

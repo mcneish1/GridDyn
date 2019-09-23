@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef DCBUS_H_
-#define DCBUS_H_
+#pragma once
 
 // headers
 #include "griddyn/gridBus.h"
@@ -125,4 +124,3 @@ class dcBus : public gridBus
 };
 
 }  // namespace griddyn
-#endif

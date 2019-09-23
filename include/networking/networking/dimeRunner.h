@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef _DIME_RUNNER_H_
-#define _DIME_RUNNER_H_
+#pragma once
 
 #include "core/coreOwningPtr.hpp"
 #include "runner/gridDynRunner.h"
@@ -52,4 +51,3 @@ class dimeRunner : public GriddynRunner
 
 }  // namespace dimeLib
 }  // namespace griddyn
-#endif

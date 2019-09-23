@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef BREAKER_RELAY_H_
-#define BREAKER_RELAY_H_
+#pragma once
 
 #include "griddyn/Relay.h"
 namespace griddyn
@@ -98,4 +97,3 @@ class breaker : public Relay
 
 }  // namespace relays
 }  // namespace griddyn
-#endif

@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef DYNAMIC_INITIAL_CONDITION_RECOVERY_H_
-#define DYNAMIC_INITIAL_CONDITION_RECOVERY_H_
+#pragma once
 
 #include <memory>
 
@@ -68,4 +67,3 @@ class dynamicInitialConditionRecovery
 };
 
 }  // namespace griddyn
-#endif

@@ -10,8 +10,7 @@
 * LLNS Copyright End
 */
 
-#ifndef FILE_SOURCE_H_
-#define FILE_SOURCE_H_
+#pragma once
 
 #include "griddyn/sources/rampSource.h"
 #include "utilities/timeSeries.hpp"
@@ -59,6 +58,3 @@ private:
 };
 }//namespace sources
 }//namespace griddyn
-
-#endif
-

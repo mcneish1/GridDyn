@@ -10,8 +10,6 @@
 * LLNS Copyright End
 */
 
-#ifndef DCBUSCONTROLS_H_
-#define DCBUSCONTROLS_H_
 #pragma once
 
 #include "griddyn/gridDynDefinitions.hpp"
@@ -78,4 +76,3 @@ public:
 
 
 }//namespace griddyn
-#endif

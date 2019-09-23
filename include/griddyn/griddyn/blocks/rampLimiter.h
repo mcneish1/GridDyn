@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef RAMP_LIMITER_H_
-#define RAMP_LIMITER_H_
 #pragma once
 
 #include <limits>
@@ -66,4 +64,3 @@ class rampLimiter
 };
 }  // namespace blocks
 }  // namespace griddyn
-#endif

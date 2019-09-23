@@ -9,8 +9,8 @@
 * For details, see the LICENSE file.
 * LLNS Copyright End
 */
-#ifndef PVector_h
-#define PVector_h
+
+#pragma once
 
 #include "Vector.h"
 
@@ -27,5 +27,3 @@ public:
 };
 } // namespace paradae
 } // namespace griddyn
-
-#endif

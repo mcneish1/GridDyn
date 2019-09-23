@@ -10,8 +10,8 @@
  * LLNS Copyright End
  */
 
-#ifndef GRIDDYN_EXPORT_INTERNAL_H_
-#define GRIDDYN_EXPORT_INTERNAL_H_
+#pragma once
+
 #include "griddyn/gridComponent.h"
 #include "griddyn/solvers/solverMode.hpp"
 typedef void *gridDynObject;
@@ -48,4 +48,3 @@ void CopyFromLocal (std::vector<double> &dest,
                     const double *localData,
                     const griddyn::gridComponent *comp,
                     const griddyn::solverMode &sMode);
-#endif

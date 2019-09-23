@@ -17,8 +17,8 @@ Livermore National Laboratory, operated by Lawrence Livermore National Security,
  * LLNS Copyright End
  */
 
-#ifndef ZMQREACTOR_H_
-#define ZMQREACTOR_H_
+#pragma once
+
 #include "utilities/simpleQueue.hpp"
 #include "zmqSocketDescriptor.h"
 #include <atomic>
@@ -83,4 +83,3 @@ class zmqReactor
     void reactorLoop ();
 };
 }  // namespace zmqlib
-#endif

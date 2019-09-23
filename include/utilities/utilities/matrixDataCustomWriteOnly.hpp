@@ -10,8 +10,6 @@
  * LLNS Copyright End
  */
 
-#ifndef _MATRIX_DATA_CUSTOM_WRITE_ONLY_H_
-#define _MATRIX_DATA_CUSTOM_WRITE_ONLY_H_
 #pragma once
 
 #include "utilities/matrixData.hpp"
@@ -45,5 +43,3 @@ class matrixDataCustomWriteOnly : public matrixData<ValueT>
 
     void setFunction (std::function<void(index_t, index_t, ValueT)> func) { insertFunction = std::move (func); }
 };
-
-#endif  // _MATRIX_DATA_CUSTOM_WRITE_ONLY_H_

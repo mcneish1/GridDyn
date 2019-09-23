@@ -10,8 +10,7 @@
  * LLNS Copyright End
  */
 
-#ifndef GRIDPARAMETER_H_
-#define GRIDPARAMETER_H_
+#pragma once
 
 #include "utilities/units.h"
 #include <string>
@@ -57,4 +56,3 @@ class gridParameter
 };
 
 }  // namespace griddyn
-#endif

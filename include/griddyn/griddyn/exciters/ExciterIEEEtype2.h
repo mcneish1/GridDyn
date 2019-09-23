@@ -10,8 +10,7 @@
  * LLNS Copyright End
 */
 
-#ifndef EXCITER_IEEE_TYPE2_H_
-#define EXCITER_IEEE_TYPE2_H_
+#pragma once
 
 #include "ExciterIEEEtype1.h"
 namespace griddyn
@@ -52,7 +51,3 @@ public:
 
 }//namespace exciters
 }//namespace griddyn
-
-
-
-#endif //GRIDDYNEXCITER_H_
