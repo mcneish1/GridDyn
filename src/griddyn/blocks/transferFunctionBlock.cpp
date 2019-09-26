@@ -173,7 +173,7 @@ void transferFunctionBlock::blockJacobianElements (double input,
 
 double transferFunctionBlock::step (coreTime time, double inputA)
 {
-    double dt = time - prevTime;
+    double dt = time - object_time.prevTime;
     double out;
     double input = inputA + bias;
     // double ival, ival2;
@@ -189,7 +189,7 @@ double transferFunctionBlock::step (coreTime time, double inputA)
     else
     {
         double tstep = 0.05;
-        double ct = prevTime + tstep;
+        double ct = object_time.prevTime + tstep;
         double in = prevInput;
         // double pin = prevInput;
         //   ival = m_state[2];
@@ -216,7 +216,7 @@ double transferFunctionBlock::step (coreTime time, double inputA)
     {
         out = K * m_state[1];
         m_state[0] = out;
-        prevTime = time;
+        object_time.prevTime = time;
         m_output = out;
     }
     return out;

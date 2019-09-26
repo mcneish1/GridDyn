@@ -141,7 +141,7 @@ void approximatingLoad::timestep (coreTime time, const IOdata &inputs, const sol
     }
     Vprev = V;
     Thprev = th;
-    prevTime = time;
+    object_time.prevTime = time;
 }
 
 void approximatingLoad::updateA (coreTime time)
@@ -174,7 +174,7 @@ void approximatingLoad::updateA (coreTime time)
     }
     Vprev = V;
     Thprev = th;
-    prevTime = time;
+    object_time.prevTime = time;
 }
 
 coreTime approximatingLoad::updateB ()
@@ -189,9 +189,9 @@ coreTime approximatingLoad::updateB ()
         if (res.size () == 4)
         {
             double diff = res[2] - res[0];
-            dPdt = diff / updatePeriod;
+            dPdt = diff / object_time.updatePeriod;
             diff = res[3] - res[1];
-            dQdt = diff / updatePeriod;
+            dQdt = diff / object_time.updatePeriod;
         }
     }
     break;
@@ -206,13 +206,13 @@ coreTime approximatingLoad::updateB ()
         if (LV.size () == 8)
         {
             double diff = LV[4] - LV[0];
-            dPdt = diff / updatePeriod;
+            dPdt = diff / object_time.updatePeriod;
             diff = LV[5] - LV[1];
-            dQdt = diff / updatePeriod;
+            dQdt = diff / object_time.updatePeriod;
             diff = LV[6] - LV[2];
-            dIpdt = diff / updatePeriod;
+            dIpdt = diff / object_time.updatePeriod;
             diff = LV[7] - LV[3];
-            dIqdt = diff / updatePeriod;
+            dIqdt = diff / object_time.updatePeriod;
         }
     }
     break;
@@ -233,17 +233,17 @@ coreTime approximatingLoad::updateB ()
         if (LV.size () == 12)
         {
             double diff = LV[6] - LV[0];
-            dPdt = diff / updatePeriod;
+            dPdt = diff / object_time.updatePeriod;
             diff = LV[7] - LV[1];
-            dQdt = diff / updatePeriod;
+            dQdt = diff / object_time.updatePeriod;
             diff = LV[8] - LV[2];
-            dIpdt = diff / updatePeriod;
+            dIpdt = diff / object_time.updatePeriod;
             diff = LV[9] - LV[3];
-            dIqdt = diff / updatePeriod;
+            dIqdt = diff / object_time.updatePeriod;
             diff = LV[10] - LV[4];
-            dYpdt = diff / updatePeriod;
+            dYpdt = diff / object_time.updatePeriod;
             diff = LV[11] - LV[5];
-            dYqdt = diff / updatePeriod;
+            dYqdt = diff / object_time.updatePeriod;
         }
 #ifdef SGS_DEBUG
         std::cout << "SGS : " << prevTime << " : " << name
@@ -256,12 +256,12 @@ coreTime approximatingLoad::updateB ()
     default:
         assert (false);
     }
-    lastTime = prevTime;
-    if (prevTime >= nextUpdateTime)
+    lastTime = object_time.prevTime;
+    if (object_time.prevTime >= object_time.nextUpdateTime)
     {
-        nextUpdateTime += updatePeriod;
+        object_time.nextUpdateTime += object_time.updatePeriod;
     }
-    return nextUpdateTime;
+    return object_time.nextUpdateTime;
 }
 
 void approximatingLoad::preEx (const IOdata &inputs, const stateData &sD, const solverMode &sMode)
@@ -693,7 +693,7 @@ change_code approximatingLoad::rootCheck (const IOdata &inputs,
     double V = inputs[voltageInLocation];
     if (std::abs (V - Vprev) > spread * triggerBound)
     {
-        updateA ((sD.empty ()) ? (sD.time) : prevTime);
+        updateA ((sD.empty ()) ? (sD.time) : object_time.prevTime);
         updateB ();
         return change_code::parameter_change;
     }

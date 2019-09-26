@@ -313,7 +313,7 @@ double Block::step (coreTime time, double input)
             if (opFlags[use_ramp_limits])
             {
                 int offset = offsets.getDiffOffset (cLocalSolverMode);
-                double ramp = (m_state[offset + 1] - m_state[offset]) / (time - prevTime);
+                double ramp = (m_state[offset + 1] - m_state[offset]) / (time - object_time.prevTime);
                 double cramp = rLimiter->clampOutputRamp (ramp);
                 if (cramp == ramp)
                 {
@@ -321,7 +321,7 @@ double Block::step (coreTime time, double input)
                 }
                 else
                 {
-                    m_state[offset] += cramp * (time - prevTime);
+                    m_state[offset] += cramp * (time - object_time.prevTime);
                 }
             }
             else
@@ -336,7 +336,7 @@ double Block::step (coreTime time, double input)
         if (opFlags[use_ramp_limits])
         {
             int offset = offsets.getDiffOffset (cLocalSolverMode);
-            double ramp = (m_state[offset + 1] - m_state[offset]) / (time - prevTime);
+            double ramp = (m_state[offset + 1] - m_state[offset]) / (time - object_time.prevTime);
             double cramp = rLimiter->clampOutputRamp (ramp);
             if (cramp == ramp)
             {
@@ -344,7 +344,7 @@ double Block::step (coreTime time, double input)
             }
             else
             {
-                m_state[offset] += ramp * (time - prevTime);
+                m_state[offset] += ramp * (time - object_time.prevTime);
             }
         }
         else
@@ -357,7 +357,7 @@ double Block::step (coreTime time, double input)
             }
         }
     }
-    prevTime = time;
+    object_time.prevTime = time;
     auto offset = opFlags[differential_output] ? (offsets.getDiffOffset (cLocalSolverMode)) : 0;
     return m_state[offset];
 }
@@ -787,7 +787,7 @@ void Block::setFlag (const std::string &flag, bool val)
             // be changing after initialization
             {
                 opFlags[simplified] = val;
-                dynObjectInitializeA (prevTime, 0);
+                dynObjectInitializeA (object_time.prevTime, 0);
                 alert (this, STATE_COUNT_CHANGE);
                 LOG_WARNING ("changing object state computations during simulation "
                              "triggers solver reset");

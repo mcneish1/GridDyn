@@ -377,7 +377,7 @@ Lp offsetTable::getLocations (const stateData &sD, const solverMode &sMode, cons
     Loc.algSize = offsetContainer[sMode.offsetIndex].total.algSize;
     if ((sMode.local) || (sD.empty ()))
     {
-        Loc.time = comp->prevTime;
+        Loc.time = comp->object_time.prevTime;
         Loc.algStateLoc = comp->m_state.data ();
         Loc.diffStateLoc = comp->m_state.data () + Loc.algSize;
         Loc.dstateLoc = comp->m_dstate_dt.data () + Loc.algSize;
@@ -470,7 +470,7 @@ Lp offsetTable::getLocations (const stateData &sD, const solverMode &sMode, cons
     }
     else
     {
-        Loc.time = comp->prevTime;
+        Loc.time = comp->object_time.prevTime;
         Loc.algStateLoc = comp->m_state.data ();
         Loc.diffStateLoc = comp->m_state.data () + Loc.algSize;
         Loc.dstateLoc = comp->m_dstate_dt.data () + Loc.algSize;

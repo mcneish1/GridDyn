@@ -122,14 +122,14 @@ void zipLoad::timestep (coreTime time, const IOdata &inputs, const solverMode & 
         Pout = 0;
         return;
     }
-    if (time != prevTime)
+    if (time != object_time.prevTime)
     {
         updateLocalCache (inputs, stateData (time), cLocalSolverMode);
     }
 
     double V = (inputs.empty ()) ? (bus->getVoltage ()) : inputs[voltageInLocation];
     Pout = -getRealPower (V);
-    prevTime = time;
+    object_time.prevTime = time;
     Qout = -getReactivePower (V);
 
 #ifdef SGS_DEBUG
@@ -543,7 +543,7 @@ void zipLoad::setState (coreTime time, const double state[], const double dstate
 {
     stateData sD (time, state, dstate_dt);
     updateLocalCache (noInputs, sD, sMode);
-    prevTime = time;
+    object_time.prevTime = time;
 }
 
 double zipLoad::voltageAdjustment (double val, double V) const

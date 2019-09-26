@@ -263,9 +263,9 @@ void blockSource::jacobianElements (const IOdata &inputs,
 
 void blockSource::timestep (coreTime time, const IOdata &inputs, const solverMode &sMode)
 {
-    while (prevTime < time)
+    while (object_time.prevTime < time)
     {
-        auto ntime = std::min (prevTime + maxStepSize, time);
+        auto ntime = std::min (object_time.prevTime + maxStepSize, time);
         double srcOut = m_output;
         if (src != nullptr)
         {

@@ -373,7 +373,7 @@ void acBus::pFlowObjectInitializeB ()
     outputs[voltageInLocation] = voltage;
     outputs[angleInLocation] = angle;
     outputs[frequencyInLocation] = freq;
-    lastSetTime = prevTime;
+    lastSetTime = object_time.prevTime;
     computePowerAdjustments ();
     if (opFlags[use_autogen])
     {
@@ -988,7 +988,7 @@ void acBus::dynObjectInitializeB (const IOdata & /*inputs*/, const IOdata &desir
         }
     }
     updateLocalCache ();
-    lastSetTime = prevTime;
+    lastSetTime = object_time.prevTime;
     m_state[voltageInLocation] = voltage;
     m_state[angleInLocation] = angle;
     m_state[frequencyInLocation] = freq;
@@ -1148,7 +1148,7 @@ void acBus::generationAdjust (double adjustment)
 
 void acBus::timestep (coreTime time, const IOdata & /*inputs*/, const solverMode &sMode)
 {
-    double dt = time - prevTime;
+    double dt = time - object_time.prevTime;
     if (dt < 1.0)
     {
         if (!m_dstate_dt.empty ())
@@ -1176,7 +1176,7 @@ void acBus::timestep (coreTime time, const IOdata & /*inputs*/, const solverMode
     {
         fblock->step (time, angle);
     }
-    prevTime = time;
+    object_time.prevTime = time;
 }
 
 static const stringVec locNumStrings{
@@ -1915,7 +1915,7 @@ void acBus::setState (coreTime time, const double state[], const double dstate_d
     {
         if (Voffset != kNullLocation)
         {
-            if (time > prevTime)
+            if (time > object_time.prevTime)
             {
                 m_dstate_dt[voltageInLocation] =
                   (state[Voffset] - m_state[voltageInLocation]) / (time - lastSetTime);
@@ -1924,7 +1924,7 @@ void acBus::setState (coreTime time, const double state[], const double dstate_d
         }
         if (Aoffset != kNullLocation)
         {
-            if (time > prevTime)
+            if (time > object_time.prevTime)
             {
                 m_dstate_dt[angleInLocation] = (state[Aoffset] - -m_state[angleInLocation]) / (time - lastSetTime);
             }

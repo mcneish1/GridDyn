@@ -77,9 +77,9 @@ void gridSecondary::dynInitializeB (const IOdata &inputs, const IOdata &desiredO
         m_dstate_dt.clear ();
         m_dstate_dt.resize (ns, 0);
         dynObjectInitializeB (inputs, desiredOutput, fieldSet);
-        if (updatePeriod < maxTime)
+        if (object_time.updatePeriod < maxTime)
         {
-            setUpdateTime (prevTime + updatePeriod);
+            setUpdateTime (object_time.prevTime + object_time.updatePeriod);
             enable_updates ();
             alert (this, UPDATE_REQUIRED);
         }
@@ -107,7 +107,7 @@ void gridSecondary::pFlowObjectInitializeA (coreTime time0, std::uint32_t flags)
             }
         }
     }
-    prevTime = time0;
+    object_time.prevTime = time0;
 }
 
 void gridSecondary::set (const std::string &param, double val, gridUnits::units_t unitType)

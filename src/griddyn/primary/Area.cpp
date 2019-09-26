@@ -1108,7 +1108,7 @@ void Area::timestep (coreTime time, const IOdata &inputs, const solverMode &sMod
             rel->timestep (time, inputs, sMode);
         }
     }
-    prevTime = time;
+    object_time.prevTime = time;
 }
 
 count_t Area::getBusVector (std::vector<gridBus *> &busVector, index_t start) const
@@ -1763,7 +1763,7 @@ void Area::rootTrigger (coreTime time,
 // pass the solution
 void Area::setState (coreTime time, const double state[], const double dstate_dt[], const solverMode &sMode)
 {
-    prevTime = time;
+    object_time.prevTime = time;
 
     // links come first
     for (auto &link : m_Links)

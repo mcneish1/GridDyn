@@ -94,7 +94,7 @@ void schedulerReg::setReg (double regLevel)
 
 void schedulerReg::updateA (coreTime time)
 {
-    double dt = (time - prevTime);
+    double dt = (time - object_time.prevTime);
 
     if (dt == 0)
     {
@@ -121,7 +121,7 @@ void schedulerReg::updateA (coreTime time)
 
 double schedulerReg::predict (coreTime time)
 {
-    double dt = (time - prevTime);
+    double dt = (time - object_time.prevTime);
     if (dt == 0)
     {
         return m_output;

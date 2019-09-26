@@ -76,7 +76,7 @@ static IOdata kNullVec;
 
 double nullBlock::step (coreTime time, double input)
 {
-    prevTime = time;
+    object_time.prevTime = time;
     return input;
 }
 

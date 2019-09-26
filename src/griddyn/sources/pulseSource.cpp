@@ -60,7 +60,7 @@ void pulseSource::pFlowObjectInitializeA (coreTime time0, std::uint32_t /*flags*
 
 void pulseSource::updateOutput (coreTime time)
 {
-    if ((time == prevTime) || (period == maxTime))
+    if ((time == object_time.prevTime) || (period == maxTime))
     {
         return;
     }
@@ -81,12 +81,12 @@ void pulseSource::updateOutput (coreTime time)
 
     m_output = baseValue + pcalc;
     // printf("at %f setting output to %f\n", static_cast<double>(time), m_output);
-    prevTime = time;
+    object_time.prevTime = time;
 }
 
 double pulseSource::computeOutput (coreTime time) const
 {
-    if ((time == prevTime) || (period == maxTime))
+    if ((time == object_time.prevTime) || (period == maxTime))
     {
         return m_output;
     }

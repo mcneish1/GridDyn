@@ -44,7 +44,7 @@ void gridSubModel::dynInitializeA (coreTime time, std::uint32_t flags)
         }
 
         so.setOffset (0);
-        prevTime = time;
+        object_time.prevTime = time;
         updateFlags (true);
         setupDynFlags ();
     }
@@ -61,10 +61,10 @@ void gridSubModel::dynInitializeB (const IOdata &inputs, const IOdata &desiredOu
         m_dstate_dt.resize (ns, 0);
 
         dynObjectInitializeB (inputs, desiredOutput, fieldSet);
-        if (updatePeriod < maxTime)
+        if (object_time.updatePeriod < maxTime)
         {
             enable_updates ();
-            setUpdateTime (prevTime + updatePeriod);
+            setUpdateTime (object_time.prevTime + object_time.updatePeriod);
             alert (this, UPDATE_REQUIRED);
         }
         opFlags.set (dyn_initialized);

@@ -93,7 +93,7 @@ double delayBlock::step (coreTime time, double inputA)
     {
         return Block::step (time, inputA);
     }
-    double dt = time - prevTime;
+    double dt = time - object_time.prevTime;
 
     double input = (inputA + bias);
     index_t loc = limiter_diff;
@@ -108,7 +108,7 @@ double delayBlock::step (coreTime time, double inputA)
     else
     {
         double tstep = 0.05 * m_T1;
-        double ct = prevTime + tstep;
+        double ct = object_time.prevTime + tstep;
         double in = prevInput;
         double pin = prevInput;
         double ival = m_state[loc];
@@ -130,7 +130,7 @@ double delayBlock::step (coreTime time, double inputA)
     else
     {
         out = m_state[loc];
-        prevTime = time;
+        object_time.prevTime = time;
         m_output = out;
     }
     return out;

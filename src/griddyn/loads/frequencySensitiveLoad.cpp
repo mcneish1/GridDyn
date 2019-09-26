@@ -151,7 +151,7 @@ void frequencySensitiveLoad::setState (coreTime time,
 {
     subLoad->setState (time, state, dstate_dt, sMode);
     updateOutputs (bus->getFreq ());
-    prevTime = time;
+    object_time.prevTime = time;
 }
 
 double frequencySensitiveLoad::getRealPower () const { return Pout; }

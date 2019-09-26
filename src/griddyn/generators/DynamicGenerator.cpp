@@ -352,7 +352,7 @@ void DynamicGenerator::setState (coreTime time,
                 // subobj->guessState (time, m_state.data (), m_dstate_dt.data (), cLocalbSolverMode);
             }
         }
-        Pset += dPdt * (time - prevTime);
+        Pset += dPdt * (time - object_time.prevTime);
         Pset = valLimit (Pset, Pmin, Pmax);
         updateLocalCache (noInputs, emptyStateData, cLocalSolverMode);
     }
@@ -360,7 +360,7 @@ void DynamicGenerator::setState (coreTime time,
     {
         Generator::setState (time, state, dstate_dt, sMode);
     }
-    prevTime = time;
+    object_time.prevTime = time;
 }
 
 void DynamicGenerator::updateLocalCache (const IOdata &inputs, const stateData &sD, const solverMode &sMode)
@@ -570,7 +570,7 @@ void DynamicGenerator::timestep (coreTime time, const IOdata &inputs, const solv
         Q = vals[QoutLocation] * scale;
     }
     // use this as the temporary state storage
-    prevTime = time;
+    object_time.prevTime = time;
 }
 
 void DynamicGenerator::algebraicUpdate (const IOdata &inputs,
@@ -634,7 +634,7 @@ void DynamicGenerator::setFlag (const std::string &flag, bool val)
             }
             else
             {
-                isoc->activate (prevTime);
+                isoc->activate (object_time.prevTime);
             }
         }
         if (!val)
@@ -1260,7 +1260,7 @@ double DynamicGenerator::pSetControlUpdate (const IOdata &inputs, const stateDat
     }
     else
     {
-        val = (!sD.empty ()) ? (Pset + dPdt * (sD.time - prevTime)) : Pset;
+        val = (!sD.empty ()) ? (Pset + dPdt * (sD.time - object_time.prevTime)) : Pset;
     }
     if (opFlags[isochronous_operation])
     {

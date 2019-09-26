@@ -44,7 +44,7 @@ coreObject *isocController::clone (coreObject *obj) const
 void isocController::dynObjectInitializeA (coreTime /*time0*/, std::uint32_t /*flags*/)
 {
     gen = dynamic_cast<Generator *> (getParent ());
-    updatePeriod = upPeriod;
+    object_time.updatePeriod = upPeriod;
     integratorLevel = 0;
 }
 
@@ -55,7 +55,7 @@ void isocController::dynObjectInitializeB (const IOdata &inputs, const IOdata &d
         lastFreq = inputs[0];
         if (lastFreq < -db)
         {
-            updatePeriod = downPeriod;
+            object_time.updatePeriod = downPeriod;
         }
     }
     if (!desiredOutput.empty ())
@@ -78,25 +78,25 @@ void isocController::setLimits (double minV, double maxV)
 
 void isocController::updateA (coreTime time)
 {
-    if (time < nextUpdateTime)
+    if (time < object_time.nextUpdateTime)
     {
         assert (false);
         return;
     }
-    integratorLevel += lastFreq * updatePeriod;
+    integratorLevel += lastFreq * object_time.updatePeriod;
     if (lastFreq > db)
     {
         m_output += upStep;
-        updatePeriod = upPeriod;
+        object_time.updatePeriod = upPeriod;
     }
     else if (lastFreq < -db)
     {
         m_output += downStep;
-        updatePeriod = downPeriod;
+        object_time.updatePeriod = downPeriod;
     }
     else
     {
-        updatePeriod = upPeriod;
+        object_time.updatePeriod = upPeriod;
         if (integratorLevel > integralTrigger)
         {
             m_output += upStep;
@@ -107,15 +107,15 @@ void isocController::updateA (coreTime time)
         }
     }
     m_output = valLimit (m_output, minLevel, maxLevel);
-    lastUpdateTime = time;
+    object_time.lastUpdateTime = time;
     // printf("t=%f,output=%f\n", time, m_output);
 }
 
 void isocController::timestep (coreTime time, const IOdata &inputs, const solverMode & /*sMode*/)
 {
-    prevTime = time;
+    object_time.prevTime = time;
     lastFreq = inputs[0];
-    while (nextUpdateTime <= time)
+    while (object_time.nextUpdateTime <= time)
     {
         updateA (time);
         updateB ();
@@ -169,8 +169,8 @@ void isocController::setFreq (double freq) { lastFreq = freq; }
 void isocController::deactivate ()
 {
     m_output = 0;
-    nextUpdateTime = maxTime;
+    object_time.nextUpdateTime = maxTime;
 }
 
-void isocController::activate (coreTime time) { nextUpdateTime = time + upPeriod; }
+void isocController::activate (coreTime time) { object_time.nextUpdateTime = time + upPeriod; }
 }  // namespace griddyn

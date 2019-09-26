@@ -203,13 +203,13 @@ void randomSource::pFlowObjectInitializeA (coreTime time0, std::uint32_t /*flags
     {
         nextStep (triggerTime);
     }
-    nextUpdateTime = triggerTime;
+    object_time.nextUpdateTime = triggerTime;
     opFlags.set (object_armed_flag);
 }
 
 void randomSource::updateOutput (coreTime time)
 {
-    if (time >= nextUpdateTime)
+    if (time >= object_time.nextUpdateTime)
     {
         updateA (time);
     }
@@ -219,29 +219,29 @@ void randomSource::updateOutput (coreTime time)
 
 void randomSource::updateA (coreTime time)
 {
-    if (time < nextUpdateTime)
+    if (time < object_time.nextUpdateTime)
     {
         return;
     }
 
-    lastUpdateTime = nextUpdateTime;
+    object_time.lastUpdateTime = object_time.nextUpdateTime;
     opFlags.set (triggered_flag);
-    auto triggerTime = lastUpdateTime + ntime ();
+    auto triggerTime = object_time.lastUpdateTime + ntime ();
     if (opFlags[interpolate_flag])
     {
-        rampSource::setState (nextUpdateTime, nullptr, nullptr, cLocalSolverMode);
+        rampSource::setState (object_time.nextUpdateTime, nullptr, nullptr, cLocalSolverMode);
         if (opFlags[repeated_flag])
         {
             nextStep (triggerTime);
-            nextUpdateTime = triggerTime;
+            object_time.nextUpdateTime = triggerTime;
             rampSource::setState (time, nullptr, nullptr, cLocalSolverMode);
         }
         else
         {
             rampSource::clearRamp ();
-            nextUpdateTime = maxTime;
+            object_time.nextUpdateTime = maxTime;
             opFlags.set (object_armed_flag, false);
-            prevTime = time;
+            object_time.prevTime = time;
             keyTime = time;
         }
     }
@@ -253,17 +253,17 @@ void randomSource::updateA (coreTime time)
 
         if (opFlags[repeated_flag])
         {
-            nextUpdateTime = triggerTime;
+            object_time.nextUpdateTime = triggerTime;
         }
         else
         {
-            nextUpdateTime = maxTime;
+            object_time.nextUpdateTime = maxTime;
             opFlags.reset (object_armed_flag);
         }
-        prevTime = time;
+        object_time.prevTime = time;
         keyTime = time;
     }
-    if (nextUpdateTime <= time)
+    if (object_time.nextUpdateTime <= time)
     {
         updateA (time);
     }
@@ -306,9 +306,9 @@ void randomSource::nextStep (coreTime triggerTime)
 
 void randomSource::timestep (coreTime time, const IOdata &inputs, const solverMode &sMode)
 {
-    while (time >= nextUpdateTime)
+    while (time >= object_time.nextUpdateTime)
     {
-        updateA (nextUpdateTime);
+        updateA (object_time.nextUpdateTime);
     }
 
     rampSource::timestep (time, inputs, sMode);

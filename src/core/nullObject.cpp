@@ -26,9 +26,9 @@ coreObject *nullObject::clone (coreObject *obj) const
     {
         return coreObject::clone (obj);
     }
-    if (id < 100)
+    if (object_id.id < 100)
     {
-        return coreObject::clone (new nullObject (id));
+        return coreObject::clone (new nullObject (object_id.id));
     }
     return coreObject::clone (new nullObject (getName ()));
 }

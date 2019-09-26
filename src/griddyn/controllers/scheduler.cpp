@@ -38,7 +38,7 @@ bool operator!= (const tsched &td1, coreTime timeC) { return (td1.time != timeC)
 scheduler::scheduler (const std::string &objName, double initialValue)
     : Source (objName, initialValue), PCurr (initialValue)
 {
-    prevTime = negTime;  // override default setting
+    object_time.prevTime = negTime;  // override default setting
 }
 
 scheduler::scheduler (double initialValue, const std::string &objName) : scheduler (objName, initialValue) {}
@@ -60,7 +60,7 @@ coreObject *scheduler::clone (coreObject *obj) const
 
 scheduler::~scheduler () { clearSchedule (); }
 
-void scheduler::setTarget (double target) { insertTarget (tsched (prevTime, target)); }
+void scheduler::setTarget (double target) { insertTarget (tsched (object_time.prevTime, target)); }
 
 void scheduler::setTarget (coreTime time, double target) { insertTarget (tsched (time, target)); }
 
@@ -79,9 +79,9 @@ void scheduler::setTarget (std::vector<double> &time, std::vector<double> &targe
         ++tg;
     }
     pTarget.sort ();
-    if (pTarget.front ().time != nextUpdateTime)
+    if (pTarget.front ().time != object_time.nextUpdateTime)
     {
-        nextUpdateTime = (pTarget.front ()).time;
+        object_time.nextUpdateTime = (pTarget.front ()).time;
         alert (this, UPDATE_TIME_CHANGE);
     }
 }
@@ -101,21 +101,21 @@ void scheduler::setTarget (const std::string &fileName)
     }
     flist.sort ();
     pTarget.merge (flist);
-    if (pTarget.front ().time != nextUpdateTime)
+    if (pTarget.front ().time != object_time.nextUpdateTime)
     {
-        nextUpdateTime = (pTarget.front ()).time;
+        object_time.nextUpdateTime = (pTarget.front ()).time;
         alert (this, UPDATE_TIME_CHANGE);
     }
 }
 
 void scheduler::updateA (coreTime time)
 {
-    auto dt = (time - prevTime);
+    auto dt = (time - object_time.prevTime);
     if (dt == timeZero)
     {
         return;
     }
-    if (time >= nextUpdateTime)
+    if (time >= object_time.nextUpdateTime)
     {
         while (time >= pTarget.front ().time)
         {
@@ -132,22 +132,22 @@ void scheduler::updateA (coreTime time)
             pTarget.pop_front ();
             if (pTarget.empty ())
             {
-                nextUpdateTime = maxTime;
+                object_time.nextUpdateTime = maxTime;
 
                 break;
             }
-            nextUpdateTime = (pTarget.front ()).time;
+            object_time.nextUpdateTime = (pTarget.front ()).time;
         }
     }
     m_output = PCurr;
-    prevTime = time;
-    lastUpdateTime = time;
+    object_time.prevTime = time;
+    object_time.lastUpdateTime = time;
 }
 
 double scheduler::predict (coreTime time)
 {
     double out = m_output;
-    if (time >= nextUpdateTime)
+    if (time >= object_time.nextUpdateTime)
     {
         out = (pTarget.front ()).target;
         if (out > Pmax)
@@ -169,7 +169,7 @@ void scheduler::dynObjectInitializeA (coreTime time0, std::uint32_t /*flags*/)
     commLink->registerReceiveCallback ([this](std::uint64_t sourceID, std::shared_ptr<commMessage> message) {
         receiveMessage (sourceID, message);
     });
-    prevTime = time0;
+    object_time.prevTime = time0;
 }
 
 void scheduler::dynObjectInitializeB (const IOdata & /*inputs*/,
@@ -277,17 +277,17 @@ void scheduler::clearSchedule ()
     if (!pTarget.empty ())
     {
         pTarget.resize (0);
-        nextUpdateTime = maxTime;
+        object_time.nextUpdateTime = maxTime;
         alert (this, UPDATE_TIME_CHANGE);
     }
 }
 
 void scheduler::insertTarget (tsched ts)
 {
-    if (ts < nextUpdateTime)
+    if (ts < object_time.nextUpdateTime)
     {
         pTarget.push_front (ts);
-        nextUpdateTime = ts.time;
+        object_time.nextUpdateTime = ts.time;
         alert (this, UPDATE_TIME_CHANGE);
     }
     else

@@ -74,7 +74,7 @@ void derivativeBlock::dynObjectInitializeB (const IOdata &inputs, const IOdata &
 double derivativeBlock::step (coreTime time, double inputA)
 {
     index_t loc = limiter_alg;
-    double dt = time - prevTime;
+    double dt = time - object_time.prevTime;
     double out;
     double input = inputA + bias;
     double ival;
@@ -91,7 +91,7 @@ double derivativeBlock::step (coreTime time, double inputA)
     else
     {
         double tstep = 0.05 * m_T1;
-        double ct = prevTime + tstep;
+        double ct = object_time.prevTime + tstep;
         double in = prevInput;
         double pin = prevInput;
         ival = m_state[loc + 1];
@@ -113,7 +113,7 @@ double derivativeBlock::step (coreTime time, double inputA)
     else
     {
         out = m_state[0];
-        prevTime = time;
+        object_time.prevTime = time;
         m_output = out;
     }
     return out;

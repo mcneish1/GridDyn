@@ -109,11 +109,11 @@ void ExciterIEEEtype1::residual(const IOdata &inputs,
 void ExciterIEEEtype1::timestep(coreTime time, const IOdata &inputs, const solverMode & /*sMode*/)
 {
 	derivative(inputs, emptyStateData, m_dstate_dt.data(), cLocalSolverMode);
-	double dt = time - prevTime;  // convert from a coreTime
+	double dt = time - object_time.prevTime;  // convert from a coreTime
 	m_state[0] += dt * m_dstate_dt[0];
 	m_state[1] += dt * m_dstate_dt[1];
 	m_state[2] += dt * m_dstate_dt[2];
-	prevTime = time;
+	object_time.prevTime = time;
 }
 
 void ExciterIEEEtype1::derivative(const IOdata &inputs,

@@ -146,16 +146,16 @@ double blockSequence::step (coreTime time, double input)
     // compute a core sample time then cycle through all the objects at that
     // sampling rate
     input = input + bias;
-    double drate = (input - prevInput) / (time - prevTime);
-    while (prevTime < time)
+    double drate = (input - prevInput) / (time - object_time.prevTime);
+    while (object_time.prevTime < time)
     {
-        coreTime newTime = std::min (time, prevTime + sampleTime);
-        double blockInput = prevInput + drate * (newTime - prevTime);
+        coreTime newTime = std::min (time, object_time.prevTime + sampleTime);
+        double blockInput = prevInput + drate * (newTime - object_time.prevTime);
         for (auto &blkIn : sequence)
         {
             blockInput = blocks[blkIn]->step (newTime, blockInput);
         }
-        prevTime = newTime;
+        object_time.prevTime = newTime;
     }
     return Block::step (time, input);
 }

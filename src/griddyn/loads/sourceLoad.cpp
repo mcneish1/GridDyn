@@ -248,7 +248,7 @@ void sourceLoad::timestep (coreTime time, const IOdata &inputs, const solverMode
         static_cast<Source *> (src)->timestep (time, noInputs, sMode);
     }
     getSourceLoads ();
-    prevTime = time;
+    object_time.prevTime = time;
     zipLoad::timestep (time, inputs, sMode);
 }
 
@@ -259,7 +259,7 @@ void sourceLoad::setState (coreTime time, const double state[], const double dst
         src->setState (time, state, dstate_dt, sMode);
     }
     getSourceLoads ();
-    prevTime = time;
+    object_time.prevTime = time;
 }
 
 void sourceLoad::set (const std::string &param, double val, gridUnits::units_t unitType)

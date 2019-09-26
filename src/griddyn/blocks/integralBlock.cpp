@@ -112,7 +112,7 @@ void integralBlock::blockJacobianElements (double input,
 
 double integralBlock::step (coreTime time, double inputA)
 {
-    double dt = time - prevTime;
+    double dt = time - object_time.prevTime;
     double out;
     double input = inputA + bias;
     index_t loc = limiter_diff + limiter_alg;
@@ -125,7 +125,7 @@ double integralBlock::step (coreTime time, double inputA)
     else
     {
         out = m_state[0];
-        prevTime = time;
+        object_time.prevTime = time;
         m_output = out;
     }
     return out;

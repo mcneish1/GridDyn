@@ -169,7 +169,7 @@ void Link::timestep (const coreTime time, const IOdata & /*inputs*/, const solve
     }
 
     updateLocalCache ();
-    prevTime = time;
+    object_time.prevTime = time;
     /*if (scheduled)
     {
     Psched=sched->timestepP(time);
@@ -709,7 +709,7 @@ void Link::setState (coreTime time,
                      const double /*dstate_dt*/[],
                      const solverMode & /*sMode*/)
 {
-    prevTime = time;
+    object_time.prevTime = time;
 }
 
 void Link::updateLocalCache (const IOdata & /*inputs*/, const stateData &sD, const solverMode &sMode)

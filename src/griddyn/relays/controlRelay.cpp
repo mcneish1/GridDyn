@@ -165,16 +165,16 @@ void controlRelay::receiveMessage (std::uint64_t sourceID, std::shared_ptr<commM
     switch (message->getMessageType ())
     {
     case cm::SET:
-        if (m->m_time <= prevTime + kSmallTime)
+        if (m->m_time <= object_time.prevTime + kSmallTime)
         {
             if (actionDelay <= kSmallTime)
             {
-                auto fea = generateSetEvent (prevTime, sourceID, m);
-                fea->execute (prevTime);  // just execute the event immediately
+                auto fea = generateSetEvent (object_time.prevTime, sourceID, m);
+                fea->execute (object_time.prevTime);  // just execute the event immediately
             }
             else
             {
-                auto fea = generateSetEvent (prevTime + actionDelay, sourceID, m);
+                auto fea = generateSetEvent (object_time.prevTime + actionDelay, sourceID, m);
                 rootSim->add (std::shared_ptr<eventAdapter> (std::move (fea)));
             }
         }
@@ -190,13 +190,13 @@ void controlRelay::receiveMessage (std::uint64_t sourceID, std::shared_ptr<commM
         }
         break;
     case cm::GET:
-        if (m->m_time <= prevTime + kSmallTime)
+        if (m->m_time <= object_time.prevTime + kSmallTime)
         {
             if (measureDelay <= kSmallTime)
             {
                 // just generate the action and execute it
-                auto fea = generateGetEvent (prevTime, sourceID, m);
-                fea->execute (prevTime);  // just execute the event immediately
+                auto fea = generateGetEvent (object_time.prevTime, sourceID, m);
+                fea->execute (object_time.prevTime);  // just execute the event immediately
             }
             else
             {
@@ -214,7 +214,7 @@ void controlRelay::receiveMessage (std::uint64_t sourceID, std::shared_ptr<commM
         }
         break;
     case cm::GET_MULTIPLE:
-		if (m->m_time <= prevTime + kSmallTime)
+		if (m->m_time <= object_time.prevTime + kSmallTime)
 		{
 			if (measureDelay <= kSmallTime)
 			{
@@ -336,7 +336,7 @@ change_code controlRelay::executeAction (index_t actionNum)
             auto ptr = gres->getPayload<cm>();
            ptr->m_field = cact.field;
             ptr->m_value = val;
-            ptr->m_time = prevTime;
+            ptr->m_time = object_time.prevTime;
             commLink->transmit (cact.sourceID, std::shared_ptr<commMessage> (std::move (gres)));
             return change_code::no_change;
         }

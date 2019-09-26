@@ -231,7 +231,7 @@ double deadbandBlock::step (coreTime time, double input)
     }
     else
     {
-        prevTime = time;
+        object_time.prevTime = time;
         m_output = m_state[0];
     }
     // printf("deadband input=%f, step out=%f, check out =%f\n",input, m_state[0],

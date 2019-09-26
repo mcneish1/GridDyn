@@ -32,7 +32,7 @@ namespace griddyn
 namespace relays
 {
 using namespace gridUnits;
-breaker::breaker (const std::string &objName) : Relay (objName), useCTI (extra_bool)
+breaker::breaker (const std::string &objName) : Relay (objName), useCTI (object_bools.extra_bool)
 {
     opFlags.set (continuous_flag);
 }
@@ -207,7 +207,7 @@ void breaker::conditionTriggered (index_t conditionNum, coreTime triggeredTime)
             }
             else
             {
-                nextUpdateTime = triggeredTime + minClearingTime;
+                object_time.nextUpdateTime = triggeredTime + minClearingTime;
                 alert (this, UPDATE_TIME_CHANGE);
             }
         }
@@ -242,14 +242,14 @@ void breaker::updateA (coreTime time)
 {
     if (opFlags[breaker_tripped_flag])
     {
-        if (time >= nextUpdateTime)
+        if (time >= object_time.nextUpdateTime)
         {
             resetBreaker (time);
         }
     }
     else if (opFlags[overlimit_flag])
     {
-        if (time >= nextUpdateTime)
+        if (time >= object_time.nextUpdateTime)
         {
             if (checkCondition (0))
             {  // still over the limit->trip the breaker
@@ -266,7 +266,7 @@ void breaker::updateA (coreTime time)
     {
         Relay::updateA (time);
     }
-    lastUpdateTime = time;
+    object_time.lastUpdateTime = time;
 }
 
 stateSizes breaker::LocalStateSizes (const solverMode &sMode) const
@@ -290,7 +290,7 @@ count_t breaker::LocalJacobianCount (const solverMode &sMode) const
 
 void breaker::timestep (coreTime time, const IOdata & /*inputs*/, const solverMode & /*sMode*/)
 {
-    prevTime = time;
+    object_time.prevTime = time;
     if (limit < kBigNum / 2.0)
     {
         double val = getConditionValue (0);
@@ -382,7 +382,7 @@ void breaker::setState (coreTime time, const double state[], const double /*dsta
         auto offset = offsets.getDiffOffset (sMode);
         cTI = state[offset];
     }
-    prevTime = time;
+    object_time.prevTime = time;
 }
 
 void breaker::residual (const IOdata & /*inputs*/, const stateData &sD, double resid[], const solverMode &sMode)
@@ -481,12 +481,12 @@ void breaker::tripBreaker (coreTime time)
     }
     if ((recloseAttempts == 0) && (recloseAttempts < maxRecloseAttempts))
     {
-        nextUpdateTime = time + recloseTime1;
+        object_time.nextUpdateTime = time + recloseTime1;
         alert (this, UPDATE_TIME_CHANGE);
     }
     else if (recloseAttempts < maxRecloseAttempts)
     {
-        nextUpdateTime = time + recloseTime2;
+        object_time.nextUpdateTime = time + recloseTime2;
         alert (this, UPDATE_TIME_CHANGE);
     }
 }
@@ -500,7 +500,7 @@ void breaker::resetBreaker (coreTime time)
     opFlags.reset (breaker_tripped_flag);
     // timestep (time, solverMode::pFlow);
     triggerAction (1);  // reclose the breaker
-    nextUpdateTime = maxTime;
+    object_time.nextUpdateTime = maxTime;
     if (!opFlags[nonlink_source_flag])
     {  // do a recompute power
         static_cast<Link *> (m_sourceObject)->updateLocalCache ();
@@ -515,7 +515,7 @@ void breaker::resetBreaker (coreTime time)
             }
             else
             {
-                nextUpdateTime = time + minClearingTime;
+                object_time.nextUpdateTime = time + minClearingTime;
             }
         }
         else

@@ -127,7 +127,7 @@ double reserveDispatcher::dynInitializeA (coreTime time0, double dispatchSet)
         dispatch (dispatchSet);
         dispatchTime = time0;
     }
-    prevTime = time0;
+    object_time.prevTime = time0;
     return currDispatch;
 }
 

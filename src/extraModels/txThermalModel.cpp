@@ -251,7 +251,7 @@ void txThermalModel::dynObjectInitializeA(coreTime time0, std::uint32_t flags)
 		return sensor::dynObjectInitializeA(time0, flags);
 	}
 
-	if (updatePeriod > kHalfBigNum)
+	if (object_time.updatePeriod > kHalfBigNum)
 	{        //set the period to the period of the simulation to at least 1/5 the winding time constant
 		double pstep = getRoot()->get("steptime");
 		if (pstep < 0)
@@ -259,10 +259,10 @@ void txThermalModel::dynObjectInitializeA(coreTime time0, std::uint32_t flags)
 			pstep = 1.0;
 		}
 		double mtimestep = Tgr / 5.0;
-		updatePeriod = pstep*std::floor(mtimestep / pstep);
-		if (updatePeriod < pstep)
+		object_time.updatePeriod = pstep*std::floor(mtimestep / pstep);
+		if (object_time.updatePeriod < pstep)
 		{
-			updatePeriod = pstep;
+			object_time.updatePeriod = pstep;
 		}
 	}
 
@@ -408,7 +408,7 @@ void txThermalModel::dynObjectInitializeB(const IOdata &inputs, const IOdata & d
 
 void txThermalModel::updateA(coreTime time)
 {
-	auto dt = time - prevTime;
+	auto dt = time - object_time.prevTime;
 	if (dt == timeZero)
 	{
 		return;
@@ -452,7 +452,7 @@ void txThermalModel::updateA(coreTime time)
 	}
 	//printf("%f:%s A=%f to(%f)=%f hs(%f)=%f\n",time, name.c_str(), ambientTemp, DTtou+ambientTemp, o1, DTgu, o2);
 	Relay::updateA(time);
-	prevTime = time;
+	object_time.prevTime = time;
 }
 
 void txThermalModel::timestep(coreTime time, const IOdata & /*inputs*/, const solverMode & /*sMode*/)

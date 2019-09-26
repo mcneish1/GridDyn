@@ -34,7 +34,7 @@ coreObject *grabberSource::clone (coreObject *obj) const
     src->set ("gain", multiplier);
     if ((gset) && (!src->gset))
     {
-        src->pFlowInitializeA (prevTime, 0);
+        src->pFlowInitializeA (object_time.prevTime, 0);
     }
     return src;
 }

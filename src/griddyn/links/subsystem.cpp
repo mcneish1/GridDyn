@@ -317,7 +317,7 @@ double subsystem::get (const std::string &param, units_t unitType) const
 void subsystem::timestep (const coreTime time, const IOdata &inputs, const solverMode &sMode)
 {
     subarea.timestep (time, inputs, sMode);
-    prevTime = time;
+    object_time.prevTime = time;
 }
 
 count_t subsystem::getBusVector (std::vector<gridBus *> &busVector, index_t start)
@@ -336,7 +336,7 @@ void subsystem::setState (const coreTime time,
                           const solverMode &sMode)
 {
     subarea.setState (time, state, dstate_dt, sMode);
-    prevTime = time;
+    object_time.prevTime = time;
     updateLocalCache ();
     // next do any internal area states
 }

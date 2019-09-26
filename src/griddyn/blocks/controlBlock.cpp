@@ -156,7 +156,7 @@ void controlBlock::blockJacobianElements (double input,
 
 double controlBlock::step (coreTime time, double input)
 {
-    double dt = time - prevTime;
+    double dt = time - object_time.prevTime;
     double out;
     double inputB = input + bias;
     double ival, ival2;
@@ -167,7 +167,7 @@ double controlBlock::step (coreTime time, double input)
     else
     {
         double tstep = 0.05 * m_T1;
-        double ct = prevTime + tstep;
+        double ct = object_time.prevTime + tstep;
         double in = prevInput;
         double pin = prevInput;
         ival = m_state[limiter_alg + limiter_diff + 1];
@@ -193,7 +193,7 @@ double controlBlock::step (coreTime time, double input)
     else
     {
         out = m_state[0];
-        prevTime = time;
+        object_time.prevTime = time;
         m_output = out;
     }
     return out;

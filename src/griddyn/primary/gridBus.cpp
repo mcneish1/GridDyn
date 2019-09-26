@@ -1030,7 +1030,7 @@ void gridBus::residual (const IOdata &inputs, const stateData &sD, double resid[
     {
         alert (this, INVALID_STATE_ALERT);
         alert (this, VERY_LOW_VOLTAGE_ALERT);
-        lowVtime = (!sD.empty ()) ? sD.time : prevTime;
+        lowVtime = (!sD.empty ()) ? sD.time : object_time.prevTime;
         return;
     }
     gridComponent::residual (outputs, sD, resid, sMode);

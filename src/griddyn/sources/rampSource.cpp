@@ -47,7 +47,7 @@ void rampSource::set (const std::string &param, double val, gridUnits::units_t u
 
 double rampSource::computeOutput (coreTime time) const
 {
-    auto tdiff = time - prevTime;
+    auto tdiff = time - object_time.prevTime;
     return m_output + mp_dOdt * tdiff;
 }
 

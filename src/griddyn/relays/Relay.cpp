@@ -435,7 +435,7 @@ void Relay::setFlag (const std::string &flag, bool val)
         opFlags.set (continuous_flag, val);
         if (!val)
         {
-            m_nextSampleTime = (prevTime < timeZero) ? timeZero : prevTime;
+            m_nextSampleTime = (object_time.prevTime < timeZero) ? timeZero : object_time.prevTime;
         }
     }
     else if (flag == "sampled")
@@ -443,7 +443,7 @@ void Relay::setFlag (const std::string &flag, bool val)
         opFlags.set (continuous_flag, !val);
         if (val)
         {
-            m_nextSampleTime = (prevTime < timeZero) ? timeZero : prevTime;
+            m_nextSampleTime = (object_time.prevTime < timeZero) ? timeZero : object_time.prevTime;
         }
     }
     else if ((flag == "comm_enabled") || (flag == "comms") || (flag == "usecomms"))
@@ -476,7 +476,7 @@ void Relay::updateA (coreTime time)
     auto ncond = condChecks;  // the condition triggers may change the number of conditions so the array needs to
     // be copied first
     condChecks.clear ();
-    nextUpdateTime = maxTime;
+    object_time.nextUpdateTime = maxTime;
     if (opFlags[continuous_flag])
     {
         for (auto &cond : ncond)
@@ -485,9 +485,9 @@ void Relay::updateA (coreTime time)
         }
         for (auto &cond : condChecks)
         {
-            if (cond.testTime < nextUpdateTime)
+            if (cond.testTime < object_time.nextUpdateTime)
             {
-                nextUpdateTime = cond.testTime;
+                object_time.nextUpdateTime = cond.testTime;
             }
         }
         auto cz = static_cast<index_t> (conditions.size ());
@@ -511,9 +511,9 @@ void Relay::updateA (coreTime time)
 
         for (auto &cond : condChecks)
         {
-            if (cond.testTime < nextUpdateTime)
+            if (cond.testTime < object_time.nextUpdateTime)
             {
-                nextUpdateTime = cond.testTime;
+                object_time.nextUpdateTime = cond.testTime;
             }
         }
 
@@ -530,12 +530,12 @@ void Relay::updateA (coreTime time)
                     }
                 }
             }
-            m_nextSampleTime += updatePeriod;
-            nextUpdateTime = std::min (nextUpdateTime, m_nextSampleTime);
+            m_nextSampleTime += object_time.updatePeriod;
+            object_time.nextUpdateTime = std::min (object_time.nextUpdateTime, m_nextSampleTime);
         }
     }
-    assert (nextUpdateTime > negTime / 2);
-    lastUpdateTime = time;
+    assert (object_time.nextUpdateTime > negTime / 2);
+    object_time.lastUpdateTime = time;
 }
 
 std::string Relay::generateCommName () { return getName (); }
@@ -597,7 +597,7 @@ void Relay::pFlowObjectInitializeA (coreTime time0, std::uint32_t /*flags*/)
             }
         }
     }
-    prevTime = time0;
+    object_time.prevTime = time0;
 }
 
 void Relay::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
@@ -608,15 +608,15 @@ void Relay::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
     }
     else
     {
-        if (updatePeriod == maxTime)
+        if (object_time.updatePeriod == maxTime)
         {  // set the period to the period of the simulation
-            updatePeriod = getRoot ()->get ("steptime");
-            if (updatePeriod < timeZero)
+            object_time.updatePeriod = getRoot ()->get ("steptime");
+            if (object_time.updatePeriod < timeZero)
             {
-                updatePeriod = timeOneSecond;
+                object_time.updatePeriod = timeOneSecond;
             }
         }
-        m_nextSampleTime = nextUpdateTime = time0 + updatePeriod;
+        m_nextSampleTime = object_time.nextUpdateTime = time0 + object_time.updatePeriod;
     }
 
     //*update the flag for future power flow check  BUG noticed by Colin Ponce 10/21/16
@@ -659,7 +659,7 @@ change_code Relay::triggerAction (index_t actionNumber)
 {
     if (isValidIndex (actionNumber, actions))
     {
-        return executeAction (actionNumber, kNullLocation, prevTime);
+        return executeAction (actionNumber, kNullLocation, object_time.prevTime);
     }
     return change_code::not_triggered;
 }
@@ -718,7 +718,7 @@ change_code Relay::powerFlowAdjust (const IOdata & /*inputs*/, std::uint32_t /*f
             {
                 if (conditions[kk]->checkCondition ())
                 {
-                    ret = std::max (triggerCondition (kk, prevTime, maxTime), ret);
+                    ret = std::max (triggerCondition (kk, object_time.prevTime, maxTime), ret);
                 }
             }
         }
@@ -777,7 +777,7 @@ change_code Relay::rootCheck (const IOdata & /*inputs*/,
 {
     auto prevTrig = triggerCount;
     auto prevAct = actionsTakenCount;
-    coreTime ctime = (!sD.empty ()) ? (sD.time) : prevTime;
+    coreTime ctime = (!sD.empty ()) ? (sD.time) : object_time.prevTime;
     updateA (ctime);
     if ((triggerCount != prevTrig) || (actionsTakenCount != prevAct))
     {
@@ -792,7 +792,7 @@ void Relay::clearCondChecks (index_t conditionNumber)
 {
     auto cc = condChecks;
     condChecks.resize (0);
-    coreTime mTime = nextUpdateTime;
+    coreTime mTime = object_time.nextUpdateTime;
     for (auto &cond : cc)
     {
         if (cond.conditionNum != conditionNumber)
@@ -804,9 +804,9 @@ void Relay::clearCondChecks (index_t conditionNumber)
             }
         }
     }
-    if (mTime != nextUpdateTime)
+    if (mTime != object_time.nextUpdateTime)
     {
-        nextUpdateTime = mTime;
+        object_time.nextUpdateTime = mTime;
         alert (this, UPDATE_TIME_CHANGE);
     }
 }
@@ -875,12 +875,12 @@ Relay::triggerCondition (index_t conditionNum, coreTime conditionTriggerTime, co
             condChecks.emplace_back (conditionNum, mm, conditionTriggerTime + actionDelays[conditionNum][mm]);
             if (hasUpdates ())
             {
-                nextUpdateTime = std::min (nextUpdateTime, conditionTriggerTime + actionDelays[conditionNum][mm]);
+                object_time.nextUpdateTime = std::min (object_time.nextUpdateTime, conditionTriggerTime + actionDelays[conditionNum][mm]);
                 alert (this, UPDATE_TIME_CHANGE);
             }
             else
             {
-                nextUpdateTime = conditionTriggerTime + actionDelays[conditionNum][mm];
+                object_time.nextUpdateTime = conditionTriggerTime + actionDelays[conditionNum][mm];
                 enable_updates ();
                 alert (this, UPDATE_REQUIRED);
             }
@@ -922,7 +922,7 @@ Relay::multiConditionCheckExecute (index_t conditionNumber, coreTime conditionTr
         {
             if (mct.delayTime <= minimumDelayTime)
             {
-                auto iret = executeAction (mct.actionNum, conditionNumber, prevTime);
+                auto iret = executeAction (mct.actionNum, conditionNumber, object_time.prevTime);
                 if (iret > eventReturn)
                 {
                     eventReturn = iret;
@@ -931,7 +931,7 @@ Relay::multiConditionCheckExecute (index_t conditionNumber, coreTime conditionTr
             else
             {
                 condChecks.emplace_back (conditionNumber, mct.actionNum, conditionTriggerTime + mct.delayTime, true);
-                nextUpdateTime = std::min (nextUpdateTime, conditionTriggerTime + mct.delayTime);
+                object_time.nextUpdateTime = std::min (object_time.nextUpdateTime, conditionTriggerTime + mct.delayTime);
                 alert (this, UPDATE_TIME_CHANGE);
             }
         }

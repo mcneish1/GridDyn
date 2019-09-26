@@ -318,11 +318,11 @@ void pmu::updateA (coreTime time)
 coreTime pmu::updateB ()
 {
     sensor::updateB ();
-    if (nextUpdateTime > nextTransmitTime)
+    if (object_time.nextUpdateTime > nextTransmitTime)
     {
-        nextUpdateTime = nextTransmitTime;
+        object_time.nextUpdateTime = nextTransmitTime;
     }
-    return nextUpdateTime;
+    return object_time.nextUpdateTime;
 }
 
 void pmu::generateAndTransmitMessage () const
@@ -339,7 +339,7 @@ void pmu::generateAndTransmitMessage () const
         payload->multiFields.resize (res.size ());
         payload->multiValues.resize (res.size ());
         payload->multiUnits.resize (res.size ());
-        payload->m_time = prevTime;
+        payload->m_time = object_time.prevTime;
         for (index_t ii = 0; ii < static_cast<index_t> (res.size ()); ++ii)
         {
             payload->multiFields[ii] = oname[ii][0];

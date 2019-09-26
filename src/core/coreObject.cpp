@@ -25,22 +25,27 @@ namespace griddyn
 // secondary
 std::atomic<id_type_t> coreObject::s_obcnt (101);
 
-coreObject::coreObject (const std::string &objName) : m_refCount (0), m_oid (s_obcnt++), name (objName)
+coreObject::coreObject (const std::string &objName)
 {
+    object_refcount.m_refCount = 0;
+    object_id.m_oid = s_obcnt++;
+    object_id.name = objName;
     static nullObject nullObject0 (0);
     // not using updateName since in many cases the id has not been set yet
-    if (!name.empty () && (name.back () == '#'))
+    if (!object_id.name.empty () && (object_id.name.back () == '#'))
     {
-        name.pop_back ();
-        appendInteger (name, m_oid);
+        object_id.name.pop_back ();
+        appendInteger (object_id.name, object_id.m_oid);
     }
     parent = &nullObject0;
 }
 
 // this constructor is only used for building some select nullObjects
-coreObject::coreObject (id_type_t coid) : m_refCount (0), m_oid (coid)
+coreObject::coreObject (id_type_t coid)
 {
-    id = coid;
+    object_refcount.m_refCount = 0;
+    object_id.id = coid;
+    object_id.m_oid = coid;
     parent = nullptr;
 }
 coreObject::~coreObject () = default;
@@ -52,40 +57,58 @@ coreObject *coreObject::clone (coreObject *obj) const
 {
     if (obj == nullptr)
     {
-        obj = new coreObject (name);
-        descriptionDictionary.copy (m_oid, obj->m_oid);
+        obj = new coreObject (object_id.name);
+        descriptionDictionary.copy (object_id.m_oid, obj->object_id.m_oid);
     }
-    obj->enabled = enabled;
-    obj->id = id;
-    obj->prevTime = prevTime;
+    obj->object_status.enabled = object_status.enabled;
+    obj->object_id.id = object_id.id;
+    obj->object_time.prevTime = object_time.prevTime;
 
-    obj->nextUpdateTime = nextUpdateTime;
-    obj->lastUpdateTime = lastUpdateTime;
-    obj->updatePeriod = updatePeriod;
-    obj->updateDelay = updateDelay;
+    obj->object_time.nextUpdateTime = object_time.nextUpdateTime;
+    obj->object_time.lastUpdateTime = object_time.lastUpdateTime;
+    obj->object_time.updatePeriod = object_time.updatePeriod;
+    obj->object_time.updateDelay = object_time.updateDelay;
+
+    return obj;
+}
+
+// inherited copy construction method
+coreObject *coreObject::clone () const
+{
+    coreObject* obj = new coreObject (object_id.name);
+    descriptionDictionary.copy (object_id.m_oid, obj->object_id.m_oid);
+
+    obj->object_status.enabled = object_status.enabled;
+    obj->object_id.id = object_id.id;
+    obj->object_time.prevTime = object_time.prevTime;
+
+    obj->object_time.nextUpdateTime = object_time.nextUpdateTime;
+    obj->object_time.lastUpdateTime = object_time.lastUpdateTime;
+    obj->object_time.updatePeriod = object_time.updatePeriod;
+    obj->object_time.updateDelay = object_time.updateDelay;
 
     return obj;
 }
 
 void coreObject::updateName ()
 {
-    if (name.empty ())
+    if (object_id.name.empty ())
     {
         return;
     }
-    switch (name.back ())
+    switch (object_id.name.back ())
     {
     case '$':
-        name.pop_back ();
-        appendInteger (name, id);
+        object_id.name.pop_back ();
+        appendInteger (object_id.name, object_id.id);
         break;
     case '#':
-        name.pop_back ();
-        appendInteger (name, m_oid);
+        object_id.name.pop_back ();
+        appendInteger (object_id.name, object_id.m_oid);
         break;
     case '@':
-        name.pop_back ();
-        appendInteger (name, locIndex);
+        object_id.name.pop_back ();
+        appendInteger (object_id.name, locIndex);
         break;
     default:
         break;
@@ -119,7 +142,7 @@ void coreObject::addHelper (std::shared_ptr<helperObject> obj)
 void coreObject::addOwningReference ()
 {
     // use relaxed ordering since no one cares about order on the increment operation
-    m_refCount.fetch_add (1, std::memory_order_relaxed);
+    object_refcount.m_refCount.fetch_add (1, std::memory_order_relaxed);
 }
 
 static stringVec locNumStrings{"updateperiod", "updaterate", "nextupdatetime", "basepower", "enabled", "id"};
@@ -158,13 +181,13 @@ void coreObject::getParameterStrings (stringVec &pstr, paramStringType pstype) c
 
 void coreObject::setDescription (const std::string &description)
 {
-    descriptionDictionary.update (m_oid, description);
+    descriptionDictionary.update (object_id.m_oid, description);
 }
 
-std::string coreObject::getDescription () const { return descriptionDictionary.query (m_oid); }
+std::string coreObject::getDescription () const { return descriptionDictionary.query (object_id.m_oid); }
 void coreObject::nameUpdate () { parent->alert (this, OBJECT_NAME_CHANGE); }
 void coreObject::idUpdate () { parent->alert (this, OBJECT_ID_CHANGE); }
-void coreObject::setUpdateTime (double newUpdateTime) { nextUpdateTime = newUpdateTime; }
+void coreObject::setUpdateTime (double newUpdateTime) { object_time.nextUpdateTime = newUpdateTime; }
 void coreObject::setParent (coreObject *parentObj)
 {
     static nullObject nullObjectEp (0);
@@ -259,19 +282,19 @@ double coreObject::get (const std::string &param, gridUnits::units_t unitType) c
     }
     else if (param == "period")
     {
-        val = gridUnits::unitConversion (static_cast<double> (updatePeriod), gridUnits::sec, unitType);
+        val = gridUnits::unitConversion (static_cast<double> (object_time.updatePeriod), gridUnits::sec, unitType);
     }
     else if ((param == "time") || (param == "currenttime"))
     {
-        val = static_cast<double> (prevTime);
+        val = static_cast<double> (object_time.prevTime);
     }
     else if ((param == "update") || (param == "nextupdate"))
     {
-        val = static_cast<double> (nextUpdateTime);
+        val = static_cast<double> (object_time.nextUpdateTime);
     }
     else if (param == "lastupdate")
     {
-        val = static_cast<double> (lastUpdateTime);
+        val = static_cast<double> (object_time.lastUpdateTime);
     }
     return val;
 }
@@ -280,23 +303,23 @@ void coreObject::set (const std::string &param, double val, gridUnits::units_t u
 {
     if ((param == "updateperiod") || (param == "period"))
     {
-        updatePeriod = gridUnits::unitConversion (val, unitType, gridUnits::sec);
+        object_time.updatePeriod = gridUnits::unitConversion (val, unitType, gridUnits::sec);
     }
     else if ((param == "updaterate") || (param == "rate"))
     {
         double rt = gridUnits::unitConversion (val, unitType, gridUnits::Hz);
         if (rt <= 0.0)
         {
-            updatePeriod = kBigNum;
+            object_time.updatePeriod = kBigNum;
         }
         else
         {
-            updatePeriod = 1.0 / rt;
+            object_time.updatePeriod = 1.0 / rt;
         }
     }
     else if (param == "nextupdatetime")
     {
-        nextUpdateTime = gridUnits::unitConversion (val, unitType, gridUnits::sec);
+        object_time.nextUpdateTime = gridUnits::unitConversion (val, unitType, gridUnits::sec);
     }
     else if ((param == "number") || (param == "renumber") || (param == "id"))
     {
@@ -333,7 +356,7 @@ std::string coreObject::getString (const std::string &param) const
     std::string out ("NA");
     if (param == "name")
     {
-        out = name;
+        out = object_id.name;
     }
     else if (param == "description")
     {
@@ -352,30 +375,30 @@ std::string coreObject::getString (const std::string &param) const
 coreObject *coreObject::getSubObject (const std::string & /*typeName*/, index_t /*num*/) const { return nullptr; }
 coreObject *coreObject::findByUserID (const std::string & /*typeName*/, index_t searchID) const
 {
-    if (searchID == id)
+    if (searchID == object_id.id)
     {
         return const_cast<coreObject *> (this);
     }
     return nullptr;
 }
 
-void coreObject::updateA (coreTime time) { lastUpdateTime = time; }
+void coreObject::updateA (coreTime time) { object_time.lastUpdateTime = time; }
 coreTime coreObject::updateB ()
 {
-    assert (nextUpdateTime > negTime / 2.0);  // The assert is to check for spurious calls
-    if (nextUpdateTime < maxTime)
+    assert (object_time.nextUpdateTime > negTime / 2.0);  // The assert is to check for spurious calls
+    if (object_time.nextUpdateTime < maxTime)
     {
-        while (lastUpdateTime >= nextUpdateTime)
+        while (object_time.lastUpdateTime >= object_time.nextUpdateTime)
         {
-            nextUpdateTime += updatePeriod;
+            object_time.nextUpdateTime += object_time.updatePeriod;
         }
     }
-    return nextUpdateTime;
+    return object_time.nextUpdateTime;
 }
 
-void coreObject::enable () { enabled = true; }
-void coreObject::disable () { enabled = false; }
-bool coreObject::isEnabled () const { return enabled; }
+void coreObject::enable () { object_status.enabled = true; }
+void coreObject::disable () { object_status.enabled = false; }
+bool coreObject::isEnabled () const { return object_status.enabled; }
 // core objects are cloneable derived classes may not be
 bool coreObject::isCloneable () const { return true; }
 void coreObject::alert (coreObject *object, int code) { parent->alert (object, code); }
@@ -384,7 +407,7 @@ void coreObject::log (coreObject *object, print_level level, const std::string &
     parent->log (object, level, message);
 }
 
-void coreObject::makeNewOID () { m_oid = ++s_obcnt; }
+void coreObject::makeNewOID () { object_id.m_oid = ++s_obcnt; }
 // NOTE: there is some potential for recursion here if the parent object searches in lower objects
 // But in some cases you search up, and others you want to search down so we will rely on intelligence on the part
 // of the implementer
@@ -394,9 +417,9 @@ int coreObject::getInt (const std::string &param) const { return static_cast<int
 
 std::string fullObjectName (const coreObject *obj)
 {
-    if (obj->parent->m_oid != 0u)  // the nullobject oid==0
+    if (obj->parent->object_id.m_oid != 0u)  // the nullobject oid==0
     {
-        if (obj->parent->parent->m_oid != 0u)
+        if (obj->parent->parent->object_id.m_oid != 0u)
         {
             return fullObjectName (obj->parent) + "::" + obj->getName ();  // yay recursion
         }
@@ -410,11 +433,11 @@ void removeReference (coreObject *objToDelete)
 {
     if (objToDelete != nullptr)
     {
-        if (objToDelete->m_refCount <= 1)  // don't do a write unless we absolutely need to
+        if (objToDelete->object_refcount.m_refCount <= 1)  // don't do a write unless we absolutely need to
         {
             delete objToDelete;
         }
-        else if (--objToDelete->m_refCount <= 0)  // now we need to check again if we need to delete
+        else if (--objToDelete->object_refcount.m_refCount <= 0)  // now we need to check again if we need to delete
         {
             delete objToDelete;
         }
@@ -425,11 +448,11 @@ void removeReference (coreObject *objToDelete, const coreObject *parent)
 {
     if (objToDelete != nullptr)
     {
-        if (objToDelete->m_refCount <= 1)  // don't do a write on an atomic unless we absolutely need to
+        if (objToDelete->object_refcount.m_refCount <= 1)  // don't do a write on an atomic unless we absolutely need to
         {
             delete objToDelete;
         }
-        else if (--objToDelete->m_refCount <= 0)  // this is an atomic operation
+        else if (--objToDelete->object_refcount.m_refCount <= 0)  // this is an atomic operation
         {
             delete objToDelete;
         }
@@ -481,5 +504,46 @@ print_level stringToPrintLevel (const std::string &level)
     }
     throw (invalidParameterValue (level));
 }
+
+std::string const& coreObject::getName () const noexcept { return object_id.name; }
+index_t coreObject::getUserID () const noexcept { return object_id.id; }
+std::int64_t coreObject::getID () const noexcept { return object_id.m_oid; }
+void coreObject::setName (const std::string &newName)
+{
+    object_id.name = newName;
+    nameUpdate ();
+}
+coreObject *coreObject::getRoot () const
+{  // the id of 0 is used by a special nullObject
+    return (parent->object_id.id != 0) ? (parent->getRoot ()) : const_cast<coreObject *> (this);
+}
+bool coreObject::isRoot () const { return (parent->object_id.id == 0); }
+void coreObject::setUserID (index_t newUserID)
+{
+    object_id.id = newUserID;
+    idUpdate ();
+}
+bool coreObject::hasUpdates () const { return object_status.updates_enabled; }
+void coreObject::enable_updates (bool upd_enabled)
+{
+    object_status.updates_enabled = upd_enabled;
+    alert (this, UPDATE_REQUIRED);
+}
+coreTime coreObject::getNextUpdateTime () const noexcept { return object_time.nextUpdateTime; }
+coreTime coreObject::currentTime () const noexcept { return object_time.prevTime; }
+
+bool compareUpdates (const coreObject *o1, const coreObject *o2)
+{
+    return (o1->object_time.nextUpdateTime < o2->object_time.nextUpdateTime);
+}
+bool compareNames (const coreObject *o1, const coreObject *o2) { return (o1->object_id.name < o2->object_id.name); }
+
+bool isSameObject (const coreObject *o1, const coreObject *o2)
+{
+    return ((o2 != nullptr) && (o1 != nullptr) && (o1->object_id.m_oid == o2->object_id.m_oid));
+}
+bool isSameObject (id_type_t id, const coreObject *o2) { return ((o2 != nullptr) && (id == o2->object_id.m_oid)); }
+bool isSameObject (const coreObject *o1, id_type_t id) { return ((o1 != nullptr) && (id == o1->object_id.m_oid)); }
+
 
 }  // namespace griddyn

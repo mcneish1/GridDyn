@@ -48,7 +48,7 @@ coreObject *infiniteBus::clone (coreObject *obj) const
 
 void infiniteBus::updateVoltageAngle (coreTime time)
 {
-    auto dt = static_cast<double> (time - prevTime);
+    auto dt = static_cast<double> (time - object_time.prevTime);
 
     angle += 2.0 * kPI * dt * (dfdt / 2.0 + (freq - 1.0));
     freq += dfdt * dt;
@@ -105,19 +105,19 @@ double infiniteBus::getAngle (const double /*state*/[], const solverMode & /*sMo
 
 double infiniteBus::getVoltage (const stateData &sD, const solverMode & /*sMode*/) const
 {
-    const double dt = (!sD.empty ()) ? static_cast<double> (sD.time - prevTime) : 0.0;
+    const double dt = (!sD.empty ()) ? static_cast<double> (sD.time - object_time.prevTime) : 0.0;
     return voltage + dt * dvdt;
 }
 
 double infiniteBus::getAngle (const stateData &sD, const solverMode & /*sMode*/) const
 {
-    const double dt = (!sD.empty ()) ? static_cast<double> (sD.time - prevTime) : 0.0;
+    const double dt = (!sD.empty ()) ? static_cast<double> (sD.time - object_time.prevTime) : 0.0;
     return angle + 2 * kPI * (dt * ((freq - 1.0) + dfdt / 2));
 }
 
 double infiniteBus::getFreq (const stateData &sD, const solverMode & /*sMode*/) const
 {
-    double dt = (!sD.empty ()) ? static_cast<double> (sD.time - prevTime) : 0.0;
+    double dt = (!sD.empty ()) ? static_cast<double> (sD.time - object_time.prevTime) : 0.0;
     return freq + dt * dfdt;
 }
 

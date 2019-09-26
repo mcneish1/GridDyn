@@ -50,7 +50,7 @@ int fileSource::setFile (const std::string &fileName, index_t column)
 
 void fileSource::pFlowObjectInitializeA (coreTime time0, std::uint32_t flags)
 {
-    prevTime = time0;
+    object_time.prevTime = time0;
     if (opFlags[use_absolute_time_flag])
     {
         double abstime0 = get ("abstime0");
@@ -65,7 +65,7 @@ void fileSource::pFlowObjectInitializeA (coreTime time0, std::uint32_t flags)
             }
         }
         currIndex = ii;
-        nextUpdateTime = schedLoad.time (currIndex);
+        object_time.nextUpdateTime = schedLoad.time (currIndex);
         timestep (time0, noInputs, cLocalSolverMode);
     }
     else
@@ -77,7 +77,7 @@ void fileSource::pFlowObjectInitializeA (coreTime time0, std::uint32_t flags)
                 currIndex++;
             }
             currIndex = currIndex - 1;
-            nextUpdateTime = schedLoad.time (currIndex);
+            object_time.nextUpdateTime = schedLoad.time (currIndex);
             timestep (time0, noInputs, cLocalSolverMode);
         }
     }
@@ -89,7 +89,7 @@ void fileSource::updateA (coreTime time)
     while (time >= schedLoad.time (currIndex))
     {
         m_output = schedLoad.data (currIndex);
-        prevTime = schedLoad.time (currIndex);
+        object_time.prevTime = schedLoad.time (currIndex);
         currIndex++;
         if (currIndex >= count)
         {  // this should never happen since the last time should be very large
@@ -109,13 +109,13 @@ void fileSource::updateA (coreTime time)
             mp_dOdt = diff / dt;
         }
 
-        nextUpdateTime = schedLoad.time (currIndex);
+        object_time.nextUpdateTime = schedLoad.time (currIndex);
     }
 }
 
 void fileSource::timestep (coreTime time, const IOdata &inputs, const solverMode &sMode)
 {
-    if (time > nextUpdateTime)
+    if (time > object_time.nextUpdateTime)
     {
         updateA (time);
     }

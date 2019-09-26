@@ -143,7 +143,7 @@ void AGControl::updateA (coreTime /*time*/) {}
 
 void AGControl::timestep (coreTime time, const IOdata &inputs, const solverMode & /*sMode*/)
 {
-    prevTime = time;
+    object_time.prevTime = time;
 
     ACE = (inputs[1]) - 10.0 * beta * inputs[0];
     fACE = filt1->step (time, ACE);

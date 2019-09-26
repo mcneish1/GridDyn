@@ -157,7 +157,7 @@ void acLine::timestep (const coreTime time, const IOdata & /*inputs*/, const sol
     }
 
     updateLocalCache ();
-    prevTime = time;
+    object_time.prevTime = time;
     /*if (scheduled)
     {
     Psched=sched->timestepP(time);
@@ -883,7 +883,7 @@ double acLine::getMaxTransfer () const
 
 void acLine::setState (coreTime time, const double state[], const double dstate_dt[], const solverMode &sMode)
 {
-    prevTime = time;
+    object_time.prevTime = time;
     stateData sD (time, state, dstate_dt);
 
     if (sMode.approx[decoupled])

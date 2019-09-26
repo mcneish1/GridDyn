@@ -88,7 +88,7 @@ void filteredDerivativeBlock::dynObjectInitializeB (const IOdata &inputs,
 double filteredDerivativeBlock::step (coreTime time, double inputA)
 {
     index_t loc = limiter_diff;
-    double dt = time - prevTime;
+    double dt = time - object_time.prevTime;
 
     double input = inputA + bias;
     if ((dt >= fabs (5.0 * m_T1)) && (dt >= fabs (5.0 * m_T2)))
@@ -99,7 +99,7 @@ double filteredDerivativeBlock::step (coreTime time, double inputA)
     else
     {
         double tstep = 0.05 * std::min (m_T1, m_T2);
-        double ct = prevTime + tstep;
+        double ct = object_time.prevTime + tstep;
         double in = prevInput;
         double pin = prevInput;
         double ival = m_state[loc + 1];
@@ -126,7 +126,7 @@ double filteredDerivativeBlock::step (coreTime time, double inputA)
     else
     {
         out = m_state[0];
-        prevTime = time;
+        object_time.prevTime = time;
         m_output = out;
     }
     return out;

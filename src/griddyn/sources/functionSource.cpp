@@ -44,7 +44,7 @@ double functionSource::getOutput (const IOdata & /*inputs*/,
 
 double functionSource::getOutput (index_t outputNum) const
 {
-    return (outputNum == 0) ? sourceFunc (prevTime) : kNullVal;
+    return (outputNum == 0) ? sourceFunc (object_time.prevTime) : kNullVal;
 }
 double functionSource::getDoutdt (const IOdata & /*inputs*/,
                                   const stateData &sD,

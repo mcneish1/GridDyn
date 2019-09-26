@@ -166,7 +166,7 @@ void gridComponent::pFlowInitializeA (coreTime time0, std::uint32_t flags)
     if (isEnabled ())
     {
         pFlowObjectInitializeA (time0, flags);
-        prevTime = time0;
+        object_time.prevTime = time0;
         updateFlags (false);
         setupPFlowFlags ();
     }
@@ -186,7 +186,7 @@ void gridComponent::dynInitializeA (coreTime time0, std::uint32_t flags)
     if (isEnabled ())
     {
         dynObjectInitializeA (time0, flags);
-        prevTime = time0;
+        object_time.prevTime = time0;
         updateFlags (true);
         setupDynFlags ();
     }
@@ -197,9 +197,9 @@ void gridComponent::dynInitializeB (const IOdata &inputs, const IOdata &desiredO
     if (isEnabled ())
     {
         dynObjectInitializeB (inputs, desiredOutput, fieldSet);
-        if (updatePeriod < maxTime)
+        if (object_time.updatePeriod < maxTime)
         {
-            setUpdateTime (prevTime + updatePeriod);
+            setUpdateTime (object_time.prevTime + object_time.updatePeriod);
             enable_updates ();
         }
         opFlags.set (dyn_initialized);
@@ -1005,7 +1005,7 @@ void gridComponent::setState (coreTime time,
                               const double dstate_dt[],
                               const solverMode &sMode)
 {
-    prevTime = time;
+    object_time.prevTime = time;
     if (!hasStates (sMode))  // use the const version of stateSize
     {
         return;
@@ -1831,7 +1831,7 @@ coreObject *gridComponent::findByUserID (const std::string &typeName, index_t se
 
 void gridComponent::timestep (coreTime time, const IOdata &inputs, const solverMode &sMode)
 {
-    prevTime = time;
+    object_time.prevTime = time;
 
     for (auto &subobj : subObjectList)
     {

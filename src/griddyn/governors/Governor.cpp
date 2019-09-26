@@ -84,7 +84,7 @@ Governor::~Governor () = default;
 
 void Governor::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
 {
-    prevTime = time0;
+    object_time.prevTime = time0;
     if (Wref < 0)
     {
         Wref = systemBaseFrequency;

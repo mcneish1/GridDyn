@@ -54,12 +54,12 @@ coreObject *schedulerRamp::clone (coreObject *obj) const
     return nobj;
 }
 
-void schedulerRamp::setTarget (double target) { insertTarget (tsched (prevTime, target)); }
+void schedulerRamp::setTarget (double target) { insertTarget (tsched (object_time.prevTime, target)); }
 
 void schedulerRamp::setTarget (coreTime time, double target)
 {
     insertTarget (tsched (time, target));
-    if (time == nextUpdateTime)
+    if (time == object_time.nextUpdateTime)
     {
         updatePTarget ();
     }
@@ -67,21 +67,21 @@ void schedulerRamp::setTarget (coreTime time, double target)
 
 void schedulerRamp::updateA (coreTime time)
 {
-    double dt = (time - prevTime);
+    double dt = (time - object_time.prevTime);
 
     if (dt == 0)
     {
         return;
     }
 
-    if (time >= nextUpdateTime)
+    if (time >= object_time.nextUpdateTime)
     {
-        double otime = nextUpdateTime;
-        dt = nextUpdateTime - prevTime;
+        double otime = object_time.nextUpdateTime;
+        dt = object_time.nextUpdateTime - object_time.prevTime;
         PCurr = PCurr + PRampCurr * dt;
         dPdt = getRamp ();
         m_output = m_output + dPdt * dt;
-        prevTime = nextUpdateTime;
+        object_time.prevTime = object_time.nextUpdateTime;
 
         updatePTarget ();
 
@@ -92,12 +92,12 @@ void schedulerRamp::updateA (coreTime time)
     dPdt = getRamp ();
     m_output = m_output + dPdt * dt;
     reserveAct = m_output - PCurr;
-    prevTime = time;
+    object_time.prevTime = time;
 }
 
 double schedulerRamp::predict (coreTime time)
 {
-    double dt = (time - prevTime);
+    double dt = (time - object_time.prevTime);
     if (dt == 0)
     {
         return m_output;
@@ -109,7 +109,7 @@ double schedulerRamp::predict (coreTime time)
 void schedulerRamp::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
 {
     scheduler::dynObjectInitializeA (time0, flags);
-    prevTime = time0 - 0.001;
+    object_time.prevTime = time0 - 0.001;
     lastTargetTime = time0 - 0.001;
 }
 
@@ -125,7 +125,7 @@ void schedulerRamp::dynObjectInitializeB (const IOdata &inputs, const IOdata &de
     }
     while (!pTarget.empty ())
     {
-        if ((pTarget.front ()).time < prevTime)
+        if ((pTarget.front ()).time < object_time.prevTime)
         {
             pTarget.pop_front ();
         }
@@ -171,7 +171,7 @@ double schedulerRamp::getRampTime () const
         return static_cast<double> (kDayLength);
     }
 
-    return (pTarget.front ()).time - prevTime;
+    return (pTarget.front ()).time - object_time.prevTime;
 }
 
 double schedulerRamp::getMax (const coreTime /*time*/) const { return Pmax; }
@@ -356,7 +356,7 @@ void schedulerRamp::updatePTarget ()
     if (pTarget.empty ())
     {
         PRampCurr = 0;
-        nextUpdateTime = maxTime;
+        object_time.nextUpdateTime = maxTime;
         return;
     }
 
@@ -372,7 +372,7 @@ void schedulerRamp::updatePTarget ()
     }
 
     tsched tempTarget;
-    if (time <= prevTime)
+    if (time <= object_time.prevTime)
     {
         // get rid of first element
         pTarget.pop_front ();
@@ -402,25 +402,25 @@ void schedulerRamp::updatePTarget ()
             {
                 // assume we were ramp limited so just keep ramping
                 remtime = rempower / PRampCurr;
-                insertTarget (tsched (target, prevTime + remtime));
-                nextUpdateTime = prevTime + remtime;
+                insertTarget (tsched (target, object_time.prevTime + remtime));
+                object_time.nextUpdateTime = object_time.prevTime + remtime;
             }
             else
             {
                 PRampCurr = 0;
-                nextUpdateTime = maxTime;
+                object_time.nextUpdateTime = maxTime;
             }
             return;
         }
     }
-    double td = (time - prevTime);
+    double td = (time - object_time.prevTime);
     double pdiff = target - PCurr;
     if (rempower == 0.0)
     {
         if ((pdiff < 0.0001) && (pdiff > -0.0001))
         {
             PRampCurr = 0;
-            nextUpdateTime = time;
+            object_time.nextUpdateTime = time;
             return;
         }
     }
@@ -428,7 +428,7 @@ void schedulerRamp::updatePTarget ()
     switch (mode)
     {
     case interp:
-        nextUpdateTime = time;
+        object_time.nextUpdateTime = time;
         PRampCurr = pdiff / td;
         if (PRampCurr > rampLimitUp)
         {
@@ -448,19 +448,19 @@ void schedulerRamp::updatePTarget ()
                 remtime = rempower / PRampCurr;
                 if (remtime < ((td - rampTime) / 2.0))
                 {
-                    nextUpdateTime = prevTime + remtime;
+                    object_time.nextUpdateTime = object_time.prevTime + remtime;
                 }
                 else
                 {
-                    nextUpdateTime = prevTime + ((td - rampTime) / 2.0);
+                    object_time.nextUpdateTime = object_time.prevTime + ((td - rampTime) / 2.0);
                 }
             }
             else
             {
                 td2 = time - lastTargetTime;
-                if ((prevTime - lastTargetTime) >= (td2 - rampTime) / 2.0)
+                if ((object_time.prevTime - lastTargetTime) >= (td2 - rampTime) / 2.0)
                 {
-                    if (prevTime < (lastTargetTime + (td2 - rampTime) / 2.0 + rampTime))
+                    if (object_time.prevTime < (lastTargetTime + (td2 - rampTime) / 2.0 + rampTime))
                     {
                         PRampCurr = pdiff / rampTime;
                         if (PRampCurr > rampLimitUp)
@@ -471,40 +471,40 @@ void schedulerRamp::updatePTarget ()
                         {
                             PRampCurr = -rampDown;
                         }
-                        nextUpdateTime = lastTargetTime + (td2 - rampTime) / 2.0 + rampTime;
+                        object_time.nextUpdateTime = lastTargetTime + (td2 - rampTime) / 2.0 + rampTime;
                     }
                     else
                     {
                         remtime = pdiff / PRampCurr;
-                        nextUpdateTime = prevTime + remtime;
-                        if (time < nextUpdateTime)
+                        object_time.nextUpdateTime = object_time.prevTime + remtime;
+                        if (time < object_time.nextUpdateTime)
                         {
-                            nextUpdateTime = time;
+                            object_time.nextUpdateTime = time;
                         }
                     }
                 }
                 else
                 {
                     PRampCurr = 0;
-                    nextUpdateTime = lastTargetTime + (td2 - rampTime) / 2.0;
+                    object_time.nextUpdateTime = lastTargetTime + (td2 - rampTime) / 2.0;
                 }
             }
         }
         else
         {
             td2 = time - lastTargetTime;
-            if (prevTime >= (lastTargetTime + (td2 - rampTime) / 2.0 + rampTime))
+            if (object_time.prevTime >= (lastTargetTime + (td2 - rampTime) / 2.0 + rampTime))
             {
                 remtime = pdiff / PRampCurr;
-                nextUpdateTime = prevTime + remtime;
-                if (time < nextUpdateTime)
+                object_time.nextUpdateTime = object_time.prevTime + remtime;
+                if (time < object_time.nextUpdateTime)
                 {
-                    nextUpdateTime = time;
+                    object_time.nextUpdateTime = time;
                 }
             }
             else
             {
-                nextUpdateTime = time;
+                object_time.nextUpdateTime = time;
                 if (td == 0)
                 {
                     if (pdiff > 0)
@@ -559,12 +559,12 @@ void schedulerRamp::updatePTarget ()
             {
                 PRampCurr = -rampDown;
             }
-            nextUpdateTime = prevTime + remtime;
+            object_time.nextUpdateTime = object_time.prevTime + remtime;
         }
         else
         {
             PRampCurr = 0;
-            nextUpdateTime = time;
+            object_time.nextUpdateTime = time;
         }
         break;
     case justInTime:
@@ -576,7 +576,7 @@ void schedulerRamp::updatePTarget ()
 void schedulerRamp::insertTarget (tsched ts)
 {
     scheduler::insertTarget (ts);
-    if (nextUpdateTime == ts.time)
+    if (object_time.nextUpdateTime == ts.time)
     {
         updatePTarget ();
     }

@@ -288,7 +288,7 @@ void motorLoad::setState (coreTime time, const double state[], const double dsta
         auto offset = offsets.getAlgOffset (sMode);
         m_state[0] = state[offset];
     }
-    prevTime = time;
+    object_time.prevTime = time;
 }
 
 void motorLoad::guessState (coreTime /*time*/, double state[], double dstate_dt[], const solverMode &sMode)
@@ -355,7 +355,7 @@ void motorLoad::getStateName (stringVec &stNames, const solverMode &sMode, const
 }
 void motorLoad::timestep (coreTime time, const IOdata &inputs, const solverMode & /*sMode*/)
 {
-    double dt = time - prevTime;
+    double dt = time - object_time.prevTime;
     motorLoad::derivative (inputs, emptyStateData, m_dstate_dt.data (), cLocalSolverMode);
     m_state[0] += dt * m_dstate_dt[0];
 }

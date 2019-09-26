@@ -62,7 +62,7 @@ void sineSource::pFlowObjectInitializeA (coreTime time0, std::uint32_t flags)
 
 double sineSource::computeOutput (coreTime time) const
 {
-    auto dt = time - prevTime;
+    auto dt = time - object_time.prevTime;
     if (dt == timeZero)
     {
         return m_output;
@@ -90,15 +90,15 @@ double sineSource::computeOutput (coreTime time) const
 
 void sineSource::updateOutput (coreTime time)
 {
-    auto dt = time - prevTime;
+    auto dt = time - object_time.prevTime;
     if (dt == timeZero)
     {
         return;
     }
     auto tdiff = time - lastCycle;
     // account for the frequency shift
-    frequency += dfdt * (time - prevTime);
-    Amp += dAdt * (time - prevTime);
+    frequency += dfdt * (time - object_time.prevTime);
+    Amp += dAdt * (time - object_time.prevTime);
     // compute the sine wave component
     double addComponent = Amp * sin (2.0 * kPI * (frequency * tdiff) + phase);
     double mult = 1.0;
@@ -120,7 +120,7 @@ void sineSource::updateOutput (coreTime time)
 
     m_output = baseValue + (mult * addComponent);
     m_tempOut = m_output;
-    prevTime = time;
+    object_time.prevTime = time;
 }
 
 void sineSource::set (const std::string &param, const std::string &val) { pulseSource::set (param, val); }
@@ -166,7 +166,7 @@ void sineSource::set (const std::string &param, double val, gridUnits::units_t u
         {
             if (!(opFlags[pulsed_flag]))
             {
-                cycleTime = prevTime;
+                cycleTime = object_time.prevTime;
             }
             opFlags.set (pulsed_flag);
         }

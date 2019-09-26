@@ -356,7 +356,7 @@ void dcLink::setState (coreTime time, const double state[], const double dstate_
             Idc = state[offset];
         }
     }
-    prevTime = time;
+    object_time.prevTime = time;
 }
 
 void dcLink::guessState (const coreTime /*time*/, double state[], double dstate_dt[], const solverMode &sMode)

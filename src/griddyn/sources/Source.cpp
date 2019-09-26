@@ -93,17 +93,17 @@ void Source::updateOutput (coreTime time)
 {
     m_tempOut = computeOutput (time);
     m_output = m_tempOut;
-    prevTime = time;
+    object_time.prevTime = time;
     lastTime = time;
 }
 
 void Source::timestep (coreTime time, const IOdata & /*inputs*/, const solverMode & /*sMode*/)
 {
-    if (time != prevTime)
+    if (time != object_time.prevTime)
     {
         updateOutput (time);
         m_tempOut = m_output;
-        prevTime = time;
+        object_time.prevTime = time;
     }
 }
 
@@ -132,7 +132,7 @@ gridUnits::units_t Source::outputUnits(index_t outputNum) const
 index_t Source::getOutputLoc (const solverMode & /*sMode*/, index_t /*outputNum*/) const { return kNullLocation; }
 void Source::updateLocalCache (const IOdata & /*inputs*/, const stateData &sD, const solverMode & /*sMode*/)
 {
-    if ((prevTime != sD.time) && (sD.time > timeZero))
+    if ((object_time.prevTime != sD.time) && (sD.time > timeZero))
     {
         m_tempOut = computeOutput (sD.time);
         lastTime = sD.time;

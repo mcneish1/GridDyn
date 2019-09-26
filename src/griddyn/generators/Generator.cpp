@@ -234,7 +234,7 @@ void Generator::setState (coreTime time,
 {
     if (isDynamic (sMode))
     {
-        Pset += dPdt * (time - prevTime);
+        Pset += dPdt * (time - object_time.prevTime);
         Pset = valLimit (Pset, Pmin, Pmax);
     }
     else if (stateSize (sMode) > 0)
@@ -242,7 +242,7 @@ void Generator::setState (coreTime time,
         auto offset = offsets.getAlgOffset (sMode);
         Q = -state[offset];
     }
-    prevTime = time;
+    object_time.prevTime = time;
 }
 
 // copy the current state to a vector
@@ -432,7 +432,7 @@ void Generator::timestep (coreTime time, const IOdata &inputs, const solverMode 
     {
         Pset = P;
     }
-    auto dt = time - prevTime;
+    auto dt = time - object_time.prevTime;
     Pset = Pset + dPdt * dt;
     Pset = (Pset > getPmax (dt)) ? getPmax (dt) : ((Pset < getPmin (dt)) ? getPmin (dt) : Pset);
 
@@ -449,7 +449,7 @@ void Generator::timestep (coreTime time, const IOdata &inputs, const solverMode 
     }
 
     // use this as the temporary state storage
-    prevTime = time;
+    object_time.prevTime = time;
 }
 
 change_code
@@ -928,7 +928,7 @@ IOdata Generator::predictOutputs (coreTime predictionTime,
     out[PoutLocation] = Pset;
     out[QoutLocation] = Q;
 
-    if (predictionTime > prevTime + timeOneSecond)
+    if (predictionTime > object_time.prevTime + timeOneSecond)
     {
         if (sched != nullptr)
         {

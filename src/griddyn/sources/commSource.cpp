@@ -58,7 +58,7 @@ void commSource::setLevel (double val)
             double dt = (val - m_output) / maxRamp;
             if (dt > 0.0001)
             {
-                nextUpdateTime = prevTime + dt;
+                object_time.nextUpdateTime = object_time.prevTime + dt;
                 alert (this, UPDATE_TIME_CHANGE);
                 mp_dOdt = (val > m_output) ? maxRamp : -maxRamp;
             }
@@ -123,10 +123,10 @@ void commSource::setFlag (const std::string &flag, bool val)
 
 void commSource::updateA (coreTime time)
 {
-    if (time > nextUpdateTime)
+    if (time > object_time.nextUpdateTime)
     {
         mp_dOdt = 0;
-        nextUpdateTime = maxTime;
+        object_time.nextUpdateTime = maxTime;
     }
 }
 
@@ -162,7 +162,7 @@ void commSource::receiveMessage (std::uint64_t sourceID, std::shared_ptr<commMes
         auto rep = reply->getPayload<controlMessagePayload> ();
         rep->m_field = "level";
         rep->m_value = m_output;
-        rep->m_time = prevTime;
+        rep->m_time = object_time.prevTime;
         commLink->transmit (sourceID, reply);
     }
     break;
@@ -171,7 +171,7 @@ void commSource::receiveMessage (std::uint64_t sourceID, std::shared_ptr<commMes
     case controlMessagePayload::GET_RESULT:
         break;
     case controlMessagePayload::SET_SCHEDULED:
-        if (m->m_time > prevTime)
+        if (m->m_time > object_time.prevTime)
         {
             double val = m->m_value;
             auto fea = std::make_shared<functionEventAdapter> (

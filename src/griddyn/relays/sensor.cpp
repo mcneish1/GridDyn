@@ -508,7 +508,7 @@ void sensor::receiveMessage (std::uint64_t sourceID, std::shared_ptr<commMessage
         assert (rep);
         rep->m_field = m->m_field;
         rep->m_value = val;
-        rep->m_time = prevTime;
+        rep->m_time = object_time.prevTime;
         commLink->transmit (sourceID, std::move (reply));
 
         break;
@@ -534,7 +534,7 @@ void sensor::receiveMessage (std::uint64_t sourceID, std::shared_ptr<commMessage
             val = get (convertToLowerCase (fieldName), gridUnits::getUnits (m->m_units));
             m->multiValues.push_back (val);
         }
-        rep->m_time = prevTime;
+        rep->m_time = object_time.prevTime;
         commLink->transmit (sourceID, std::move (reply));
         break;
     }

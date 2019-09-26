@@ -153,7 +153,7 @@ double lutBlock::step (coreTime time, double input)
     else
     {
         m_output = m_state[0];
-        prevTime = time;
+        object_time.prevTime = time;
     }
 
     return m_state[0];

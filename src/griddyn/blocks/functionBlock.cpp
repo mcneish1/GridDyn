@@ -133,7 +133,7 @@ double functionBlock::step (coreTime time, double input)
         Block::step (time, input);
     }
     m_output = m_state[0];
-    prevTime = time;
+    object_time.prevTime = time;
     return m_state[0];
 }
 

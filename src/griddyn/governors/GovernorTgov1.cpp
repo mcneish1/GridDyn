@@ -104,14 +104,14 @@ void GovernorTgov1::derivative (const IOdata &inputs, const stateData &sD, doubl
 void GovernorTgov1::timestep (coreTime time, const IOdata &inputs, const solverMode & /*sMode*/)
 {
     GovernorTgov1::derivative (inputs, emptyStateData, m_dstate_dt.data (), cLocalSolverMode);
-    double dt = time - prevTime;
+    double dt = time - object_time.prevTime;
     m_state[1] += dt * m_dstate_dt[1];
     m_state[2] += dt * m_dstate_dt[2];
     // double omega = getControlFrequency (inputs);
     double omega = inputs[govOmegaInLocation];
     m_state[0] = m_state[1] - Dt * (omega - 1.0);
 
-    prevTime = time;
+    object_time.prevTime = time;
 }
 
 void GovernorTgov1::jacobianElements (const IOdata & /*inputs*/,

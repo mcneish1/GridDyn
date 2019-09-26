@@ -123,7 +123,7 @@ void txLifeSpan::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
 		return sensor::dynObjectInitializeA(time0, flags);
 	}
 
-	if (updatePeriod > negTime)
+	if (object_time.updatePeriod > negTime)
 	{        //set the period to the period of the simulation to at least 1/5 the winding time constant
 		coreTime pstep = getRoot()->get("steptime");
 		if (pstep < timeZero)
@@ -131,10 +131,10 @@ void txLifeSpan::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
 			pstep = 1.0;
 		}
 		coreTime mtimestep = 120.0;  //update once per minute
-		updatePeriod = pstep*std::floor(mtimestep / pstep);
-		if (updatePeriod < pstep)
+		object_time.updatePeriod = pstep*std::floor(mtimestep / pstep);
+		if (object_time.updatePeriod < pstep)
 		{
-			updatePeriod = pstep;
+			object_time.updatePeriod = pstep;
 		}
 	}
 	if (!opFlags[dyn_initialized])
@@ -198,7 +198,7 @@ void txLifeSpan::dynObjectInitializeB(const IOdata &inputs, const IOdata & desir
 
 void txLifeSpan::updateA(coreTime time)
 {
-	if (time == prevTime)
+	if (time == object_time.prevTime)
 	{
 		return;
 	}
@@ -215,7 +215,7 @@ void txLifeSpan::updateA(coreTime time)
 
 	filterBlocks[0]->step(time,  Faa);
 	Relay::updateA(time);
-	prevTime = time;
+	object_time.prevTime = time;
 }
 
 void txLifeSpan::timestep(coreTime time, const IOdata & /*inputs*/, const solverMode & /*sMode*/)

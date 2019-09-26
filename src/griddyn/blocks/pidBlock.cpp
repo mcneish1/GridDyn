@@ -18,7 +18,7 @@ namespace griddyn
 {
 namespace blocks
 {
-pidBlock::pidBlock (const std::string &objName) : Block (objName),no_D(extra_bool)
+pidBlock::pidBlock (const std::string &objName) : Block (objName),no_D(object_bools.extra_bool)
 {
     opFlags.set (use_state);
     opFlags.set (differential_output);
@@ -26,7 +26,7 @@ pidBlock::pidBlock (const std::string &objName) : Block (objName),no_D(extra_boo
 }
 
 pidBlock::pidBlock (double P, double I, double D, const std::string &objName)
-    : Block (objName), m_P (P), m_I (I), m_D (D), no_D(extra_bool)
+    : Block (objName), m_P (P), m_I (I), m_D (D), no_D(object_bools.extra_bool)
 {
     opFlags.set (use_state);
     opFlags.set (differential_output);
@@ -173,7 +173,7 @@ void pidBlock::blockJacobianElements (double input,
 
 double pidBlock::step (coreTime time, double inputA)
 {
-    double dt = time - prevTime;
+    double dt = time - object_time.prevTime;
     double input = inputA + bias;
     // integral state
 
@@ -187,7 +187,7 @@ double pidBlock::step (coreTime time, double inputA)
     else
     {
         double tstep = 0.05 * std::min (m_T1, m_Td);
-        double ct = prevTime + tstep;
+        double ct = object_time.prevTime + tstep;
         double in = prevInput;
         double pin = prevInput;
         double ival_int = m_state[limiter_diff + 2];
@@ -219,7 +219,7 @@ double pidBlock::step (coreTime time, double inputA)
     }
     else
     {
-        prevTime = time;
+        object_time.prevTime = time;
         m_output = m_state[0];
     }
     return m_output;

@@ -85,8 +85,8 @@ void fileLoad::updateA (coreTime time)
 
     double diffrate = 0;
 
-    prevTime = schedLoad.time (currIndex);
-    auto dt = (currIndex < count - 1) ? (schedLoad.time (currIndex + 1) - prevTime) : maxTime;
+    object_time.prevTime = schedLoad.time (currIndex);
+    auto dt = (currIndex < count - 1) ? (schedLoad.time (currIndex + 1) - object_time.prevTime) : maxTime;
     auto Ncol = static_cast<index_t> (schedLoad.columns ());
     for (index_t pp = 0; pp < Ncol; ++pp)
     {
@@ -161,18 +161,18 @@ void fileLoad::updateA (coreTime time)
             break;
         }
     }
-    lastTime = prevTime;
+    lastTime = object_time.prevTime;
     if (!opFlags[use_step_change_flag])
     {
         rampLoad::updateLocalCache (noInputs, stateData (time), cLocalSolverMode);
     }
-    lastUpdateTime = time;
-    nextUpdateTime = (currIndex == count - 1) ? maxTime : schedLoad.time (currIndex + 1);
+    object_time.lastUpdateTime = time;
+    object_time.nextUpdateTime = (currIndex == count - 1) ? maxTime : schedLoad.time (currIndex + 1);
 }
 
 void fileLoad::timestep (coreTime time, const IOdata &inputs, const solverMode &sMode)
 {
-    if (time >= nextUpdateTime)
+    if (time >= object_time.nextUpdateTime)
     {
         updateA (time);
     }

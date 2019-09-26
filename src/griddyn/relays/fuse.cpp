@@ -32,7 +32,7 @@ namespace griddyn
 namespace relays
 {
 using namespace gridUnits;
-fuse::fuse (const std::string &objName) : Relay (objName), useI2T (extra_bool) { opFlags.set (continuous_flag); }
+fuse::fuse (const std::string &objName) : Relay (objName), useI2T (object_bools.extra_bool) { opFlags.set (continuous_flag); }
 
 coreObject *fuse::clone (coreObject *obj) const
 {
@@ -263,7 +263,7 @@ void fuse::timestep (coreTime time, const IOdata & /*inputs*/, const solverMode 
             alert (this, FUSE1_BLOWN_CURRENT);
         }
     }
-    prevTime = time;
+    object_time.prevTime = time;
 }
 
 void fuse::converge (coreTime time,
@@ -343,7 +343,7 @@ void fuse::setState (coreTime time, const double state[], const double /*dstate_
         auto offset = offsets.getDiffOffset (sMode);
         cI2T = state[offset];
     }
-    prevTime = time;
+    object_time.prevTime = time;
 }
 
 double fuse::I2Tequation (double current) { return (current * current - limit * limit); }

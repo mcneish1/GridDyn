@@ -123,7 +123,7 @@ void acdcConverter::timestep (coreTime time, const IOdata & /*inputs*/, const so
     {
     Psched=sched->timestepP(time);
     }*/
-    prevTime = time;
+    object_time.prevTime = time;
 }
 
 // it may make more sense to have the dc bus as bus 1 but then the equations wouldn't be symmetric with the the
@@ -704,7 +704,7 @@ void acdcConverter::setState (coreTime time,
             Idc = B1->getVoltage (state, sMode) / tap;
         }
     }
-    prevTime = time;
+    object_time.prevTime = time;
     updateLocalCache ();
 }
 

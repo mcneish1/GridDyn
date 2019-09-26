@@ -357,7 +357,7 @@ void dcBus::setState (coreTime time, const double state[], const double dstate_d
     {
         if (Voffset != kNullLocation)
         {
-            if (time > prevTime)
+            if (time > object_time.prevTime)
             {
                 // m_dstate_dt[voltageInLocation] = (state[Voffset] - m_state[voltageInLocation]) / (time -
                 // lastSetTime);

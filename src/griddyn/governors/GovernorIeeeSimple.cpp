@@ -119,7 +119,7 @@ void GovernorIeeeSimple::derivative (const IOdata &inputs,
 void GovernorIeeeSimple::timestep (coreTime time, const IOdata &inputs, const solverMode & /*sMode*/)
 {
     GovernorIeeeSimple::derivative (inputs, emptyStateData, m_dstate_dt.data (), cLocalSolverMode);
-    double dt = time - prevTime;
+    double dt = time - object_time.prevTime;
     m_state[0] += dt * m_dstate_dt[0];
     m_state[1] += dt * m_dstate_dt[1];
     if (opFlags[p_limited])
@@ -135,7 +135,7 @@ void GovernorIeeeSimple::timestep (coreTime time, const IOdata &inputs, const so
         }
     }
 
-    prevTime = time;
+    object_time.prevTime = time;
 }
 
 void GovernorIeeeSimple::jacobianElements (const IOdata & /*inputs*/,

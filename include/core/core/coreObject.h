@@ -14,6 +14,9 @@
 
 #include "coreDefinitions.hpp"
 #include "utilities/units.h"
+
+#include "coreObjectComponents.hpp"
+
 // common libraries in all code
 // library for printf debug statements
 
@@ -44,33 +47,23 @@ updates, set and get functions, search features, alert and logging functions
 **/
 class coreObject
 {
+
   private:
-    // this is used much more frequently than any other so it gets its own boolean at the beginning of the object
-    bool enabled = true;  //!< enabled indicator
-    bool updates_enabled = false;  //!< indicator that updates are enabled
+    components::status object_status;
   protected:
-    bool extra_bool = false;  //!< an extra flag for derived classes to use
-    bool extra_bool2 = false;  //!< a second extra flag for derived classes to use
+    components::misc object_bools;
   private:
-    index_t id = 0;  //!< a user defined id for the object
+    components::id object_id;
     coreObject *parent = nullptr;  //!< a pointer to the parent object
   protected:  // variables that are used regularly by child class objects
-    coreTime prevTime = negTime;  //!<[s]the last state time of the object
-    coreTime nextUpdateTime = maxTime;  //!<[s] the next scheduled update
-    coreTime lastUpdateTime = negTime;  //!<[s] the last update time
-    coreTime updatePeriod = maxTime;  //!<[s]the update period
-    coreTime updateDelay =
-      timeZero;  //!<[s]the requested delay between updateA and updateB--requested is key here not guaranteed
+    components::time_range object_time;
   private:
-    // these shouldn't generate false shareing as one is static
+    // these shouldn't generate false sharing as one is static
     static std::atomic<id_type_t> s_obcnt;  //!< the global object counter
-    std::atomic<count_t> m_refCount;  //!< counter for the number of owning objects;
+    components::refcount object_refcount;
   public:
     index_t locIndex = kNullLocation;  //!< a lookup index for the object to reference parent location in storage
                                        //!< arrays for use by containing objects no operational dependencies
-  private:
-    id_type_t m_oid;  //!< a unique index for the object
-    std::string name;  //!< the text name of the object
   public:
     /** @brief default constructor
     @param[in] objName the name of the object[optiona] default to "object_#"
@@ -89,7 +82,8 @@ class coreObject
      * @brief clones an object to another object or makes a new on
      * @param[in] obj the object to clone to or leave nullptr for a new object.
      */
-    virtual coreObject *clone (coreObject *obj = nullptr) const;
+    virtual coreObject *clone (coreObject *obj) const;
+    virtual coreObject *clone () const;
 
     /** @brief update a name potentially containing specific codes
      names ending in # have the '#' replaced with the oid
@@ -233,7 +227,7 @@ class coreObject
     /**
      * @brief returns the oid of the object which is supposed to be a unique identifier
      */
-    std::int64_t getID () const noexcept { return m_oid; }
+    std::int64_t getID () const noexcept;
     /**
      * @brief updates the OID with a new number-useful in a few circumstances to ensure the id is higher than
      * another object
@@ -241,14 +235,10 @@ class coreObject
     void makeNewOID ();
 
     /** @brief set the name*/
-    void setName (const std::string &newName)
-    {
-        name = newName;
-        nameUpdate ();
-    }
+    void setName (const std::string &newName);
 
     /** @brief get the name of the object*/
-    const std::string &getName () const noexcept { return name; }
+    const std::string &getName () const noexcept;
     /** add a description to the object
     @param[in] description a string describing the object*/
     void setDescription (const std::string &description);
@@ -260,45 +250,34 @@ class coreObject
     /** @brief get the parent object*/
     coreObject *getParent () const { return parent; }
     /** get the root object */
-    coreObject *getRoot () const
-    {  // the id of 0 is used by a special nullObject
-        return (parent->id != 0) ? (parent->getRoot ()) : const_cast<coreObject *> (this);
-    }
+    coreObject *getRoot () const;
     /** check if the object is a root object*/
-    bool isRoot () const { return (parent->id == 0); }
+    bool isRoot () const;
     /** @brief set the user defined identification number for an object
     @param[in] newUserID the new user defined identifier for an object*/
-    void setUserID (index_t newUserID)
-    {
-        id = newUserID;
-        idUpdate ();
-    }
+    void setUserID (index_t newUserID);
     /** get the userID
     @return the user defined identification code for the object*/
-    index_t getUserID () const noexcept { return id; }
+    index_t getUserID () const noexcept;
     /** turn on updates for an object
     @param[in] upd_enabled a boolean defining whether to turn updates on(true) or off (false)
     */
-    void enable_updates (bool upd_enabled = true)
-    {
-        updates_enabled = upd_enabled;
-        alert (this, UPDATE_REQUIRED);
-    }
+    void enable_updates (bool upd_enabled = true);
     /** check if an object has updates
     @return true if updates are enabled
     */
-    bool hasUpdates () const { return updates_enabled; }
+    bool hasUpdates () const;
     /**@brief set the next update Time
     @param[in] newUpdateTime the next time the update should trigger
     */
     virtual void setUpdateTime (double newUpdateTime);
     /** @brief get the next time the system should call the update functions
      */
-    coreTime getNextUpdateTime () const noexcept { return nextUpdateTime; }
+    coreTime getNextUpdateTime () const noexcept;
 
     /**@brief return the last time the object had its state set or was updated
      */
-    coreTime currentTime () const noexcept { return prevTime; }
+    coreTime currentTime () const noexcept;
     friend void removeReference (coreObject *objToDelete);
     friend void removeReference (coreObject *objToDelete, const coreObject *parent);
     friend bool compareUpdates (const coreObject *o1, const coreObject *o2);
@@ -334,17 +313,14 @@ void setMultipleFlags (coreObject *obj, const std::string &flags);
 @param[in] o2 the second object to compare
 @return true if the update time from o1 comes before the update time in o2
 */
-inline bool compareUpdates (const coreObject *o1, const coreObject *o2)
-{
-    return (o1->nextUpdateTime < o2->nextUpdateTime);
-}
+bool compareUpdates (const coreObject *o1, const coreObject *o2);
 /**
 * @brief function to compare names of two objects
 * @param[in] o1 the first object to compare
 * @param[in] o2 the second object to compare
 @return true if the first object comes before the second alphabetically
 */
-inline bool compareNames (const coreObject *o1, const coreObject *o2) { return (o1->name < o2->name); }
+bool compareNames (const coreObject *o1, const coreObject *o2);
 
 /**
  * @brief general deletion function that checks the reference count and deletes the object if it is 0;
@@ -371,24 +347,21 @@ std::string fullObjectName (const coreObject *obj);
 * @param[in] o2 the second object to check
 @return true if the objects have the object id
 */
-inline bool isSameObject (const coreObject *o1, const coreObject *o2)
-{
-    return ((o2 != nullptr) && (o1 != nullptr) && (o1->m_oid == o2->m_oid));
-}
+bool isSameObject (const coreObject *o1, const coreObject *o2);
 /**
 * @brief function to check if two objects are the same object
 * @param[in] id the id of the first object to check
 * @param[in] o2 the second object to check
 @return true if the id's match
 */
-inline bool isSameObject (id_type_t id, const coreObject *o2) { return ((o2 != nullptr) && (id == o2->m_oid)); }
+bool isSameObject (id_type_t id, const coreObject *o2);
 /**
 * @brief function to check if two objects are the same object
 * @param[in] o1 the first object to check
 * @param[in] id the identifier of the first object to check
 @return true if the id's match
 */
-inline bool isSameObject (const coreObject *o1, id_type_t id) { return ((o1 != nullptr) && (id == o1->m_oid)); }
+bool isSameObject (const coreObject *o1, id_type_t id);
 
 /**
 * @brief convert a string to a print level

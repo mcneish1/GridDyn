@@ -334,13 +334,13 @@ void motorLoad5::timestep (coreTime time, const IOdata &inputs, const solverMode
     stateData sD (time, m_state.data ());
 
     derivative (inputs, sD, m_dstate_dt.data (), cLocalSolverMode);
-    double dt = time - prevTime;
+    double dt = time - object_time.prevTime;
     m_state[2] += dt * m_dstate_dt[2];
     m_state[3] += dt * m_dstate_dt[3];
     m_state[4] += dt * m_dstate_dt[4];
     m_state[5] += dt * m_dstate_dt[5];
     m_state[6] += dt * m_dstate_dt[6];
-    prevTime = time;
+    object_time.prevTime = time;
     updateCurrents (inputs, sD, cLocalSolverMode);
 }
 
