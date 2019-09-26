@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<classes>
+
+<transform name = "status">
+    <map target = "enabled">
+        <alias name = "on" />
+        <alias name = "in" />
+    </map>
+    <map target = "disabled">
+        <alias name = "off" />
+        <alias name = "out" />
+    </map>
+</transform>
+
+
+<!-- This just does set(string, string); set(string, value, unit) will come later -->
+
+<!-- coreObject-rooted sets -->
+
+<class name = "gridComponent" path = "griddyn" parent = "coreObject" extension = "h">
+    <property name = "status" action = "setStatus" transform = "status" />
+    <property name = "flags" action = "setFlags" />
+</class>
+
+
+<class name = "Stabilizer" path = "griddyn" parent = "coreObject" extension = "h" />
+<class name = "delayBlock" path = "griddyn/blocks" parent = "coreObject" namespace = "griddyn::blocks" extension = "h" />
+<class name = "GenModelClassical" path = "griddyn/genmodels" parent = "coreObject" namespace = "griddyn::genmodels" extension = "h" />
+<class name = "dispatcher" path = "griddyn/controllers" parent = "coreObject" extension = "h" />
+<class name = "AGControl" path = "griddyn/controllers" parent = "coreObject" extension = "h" />
+<class name = "reserveDispatcher" path = "griddyn/controllers" parent = "coreObject" extension = "h" />
+<class name = "Exciter" path = "griddyn" parent = "coreObject" extension = "h" />
+<class name = "GovernorSteamTCSR" path = "griddyn/governors" parent = "coreObject" namespace = "griddyn::governors" extension = "h" />
+<class name = "GovernorSteamNR" path = "griddyn/governors" parent = "coreObject" namespace = "griddyn::governors" extension = "h" />
+<class name = "GovernorHydro" path = "griddyn/governors" parent = "coreObject" namespace = "griddyn::governors" extension = "h" />
+
+
+<!-- miscellaneous sets -->
+<class name = "gridPrimary" path = "griddyn" parent = "gridComponent" extension = "h" />
+<class name = "gridSecondary" path = "griddyn" parent = "gridComponent" extension = "h" />
+
+
+</classes>

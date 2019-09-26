@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<classes>
+
+<transform name = "status">
+    <map target = "enabled">
+        <alias name = "on" />
+        <alias name = "in" />
+    </map>
+    <map target = "disabled">
+        <alias name = "off" />
+        <alias name = "out" />
+    </map>
+</transform>
+
+<class name = "gridOptObject" path = "optimization" parent = "coreObject" extension = "h">
+    <property name = "status" action = "setStatus" transform = "status" />
+</class>
+
+</classes>

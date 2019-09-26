@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<transforms>
+
+<!-- Transforms: map a string into another string, and error on any unexpected values -->
+<!-- These are (for now) copied to other xml files as needed -->
+<transform name = "status">
+    <map target = "enabled">
+        <alias name = "on" />
+        <alias name = "in" />
+    </map>
+    <map target = "disabled">
+        <alias name = "off" />
+        <alias name = "out" />
+    </map>
+</transform>
+
+</transforms>
