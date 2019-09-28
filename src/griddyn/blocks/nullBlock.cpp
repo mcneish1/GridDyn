@@ -20,9 +20,9 @@ namespace blocks
 {
 nullBlock::nullBlock (const std::string &objName) : Block (objName)
 {
-    opFlags[use_direct] = true;
-    opFlags[no_powerflow_operations] = true;
-    opFlags[no_dynamics] = true;
+    component_configuration.opFlags[use_direct] = true;
+    component_configuration.opFlags[no_powerflow_operations] = true;
+    component_configuration.opFlags[no_dynamics] = true;
 }
 
 coreObject *nullBlock::clone (coreObject *obj) const
@@ -45,9 +45,9 @@ void nullBlock::dynObjectInitializeA (coreTime /*time0*/, std::uint32_t /*flags*
     lcinfo.local.diffSize = 0;
     lcinfo.local.algSize = 0;
 
-    if (opFlags[differential_input])
+    if (component_configuration.opFlags[differential_input])
     {
-        m_inputSize = 2;
+        component_ports.m_inputSize = 2;
     }
 }
 
@@ -83,18 +83,18 @@ double nullBlock::step (coreTime time, double input)
 double nullBlock::getBlockOutput (const stateData &sD, const solverMode &sMode) const
 {
     auto Loc = offsets.getLocations (sD, sMode, this);
-    return opFlags[differential_output] ? *Loc.diffStateLoc : *Loc.algStateLoc;
+    return component_configuration.opFlags[differential_output] ? *Loc.diffStateLoc : *Loc.algStateLoc;
 }
 
 double nullBlock::getBlockOutput () const
 {
-    auto offset = opFlags[differential_output] ? (offsets.getDiffOffset (cLocalSolverMode)) : 0;
-    return m_state[offset];
+    auto offset = component_configuration.opFlags[differential_output] ? (offsets.getDiffOffset (cLocalSolverMode)) : 0;
+    return component_state.m_state[offset];
 }
 
 double nullBlock::getBlockDoutDt (const stateData &sD, const solverMode &sMode) const
 {
-    if (opFlags[differential_output])
+    if (component_configuration.opFlags[differential_output])
     {
         auto Loc = offsets.getLocations (sD, sMode, this);
         return *Loc.dstateLoc;
@@ -162,8 +162,8 @@ void nullBlock::setFlag (const std::string &flag, bool val)
 {
     if (flag == "differential_input")
     {
-        opFlags[differential_input] = val;
-        opFlags[differential_output] = val;
+        component_configuration.opFlags[differential_input] = val;
+        component_configuration.opFlags[differential_output] = val;
     }
     else
     {

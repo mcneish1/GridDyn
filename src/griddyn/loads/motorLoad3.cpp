@@ -42,21 +42,21 @@ void motorLoad3::pFlowObjectInitializeA (coreTime time0, std::uint32_t flags)
     // setup the parameters
     x0 = x + xm;
     xp = x + x1 * xm / (x1 + xm);
-    T0p = (x1 + xm) / (systemBaseFrequency * r1);
-    scale = mBase / systemBasePower;
-    m_state.resize (5, 0);
-    if (opFlags[init_transient])
+    T0p = (x1 + xm) / (component_parameters.systemBaseFrequency * r1);
+    scale = mBase / component_parameters.systemBasePower;
+    component_state.m_state.resize (5, 0);
+    if (component_configuration.opFlags[init_transient])
     {
-        m_state[2] = init_slip;
+        component_state.m_state[2] = init_slip;
     }
     else if (Pmot > -kHalfBigNum)
     {
-        m_state[2] = computeSlip (Pmot / scale);
+        component_state.m_state[2] = computeSlip (Pmot / scale);
     }
     else
     {
-        m_state[2] = 1.0;
-        opFlags.set (init_transient);
+        component_state.m_state[2] = 1.0;
+        component_configuration.opFlags.set (init_transient);
     }
 
     Load::pFlowObjectInitializeA (time0, flags);
@@ -70,8 +70,8 @@ void motorLoad3::converge ()
 {
     double V = bus->getVoltage ();
     double theta = bus->getAngle ();
-    double slip = m_state[2];
-    double Qtest = qPower (V, m_state[2]);
+    double slip = component_state.m_state[2];
+    double Qtest = qPower (V, component_state.m_state[2]);
     double im, ir;
     double er, em;
 
@@ -86,7 +86,7 @@ void motorLoad3::converge ()
     {
         er = Vr - r * ir + xp * im;
         em = Vm - r * im - xp * ir;
-        double slipp = (er + (x0 - xp) * im) / T0p / systemBaseFrequency / em;
+        double slipp = (er + (x0 - xp) * im) / T0p / component_parameters.systemBaseFrequency / em;
         dslip = slipp - slip;
         if (Pmot > 0)
         {
@@ -106,18 +106,18 @@ void motorLoad3::converge ()
             break;
         }
         // just archiving the states in case we need to break;
-        m_state[0] = ir;
-        m_state[1] = im;
-        m_state[2] = slip;
-        m_state[3] = er;
-        m_state[4] = em;
+        component_state.m_state[0] = ir;
+        component_state.m_state[1] = im;
+        component_state.m_state[2] = slip;
+        component_state.m_state[3] = er;
+        component_state.m_state[4] = em;
         if (++ccnt > 50)
         {
             break;
         }
 
         perr = err;
-        ir = (-systemBaseFrequency * slip * er * T0p - em) / (-(x0 - xp));
+        ir = (-component_parameters.systemBaseFrequency * slip * er * T0p - em) / (-(x0 - xp));
         im = (mechPower (slip) - er * ir) / em;
     }
 }
@@ -127,9 +127,9 @@ void motorLoad3::dynObjectInitializeB (const IOdata &inputs,
                                        const IOdata & /*desiredOutput*/,
                                        IOdata & /*fieldSet*/)
 {
-    if (opFlags[init_transient])
+    if (component_configuration.opFlags[init_transient])
     {
-        derivative (inputs, emptyStateData, m_dstate_dt.data (), cLocalSolverMode);
+        derivative (inputs, emptyStateData, component_state.m_dstate_dt.data (), cLocalSolverMode);
     }
 }
 
@@ -164,7 +164,7 @@ count_t motorLoad3::LocalJacobianCount (const solverMode &sMode) const
     }
     else
     {
-        if (opFlags[init_transient])
+        if (component_configuration.opFlags[init_transient])
         {
             localJacSize = 19;
         }
@@ -272,9 +272,9 @@ void motorLoad3::residual (const IOdata &inputs, const stateData &sD, double res
         double slip = gm[2];
         // printf("angle=%f, slip=%f\n",theta,slip);
         // slip
-        if (opFlags[init_transient])
+        if (component_configuration.opFlags[init_transient])
         {
-            rv[2] = slip - m_state[2];
+            rv[2] = slip - component_state.m_state[2];
         }
         else
         {
@@ -282,8 +282,8 @@ void motorLoad3::residual (const IOdata &inputs, const stateData &sD, double res
             rv[2] = (mechPower (slip) - Te) / (2 * H);
         }
         // Erp and Emp
-        rv[3] = systemBaseFrequency * slip * gm[4] - (gm[3] + (x0 - xp) * gm[1]) / T0p;
-        rv[4] = -systemBaseFrequency * slip * gm[3] - (gm[4] - (x0 - xp) * gm[0]) / T0p;
+        rv[3] = component_parameters.systemBaseFrequency * slip * gm[4] - (gm[3] + (x0 - xp) * gm[1]) / T0p;
+        rv[4] = -component_parameters.systemBaseFrequency * slip * gm[3] - (gm[4] - (x0 - xp) * gm[0]) / T0p;
     }
 }
 
@@ -317,12 +317,12 @@ void motorLoad3::getStateName (stringVec &stNames, const solverMode &sMode, cons
 
 void motorLoad3::timestep (coreTime time, const IOdata &inputs, const solverMode & /*sMode*/)
 {
-    stateData sD (time, m_state.data ());
-    derivative (inputs, sD, m_dstate_dt.data (), cLocalSolverMode);
+    stateData sD (time, component_state.m_state.data ());
+    derivative (inputs, sD, component_state.m_dstate_dt.data (), cLocalSolverMode);
     double dt = time - object_time.prevTime;
-    m_state[2] += dt * m_dstate_dt[2];
-    m_state[3] += dt * m_dstate_dt[3];
-    m_state[4] += dt * m_dstate_dt[4];
+    component_state.m_state[2] += dt * component_state.m_dstate_dt[2];
+    component_state.m_state[3] += dt * component_state.m_dstate_dt[3];
+    component_state.m_state[4] += dt * component_state.m_dstate_dt[4];
     object_time.prevTime = time;
     updateCurrents (inputs, sD, cLocalSolverMode);
 }
@@ -358,7 +358,7 @@ void motorLoad3::derivative (const IOdata & /*inputs*/,
     //}
 
     // slip
-    if (opFlags[stalled])
+    if (component_configuration.opFlags[stalled])
     {
         dv[0] = 0;
     }
@@ -369,8 +369,8 @@ void motorLoad3::derivative (const IOdata & /*inputs*/,
     }
     // printf("t=%f, slip=%f mp=%f, te=%f, dslip=%e\n", sD.time, slip,mechPower(slip), Te,dv[0] );
     // Edp and Eqp
-    dv[1] = systemBaseFrequency * slip * dst[2] - (dst[1] + (x0 - xp) * ast[1]) / T0p;
-    dv[2] = -systemBaseFrequency * slip * dst[1] - (dst[2] - (x0 - xp) * ast[0]) / T0p;
+    dv[1] = component_parameters.systemBaseFrequency * slip * dst[2] - (dst[1] + (x0 - xp) * ast[1]) / T0p;
+    dv[2] = -component_parameters.systemBaseFrequency * slip * dst[1] - (dst[2] - (x0 - xp) * ast[0]) / T0p;
 }
 
 void motorLoad3::jacobianElements (const IOdata &inputs,
@@ -443,7 +443,7 @@ void motorLoad3::jacobianElements (const IOdata &inputs,
     md.assign (refAlg + 1, refDiff + 1, -1.0);
 
     double slip = dst[0];
-    if ((isDynamic (sMode)) || (!opFlags[init_transient]))
+    if ((isDynamic (sMode)) || (!component_configuration.opFlags[init_transient]))
     {
         /*
         // slip
@@ -452,7 +452,7 @@ void motorLoad3::jacobianElements (const IOdata &inputs,
 
         */
         // slip
-        if (opFlags[stalled])
+        if (component_configuration.opFlags[stalled])
         {
             md.assign (refDiff, refDiff, -cj);
         }
@@ -472,17 +472,17 @@ void motorLoad3::jacobianElements (const IOdata &inputs,
     // omega
 
     // Edp and Eqp
-    // dv[1] = systemBaseFrequency*slip*dst[2] - (dst[1] + (x0 - xp)*ast[1]) / T0p;
-    // dv[2] = -systemBaseFrequency*slip*dst[1] - (dst[2] - (x0 - xp)*ast[0]) / T0p;
+    // dv[1] = component_parameters.systemBaseFrequency*slip*dst[2] - (dst[1] + (x0 - xp)*ast[1]) / T0p;
+    // dv[2] = -component_parameters.systemBaseFrequency*slip*dst[1] - (dst[2] - (x0 - xp)*ast[0]) / T0p;
 
     md.assign (refDiff + 1, refAlg + 1, -(x0 - xp) / T0p);
-    md.assign (refDiff + 1, refDiff, systemBaseFrequency * dst[2]);
+    md.assign (refDiff + 1, refDiff, component_parameters.systemBaseFrequency * dst[2]);
     md.assign (refDiff + 1, refDiff + 1, -1.0 / T0p - cj);
-    md.assign (refDiff + 1, refDiff + 2, systemBaseFrequency * slip);
+    md.assign (refDiff + 1, refDiff + 2, component_parameters.systemBaseFrequency * slip);
 
     md.assign (refDiff + 2, refAlg, (x0 - xp) / T0p);
-    md.assign (refDiff + 2, refDiff, -systemBaseFrequency * dst[1]);
-    md.assign (refDiff + 2, refDiff + 1, -systemBaseFrequency * slip);
+    md.assign (refDiff + 2, refDiff, -component_parameters.systemBaseFrequency * dst[1]);
+    md.assign (refDiff + 2, refDiff + 1, -component_parameters.systemBaseFrequency * slip);
     md.assign (refDiff + 2, refDiff + 2, -1.0 / T0p - cj);
 }
 
@@ -499,13 +499,13 @@ void motorLoad3::outputPartialDerivatives (const IOdata &inputs,
     vr = -V * Vcontrol * sin (theta);
     vm = V * Vcontrol * cos (theta);
 
-    // vr*m_state[0] + vm*m_state[1];
+    // vr*component_state.m_state[0] + vm*component_state.m_state[1];
 
     // output P
     md.assign (PoutLocation, refAlg, vr * scale);
     md.assign (PoutLocation, refAlg + 1, vm * scale);
 
-    // vm*m_state[0] - vr*m_state[1];
+    // vm*component_state.m_state[0] - vr*component_state.m_state[1];
     // output Q
     md.assign (QoutLocation, refAlg, vm * scale);
     md.assign (QoutLocation, refAlg + 1, -vr * scale);
@@ -531,9 +531,9 @@ void motorLoad3::ioPartialDerivatives (const IOdata &inputs,
     double ir = gm[0] * scale;
     double im = gm[1] * scale;
 
-    // P=vr*m_state[0] + vm*m_state[1];
+    // P=vr*component_state.m_state[0] + vm*component_state.m_state[1];
 
-    // Q=vm*m_state[0] - vr*m_state[1];
+    // Q=vm*component_state.m_state[0] - vr*component_state.m_state[1];
     md.assignCheckCol (PoutLocation, inputLocs[angleInLocation], -ir * vm + vr * im);
     md.assignCheckCol (PoutLocation, inputLocs[voltageInLocation], ir * vr / V + vm * im / V);
     md.assignCheckCol (QoutLocation, inputLocs[angleInLocation], vr * ir + vm * im);
@@ -609,7 +609,7 @@ void motorLoad3::rootTest (const IOdata & /*inputs*/, const stateData &sD, doubl
 {
     auto Loc = offsets.getLocations (sD, sMode, this);
     auto ro = offsets.getRootOffset (sMode);
-    if (opFlags[stalled])
+    if (component_configuration.opFlags[stalled])
     {
         double Te = Loc.diffStateLoc[1] * Loc.algStateLoc[0] + Loc.diffStateLoc[2] * Loc.algStateLoc[1];
         roots[ro] = Te - mechPower (1.0);
@@ -632,24 +632,24 @@ void motorLoad3::rootTrigger (coreTime /*time*/,
     {
         return;
     }
-    if (opFlags[stalled])
+    if (component_configuration.opFlags[stalled])
     {
         if (inputs[voltageInLocation] > 0.5)
         {
-            opFlags.reset (stalled);
+            component_configuration.opFlags.reset (stalled);
             alert (this, JAC_COUNT_INCREASE);
-            m_state[2] = 1.0 - 1e-7;
+            component_state.m_state[2] = 1.0 - 1e-7;
         }
     }
     else
     {
-        opFlags.set (stalled);
+        component_configuration.opFlags.set (stalled);
         alert (this, JAC_COUNT_DECREASE);
         if (inputs[voltageInLocation] < 0.25)
         {
             alert (this, POTENTIAL_FAULT_CHANGE);
         }
-        m_state[2] = 1.0;
+        component_state.m_state[2] = 1.0;
     }
 }
 
@@ -658,13 +658,13 @@ change_code motorLoad3::rootCheck (const IOdata & /*inputs*/,
                                    const solverMode &sMode,
                                    check_level_t /*level*/)
 {
-    if (opFlags[stalled])
+    if (component_configuration.opFlags[stalled])
     {
         auto Loc = offsets.getLocations (sD, sMode, this);
         const double Te = Loc.diffStateLoc[1] * Loc.algStateLoc[0] + Loc.diffStateLoc[2] * Loc.algStateLoc[1];
         if (Te - mechPower (1.0) > 0)
         {
-            opFlags.reset (stalled);
+            component_configuration.opFlags.reset (stalled);
             alert (this, JAC_COUNT_INCREASE);
             return change_code::jacobian_change;
         }
@@ -678,7 +678,7 @@ double motorLoad3::getRealPower () const
     double ang = bus->getAngle ();
     double vr = -v * Vcontrol * sin (ang);
     double vm = v * Vcontrol * cos (ang);
-    double Ptemp = vr * m_state[0] + vm * m_state[1];
+    double Ptemp = vr * component_state.m_state[0] + vm * component_state.m_state[1];
     return Ptemp * scale;
 }
 
@@ -688,7 +688,7 @@ double motorLoad3::getReactivePower () const
     double ang = bus->getAngle ();
     double vr = -v * Vcontrol * sin (ang);
     double vm = v * Vcontrol * cos (ang);
-    double Qtemp = vm * m_state[0] - vr * m_state[1];
+    double Qtemp = vm * component_state.m_state[0] - vr * component_state.m_state[1];
 
     return Qtemp * scale;
 }
@@ -731,7 +731,7 @@ double motorLoad3::getRealPower (double V) const
 
     double vr = -V * Vcontrol * sin (ang);
     double vm = V * Vcontrol * cos (ang);
-    double Ptemp = vr * m_state[0] + vm * m_state[1];
+    double Ptemp = vr * component_state.m_state[0] + vm * component_state.m_state[1];
     return Ptemp * scale;
 }
 
@@ -741,7 +741,7 @@ double motorLoad3::getReactivePower (double V) const
 
     double vr = -V * Vcontrol * sin (ang);
     double vm = V * Vcontrol * cos (ang);
-    double Qtemp = vm * m_state[0] - vr * m_state[1];
+    double Qtemp = vm * component_state.m_state[0] - vr * component_state.m_state[1];
 
     return Qtemp * scale;
 }

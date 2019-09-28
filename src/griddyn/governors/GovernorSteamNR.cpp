@@ -73,8 +73,8 @@ void GovernorSteamNR::dynObjectInitializeB (const IOdata & /*inputs*/,
                                             IOdata & /*inputSet*/)
 {
     auto offset = offsets.getAlgOffset (cLocalSolverMode);
-    m_state[offset + 1] = 0;
-    m_state[offset + offset] = desiredOutput[0];
+    component_state.m_state[offset + 1] = 0;
+    component_state.m_state[offset + offset] = desiredOutput[0];
 
     Pset = static_cast<Generator *>(getParent ())->getPset ();
 }

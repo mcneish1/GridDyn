@@ -60,7 +60,7 @@ void GovernorReheat::dynObjectInitializeB (const IOdata &inputs, const IOdata &d
 {
     if (Wref < 0)
     {
-        Wref = systemBaseFrequency;
+        Wref = component_parameters.systemBaseFrequency;
     }
 
     double P = desiredOutput[0];
@@ -74,10 +74,10 @@ void GovernorReheat::dynObjectInitializeB (const IOdata &inputs, const IOdata &d
     {
         P = Pmin;
     }
-    m_state[3] = P;
-    m_state[2] = (1.0 - T3 / T2) * P;
-    m_state[1] = (1.0 - T4 / T5) * (m_state[2] + T3 / T2 * m_state[3]);
-    m_state[0] = P;
+    component_state.m_state[3] = P;
+    component_state.m_state[2] = (1.0 - T3 / T2) * P;
+    component_state.m_state[1] = (1.0 - T4 / T5) * (component_state.m_state[2] + T3 / T2 * component_state.m_state[3]);
+    component_state.m_state[0] = P;
 
     fieldSet.resize (2);
     fieldSet[1] = P - K * (Wref - omega);  // Pset
@@ -169,9 +169,9 @@ void GovernorReheat::jacobianElements (const IOdata &inputs,
     // md.assign(arrayIndex, RowIndex, ColIndex, value)
     bool linkOmega = (inputLocs[govOmegaInLocation] != kNullLocation);
 
-    /* if (opFlags.test (uses_deadband))
+    /* if (component_configuration.opFlags.test (uses_deadband))
        {
-         if (!opFlags.test (outside_deadband))
+         if (!component_configuration.opFlags.test (outside_deadband))
            {
              linkOmega = false;
            }

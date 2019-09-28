@@ -97,15 +97,12 @@ class Link : public gridPrimary
     /** @brief get the switch state
      * @return true if switch is open, false if closed
      */
-    virtual bool switchTest () const { return (opFlags[switch1_open_flag] || opFlags[switch2_open_flag]); }
+    virtual bool switchTest () const;
     /** @brief get the switch state
     @param[in] num  the number of the switch 1 for "from" bus 2 for "to" bus
     * @return true if switch is open, false if closed
     */
-    virtual bool switchTest (index_t num) const
-    {
-        return (num == 2) ? opFlags[switch2_open_flag] : opFlags[switch1_open_flag];
-    }
+    virtual bool switchTest (index_t num) const;
     /** @brief set the switch state
     @param[in] num  the number of the switch 1 for "from" bus 2 for "to" bus
     @param[in] mode the mode of the switch true for open  false for closed

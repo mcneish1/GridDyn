@@ -64,8 +64,8 @@ void GovernorHydro::dynObjectInitializeB (const IOdata & /*inputs*/,
                                           const IOdata &desiredOutput,
                                           IOdata & /*fieldSet*/)
 {
-    m_state[1] = 0;
-    m_state[0] = desiredOutput[0];
+    component_state.m_state[1] = 0;
+    component_state.m_state[0] = desiredOutput[0];
     auto genObj = find ("gen");
     if (genObj != nullptr)
     {

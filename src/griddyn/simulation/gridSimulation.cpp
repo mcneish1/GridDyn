@@ -42,7 +42,7 @@ gridSimulation::gridSimulation (const std::string &objName) : Area (objName), si
 
 gridSimulation::~gridSimulation ()
 {
-    opFlags.set (being_deleted);  // set this flag to handle some unusual circumstances with extra objects
+    component_configuration.opFlags.set (being_deleted);  // set this flag to handle some unusual circumstances with extra objects
 }
 
 coreObject *gridSimulation::clone (coreObject *obj) const

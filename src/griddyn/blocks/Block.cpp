@@ -38,8 +38,8 @@ static childTypeFactory<filteredDerivativeBlock, Block>
   fderbof ("block", stringVec{"fder", "filtered_deriv", "filtered_derivative"});
 }  // namespace blocks
 
-Block::Block (const std::string &objName) : gridSubModel (objName) { m_inputSize = 1; }
-Block::Block (double gain, const std::string &objName) : gridSubModel (objName), K (gain) { m_inputSize = 1; }
+Block::Block (const std::string &objName) : gridSubModel (objName) { component_ports.m_inputSize = 1; }
+Block::Block (double gain, const std::string &objName) : gridSubModel (objName), K (gain) { component_ports.m_inputSize = 1; }
 Block::~Block () = default;
 
 coreObject *Block::clone (coreObject *obj) const
@@ -70,19 +70,19 @@ void Block::dynObjectInitializeA (coreTime /*time0*/, std::uint32_t /*flags*/)
     offsets.unload ();  // unload all the offsets
 
     lcinfo.local.jacSize = 2;
-    if (!opFlags[use_state])
+    if (!component_configuration.opFlags[use_state])
     {
-        if (opFlags[use_direct])
+        if (component_configuration.opFlags[use_direct])
         {  // In use direct mode it just processes the input
             // also ignore the gain and bias
             lcinfo.local.jacSize = 0;
         }
         else
         {
-            if (opFlags[differential_input])
+            if (component_configuration.opFlags[differential_input])
             {
                 lcinfo.local.diffSize = 1;
-                opFlags.set (differential_output);
+                component_configuration.opFlags.set (differential_output);
             }
             else
             {
@@ -90,7 +90,7 @@ void Block::dynObjectInitializeA (coreTime /*time0*/, std::uint32_t /*flags*/)
             }
         }
     }
-    else if (opFlags[differential_output])
+    else if (component_configuration.opFlags[differential_output])
     {
         lcinfo.local.diffSize = 1;
     }
@@ -105,9 +105,9 @@ void Block::dynObjectInitializeA (coreTime /*time0*/, std::uint32_t /*flags*/)
     {
         resetLevel = computeDefaultResetLevel ();
     }
-    if (opFlags[use_block_limits])
+    if (component_configuration.opFlags[use_block_limits])
     {
-        if (opFlags[differential_output])
+        if (component_configuration.opFlags[differential_output])
         {
             ++(lcinfo.local.diffRoots);
             ++(lcinfo.local.diffSize);
@@ -123,7 +123,7 @@ void Block::dynObjectInitializeA (coreTime /*time0*/, std::uint32_t /*flags*/)
         vLimiter = std::make_unique<blocks::valueLimiter> (Omin, Omax);
         vLimiter->setResetLevel (resetLevel);
     }
-    if ((opFlags[use_ramp_limits]) && (opFlags[differential_output]))  // ramp limits only work with a
+    if ((component_configuration.opFlags[use_ramp_limits]) && (component_configuration.opFlags[differential_output]))  // ramp limits only work with a
     // differential output state before the
     // limiters
     {
@@ -138,11 +138,11 @@ void Block::dynObjectInitializeA (coreTime /*time0*/, std::uint32_t /*flags*/)
     }
     if (limiter_alg + limiter_diff > 0)
     {
-        opFlags[has_limits] = true;
+        component_configuration.opFlags[has_limits] = true;
     }
-    if (opFlags[differential_input])
+    if (component_configuration.opFlags[differential_input])
     {
-        m_inputSize = 2;
+        component_ports.m_inputSize = 2;
     }
 }
 
@@ -189,108 +189,108 @@ void Block::dynObjectInitializeB (const IOdata &inputs, const IOdata &desiredOut
     {
         assert (!inputs.empty ());
         prevInput = (inputs[0] + bias);
-        if (!opFlags[use_state])
+        if (!component_configuration.opFlags[use_state])
         {
-            if (!opFlags[use_direct])
+            if (!component_configuration.opFlags[use_direct])
             {
-                m_state[limiter_alg + limiter_diff] = (prevInput)*K;
-                if (opFlags[use_ramp_limits])
+                component_state.m_state[limiter_alg + limiter_diff] = (prevInput)*K;
+                if (component_configuration.opFlags[use_ramp_limits])
                 {
-                    m_state[limiter_diff - 1] = m_state[limiter_diff];
+                    component_state.m_state[limiter_diff - 1] = component_state.m_state[limiter_diff];
                 }
-                if (opFlags[use_block_limits])
+                if (component_configuration.opFlags[use_block_limits])
                 {
                     Block::rootCheck (inputs, emptyStateData, cLocalSolverMode, check_level_t::reversable_only);
-                    m_state[0] = vLimiter->clampOutput (m_state[1]);
+                    component_state.m_state[0] = vLimiter->clampOutput (component_state.m_state[1]);
                 }
             }
         }
         else
         {
-            if (opFlags[use_ramp_limits])
+            if (component_configuration.opFlags[use_ramp_limits])
             {
                 index_t diffOffset = offsets.local ().local.algSize + limiter_diff;
-                m_state[diffOffset - 1] = m_state[diffOffset];
-                if (opFlags[use_block_limits])
+                component_state.m_state[diffOffset - 1] = component_state.m_state[diffOffset];
+                if (component_configuration.opFlags[use_block_limits])
                 {
                     Block::rootCheck (inputs, emptyStateData, cLocalSolverMode, check_level_t::reversable_only);
-                    m_state[0] = vLimiter->clampOutput (m_state[diffOffset - 1]);
+                    component_state.m_state[0] = vLimiter->clampOutput (component_state.m_state[diffOffset - 1]);
                 }
             }
             else
             {
-                if (opFlags[use_block_limits])
+                if (component_configuration.opFlags[use_block_limits])
                 {
-                    if (opFlags[differential_output])
+                    if (component_configuration.opFlags[differential_output])
                     {
                         index_t diffOffset = offsets.local ().local.algSize;
                         Block::rootCheck (inputs, emptyStateData, cLocalSolverMode,
                                           check_level_t::reversable_only);
-                        m_state[0] = vLimiter->clampOutput (m_state[diffOffset]);
+                        component_state.m_state[0] = vLimiter->clampOutput (component_state.m_state[diffOffset]);
                     }
                     else
                     {
                         Block::rootCheck (inputs, emptyStateData, cLocalSolverMode,
                                           check_level_t::reversable_only);
-                        m_state[0] = vLimiter->clampOutput (m_state[1]);
+                        component_state.m_state[0] = vLimiter->clampOutput (component_state.m_state[1]);
                     }
                 }
             }
         }
 
-        fieldSet[0] = m_state[0];
+        fieldSet[0] = component_state.m_state[0];
     }
     else
     {
-        m_state[0] = desiredOutput[0];
-        if (opFlags[use_block_limits])
+        component_state.m_state[0] = desiredOutput[0];
+        if (component_configuration.opFlags[use_block_limits])
         {
-            m_state[0] = vLimiter->clampOutput (m_state[0]);
+            component_state.m_state[0] = vLimiter->clampOutput (component_state.m_state[0]);
         }
 
-        if (!opFlags[use_state])
+        if (!component_configuration.opFlags[use_state])
         {
-            if (opFlags[use_block_limits])
+            if (component_configuration.opFlags[use_block_limits])
             {
-                m_state[1] = m_state[0];
+                component_state.m_state[1] = component_state.m_state[0];
             }
-            if (opFlags[use_ramp_limits])
+            if (component_configuration.opFlags[use_ramp_limits])
             {
-                m_state[2] = m_state[0];  // we know the layout in this case
+                component_state.m_state[2] = component_state.m_state[0];  // we know the layout in this case
             }
         }
         else
         {
-            if (opFlags[use_ramp_limits])
+            if (component_configuration.opFlags[use_ramp_limits])
             {
                 index_t diffOffset = offsets.getDiffOffset (cLocalSolverMode) + limiter_diff;
 
-                if (opFlags[use_block_limits])
+                if (component_configuration.opFlags[use_block_limits])
                 {
-                    m_state[limiter_diff - 1] = m_state[0];
+                    component_state.m_state[limiter_diff - 1] = component_state.m_state[0];
                 }
-                m_state[diffOffset] = m_state[0];
-                m_state[diffOffset + 1] = m_state[0];
+                component_state.m_state[diffOffset] = component_state.m_state[0];
+                component_state.m_state[diffOffset + 1] = component_state.m_state[0];
             }
             else
             {
-                if (opFlags[use_block_limits])
+                if (component_configuration.opFlags[use_block_limits])
                 {
-                    if (opFlags[differential_output])
+                    if (component_configuration.opFlags[differential_output])
                     {
                         index_t diffOffset = offsets.getDiffOffset (cLocalSolverMode) + limiter_diff;
                         Block::rootCheck (inputs, emptyStateData, cLocalSolverMode,
                                           check_level_t::reversable_only);
-                        m_state[diffOffset] = m_state[0];
+                        component_state.m_state[diffOffset] = component_state.m_state[0];
                     }
                     else
                     {
-                        m_state[1] = m_state[0];
+                        component_state.m_state[1] = component_state.m_state[0];
                     }
                 }
             }
         }
-        fieldSet[0] = m_state[0] / K - bias;
+        fieldSet[0] = component_state.m_state[0] / K - bias;
         prevInput = fieldSet[0] + bias;
     }
 }
@@ -304,79 +304,79 @@ static IOdata kNullVec;
 
 double Block::step (coreTime time, double input)
 {
-    if (!opFlags[use_state])
+    if (!component_configuration.opFlags[use_state])
     {
-        m_state[limiter_alg + limiter_diff] = (input + bias) * K;
+        component_state.m_state[limiter_alg + limiter_diff] = (input + bias) * K;
 
-        if (opFlags[has_limits])
+        if (component_configuration.opFlags[has_limits])
         {
-            if (opFlags[use_ramp_limits])
+            if (component_configuration.opFlags[use_ramp_limits])
             {
                 int offset = offsets.getDiffOffset (cLocalSolverMode);
-                double ramp = (m_state[offset + 1] - m_state[offset]) / (time - object_time.prevTime);
+                double ramp = (component_state.m_state[offset + 1] - component_state.m_state[offset]) / (time - object_time.prevTime);
                 double cramp = rLimiter->clampOutputRamp (ramp);
                 if (cramp == ramp)
                 {
-                    m_state[offset] = m_state[offset + 1];
+                    component_state.m_state[offset] = component_state.m_state[offset + 1];
                 }
                 else
                 {
-                    m_state[offset] += cramp * (time - object_time.prevTime);
+                    component_state.m_state[offset] += cramp * (time - object_time.prevTime);
                 }
             }
             else
             {
                 rootCheck ({input}, emptyStateData, cLocalSolverMode, check_level_t::reversable_only);
-                m_state[0] = vLimiter->clampOutput (m_state[1]);
+                component_state.m_state[0] = vLimiter->clampOutput (component_state.m_state[1]);
             }
         }
     }
     else
     {
-        if (opFlags[use_ramp_limits])
+        if (component_configuration.opFlags[use_ramp_limits])
         {
             int offset = offsets.getDiffOffset (cLocalSolverMode);
-            double ramp = (m_state[offset + 1] - m_state[offset]) / (time - object_time.prevTime);
+            double ramp = (component_state.m_state[offset + 1] - component_state.m_state[offset]) / (time - object_time.prevTime);
             double cramp = rLimiter->clampOutputRamp (ramp);
             if (cramp == ramp)
             {
-                m_state[offset] = m_state[offset + 1];
+                component_state.m_state[offset] = component_state.m_state[offset + 1];
             }
             else
             {
-                m_state[offset] += ramp * (time - object_time.prevTime);
+                component_state.m_state[offset] += ramp * (time - object_time.prevTime);
             }
         }
         else
         {
-            if (opFlags[use_block_limits])
+            if (component_configuration.opFlags[use_block_limits])
             {
-                auto offset = opFlags[differential_output] ? (offsets.getDiffOffset (cLocalSolverMode)) + 1 : 1;
+                auto offset = component_configuration.opFlags[differential_output] ? (offsets.getDiffOffset (cLocalSolverMode)) + 1 : 1;
                 rootCheck (kNullVec, emptyStateData, cLocalSolverMode, check_level_t::reversable_only);
-                m_state[offset - 1] = vLimiter->clampOutput (m_state[offset]);
+                component_state.m_state[offset - 1] = vLimiter->clampOutput (component_state.m_state[offset]);
             }
         }
     }
     object_time.prevTime = time;
-    auto offset = opFlags[differential_output] ? (offsets.getDiffOffset (cLocalSolverMode)) : 0;
-    return m_state[offset];
+    auto offset = component_configuration.opFlags[differential_output] ? (offsets.getDiffOffset (cLocalSolverMode)) : 0;
+    return component_state.m_state[offset];
 }
 
 double Block::getBlockOutput (const stateData &sD, const solverMode &sMode) const
 {
     auto Loc = offsets.getLocations (sD, sMode, this);
-    return opFlags[differential_output] ? *Loc.diffStateLoc : *Loc.algStateLoc;
+    return component_configuration.opFlags[differential_output] ? *Loc.diffStateLoc : *Loc.algStateLoc;
 }
 
 double Block::getBlockOutput () const
 {
-    auto offset = opFlags[differential_output] ? (offsets.getDiffOffset (cLocalSolverMode)) : 0;
-    return m_state[offset];
+    auto offset = component_configuration.opFlags[differential_output] ? (offsets.getDiffOffset (cLocalSolverMode)) : 0;
+    return component_state.m_state[offset];
 }
 
 double Block::getBlockDoutDt (const stateData &sD, const solverMode &sMode) const
 {
-    if (opFlags[differential_output])
+    if (component_configuration.opFlags[differential_output])
     {
         auto Loc = offsets.getLocations (sD, sMode, this);
         return *Loc.dstateLoc;
@@ -386,10 +386,10 @@ double Block::getBlockDoutDt (const stateData &sD, const solverMode &sMode) cons
 
 double Block::getBlockDoutDt () const
 {
-    if (opFlags[differential_output])
+    if (component_configuration.opFlags[differential_output])
     {
-        auto offset = opFlags[differential_output] ? (offsets.getDiffOffset (cLocalSolverMode)) : 0;
-        return m_dstate_dt[offset];
+        auto offset = component_configuration.opFlags[differential_output] ? (offsets.getDiffOffset (cLocalSolverMode)) : 0;
+        return component_state.m_dstate_dt[offset];
     }
     return 0.0;
 }
@@ -429,21 +429,21 @@ void Block::limiterResidElements (double input,
                                   double resid[],
                                   const solverMode &sMode)
 {
-    if (opFlags[differential_output])
+    if (component_configuration.opFlags[differential_output])
     {
         auto offset = offsets.getDiffOffset (sMode) + limiter_diff;
         double testVal = getTestRate (didt, sD.dstate_dt[offset]);
 
         if (limiter_diff > 0)
         {
-            if (opFlags[use_ramp_limits])
+            if (component_configuration.opFlags[use_ramp_limits])
             {
                 --offset;
                 resid[offset] = rLimiter->deriv (testVal);
                 testVal = resid[offset];
                 resid[offset] -= sD.dstate_dt[offset];
             }
-            if (opFlags[use_block_limits])
+            if (component_configuration.opFlags[use_block_limits])
             {
                 resid[offset - 1] = vLimiter->deriv (testVal) - sD.dstate_dt[offset - 1];
             }
@@ -453,7 +453,7 @@ void Block::limiterResidElements (double input,
     {
         auto offset = offsets.getAlgOffset (sMode) + limiter_alg;
         double testVal = getTestValue (input, sD.state[offset]);
-        if (opFlags[has_limits])
+        if (component_configuration.opFlags[has_limits])
         {
             resid[offset - 1] = vLimiter->output (testVal) - sD.state[offset - 1];
         }
@@ -484,15 +484,15 @@ void Block::residual (const IOdata &inputs, const stateData &sD, double resid[],
     blockResidual (inputs[0], getRateInput (inputs), sD, resid, sMode);
 }
 
-bool Block::hasValueState () const { return (!((opFlags[use_state]) || (opFlags[use_direct]))); }
+bool Block::hasValueState () const { return (!((component_configuration.opFlags[use_state]) || (component_configuration.opFlags[use_direct]))); }
 double Block::getTestValue (double input, double currentState) const
 {
     double testVal;
-    if (opFlags[use_state])
+    if (component_configuration.opFlags[use_state])
     {
         testVal = currentState;
     }
-    else if (opFlags[use_direct])
+    else if (component_configuration.opFlags[use_direct])
     {
         testVal = input * K;
     }
@@ -506,7 +506,7 @@ double Block::getTestValue (double input, double currentState) const
 double Block::getTestRate (double didt, double currentStateRate) const
 {
     double testRate;
-    if (opFlags[use_state])
+    if (component_configuration.opFlags[use_state])
     {
         testRate = currentStateRate;
     }
@@ -519,7 +519,7 @@ double Block::getTestRate (double didt, double currentStateRate) const
 
 void Block::blockAlgebraicUpdate (double input, const stateData &sD, double update[], const solverMode &sMode)
 {
-    if (opFlags[differential_output])
+    if (component_configuration.opFlags[differential_output])
     {
         return;
     }
@@ -533,7 +533,7 @@ void Block::blockAlgebraicUpdate (double input, const stateData &sD, double upda
         // otherwise the residual fails to check
         // properly
     }
-    if (opFlags[has_limits])
+    if (component_configuration.opFlags[has_limits])
     {
         update[offset - 1] = vLimiter->output (testVal);
     }
@@ -554,7 +554,7 @@ void Block::blockDerivative (double /*input*/,
                              double deriv[],
                              const solverMode &sMode)
 {
-    if (opFlags[differential_output])
+    if (component_configuration.opFlags[differential_output])
     {
         auto offset = offsets.getDiffOffset (sMode) + limiter_diff;
         double testVal = getTestRate (didt, sD.dstate_dt[offset]);
@@ -564,13 +564,13 @@ void Block::blockDerivative (double /*input*/,
         }
         if (limiter_diff > 0)
         {
-            if (opFlags[use_ramp_limits])
+            if (component_configuration.opFlags[use_ramp_limits])
             {
                 --offset;
                 deriv[offset] = rLimiter->output (testVal);
                 testVal = deriv[offset];
             }
-            if (opFlags[use_block_limits])
+            if (component_configuration.opFlags[use_block_limits])
             {
                 deriv[offset - 1] = vLimiter->deriv (testVal);
             }
@@ -590,7 +590,7 @@ void Block::blockJacobianElements (double /*input*/,
                                    index_t argLoc,
                                    const solverMode &sMode)
 {
-    if ((opFlags[differential_output]) && (hasDifferential (sMode)))
+    if ((component_configuration.opFlags[differential_output]) && (hasDifferential (sMode)))
     {
         auto offset = offsets.getDiffOffset (sMode) + limiter_diff;
         if (hasValueState ())
@@ -600,11 +600,11 @@ void Block::blockJacobianElements (double /*input*/,
         }
         if (limiter_diff > 0)
         {
-            if (opFlags[use_ramp_limits])
+            if (component_configuration.opFlags[use_ramp_limits])
             {
                 --offset;
                 md.assign (offset, offset, -sD.cj);
-                if (opFlags[use_direct])
+                if (component_configuration.opFlags[use_direct])
                 {
                     md.assignCheckCol (offset, argLoc, K * sD.cj * rLimiter->DoutDin ());
                 }
@@ -613,12 +613,12 @@ void Block::blockJacobianElements (double /*input*/,
                     md.assign (offset, offset + 1, sD.cj * rLimiter->DoutDin ());
                 }
             }
-            if (opFlags[use_block_limits])
+            if (component_configuration.opFlags[use_block_limits])
             {
                 --offset;
                 md.assign (offset, offset, -sD.cj);
 
-                if ((opFlags[use_direct]) && (!opFlags[use_ramp_limits]))
+                if ((component_configuration.opFlags[use_direct]) && (!component_configuration.opFlags[use_ramp_limits]))
                 {
                     md.assignCheckCol (offset, argLoc, K * sD.cj * vLimiter->DoutDin ());
                 }
@@ -630,7 +630,7 @@ void Block::blockJacobianElements (double /*input*/,
         }
     }
     // Now do the algebraic states if needed
-    if ((!opFlags[differential_output]) && (hasAlgebraic (sMode)))
+    if ((!component_configuration.opFlags[differential_output]) && (hasAlgebraic (sMode)))
     {
         auto offset = offsets.getAlgOffset (sMode) + limiter_alg;
         if (hasValueState ())
@@ -642,7 +642,7 @@ void Block::blockJacobianElements (double /*input*/,
         {
             --offset;
             md.assign (offset, offset, -1.0);
-            if (opFlags[use_direct])
+            if (component_configuration.opFlags[use_direct])
             {
                 md.assign (offset, argLoc, K * vLimiter->DoutDin ());
             }
@@ -665,9 +665,9 @@ void Block::jacobianElements (const IOdata &inputs,
 
 double Block::getLimiterTestValue (double input, const stateData &sD, const solverMode &sMode)
 {
-    auto offset = (opFlags[differential_output]) ? offsets.getDiffOffset (sMode) : offsets.getAlgOffset (sMode);
-    auto stateVal = (sD.empty ()) ? m_state[1] : sD.state[offset + 1];
-    if (hasValueState () || opFlags[use_ramp_limits])
+    auto offset = (component_configuration.opFlags[differential_output]) ? offsets.getDiffOffset (sMode) : offsets.getAlgOffset (sMode);
+    auto stateVal = (sD.empty ()) ? component_state.m_state[1] : sD.state[offset + 1];
+    if (hasValueState () || component_configuration.opFlags[use_ramp_limits])
     {
         return stateVal;
     }
@@ -676,12 +676,12 @@ double Block::getLimiterTestValue (double input, const stateData &sD, const solv
 
 void Block::rootTest (const IOdata &inputs, const stateData &sD, double roots[], const solverMode &sMode)
 {
-    if (!opFlags[has_limits])
+    if (!component_configuration.opFlags[has_limits])
     {
         return;
     }
     int rootOffset = offsets.getRootOffset (sMode);
-    if (opFlags[use_ramp_limits])
+    if (component_configuration.opFlags[use_ramp_limits])
     {
         auto doffset = offsets.getDiffOffset (sMode) + limiter_diff;
         double testRate = getTestRate (inputs[1], sD.dstate_dt[doffset]);
@@ -690,7 +690,7 @@ void Block::rootTest (const IOdata &inputs, const stateData &sD, double roots[],
         ++rootOffset;
     }
 
-    if (opFlags[use_block_limits])
+    if (component_configuration.opFlags[use_block_limits])
     {
         double val = getLimiterTestValue (inputs[0], sD, sMode);
         roots[rootOffset] = vLimiter->limitCheck (val);
@@ -701,13 +701,13 @@ change_code
 Block::rootCheck (const IOdata &inputs, const stateData &sD, const solverMode &sMode, check_level_t /*level*/)
 {
     change_code ret = change_code::no_change;
-    if (!opFlags[has_limits])
+    if (!component_configuration.opFlags[has_limits])
     {
         return ret;
     }
-    const double *st = ((!sD.empty ()) ? sD.state : m_state.data ());
-    const double *dst = ((!sD.empty ()) ? sD.dstate_dt : m_dstate_dt.data ());
-    if (opFlags[use_ramp_limits])
+    const double *st = ((!sD.empty ()) ? sD.state : component_state.m_state.data ());
+    const double *dst = ((!sD.empty ()) ? sD.dstate_dt : component_state.m_dstate_dt.data ());
+    if (component_configuration.opFlags[use_ramp_limits])
     {
         auto doffset = offsets.getDiffOffset (sMode);
         double testRate = getTestRate (getRateInput (inputs), dst[doffset]);
@@ -719,7 +719,7 @@ Block::rootCheck (const IOdata &inputs, const stateData &sD, const solverMode &s
             ret = change_code::non_state_change;
         }
     }
-    if (opFlags[use_block_limits])
+    if (component_configuration.opFlags[use_block_limits])
     {
         double val = getLimiterTestValue (inputs[0], sD, sMode);
         double vval = vLimiter->limitCheck (val);
@@ -738,33 +738,33 @@ void Block::rootTrigger (coreTime /*time*/,
                          const std::vector<int> &rootMask,
                          const solverMode &sMode)
 {
-    if (!opFlags[has_limits])
+    if (!component_configuration.opFlags[has_limits])
     {
         return;
     }
     auto roffset = offsets.getRootOffset (sMode);
 
-    if (opFlags[use_ramp_limits])
+    if (component_configuration.opFlags[use_ramp_limits])
     {
         if (rootMask[roffset] != 0)
         {
             auto doffset = offsets.getDiffOffset (cLocalSolverMode);
-            double testRate = getTestRate (getRateInput (inputs), m_dstate_dt[doffset]);
+            double testRate = getTestRate (getRateInput (inputs), component_state.m_dstate_dt[doffset]);
             rLimiter->changeLimitActivation (testRate);
             // ret = change_code::non_state_change;
         }
         ++roffset;
     }
-    if (opFlags[use_block_limits])
+    if (component_configuration.opFlags[use_block_limits])
     {
         if (rootMask[roffset] == 0)
         {
             return;
         }
-        double val = getLimiterTestValue (inputs.empty () ? m_state[0] : inputs[0], emptyStateData, sMode);
+        double val = getLimiterTestValue (inputs.empty () ? component_state.m_state[0] : inputs[0], emptyStateData, sMode);
 
         vLimiter->changeLimitActivation (val);
-        m_state[0] = vLimiter->output (val);
+        component_state.m_state[0] = vLimiter->output (val);
     }
 }
 
@@ -772,21 +772,21 @@ void Block::setFlag (const std::string &flag, bool val)
 {
     if (flag == "use_limits")
     {
-        if (!opFlags[dyn_initialized])
+        if (!component_configuration.opFlags[dyn_initialized])
         {
-            opFlags[has_limits] = val;
-            opFlags[use_block_limits] = val;
-            opFlags[use_ramp_limits] = val;
+            component_configuration.opFlags[has_limits] = val;
+            component_configuration.opFlags[use_block_limits] = val;
+            component_configuration.opFlags[use_ramp_limits] = val;
         }
     }
     else if (flag == "simplified")
     {
-        if (opFlags[dyn_initialized])
+        if (component_configuration.opFlags[dyn_initialized])
         {
-            if (opFlags[simplified] != val)  // this is probably not the best thing to
+            if (component_configuration.opFlags[simplified] != val)  // this is probably not the best thing to
             // be changing after initialization
             {
-                opFlags[simplified] = val;
+                component_configuration.opFlags[simplified] = val;
                 dynObjectInitializeA (object_time.prevTime, 0);
                 alert (this, STATE_COUNT_CHANGE);
                 LOG_WARNING ("changing object state computations during simulation "
@@ -795,28 +795,28 @@ void Block::setFlag (const std::string &flag, bool val)
         }
         else
         {
-            opFlags[simplified] = val;
+            component_configuration.opFlags[simplified] = val;
         }
     }
     else if (flag == "use_direct")
     {
-        if (!opFlags[dyn_initialized])
+        if (!component_configuration.opFlags[dyn_initialized])
         {
-            opFlags[use_direct] = val;
+            component_configuration.opFlags[use_direct] = val;
         }
     }
     else if (flag == "differential_input")
     {
-        if (!opFlags[dyn_initialized])
+        if (!component_configuration.opFlags[dyn_initialized])
         {
-            opFlags[differential_input] = val;
+            component_configuration.opFlags[differential_input] = val;
         }
     }
     else if (flag == "use_ramp_limits")
     {
-        if (!opFlags[dyn_initialized])
+        if (!component_configuration.opFlags[dyn_initialized])
         {
-            opFlags[use_ramp_limits] = val;
+            component_configuration.opFlags[use_ramp_limits] = val;
         }
     }
     else
@@ -901,9 +901,9 @@ double Block::get (const std::string &param, gridUnits::units_t unitType) const
 
 void Block::valLimiterUpdate ()
 {
-    if (!opFlags[dyn_initialized])
+    if (!component_configuration.opFlags[dyn_initialized])
     {
-        opFlags.set (use_block_limits);
+        component_configuration.opFlags.set (use_block_limits);
     }
     else
     {
@@ -916,9 +916,9 @@ void Block::valLimiterUpdate ()
 
 void Block::rampLimiterUpdate ()
 {
-    if (!opFlags[dyn_initialized])
+    if (!component_configuration.opFlags[dyn_initialized])
     {
-        opFlags.set (use_ramp_limits);
+        component_configuration.opFlags.set (use_ramp_limits);
     }
     else
     {
@@ -932,11 +932,11 @@ void Block::rampLimiterUpdate ()
 stringVec Block::localStateNames () const
 {
     stringVec stNames;
-    if (opFlags[use_block_limits])
+    if (component_configuration.opFlags[use_block_limits])
     {
         stNames.emplace_back ("block_limits");
     }
-    if (opFlags[use_ramp_limits])
+    if (component_configuration.opFlags[use_ramp_limits])
     {
         stNames.emplace_back ("ramp_limits");
     }

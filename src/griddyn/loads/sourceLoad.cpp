@@ -286,7 +286,7 @@ void sourceLoad::set (const std::string &param, double val, gridUnits::units_t u
             {
                 sourceLink[ind->second] = static_cast<int> (val);
             }
-            else if (!opFlags[pFlow_initialized])
+            else if (!component_configuration.opFlags[pFlow_initialized])
             {
                 sourceLink[ind->second] = static_cast<int> (val);
             }
@@ -304,7 +304,7 @@ void sourceLoad::set (const std::string &param, double val, gridUnits::units_t u
             if ((static_cast<int> (sources.size ()) > keyind->second) && (sources[keyind->second] != nullptr))
             {
                 sources[keyind->second]->set ("level", gridUnits::unitConversion (val, unitType, gridUnits::puMW,
-                                                                                  systemBasePower));
+                                                                                  component_parameters.systemBasePower));
                 return;
             }
         }

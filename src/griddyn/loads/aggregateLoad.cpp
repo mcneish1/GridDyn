@@ -261,7 +261,7 @@ void aggregateLoad::set (const std::string &param, const std::string &val)
             }
             fraction[nn + 1] = fval[nn];
         }
-        if (opFlags[pFlow_initialized])
+        if (component_configuration.opFlags[pFlow_initialized])
         {
             for (size_t nn = 0; nn < subLoads.size (); ++nn)
             {
@@ -306,7 +306,7 @@ void aggregateLoad::set (const std::string &param, double val, gridUnits::units_
     {
         zipLoad::set (param, val, unitType);
     }
-    if ((reallocate) && (opFlags[pFlow_initialized]))
+    if ((reallocate) && (component_configuration.opFlags[pFlow_initialized]))
     {
         for (size_t nn = 0; nn < subLoads.size (); ++nn)
         {

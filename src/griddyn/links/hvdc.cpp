@@ -177,16 +177,16 @@ void hvdc::setFlow (int direction)
 {
     if (direction == reverse)
     {
-        if (!opFlags[reverse_flow])
+        if (!component_configuration.opFlags[reverse_flow])
         {
-            opFlags.set (reverse_flow);
+            component_configuration.opFlags.set (reverse_flow);
         }
     }
     else
     {
-        if (opFlags[reverse_flow])
+        if (component_configuration.opFlags[reverse_flow])
         {
-            opFlags.reset (reverse_flow);
+            component_configuration.opFlags.reset (reverse_flow);
         }
     }
 }

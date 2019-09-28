@@ -78,7 +78,7 @@ stateSizes dcBus::LocalStateSizes (const solverMode &sMode) const
         busSS.vSize = 1;
 
         // check for slave bus mode
-        if (opFlags[slave_bus])
+        if (component_configuration.opFlags[slave_bus])
         {
             busSS.vSize = 0;
         }
@@ -105,7 +105,7 @@ count_t dcBus::LocalJacobianCount (const solverMode &sMode) const
     {
         localJacSize = 1 + 2 * static_cast<count_t> (attachedLinks.size ());
         // check for slave bus mode
-        if (opFlags[slave_bus])
+        if (component_configuration.opFlags[slave_bus])
         {
             localJacSize -= 1;
         }
@@ -350,7 +350,7 @@ void dcBus::setState (coreTime time, const double state[], const double dstate_d
         if (Voffset != kNullLocation)
         {
             voltage = state[Voffset];
-            m_dstate_dt[voltageInLocation] = dstate_dt[Voffset];
+            component_state.m_dstate_dt[voltageInLocation] = dstate_dt[Voffset];
         }
     }
     else if (hasAlgebraic (sMode))
@@ -359,7 +359,7 @@ void dcBus::setState (coreTime time, const double state[], const double dstate_d
         {
             if (time > object_time.prevTime)
             {
-                // m_dstate_dt[voltageInLocation] = (state[Voffset] - m_state[voltageInLocation]) / (time -
+                // component_state.m_dstate_dt[voltageInLocation] = (state[Voffset] - m_state[voltageInLocation]) / (time -
                 // lastSetTime);
             }
             voltage = state[Voffset];
@@ -372,7 +372,7 @@ void dcBus::guessState (coreTime time, double state[], double dstate_dt[], const
 {
     auto Voffset = offsets.getVOffset (sMode);
 
-    if (!opFlags[slave_bus])
+    if (!component_configuration.opFlags[slave_bus])
     {
         if (Voffset != kNullLocation)
         {

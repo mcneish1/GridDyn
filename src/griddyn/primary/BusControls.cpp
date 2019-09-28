@@ -292,10 +292,10 @@ void BusControls::updateVoltageControls ()
             vcobj->setFlag ("indirect_voltage_control", true);
         }
         controlledBus->set ("type", "pq");
-        controlledBus->opFlags.set (indirect_voltage_control);
+        controlledBus->component_configuration.opFlags.set (indirect_voltage_control);
     }
     // check if the v and p controls are identical
-    controlledBus->opFlags.set (acBus::bus_flags::identical_PQ_control_objects, checkIdenticalControls ());
+    controlledBus->component_configuration.opFlags.set (acBus::bus_flags::identical_PQ_control_objects, checkIdenticalControls ());
 }
 
 void BusControls::updatePowerControls ()
@@ -356,7 +356,7 @@ void BusControls::updatePowerControls ()
         controlledBus->set ("participation", pfsum);
     }
     // check if the v and p controls are identical
-    controlledBus->opFlags.set (acBus::bus_flags::identical_PQ_control_objects, checkIdenticalControls ());
+    controlledBus->component_configuration.opFlags.set (acBus::bus_flags::identical_PQ_control_objects, checkIdenticalControls ());
 }
 
 bool BusControls::checkIdenticalControls ()
@@ -408,7 +408,7 @@ void BusControls::mergeBus (acBus *mbus)
             {
                 // This bus becomes the master of mbus
                 mbus->busController.masterBus = controlledBus;
-                mbus->opFlags.set (acBus::bus_flags::slave_bus);
+                mbus->component_configuration.opFlags.set (acBus::bus_flags::slave_bus);
                 slaveBusses.push_back (mbus);
                 for (auto sb : mbus->busController.slaveBusses)
                 {
@@ -481,7 +481,7 @@ void BusControls::unmergeBus (acBus *mbus)
         {
             for (auto &eb : slaveBusses)
             {
-                eb->opFlags.reset (acBus::bus_flags::slave_bus);
+                eb->component_configuration.opFlags.reset (acBus::bus_flags::slave_bus);
             }
             checkMerge ();
             mbus->checkMerge ();

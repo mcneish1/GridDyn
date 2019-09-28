@@ -117,7 +117,7 @@ void Link::updateBus (gridBus *bus, index_t busNumber)
 
 void Link::followNetwork (int network, std::queue<gridBus *> &stk)
 {
-    if (isConnected () && opFlags[network_connected])
+    if (isConnected () && component_configuration.opFlags[network_connected])
     {
         if (B1->Network != network)
         {
@@ -236,18 +236,18 @@ void Link::switchMode (index_t num, bool mode)
 {
     if (num == 2)
     {
-        if (mode == opFlags[switch2_open_flag])
+        if (mode == component_configuration.opFlags[switch2_open_flag])
         {
             return;
         }
 
-        opFlags.flip (switch2_open_flag);
+        component_configuration.opFlags.flip (switch2_open_flag);
 
-        if (opFlags[pFlow_initialized])
+        if (component_configuration.opFlags[pFlow_initialized])
         {
             LOG_DEBUG (
               "Switch2 changed||state =" +
-              ((opFlags[switch2_open_flag]) ? std::string ("OPEN") : std::string ("CLOSED")) +
+              ((component_configuration.opFlags[switch2_open_flag]) ? std::string ("OPEN") : std::string ("CLOSED")) +
               ", link status =" + ((isConnected ()) ? std::string ("CONNECTED") : std::string ("DISCONNECTED")));
             if (isConnected ())
             {
@@ -272,17 +272,17 @@ void Link::switchMode (index_t num, bool mode)
     }
     else
     {
-        if (mode == opFlags[switch1_open_flag])
+        if (mode == component_configuration.opFlags[switch1_open_flag])
         {
             return;
         }
-        opFlags.flip (switch1_open_flag);
+        component_configuration.opFlags.flip (switch1_open_flag);
 
-        if (opFlags[pFlow_initialized])
+        if (component_configuration.opFlags[pFlow_initialized])
         {
             LOG_DEBUG (
               "Switch1 changed||state =" +
-              ((opFlags[switch1_open_flag]) ? std::string ("OPEN") : std::string ("CLOSED")) +
+              ((component_configuration.opFlags[switch1_open_flag]) ? std::string ("OPEN") : std::string ("CLOSED")) +
               ", link status =" + ((isConnected ()) ? std::string ("CONNECTED") : std::string ("DISCONNECTED")));
             if (isConnected ())
             {
@@ -311,8 +311,8 @@ void Link::disconnect ()
 {
     if (isConnected ())
     {
-        opFlags.set (switch1_open_flag, true);
-        opFlags.set (switch2_open_flag, true);
+        component_configuration.opFlags.set (switch1_open_flag, true);
+        component_configuration.opFlags.set (switch2_open_flag, true);
         switchChange (1);
         switchChange (2);
         if (!B1->checkCapable ())
@@ -333,14 +333,14 @@ void Link::reconnect ()
 {
     if (!isConnected ())
     {
-        if (opFlags[switch1_open_flag])
+        if (component_configuration.opFlags[switch1_open_flag])
         {
-            opFlags.reset (switch1_open_flag);
+            component_configuration.opFlags.reset (switch1_open_flag);
             switchChange (1);
         }
-        if (opFlags[switch2_open_flag])
+        if (component_configuration.opFlags[switch2_open_flag])
         {
-            opFlags.reset (switch2_open_flag);
+            component_configuration.opFlags.reset (switch2_open_flag);
             switchChange (2);
         }
         LOG_DEBUG ("reconnecting line");
@@ -375,8 +375,8 @@ void Link::set (const std::string &param, double val, units_t unitType)
     }
     else if (param == "pset")
     {
-        Pset = unitConversion (val, unitType, puMW, systemBasePower);
-        opFlags.set (fixed_target_power);
+        Pset = unitConversion (val, unitType, puMW, component_parameters.systemBasePower);
+        component_configuration.opFlags.set (fixed_target_power);
         computePowers ();
     }
     else if ((param == "loss") || (param == "lossfraction"))
@@ -386,15 +386,15 @@ void Link::set (const std::string &param, double val, units_t unitType)
     }
     else if ((param == "ratinga") || (param == "rating"))
     {
-        ratingA = unitConversion (val, unitType, puMW, systemBasePower);
+        ratingA = unitConversion (val, unitType, puMW, component_parameters.systemBasePower);
     }
     else if (param == "ratingb")
     {
-        ratingB = unitConversion (val, unitType, puMW, systemBasePower);
+        ratingB = unitConversion (val, unitType, puMW, component_parameters.systemBasePower);
     }
     else if ((param == "ratinge") || (param == "emergency_rating") || (param == "erating") || (param == "ratingc"))
     {
-        Erating = unitConversion (val, unitType, puMW, systemBasePower);
+        Erating = unitConversion (val, unitType, puMW, component_parameters.systemBasePower);
     }
     else if (param == "circuit")
     {
@@ -421,11 +421,11 @@ double Link::get (const std::string &param, units_t unitType) const
 
     if ((param == "breaker1") || (param == "switch1") || (param == "breaker_open1"))
     {
-        val = static_cast<double> (opFlags[switch1_open_flag]);
+        val = static_cast<double> (component_configuration.opFlags[switch1_open_flag]);
     }
     else if ((param == "breaker2") || (param == "switch2") || (param == "breaker_open2"))
     {
-        val = static_cast<double> (opFlags[switch2_open_flag]);
+        val = static_cast<double> (component_configuration.opFlags[switch2_open_flag]);
     }
     else if ((param == "connected") || (param == "breaker"))
     {
@@ -433,7 +433,7 @@ double Link::get (const std::string &param, units_t unitType) const
     }
     else if ((param == "set") || (param == "pset"))
     {
-        val = gridUnits::unitConversion (Pset, puMW, unitType, systemBasePower);
+        val = gridUnits::unitConversion (Pset, puMW, unitType, component_parameters.systemBasePower);
     }
     else if (param == "linkcount")
     {
@@ -457,7 +457,7 @@ double Link::get (const std::string &param, units_t unitType) const
     }
     else if (param == "loss")
     {
-        val = unitConversion (getLoss (), puMW, unitType, systemBasePower);
+        val = unitConversion (getLoss (), puMW, unitType, component_parameters.systemBasePower);
     }
     else if (param == "lossfraction")
     {
@@ -473,7 +473,7 @@ double Link::get (const std::string &param, units_t unitType) const
         if (fptr.first)
         {
             coreObject *tobj = const_cast<Link *> (this);
-            val = unitConversion (fptr.first (tobj), fptr.second, unitType, systemBasePower);
+            val = unitConversion (fptr.first (tobj), fptr.second, unitType, component_parameters.systemBasePower);
         }
         else
         {
@@ -487,26 +487,26 @@ void Link::pFlowObjectInitializeA (coreTime /*time0*/, std::uint32_t /*flags*/)
 {
     if (B1 == nullptr)
     {
-        opFlags.set (switch1_open_flag);
+        component_configuration.opFlags.set (switch1_open_flag);
     }
     if (B2 == nullptr)
     {
-        opFlags.set (switch2_open_flag);
+        component_configuration.opFlags.set (switch2_open_flag);
     }
 }
 
-bool Link::isConnected () const { return (!(opFlags[switch1_open_flag] || opFlags[switch2_open_flag])); }
+bool Link::isConnected () const { return (!(component_configuration.opFlags[switch1_open_flag] || component_configuration.opFlags[switch2_open_flag])); }
 int Link::fixRealPower (double power, id_type_t measureTerminal, id_type_t /*fixedTerminal*/, units_t unitType)
 {
     if (measureTerminal == 1)
     {
-        Pset = unitConversion (power, unitType, puMW, systemBasePower);
+        Pset = unitConversion (power, unitType, puMW, component_parameters.systemBasePower);
     }
     else
     {
-        Pset = unitConversion (power, unitType, puMW, systemBasePower) / (1.0 - lossFraction);
+        Pset = unitConversion (power, unitType, puMW, component_parameters.systemBasePower) / (1.0 - lossFraction);
     }
-    opFlags.set (fixed_target_power);
+    component_configuration.opFlags.set (fixed_target_power);
     return 1;
 }
 
@@ -592,7 +592,7 @@ void Link::disable ()
     {
         return;
     }
-    if ((opFlags[has_pflow_states]) || (opFlags[has_dyn_states]))
+    if ((component_configuration.opFlags[has_pflow_states]) || (component_configuration.opFlags[has_dyn_states]))
     {
         alert (this, STATE_COUNT_CHANGE);
     }
@@ -939,6 +939,12 @@ bool compareLink (Link *lnk1, Link *lnk2, bool cmpBus, bool printDiff)
         }
     }
     return true;
+}
+
+bool Link::switchTest () const { return (component_configuration.opFlags[switch1_open_flag] || component_configuration.opFlags[switch2_open_flag]); }
+bool Link::switchTest (index_t num) const
+{
+    return (num == 2) ? component_configuration.opFlags[switch2_open_flag] : component_configuration.opFlags[switch1_open_flag];
 }
 
 }  // namespace griddyn

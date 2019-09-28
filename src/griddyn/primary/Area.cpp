@@ -38,7 +38,7 @@ Area::Area (const std::string &objName) : gridPrimary (objName)
     // default values
     setUserID (++areaCounter);
     updateName ();
-    opFlags.set (multipart_calculation_capable);
+    component_configuration.opFlags.set (multipart_calculation_capable);
     obList = std::make_unique<coreObjectList> ();
     opObjectLists = std::make_unique<listMaintainer> ();
 }
@@ -201,8 +201,8 @@ void addObject (Area *area, X *obj, std::vector<X *> &objVector)
         obj->addOwningReference ();
         obj->locIndex = static_cast<index_t> (objVector.size ()) - 1;
 
-        obj->set ("basepower", area->systemBasePower);
-        obj->set ("basefreq", area->systemBaseFrequency);
+        obj->set ("basepower", area->component_parameters.systemBasePower);
+        obj->set ("basefreq", area->component_parameters.systemBaseFrequency);
         area->primaryObjects.push_back (obj);
         obj->locIndex2 = static_cast<index_t> (area->primaryObjects.size ()) - 1;
         if (area->checkFlag (pFlow_initialized))
@@ -248,7 +248,7 @@ void Area::remove (coreObject *obj)
     }
 
     objectHolder[obj->locIndex]->setParent (nullptr);
-    if (opFlags[being_deleted])
+    if (component_configuration.opFlags[being_deleted])
     {
         objectHolder[obj->locIndex] = nullptr;
     }
@@ -273,7 +273,7 @@ void removeObject (Area *area, X *obj, std::vector<X *> &objVector)
     }
 
     objVector[obj->locIndex]->setParent (nullptr);
-    if (area->opFlags[being_deleted])
+    if (area->component_configuration.opFlags[being_deleted])
     {
         objVector[obj->locIndex] = nullptr;
     }
@@ -759,7 +759,7 @@ void Area::updateLocalCache (const IOdata &inputs, const stateData &sD, const so
 change_code Area::powerFlowAdjust (const IOdata &inputs, std::uint32_t flags, check_level_t level)
 {
     auto ret = change_code::no_change;
-    opFlags.set (disable_flag_updates);  // this is so the adjustment object list can't get reset in the middle of
+    component_configuration.opFlags.set (disable_flag_updates);  // this is so the adjustment object list can't get reset in the middle of
     // this computation
     if (level < check_level_t::low_voltage_check)
     {
@@ -787,8 +787,8 @@ change_code Area::powerFlowAdjust (const IOdata &inputs, std::uint32_t flags, ch
         }
     }
     // unset the lock
-    opFlags.reset (disable_flag_updates);
-    if (opFlags[flag_update_required])
+    component_configuration.opFlags.reset (disable_flag_updates);
+    if (component_configuration.opFlags[flag_update_required])
     {
         updateFlags ();
     }
@@ -901,7 +901,7 @@ void Area::converge (coreTime time,
                      converge_mode mode,
                      double tol)
 {
-    if (opFlags[reverse_converge])
+    if (component_configuration.opFlags[reverse_converge])
     {
         auto ra = opObjectLists->rbegin (sMode);
         auto rend = opObjectLists->rend (sMode);
@@ -922,9 +922,9 @@ void Area::converge (coreTime time,
         }
     }
     // Toggle the reverse indicator every time
-    if (opFlags[direction_oscillate])
+    if (component_configuration.opFlags[direction_oscillate])
     {
-        opFlags.flip (reverse_converge);
+        component_configuration.opFlags.flip (reverse_converge);
     }
 }
 
@@ -932,11 +932,11 @@ void Area::setFlag (const std::string &flag, bool val)
 {
     if (flag == "reverse_converge")
     {
-        opFlags.set (reverse_converge, val);
+        component_configuration.opFlags.set (reverse_converge, val);
     }
     else if (flag == "direction_oscillate")
     {
-        opFlags.set (direction_oscillate, val);
+        component_configuration.opFlags.set (direction_oscillate, val);
     }
     else
     {
@@ -960,7 +960,7 @@ void Area::set (const std::string &param, double val, units_t unitType)
 {
     if (param == "basepower")
     {
-        systemBasePower = unitConversion (val, unitType, MW);
+        component_parameters.systemBasePower = unitConversion (val, unitType, MW);
         for (auto &obj : primaryObjects)
         {
             obj->set (param, val);
@@ -971,11 +971,11 @@ void Area::set (const std::string &param, double val, units_t unitType)
         // the default unit in this case should be Hz since that is what everyone assumes but we
         // need to store it in rps NOTE: we only do this assumed conversion for an area/simulation
 
-        systemBaseFrequency = unitConversionFreq (val, (unitType == defUnit) ? Hz : unitType, rps);
+        component_parameters.systemBaseFrequency = unitConversionFreq (val, (unitType == defUnit) ? Hz : unitType, rps);
 
         for (auto obj : primaryObjects)
         {
-            obj->set (param, systemBaseFrequency, rps);
+            obj->set (param, component_parameters.systemBaseFrequency, rps);
         }
     }
     else
@@ -1675,7 +1675,7 @@ Area::rootCheck (const IOdata &inputs, const stateData &sD, const solverMode &sM
 {
     change_code ret = change_code::no_change;
     // root checks can trigger flag updates disable and just do the update once
-    opFlags.set (disable_flag_updates);
+    component_configuration.opFlags.set (disable_flag_updates);
     if (level >= check_level_t::low_voltage_check)
     {
         for (auto &obj : primaryObjects)
@@ -1704,8 +1704,8 @@ Area::rootCheck (const IOdata &inputs, const stateData &sD, const solverMode &sM
             }
         }
     }
-    opFlags.reset (disable_flag_updates);
-    if (opFlags[flag_update_required])
+    component_configuration.opFlags.reset (disable_flag_updates);
+    if (component_configuration.opFlags[flag_update_required])
     {
         updateFlags ();
     }
@@ -1725,7 +1725,7 @@ void Area::rootTrigger (coreTime time,
     auto currentRootObject = rootObjects.begin ();
     auto obend = rootObjects.end ();
     auto ors = (*currentRootObject)->rootSize (sMode);
-    opFlags.set (disable_flag_updates);  // root triggers can cause a flag change and the flag update currently
+    component_configuration.opFlags.set (disable_flag_updates);  // root triggers can cause a flag change and the flag update currently
     // checks the root object
     // TODO::May be wise at some point to revisit the combination of the flags and root object checking
     for (auto rc : RF)
@@ -1752,11 +1752,11 @@ void Area::rootTrigger (coreTime time,
         }
         ors = (*currentRootObject)->rootSize (sMode);
     }
-    opFlags.reset (disable_flag_updates);
-    if (opFlags[flag_update_required])
+    component_configuration.opFlags.reset (disable_flag_updates);
+    if (component_configuration.opFlags[flag_update_required])
     {
         updateFlags ();
-        opFlags.reset (flag_update_required);
+        component_configuration.opFlags.reset (flag_update_required);
     }
 }
 
@@ -1969,13 +1969,13 @@ void Area::jacobianElements (const IOdata &inputs,
 void Area::updateFlags (bool /*dynOnly*/)
 {
     pFlowAdjustObjects.clear ();
-    opFlags &= (~flagMask);  // clear the cascading flags
+    component_configuration.opFlags &= (~flagMask);  // clear the cascading flags
 
     for (auto &obj : primaryObjects)
     {
         if (obj->isEnabled ())
         {
-            opFlags |= obj->cascadingFlags ();
+            component_configuration.opFlags |= obj->cascadingFlags ();
             if (obj->checkFlag (has_powerflow_adjustments))
             {
                 pFlowAdjustObjects.push_back (obj);

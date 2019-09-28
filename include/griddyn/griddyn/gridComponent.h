@@ -15,6 +15,8 @@
 #include "gridComponentHelperClasses.h"
 #include "offsetTable.h"
 
+#include "griddynComponents.hpp"
+
 #include <bitset>
 
 template <class Y>
@@ -36,21 +38,13 @@ class violation;
 class gridComponent : public coreObject
 {
   protected:
-    std::bitset<64>
-      opFlags;  //!< operational flags these flags are designed to be normal false @see ::operation_flags
     offsetTable offsets;  //!< a table of offsets for the different solver modes
-    count_t m_inputSize = 0;  //!< the required size of the inputs input
-    count_t m_outputSize = 0;  //!< the number of outputs the subModel produces
-    parameter_t systemBaseFrequency =
-      kWS;  //!<[radians per second] the base frequency of the system default to 60Hz
-    parameter_t systemBasePower = 100;  //!<[MVA] base power for all PU computations
-    parameter_t localBaseVoltage = kNullVal;  //!< [kV] base voltage for object
-
-    std::vector<double> m_state;  //!< storage location for internal state
-    std::vector<double> m_dstate_dt;  //!< storage location for internal state differential
+    components::configuration component_configuration;
+    components::ports component_ports;
+    components::parameters component_parameters;
+    components::state component_state;
   private:
-    objVector<gridComponent *> subObjectList;  //!< a vector of all the subObjects;
-    // stringVec stateNames;           //!<a vector with the names of the states
+    components::children component_children;
   public:
     /** @brief default constructor*/
     explicit gridComponent (const std::string &objName = "");
@@ -188,7 +182,7 @@ see gridComponent::dynInitializeA for more details
     /** @brief get the set of cascaing flags
     @return an unsigned long long with all non-cascading flags masked out
     */
-    inline std::uint64_t cascadingFlags () const { return (opFlags.to_ullong () & flagMask); }
+    std::uint64_t cascadingFlags () const;
 
     virtual coreObject *find (const std::string &object) const override;
 
@@ -216,10 +210,10 @@ see gridComponent::dynInitializeA for more details
 
     /** @brief get a vector reference to the local states
      */
-    const std::vector<double> &getStates () const { return m_state; }
+    const std::vector<double> &getStates () const;
     /** @brief get a vector reference to the local states derivatives
      */
-    const std::vector<double> &getDerivs () const { return m_dstate_dt; }
+    const std::vector<double> &getDerivs () const;
     /** @brief set the offsets for root finding
     @param[in] newRootOffset the offset index all variables are sequential.
     @param[in] sMode the solver mode to use.
@@ -315,11 +309,11 @@ see gridComponent::dynInitializeA for more details
     /** @brief get the number of outputs
     @return the number of outputs
     */
-    count_t numOutputs () const { return m_outputSize; }
+    count_t numOutputs () const;
     /** @brief get the number of inputs
     @return the number of inputs
     */
-    count_t numInputs () const { return m_inputSize; }
+    count_t numInputs () const;
 
     /** @brief function to get a constant pointer to the object offsets
      * @param[in] sMode the mode to get the offsets for
@@ -454,7 +448,7 @@ see gridComponent::dynInitializeA for more details
     virtual void getVariableType (double sdata[], const solverMode &sMode);
 
     /**@brief get a reference to the vector of subObjects*/
-    const objVector<gridComponent *> &getSubObjects () const { return subObjectList; }
+    const objVector<gridComponent *> &getSubObjects () const;
     /** @brief load constraint information
      0 for no constraints
     1 for > 0
@@ -525,10 +519,10 @@ see gridComponent::dynInitializeA for more details
     virtual gridUnits::units_t outputUnits (index_t outputNum) const;
 
     /** get the systemBasePower*/
-    parameter_t basePower () const { return systemBasePower; }
+    parameter_t basePower () const;
 
     /** get the localBaseVoltage*/
-    parameter_t baseVoltage () const { return localBaseVoltage; }
+    parameter_t baseVoltage () const;
     /** @brief get a vector of output Names
     @details the return data is a vector of vectors of string the first element of each vector is the typical
     output Name the others are alternatives

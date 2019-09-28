@@ -20,16 +20,16 @@ namespace blocks
 {
 pidBlock::pidBlock (const std::string &objName) : Block (objName),no_D(object_bools.extra_bool)
 {
-    opFlags.set (use_state);
-    opFlags.set (differential_output);
+    component_configuration.opFlags.set (use_state);
+    component_configuration.opFlags.set (differential_output);
 	no_D = true;
 }
 
 pidBlock::pidBlock (double P, double I, double D, const std::string &objName)
     : Block (objName), m_P (P), m_I (I), m_D (D), no_D(object_bools.extra_bool)
 {
-    opFlags.set (use_state);
-    opFlags.set (differential_output);
+    component_configuration.opFlags.set (use_state);
+    component_configuration.opFlags.set (differential_output);
 	no_D = (D == 0.0);
 
 }
@@ -73,39 +73,39 @@ void pidBlock::dynObjectInitializeB (const IOdata &inputs, const IOdata &desired
     Block::dynObjectInitializeB (inputs, desiredOutput, fieldSet);
     if (desiredOutput.empty ())
     {
-        m_state[limiter_diff + 2] = iv;
-        m_dstate_dt[limiter_diff + 2] = in * m_I;  // integral
-        m_state[limiter_diff + 1] = in;  // derivative uses a filter function
-        m_state[limiter_diff] = K * (m_P * in + m_state[limiter_diff + 2]);  // differential should be 0
-        // m_state[1] should be 0
+        component_state.m_state[limiter_diff + 2] = iv;
+        component_state.m_dstate_dt[limiter_diff + 2] = in * m_I;  // integral
+        component_state.m_state[limiter_diff + 1] = in;  // derivative uses a filter function
+        component_state.m_state[limiter_diff] = K * (m_P * in + component_state.m_state[limiter_diff + 2]);  // differential should be 0
+        // component_state.m_state[1] should be 0
 
-        fieldSet[0] = m_state[0];
+        fieldSet[0] = component_state.m_state[0];
     }
     else
     {
-        m_dstate_dt[limiter_diff + 2] = m_I * in;  // rate of change of integral
+        component_state.m_dstate_dt[limiter_diff + 2] = m_I * in;  // rate of change of integral
         // value
-        m_state[limiter_diff + 1] = in;  // derivative uses a filter function
-        m_state[limiter_diff] = desiredOutput[0];
-        // m_state[1] should be 0
+        component_state.m_state[limiter_diff + 1] = in;  // derivative uses a filter function
+        component_state.m_state[limiter_diff] = desiredOutput[0];
+        // component_state.m_state[1] should be 0
         if (m_I != 0)
         {
-            m_state[limiter_diff + 2] =
-              (m_state[limiter_diff] / K - m_P * (in));  // note: differential component assumed 0
+            component_state.m_state[limiter_diff + 2] =
+              (component_state.m_state[limiter_diff] / K - m_P * (in));  // note: differential component assumed 0
         }
         else if (in != 0.0)
         {
-            m_state[limiter_diff + 2] = 0;
-            bias += m_state[limiter_diff] / K / m_P - in;
+            component_state.m_state[limiter_diff + 2] = 0;
+            bias += component_state.m_state[limiter_diff] / K / m_P - in;
             in = inputs[0] + bias;
-            m_dstate_dt[limiter_diff + 2] = m_I * in;  // integral
-            m_state[limiter_diff + 2] = in;  // derivative uses a filter function
+            component_state.m_dstate_dt[limiter_diff + 2] = m_I * in;  // integral
+            component_state.m_state[limiter_diff + 2] = in;  // derivative uses a filter function
         }
         else
         {
-            m_state[limiter_diff + 1] = 0;
+            component_state.m_state[limiter_diff + 1] = 0;
         }
-        fieldSet[0] = m_state[0];
+        fieldSet[0] = component_state.m_state[0];
     }
     prevInput = in + bias;
 }
@@ -146,7 +146,7 @@ void pidBlock::blockJacobianElements (double input,
         //  Loc.destDiffLoc[limiter_diff] = (K*(m_P*(input + bias) +
         //  Loc.dstateLoc[limiter_diff + 1] + Loc.diffStateLoc[limiter_diff + 2]) -
         //  Loc.diffStateLoc[limiter_diff]) / m_Td;
-        if (opFlags[has_limits])
+        if (component_configuration.opFlags[has_limits])
         {
             Block::blockJacobianElements (input, didt, sD, md, argLoc, sMode);
         }
@@ -180,9 +180,9 @@ double pidBlock::step (coreTime time, double inputA)
     // derivative state
     if (dt >= fabs (5.0 * std::max (m_T1, m_Td)))
     {
-        m_state[limiter_diff + 2] = m_state[limiter_diff + 2] + m_I * (input + prevInput) / 2.0 * dt;
-        m_state[limiter_diff + 1] = input;
-        m_state[limiter_diff] = K * (m_P * input + m_state[limiter_diff + 2]);
+        component_state.m_state[limiter_diff + 2] = component_state.m_state[limiter_diff + 2] + m_I * (input + prevInput) / 2.0 * dt;
+        component_state.m_state[limiter_diff + 1] = input;
+        component_state.m_state[limiter_diff] = K * (m_P * input + component_state.m_state[limiter_diff + 2]);
     }
     else
     {
@@ -190,9 +190,9 @@ double pidBlock::step (coreTime time, double inputA)
         double ct = object_time.prevTime + tstep;
         double in = prevInput;
         double pin = prevInput;
-        double ival_int = m_state[limiter_diff + 2];
-        double ival_der = m_state[limiter_diff + 1];
-        double ival_out = m_state[limiter_diff];
+        double ival_int = component_state.m_state[limiter_diff + 2];
+        double ival_der = component_state.m_state[limiter_diff + 1];
+        double ival_out = component_state.m_state[limiter_diff];
         double didt = (input - prevInput) / dt;
         double der;
         while (ct < time)
@@ -205,22 +205,22 @@ double pidBlock::step (coreTime time, double inputA)
             ct += tstep;
             pin = in;
         }
-        m_state[limiter_diff + 2] = ival_int + m_I * (pin + input) / 2.0 * (time - ct + tstep);
+        component_state.m_state[limiter_diff + 2] = ival_int + m_I * (pin + input) / 2.0 * (time - ct + tstep);
         der = (no_D) ? 0 : 1.0 / m_T1 * (m_D * (pin + input) / 2.0 - ival_der);
-        m_state[limiter_diff + 1] = ival_der + der * (time - ct + tstep);
-        m_state[limiter_diff] =
-          ival_out + (K * (m_P * input + der + m_state[limiter_diff + 2]) - ival_out) / m_Td * (time - ct + tstep);
+        component_state.m_state[limiter_diff + 1] = ival_der + der * (time - ct + tstep);
+        component_state.m_state[limiter_diff] =
+          ival_out + (K * (m_P * input + der + component_state.m_state[limiter_diff + 2]) - ival_out) / m_Td * (time - ct + tstep);
     }
     prevInput = input;
 
-    if (opFlags[has_limits])
+    if (component_configuration.opFlags[has_limits])
     {
         Block::step (time, input);
     }
     else
     {
         object_time.prevTime = time;
-        m_output = m_state[0];
+        m_output = component_state.m_state[0];
     }
     return m_output;
 }

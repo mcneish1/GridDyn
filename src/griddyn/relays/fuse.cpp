@@ -32,7 +32,7 @@ namespace griddyn
 namespace relays
 {
 using namespace gridUnits;
-fuse::fuse (const std::string &objName) : Relay (objName), useI2T (object_bools.extra_bool) { opFlags.set (continuous_flag); }
+fuse::fuse (const std::string &objName) : Relay (objName), useI2T (object_bools.extra_bool) { component_configuration.opFlags.set (continuous_flag); }
 
 coreObject *fuse::clone (coreObject *obj) const
 {
@@ -76,11 +76,11 @@ void fuse::set (const std::string &param, double val, gridUnits::units_t unitTyp
 {
     if (param == "limit")
     {
-        limit = unitConversion (val, unitType, puA, systemBasePower, Vbase);
+        limit = unitConversion (val, unitType, puA, component_parameters.systemBasePower, Vbase);
     }
     else if (param == "i2t")
     {
-        mp_I2T = unitConversion (val, unitType, puA, systemBasePower, Vbase);
+        mp_I2T = unitConversion (val, unitType, puA, component_parameters.systemBasePower, Vbase);
     }
     else if (param == "terminal")
     {
@@ -119,7 +119,7 @@ void fuse::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
     else
     {
         add (std::shared_ptr<Condition> (make_condition ("sqrt(p^2+q^2)/@bus:v", ">=", limit, m_sourceObject)));
-        opFlags.set (nonlink_source_flag);
+        component_configuration.opFlags.set (nonlink_source_flag);
         ge->setTarget (m_sinkObject, "status");
         ge->setValue (0.0);
         bus = static_cast<gridBus *> (m_sourceObject->find ("bus"));
@@ -180,26 +180,26 @@ void fuse::conditionTriggered (index_t conditionNum, coreTime /*triggerTime*/)
 {
     if (conditionNum == 2)
     {
-        assert (opFlags[overlimit_flag]);
+        assert (component_configuration.opFlags[overlimit_flag]);
 
         setConditionStatus (1, condition_status_t::disabled);
         setConditionStatus (2, condition_status_t::disabled);
         setConditionStatus (0, condition_status_t::active);
         alert (this, JAC_COUNT_DECREASE);
-        opFlags.reset (overlimit_flag);
+        component_configuration.opFlags.reset (overlimit_flag);
         useI2T = false;
     }
 }
 
 change_code fuse::blowFuse ()
 {
-    opFlags.set (overlimit_flag);
+    component_configuration.opFlags.set (overlimit_flag);
     setConditionStatus (0, condition_status_t::disabled);
     setConditionStatus (1, condition_status_t::disabled);
     setConditionStatus (2, condition_status_t::disabled);
     alert (this, FUSE_BLOWN_CURRENT);
     LOG_NORMAL ("Fuse " + std::to_string (m_terminal) + " blown on object " + m_sourceObject->getName ());
-    opFlags.set (fuse_blown_flag);
+    component_configuration.opFlags.set (fuse_blown_flag);
     change_code cchange = change_code::non_state_change;
     if (mp_I2T > 0.0)
     {
@@ -216,7 +216,7 @@ change_code fuse::setupFuseEvaluation ()
         return blowFuse ();
     }
 
-    opFlags.set (overlimit_flag);
+    component_configuration.opFlags.set (overlimit_flag);
     setConditionStatus (0, condition_status_t::disabled);
     double I = getConditionValue (0);
     cI2T = I2Tequation (I) * minBlowTime;
@@ -258,7 +258,7 @@ void fuse::timestep (coreTime time, const IOdata & /*inputs*/, const solverMode 
         double val = getConditionValue (0);
         if (val > limit)
         {
-            opFlags.set (fuse_blown_flag);
+            component_configuration.opFlags.set (fuse_blown_flag);
             disable ();
             alert (this, FUSE1_BLOWN_CURRENT);
         }
@@ -290,7 +290,7 @@ void fuse::jacobianElements (const IOdata & /*inputs*/,
         auto Voffset = bus->getOutputLoc (sMode, voltageInLocation);
         auto inputs = bus->getOutputs (noInputs, sD, sMode);
         auto inputLocs = bus->getOutputLocs (sMode);
-        if (opFlags[nonlink_source_flag])
+        if (component_configuration.opFlags[nonlink_source_flag])
         {
             auto gs = static_cast<gridSecondary *> (m_sourceObject);
             out = gs->getOutputs (inputs, sD, sMode);
@@ -355,7 +355,7 @@ void fuse::residual (const IOdata & /*inputs*/, const stateData &sD, double resi
         auto offset = offsets.getDiffOffset (sMode);
         const double *dst = sD.dstate_dt + offset;
 
-        if (!opFlags[nonlink_source_flag])
+        if (!component_configuration.opFlags[nonlink_source_flag])
         {
             static_cast<Link *> (m_sourceObject)->updateLocalCache (noInputs, sD, sMode);
         }

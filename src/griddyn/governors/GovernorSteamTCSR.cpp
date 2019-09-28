@@ -71,8 +71,8 @@ void GovernorSteamTCSR::dynObjectInitializeB (const IOdata &inputs,
                                               const IOdata &desiredOutput,
                                               IOdata & /*inputSet*/)
 {
-    m_state[1] = 0;
-    m_state[0] = desiredOutput[PoutLocation];
+    component_state.m_state[1] = 0;
+    component_state.m_state[0] = desiredOutput[PoutLocation];
     Pset = inputs[govpSetInLocation];
 }
 

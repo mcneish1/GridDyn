@@ -70,7 +70,7 @@ void ExciterDC1A::dynObjectInitializeB (const IOdata &inputs, const IOdata &desi
 {
     Exciter::dynObjectInitializeB (inputs, desiredOutput,
                                    fieldSet);  // this will dynInitializeB the field state if need be
-    double *gs = m_state.data ();
+    double *gs = component_state.m_state.data ();
     gs[1] = (Ke + Aex * exp (Bex * gs[0])) * gs[0];  // Vr
     gs[2] = gs[1] / Ka;  // X
     gs[3] = gs[0] * Kf / Tf;  // Rf
@@ -103,7 +103,7 @@ void ExciterDC1A::derivative (const IOdata &inputs, const stateData &sD, double 
     double *d = Loc.destDiffLoc;
     double V = inputs[voltageInLocation];
     d[0] = (-(Ke + Aex * exp (Bex * es[0])) * es[0] + es[1]) / Te;
-    if (opFlags[outside_vlim])
+    if (component_configuration.opFlags[outside_vlim])
     {
         d[1] = 0;
     }
@@ -140,7 +140,7 @@ void ExciterDC1A::jacobianElements (const IOdata &inputs,
     md.assign (refI, refI, temp1);
     md.assign (refI, refI + 1, 1.0 / Te);
 
-    if (opFlags[outside_vlim])
+    if (component_configuration.opFlags[outside_vlim])
     {
         limitJacobian (inputs[voltageInLocation], VLoc, refI + 1, sD.cj, md);
     }
@@ -183,7 +183,7 @@ void ExciterDC1A::rootTest (const IOdata &inputs, const stateData &sD, double ro
     const double *es = sD.state + offset;
 
     int rootOffset = offsets.getRootOffset (sMode);
-    if (opFlags[outside_vlim])
+    if (component_configuration.opFlags[outside_vlim])
     {
         root[rootOffset] = ((Vref + vBias - inputs[voltageInLocation]) - es[0] * Kf / Tf + es[3]) * Ka * Tc / Tb +
                            es[2] * (Tb - Tc) * Ka / Tb - es[1];
@@ -193,7 +193,7 @@ void ExciterDC1A::rootTest (const IOdata &inputs, const stateData &sD, double ro
         root[rootOffset] = std::min (Vrmax - es[1], es[1] - Vrmin) + 0.00001;
         if (es[1] > Vrmax)
         {
-            opFlags.set (etrigger_high);
+            component_configuration.opFlags.set (etrigger_high);
         }
     }
 }
@@ -203,20 +203,20 @@ change_code ExciterDC1A::rootCheck (const IOdata &inputs,
                                     const solverMode & /*sMode*/,
                                     check_level_t /*level*/)
 {
-    double *es = m_state.data ();
+    double *es = component_state.m_state.data ();
     double test;
     change_code ret = change_code::no_change;
-    if (opFlags[outside_vlim])
+    if (component_configuration.opFlags[outside_vlim])
     {
         test = ((Vref + vBias - inputs[voltageInLocation]) - es[0] * Kf / Tf + es[3]) * Ka * Tc / Tb +
                es[2] * (Tb - Tc) * Ka / Tb - es[1];
-        if (opFlags[etrigger_high])
+        if (component_configuration.opFlags[etrigger_high])
         {
             if (test < 0.0)
             {
                 ret = change_code::jacobian_change;
-                opFlags.reset (outside_vlim);
-                opFlags.reset (etrigger_high);
+                component_configuration.opFlags.reset (outside_vlim);
+                component_configuration.opFlags.reset (etrigger_high);
                 alert (this, JAC_COUNT_INCREASE);
             }
         }
@@ -225,7 +225,7 @@ change_code ExciterDC1A::rootCheck (const IOdata &inputs,
             if (test > 0.0)
             {
                 ret = change_code::jacobian_change;
-                opFlags.reset (outside_vlim);
+                component_configuration.opFlags.reset (outside_vlim);
                 alert (this, JAC_COUNT_INCREASE);
             }
         }
@@ -234,16 +234,16 @@ change_code ExciterDC1A::rootCheck (const IOdata &inputs,
     {
         if (es[1] > Vrmax + 0.00001)
         {
-            opFlags.set (etrigger_high);
-            opFlags.set (outside_vlim);
+            component_configuration.opFlags.set (etrigger_high);
+            component_configuration.opFlags.set (outside_vlim);
             es[1] = Vrmax;
             ret = change_code::jacobian_change;
             alert (this, JAC_COUNT_DECREASE);
         }
         else if (es[1] < Vrmin - 0.00001)
         {
-            opFlags.reset (etrigger_high);
-            opFlags.set (outside_vlim);
+            component_configuration.opFlags.reset (etrigger_high);
+            component_configuration.opFlags.set (outside_vlim);
             es[1] = Vrmin;
             ret = change_code::jacobian_change;
             alert (this, JAC_COUNT_DECREASE);

@@ -383,7 +383,7 @@ void Relay::set (const std::string &param, const std::string &val)
     {
         if (cManager.set (param, val))
         {
-            opFlags.set (use_commLink);
+            component_configuration.opFlags.set (use_commLink);
         }
         else
         {
@@ -408,7 +408,7 @@ void Relay::set (const std::string &param, double val, units_t unitType)
     {
         if (cManager.set (param, val))
         {
-            opFlags.set (use_commLink);
+            component_configuration.opFlags.set (use_commLink);
         }
         else
         {
@@ -423,7 +423,7 @@ double Relay::get (const std::string &param, gridUnits::units_t unitType) const
     if (fptr.first)
     {
         coreObject *tobj = const_cast<Relay *> (this);
-        return unitConversion (fptr.first (tobj), fptr.second, unitType, systemBasePower);
+        return unitConversion (fptr.first (tobj), fptr.second, unitType, component_parameters.systemBasePower);
     }
     return gridPrimary::get (param, unitType);
 }
@@ -432,7 +432,7 @@ void Relay::setFlag (const std::string &flag, bool val)
 {
     if (flag == "continuous")
     {
-        opFlags.set (continuous_flag, val);
+        component_configuration.opFlags.set (continuous_flag, val);
         if (!val)
         {
             m_nextSampleTime = (object_time.prevTime < timeZero) ? timeZero : object_time.prevTime;
@@ -440,7 +440,7 @@ void Relay::setFlag (const std::string &flag, bool val)
     }
     else if (flag == "sampled")
     {
-        opFlags.set (continuous_flag, !val);
+        component_configuration.opFlags.set (continuous_flag, !val);
         if (val)
         {
             m_nextSampleTime = (object_time.prevTime < timeZero) ? timeZero : object_time.prevTime;
@@ -448,21 +448,21 @@ void Relay::setFlag (const std::string &flag, bool val)
     }
     else if ((flag == "comm_enabled") || (flag == "comms") || (flag == "usecomms"))
     {
-        opFlags.set (use_commLink, val);
+        component_configuration.opFlags.set (use_commLink, val);
     }
     else if (flag == "resettable")
     {
-        opFlags.set (resettable_flag, val);
+        component_configuration.opFlags.set (resettable_flag, val);
     }
     else if (flag == "powerflow_check")
     {
-        opFlags.set (power_flow_checks_flag, val);
+        component_configuration.opFlags.set (power_flow_checks_flag, val);
     }
     else
     {
         if (cManager.setFlag (flag, val))
         {
-            opFlags.set (use_commLink);
+            component_configuration.opFlags.set (use_commLink);
         }
         else
         {
@@ -477,7 +477,7 @@ void Relay::updateA (coreTime time)
     // be copied first
     condChecks.clear ();
     object_time.nextUpdateTime = maxTime;
-    if (opFlags[continuous_flag])
+    if (component_configuration.opFlags[continuous_flag])
     {
         for (auto &cond : ncond)
         {
@@ -542,7 +542,7 @@ std::string Relay::generateCommName () { return getName (); }
 
 void Relay::pFlowObjectInitializeA (coreTime time0, std::uint32_t /*flags*/)
 {
-    if ((opFlags[use_commLink]) && (!(commLink)))
+    if ((component_configuration.opFlags[use_commLink]) && (!(commLink)))
     {
         if (cManager.getName ().empty ())
         {
@@ -576,23 +576,23 @@ void Relay::pFlowObjectInitializeA (coreTime time0, std::uint32_t /*flags*/)
                 {
                     LOG_WARNING ("unable to initialize comm link");
                     commLink = nullptr;
-                    opFlags.reset (use_commLink);
+                    component_configuration.opFlags.reset (use_commLink);
                 }
             }
         }
         else
         {
             LOG_WARNING ("unrecognized commLink type ");
-            opFlags.reset (use_commLink);
+            component_configuration.opFlags.reset (use_commLink);
         }
     }
-    if (opFlags[power_flow_checks_flag])
+    if (component_configuration.opFlags[power_flow_checks_flag])
     {
         for (auto &cs : cStates)
         {
             if (cs == condition_status_t::active)
             {
-                opFlags.set (has_powerflow_adjustments);
+                component_configuration.opFlags.set (has_powerflow_adjustments);
                 break;
             }
         }
@@ -602,7 +602,7 @@ void Relay::pFlowObjectInitializeA (coreTime time0, std::uint32_t /*flags*/)
 
 void Relay::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
 {
-    if (opFlags[continuous_flag])
+    if (component_configuration.opFlags[continuous_flag])
     {
         updateRootCount (false);
     }
@@ -620,13 +620,13 @@ void Relay::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
     }
 
     //*update the flag for future power flow check  BUG noticed by Colin Ponce 10/21/16
-    if (opFlags[power_flow_checks_flag])
+    if (component_configuration.opFlags[power_flow_checks_flag])
     {
         for (auto &cs : cStates)
         {
             if (cs == condition_status_t::active)
             {
-                opFlags.set (has_powerflow_adjustments);
+                component_configuration.opFlags.set (has_powerflow_adjustments);
                 break;
             }
         }
@@ -680,7 +680,7 @@ void Relay::updateRootCount (bool alertChange)
             ++localRoots;
             conditionsWithRoots.push_back (kk);
         }
-        else if ((cStates[kk] == condition_status_t::triggered) && (opFlags[resettable_flag]))
+        else if ((cStates[kk] == condition_status_t::triggered) && (component_configuration.opFlags[resettable_flag]))
         {
             ++localRoots;
             conditionsWithRoots.push_back (kk);
@@ -690,13 +690,13 @@ void Relay::updateRootCount (bool alertChange)
     {
         if (localRoots > 0)
         {
-            opFlags.set (has_alg_roots);
-            opFlags.set (has_roots);
+            component_configuration.opFlags.set (has_alg_roots);
+            component_configuration.opFlags.set (has_roots);
         }
         else
         {
-            opFlags.reset (has_alg_roots);
-            opFlags.reset (has_roots);
+            component_configuration.opFlags.reset (has_alg_roots);
+            component_configuration.opFlags.reset (has_roots);
         }
         offsets.rootUnload (true);
         if (alertChange)
@@ -755,7 +755,7 @@ void Relay::rootTrigger (coreTime time,
             }
             ++ro;
         }
-        else if ((cStates[conditionToCheck] == condition_status_t::triggered) && (opFlags[resettable_flag]))
+        else if ((cStates[conditionToCheck] == condition_status_t::triggered) && (component_configuration.opFlags[resettable_flag]))
         {
             if (rootMask[ro] != 0)
             {

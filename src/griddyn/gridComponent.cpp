@@ -33,7 +33,7 @@ gridComponent::gridComponent (const std::string &objName) : coreObject (objName)
 
 gridComponent::~gridComponent ()
 {
-    for (auto &so : subObjectList)
+    for (auto &so : component_children.subObjectList)
     {
         removeReference (so, this);
     }
@@ -46,15 +46,15 @@ coreObject *gridComponent::clone (coreObject *obj) const
     {
         return obj;
     }
-    nobj->m_inputSize = m_inputSize;
-    nobj->m_outputSize = m_outputSize;
-    nobj->opFlags = opFlags;
-    nobj->systemBaseFrequency = systemBaseFrequency;
-    nobj->systemBasePower = systemBasePower;
-    nobj->localBaseVoltage = localBaseVoltage;
-    if (nobj->subObjectList.empty ())
+    nobj->component_ports.m_inputSize = component_ports.m_inputSize;
+    nobj->component_ports.m_outputSize = component_ports.m_outputSize;
+    nobj->component_configuration.opFlags = component_configuration.opFlags;
+    nobj->component_parameters.systemBaseFrequency = component_parameters.systemBaseFrequency;
+    nobj->component_parameters.systemBasePower = component_parameters.systemBasePower;
+    nobj->component_parameters.localBaseVoltage = component_parameters.localBaseVoltage;
+    if (nobj->component_children.subObjectList.empty ())
     {
-        for (const auto &subobj : subObjectList)
+        for (const auto &subobj : component_children.subObjectList)
         {
             try
             {
@@ -68,21 +68,21 @@ coreObject *gridComponent::clone (coreObject *obj) const
     }
     else
     {
-        auto csz = nobj->subObjectList.size ();
+        auto csz = nobj->component_children.subObjectList.size ();
         // clone the subObjects
-        for (size_t ii = 0; ii < subObjectList.size (); ++ii)
+        for (size_t ii = 0; ii < component_children.subObjectList.size (); ++ii)
         {
-            if (subObjectList[ii]->locIndex != kNullLocation)
+            if (component_children.subObjectList[ii]->locIndex != kNullLocation)
             {
                 bool fnd = false;
                 for (size_t kk = 0; kk < csz; ++kk)
                 {
-                    if (nobj->subObjectList[kk]->locIndex == subObjectList[ii]->locIndex)
+                    if (nobj->component_children.subObjectList[kk]->locIndex == component_children.subObjectList[ii]->locIndex)
                     {
-                        if (typeid (nobj->subObjectList[kk]) ==
-                            typeid (subObjectList[ii]))  // make sure the types are same before cloning
+                        if (typeid (nobj->component_children.subObjectList[kk]) ==
+                            typeid (component_children.subObjectList[ii]))  // make sure the types are same before cloning
                         {
-                            subObjectList[ii]->clone (nobj->subObjectList[kk]);
+                            component_children.subObjectList[ii]->clone (nobj->component_children.subObjectList[kk]);
                             fnd = true;
                             break;
                         }
@@ -92,7 +92,7 @@ coreObject *gridComponent::clone (coreObject *obj) const
                 {
                     try
                     {
-                        nobj->add (subObjectList[ii]->clone ());
+                        nobj->add (component_children.subObjectList[ii]->clone ());
                     }
                     catch (const unrecognizedObjectException &)
                     {
@@ -106,7 +106,7 @@ coreObject *gridComponent::clone (coreObject *obj) const
                 {
                     try
                     {
-                        nobj->add (subObjectList[ii]->clone ());
+                        nobj->add (component_children.subObjectList[ii]->clone ());
                     }
                     catch (const unrecognizedObjectException &)
                     {
@@ -115,15 +115,15 @@ coreObject *gridComponent::clone (coreObject *obj) const
                 }
                 else
                 {
-                    if (typeid (subObjectList[ii]) == typeid (nobj->subObjectList[ii]))
+                    if (typeid (component_children.subObjectList[ii]) == typeid (nobj->component_children.subObjectList[ii]))
                     {
-                        subObjectList[ii]->clone (nobj->subObjectList[ii]);
+                        component_children.subObjectList[ii]->clone (nobj->component_children.subObjectList[ii]);
                     }
                     else
                     {
                         try
                         {
-                            nobj->add (subObjectList[ii]->clone ());
+                            nobj->add (component_children.subObjectList[ii]->clone ());
                         }
                         catch (const unrecognizedObjectException &)
                         {
@@ -148,19 +148,19 @@ void gridComponent::updateObjectLinkages (coreObject *newRoot)
 
 void gridComponent::pFlowInitializeA (coreTime time0, std::uint32_t flags)
 {
-    if (localBaseVoltage == kNullVal)
+    if (component_parameters.localBaseVoltage == kNullVal)
     {
         if (isRoot ())
         {
-            localBaseVoltage = 120.0;
+            component_parameters.localBaseVoltage = 120.0;
         }
         else if (dynamic_cast<gridComponent *> (getParent ()) != nullptr)
         {
-            localBaseVoltage = static_cast<gridComponent *> (getParent ())->localBaseVoltage;
+            component_parameters.localBaseVoltage = static_cast<gridComponent *> (getParent ())->component_parameters.localBaseVoltage;
         }
         else
         {
-            localBaseVoltage = 120.0;
+            component_parameters.localBaseVoltage = 120.0;
         }
     }
     if (isEnabled ())
@@ -177,7 +177,7 @@ void gridComponent::pFlowInitializeB ()
     if (isEnabled ())
     {
         pFlowObjectInitializeB ();
-        opFlags.set (pFlow_initialized);
+        component_configuration.opFlags.set (pFlow_initialized);
     }
 }
 
@@ -202,13 +202,13 @@ void gridComponent::dynInitializeB (const IOdata &inputs, const IOdata &desiredO
             setUpdateTime (object_time.prevTime + object_time.updatePeriod);
             enable_updates ();
         }
-        opFlags.set (dyn_initialized);
+        component_configuration.opFlags.set (dyn_initialized);
     }
 }
 
 void gridComponent::pFlowObjectInitializeA (coreTime time0, std::uint32_t flags)
 {
-    for (auto &subobj : subObjectList)
+    for (auto &subobj : component_children.subObjectList)
     {
         subobj->pFlowInitializeA (time0, flags);
     }
@@ -216,7 +216,7 @@ void gridComponent::pFlowObjectInitializeA (coreTime time0, std::uint32_t flags)
 
 void gridComponent::pFlowObjectInitializeB ()
 {
-    for (auto &subobj : subObjectList)
+    for (auto &subobj : component_children.subObjectList)
     {
         subobj->pFlowInitializeB ();
     }
@@ -224,7 +224,7 @@ void gridComponent::pFlowObjectInitializeB ()
 
 void gridComponent::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
 {
-    for (auto &subobj : subObjectList)
+    for (auto &subobj : component_children.subObjectList)
     {
         subobj->dynInitializeA (time0, flags);
     }
@@ -232,7 +232,7 @@ void gridComponent::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
 
 void gridComponent::dynObjectInitializeB (const IOdata &inputs, const IOdata &desiredOutput, IOdata &fieldSet)
 {
-    for (auto &subobj : subObjectList)
+    for (auto &subobj : component_children.subObjectList)
     {
         if (!subobj->checkFlag (separate_processing))
         {
@@ -388,11 +388,11 @@ void gridComponent::setOffsets (const solverOffsets &newOffsets, const solverMod
 {
     offsets.setOffsets (newOffsets, sMode);
 
-    if (!subObjectList.empty ())
+    if (!component_children.subObjectList.empty ())
     {
         solverOffsets no (newOffsets);
         no.localIncrement (offsets.getOffsets (sMode));
-        for (auto &subobj : subObjectList)
+        for (auto &subobj : component_children.subObjectList)
         {
             if (subobj->isEnabled ())
             {
@@ -405,9 +405,9 @@ void gridComponent::setOffsets (const solverOffsets &newOffsets, const solverMod
 
 void gridComponent::setOffset (index_t newOffset, const solverMode &sMode)
 {
-    if (!subObjectList.empty ())
+    if (!component_children.subObjectList.empty ())
     {
-        for (auto &subobj : subObjectList)
+        for (auto &subobj : component_children.subObjectList)
         {
             if (subobj->isEnabled ())
             {
@@ -450,10 +450,10 @@ void gridComponent::setFlag (const std::string &flag, bool val)
     auto ffind = user_settable_flags.find (flag);
     if (ffind != user_settable_flags.end ())
     {
-        opFlags.set (ffind->second, val);
+        component_configuration.opFlags.set (ffind->second, val);
         if (flag == "sampled_only")
         {
-            if (opFlags[pFlow_initialized])
+            if (component_configuration.opFlags[pFlow_initialized])
             {
                 offsets.unload ();
             }
@@ -505,7 +505,7 @@ void gridComponent::parentSetFlag (index_t flagID, bool val, coreObject *checkPa
     {
         if (std::binary_search (parentSettableFlags.begin (), parentSettableFlags.end (), flagID))
         {
-            opFlags[flagID] = val;
+            component_configuration.opFlags[flagID] = val;
         }
     }
 }
@@ -574,18 +574,18 @@ bool gridComponent::getFlag (const std::string &flag) const
     auto flagfind = flagmap.find (flag);
     if (flagfind != flagmap.end ())
     {
-        return opFlags[flagfind->second];
+        return component_configuration.opFlags[flagfind->second];
     }
     return coreObject::getFlag (flag);
 }
 
-bool gridComponent::checkFlag (index_t flagID) const { return opFlags.test (flagID); }
+bool gridComponent::checkFlag (index_t flagID) const { return component_configuration.opFlags.test (flagID); }
 bool gridComponent::hasStates (const solverMode &sMode) const { return (stateSize (sMode) > 0); }
-bool gridComponent::isArmed () const { return opFlags[object_armed_flag]; }
-bool gridComponent::isCloneable () const { return !opFlags[not_cloneable]; }
-bool gridComponent::isConnected () const { return !(opFlags[disconnected]); }
-void gridComponent::reconnect () { opFlags.set (disconnected, false); }
-void gridComponent::disconnect () { opFlags.set (disconnected); }
+bool gridComponent::isArmed () const { return component_configuration.opFlags[object_armed_flag]; }
+bool gridComponent::isCloneable () const { return !component_configuration.opFlags[not_cloneable]; }
+bool gridComponent::isConnected () const { return !(component_configuration.opFlags[disconnected]); }
+void gridComponent::reconnect () { component_configuration.opFlags.set (disconnected, false); }
+void gridComponent::disconnect () { component_configuration.opFlags.set (disconnected); }
 static const stringVec locNumStrings{"status", "basefrequency", "basepower"};
 static const stringVec locStrStrings{"status"};
 
@@ -601,7 +601,7 @@ void gridComponent::setStatus (std::string const& val)
         if (!isEnabled ())
         {
             enable ();
-            if ((opFlags[has_pflow_states]) || (opFlags[has_dyn_states]))
+            if ((component_configuration.opFlags[has_pflow_states]) || (component_configuration.opFlags[has_dyn_states]))
             {
                 alert (this, STATE_COUNT_CHANGE);
             }
@@ -611,7 +611,7 @@ void gridComponent::setStatus (std::string const& val)
     {
         if (isEnabled ())
         {
-            if ((opFlags[has_pflow_states]) || (opFlags[has_dyn_states]))
+            if ((component_configuration.opFlags[has_pflow_states]) || (component_configuration.opFlags[has_dyn_states]))
             {
                 alert (this, STATE_COUNT_CHANGE);
             }
@@ -718,7 +718,7 @@ double gridComponent::subObjectGet (const std::string &param, gridUnits::units_t
 
 void gridComponent::set (const std::string &param, double val, gridUnits::units_t unitType)
 {
-    if (opFlags[no_gridcomponent_set])
+    if (component_configuration.opFlags[no_gridcomponent_set])
     {
         throw (unrecognizedParameter (param));
     }
@@ -730,7 +730,7 @@ void gridComponent::set (const std::string &param, double val, gridUnits::units_
             if (!isEnabled ())
             {
                 enable ();
-                if (opFlags[has_dyn_states])
+                if (component_configuration.opFlags[has_dyn_states])
                 {
                     alert (this, STATE_COUNT_CHANGE);
                 }
@@ -740,7 +740,7 @@ void gridComponent::set (const std::string &param, double val, gridUnits::units_
         {
             if (isEnabled ())
             {
-                if (opFlags[has_dyn_states])
+                if (component_configuration.opFlags[has_dyn_states])
                 {
                     alert (this, STATE_COUNT_CHANGE);
                 }
@@ -768,18 +768,18 @@ void gridComponent::set (const std::string &param, double val, gridUnits::units_
 
     else if ((param == "basepower") || (param == "basemw") || (param == "basemva"))
     {
-        systemBasePower = gridUnits::unitConversion (val, unitType, gridUnits::MW);
-        setAll ("all", "basepower", systemBasePower);
+        component_parameters.systemBasePower = gridUnits::unitConversion (val, unitType, gridUnits::MW);
+        setAll ("all", "basepower", component_parameters.systemBasePower);
     }
     else if ((param == "basevoltage") || (param == "vbase") || (param == "voltagebase") || (param == "basev") ||
              (param == "bv") || (param == "base voltage"))
     {
-        localBaseVoltage = gridUnits::unitConversion (val, unitType, gridUnits::kV);
+        component_parameters.localBaseVoltage = gridUnits::unitConversion (val, unitType, gridUnits::kV);
     }
-    else if ((param == "basefreq") || (param == "basefrequency") || (param == "systembasefrequency"))
+    else if ((param == "basefreq") || (param == "basefrequency") || (param == "component_parameters.systemBaseFrequency"))
     {
-        systemBaseFrequency = gridUnits::unitConversionFreq (val, unitType, gridUnits::rps);
-        setAll ("all", "basefreq", systemBasePower);
+        component_parameters.systemBaseFrequency = gridUnits::unitConversionFreq (val, unitType, gridUnits::rps);
+        setAll ("all", "basefreq", component_parameters.systemBasePower);
     }
     else if (subObjectSet (param, val, unitType))
     {
@@ -798,7 +798,7 @@ void gridComponent::setAll (const std::string &type,
 {
     if ((type == "all") || (type == "sub") || (type == "object"))
     {
-        for (auto &subobj : subObjectList)
+        for (auto &subobj : component_children.subObjectList)
         {
             subobj->set (param, val, unitType);
         }
@@ -810,23 +810,23 @@ double gridComponent::get (const std::string &param, gridUnits::units_t unitType
     double out = kNullVal;
     if (param == "basepower")
     {
-        out = gridUnits::unitConversion (systemBasePower, gridUnits::MVAR, unitType, systemBasePower);
+        out = gridUnits::unitConversion (component_parameters.systemBasePower, gridUnits::MVAR, unitType, component_parameters.systemBasePower);
     }
     else if (param == "subobjectcount")
     {
-        out = static_cast<double> (subObjectList.size ());
+        out = static_cast<double> (component_children.subObjectList.size ());
     }
     else if (param == "basefrequency")
     {
-        out = gridUnits::unitConversionFreq (systemBaseFrequency, gridUnits::rps, unitType);
+        out = gridUnits::unitConversionFreq (component_parameters.systemBaseFrequency, gridUnits::rps, unitType);
     }
     else if (param == "basevoltage")
     {
-        out = gridUnits::unitConversionFreq (localBaseVoltage, gridUnits::kV, unitType);
+        out = gridUnits::unitConversionFreq (component_parameters.localBaseVoltage, gridUnits::kV, unitType);
     }
     else if (param == "jacsize")
     {
-        if (opFlags[dyn_initialized])
+        if (component_configuration.opFlags[dyn_initialized])
         {
             out = jacSize (cDaeSolverMode);
         }
@@ -837,7 +837,7 @@ double gridComponent::get (const std::string &param, gridUnits::units_t unitType
     }
     else if (param == "statesize")
     {
-        if (opFlags[dyn_initialized])
+        if (component_configuration.opFlags[dyn_initialized])
         {
             out = stateSize (cDaeSolverMode);
         }
@@ -848,7 +848,7 @@ double gridComponent::get (const std::string &param, gridUnits::units_t unitType
     }
     else if (param == "algsize")
     {
-        if (opFlags[dyn_initialized])
+        if (component_configuration.opFlags[dyn_initialized])
         {
             out = algSize (cDaeSolverMode);
         }
@@ -871,14 +871,14 @@ double gridComponent::get (const std::string &param, gridUnits::units_t unitType
         if (out == kNullVal)
         {
             auto &outNames = outputNames ();
-            for (index_t ii = 0; ii < m_outputSize; ++ii)
+            for (index_t ii = 0; ii < component_ports.m_outputSize; ++ii)
             {
                 for (auto &oname : outNames[ii])
                 {
                     if (oname == param)
                     {
                         return gridUnits::unitConversion (getOutput (ii), outputUnits (ii), unitType,
-                                                          systemBasePower);
+                                                          component_parameters.systemBasePower);
                     }
                 }
             }
@@ -894,36 +894,36 @@ void gridComponent::addSubObject (gridComponent *comp)
     {
         return;
     }
-    if (std::any_of (subObjectList.begin (), subObjectList.end (),
+    if (std::any_of (component_children.subObjectList.begin (), component_children.subObjectList.end (),
                      [comp](const coreObject *so) { return isSameObject (so, comp); }))
     {
         return;
     }
     comp->setParent (this);
     comp->addOwningReference ();
-    comp->systemBaseFrequency = systemBaseFrequency;
-    comp->systemBasePower = systemBasePower;
-    subObjectList.push_back (comp);
-    if (opFlags[pFlow_initialized])
+    comp->component_parameters.systemBaseFrequency = component_parameters.systemBaseFrequency;
+    comp->component_parameters.systemBasePower = component_parameters.systemBasePower;
+    component_children.subObjectList.push_back (comp);
+    if (component_configuration.opFlags[pFlow_initialized])
     {
         offsets.unload (true);
         alert (this, OBJECT_COUNT_INCREASE);
-        opFlags[dyn_initialized] = false;
-        opFlags[pFlow_initialized] = false;
+        component_configuration.opFlags[dyn_initialized] = false;
+        component_configuration.opFlags[pFlow_initialized] = false;
     }
 }
 
 void gridComponent::removeSubObject (gridComponent *obj)
 {
-    if (!subObjectList.empty ())
+    if (!component_children.subObjectList.empty ())
     {
-        auto rmobj = std::find_if (subObjectList.begin (), subObjectList.end (),
+        auto rmobj = std::find_if (component_children.subObjectList.begin (), component_children.subObjectList.end (),
                                    [obj](coreObject *so) { return isSameObject (so, obj); });
-        if (rmobj != subObjectList.end ())
+        if (rmobj != component_children.subObjectList.end ())
         {
             removeReference (*rmobj, this);
-            subObjectList.erase (rmobj);
-            if (opFlags[pFlow_initialized])
+            component_children.subObjectList.erase (rmobj);
+            if (component_configuration.opFlags[pFlow_initialized])
             {
                 offsets.unload (true);
                 alert (this, OBJECT_COUNT_DECREASE);
@@ -934,7 +934,7 @@ void gridComponent::removeSubObject (gridComponent *obj)
 
 void gridComponent::replaceSubObject (gridComponent *newObj, gridComponent *oldObj)
 {
-    if (subObjectList.empty ())
+    if (component_children.subObjectList.empty ())
     {
         return addSubObject (newObj);
     }
@@ -942,22 +942,22 @@ void gridComponent::replaceSubObject (gridComponent *newObj, gridComponent *oldO
     {
         return removeSubObject (oldObj);
     }
-    auto repobj = std::find_if (subObjectList.begin (), subObjectList.end (),
+    auto repobj = std::find_if (component_children.subObjectList.begin (), component_children.subObjectList.end (),
                                 [oldObj](const coreObject *so) { return isSameObject (so, oldObj); });
-    if (repobj != subObjectList.end ())
+    if (repobj != component_children.subObjectList.end ())
     {
         removeReference (*repobj, this);
         newObj->setParent (this);
         newObj->addOwningReference ();
-        newObj->systemBaseFrequency = systemBaseFrequency;
-        newObj->systemBasePower = systemBasePower;
+        newObj->component_parameters.systemBaseFrequency = component_parameters.systemBaseFrequency;
+        newObj->component_parameters.systemBasePower = component_parameters.systemBasePower;
         *repobj = newObj;
-        if (opFlags[pFlow_initialized])
+        if (component_configuration.opFlags[pFlow_initialized])
         {
             offsets.unload (true);
             alert (this, OBJECT_COUNT_CHANGE);
-            opFlags[dyn_initialized] = false;
-            opFlags[pFlow_initialized] = false;
+            component_configuration.opFlags[dyn_initialized] = false;
+            component_configuration.opFlags[pFlow_initialized] = false;
         }
     }
     else
@@ -975,7 +975,7 @@ void gridComponent::remove (coreObject *obj)
 
 void gridComponent::reset (reset_levels level)
 {
-    for (auto &subobj : subObjectList)
+    for (auto &subobj : component_children.subObjectList)
     {
         subobj->reset (level);
     }
@@ -985,7 +985,7 @@ change_code gridComponent::powerFlowAdjust (const IOdata &inputs, std::uint32_t 
 {
     auto ret = change_code::no_change;
 
-    for (auto &subobj : subObjectList)
+    for (auto &subobj : component_children.subObjectList)
     {
         if (!(subobj->checkFlag (has_powerflow_adjustments)))
         {
@@ -1011,13 +1011,13 @@ void gridComponent::setState (coreTime time,
         return;
     }
     const auto &so = offsets.getOffsets (sMode);
-    const auto &localStates = (subObjectList.empty ()) ? (so.total) : (so.local);
+    const auto &localStates = (component_children.subObjectList.empty ()) ? (so.total) : (so.local);
 
     if (hasAlgebraic (sMode))
     {
         if (localStates.algSize > 0)
         {
-            std::copy (state + so.algOffset, state + so.algOffset + localStates.algSize, m_state.data ());
+            std::copy (state + so.algOffset, state + so.algOffset + localStates.algSize, component_state.m_state.data ());
         }
     }
     if (localStates.diffSize > 0)
@@ -1025,20 +1025,20 @@ void gridComponent::setState (coreTime time,
         if (isDifferentialOnly (sMode))
         {
             std::copy (state + so.diffOffset, state + so.diffOffset + localStates.diffSize,
-                       m_state.data () + algSize (cLocalSolverMode));
+                       component_state.m_state.data () + algSize (cLocalSolverMode));
             std::copy (dstate_dt + so.diffOffset, dstate_dt + so.diffOffset + localStates.diffSize,
-                       m_dstate_dt.data () + algSize (cLocalSolverMode));
+                       component_state.m_dstate_dt.data () + algSize (cLocalSolverMode));
         }
         else
         {
             std::copy (state + so.diffOffset, state + so.diffOffset + localStates.diffSize,
-                       m_state.data () + localStates.algSize);
+                       component_state.m_state.data () + localStates.algSize);
             std::copy (dstate_dt + so.diffOffset, dstate_dt + so.diffOffset + localStates.diffSize,
-                       m_dstate_dt.data () + localStates.algSize);
+                       component_state.m_dstate_dt.data () + localStates.algSize);
         }
     }
 
-    for (auto &sub : subObjectList)
+    for (auto &sub : component_children.subObjectList)
     {
         sub->setState (time, state, dstate_dt, sMode);
     }
@@ -1051,14 +1051,14 @@ void gridComponent::guessState (coreTime time, double state[], double dstate_dt[
         return;
     }
     const auto &so = offsets.getOffsets (sMode);
-    const auto &localStates = (subObjectList.empty ()) ? (so.total) : (so.local);
+    const auto &localStates = (component_children.subObjectList.empty ()) ? (so.total) : (so.local);
 
     if (hasAlgebraic (sMode))
     {
         if (localStates.algSize > 0)
         {
             assert (so.algOffset != kNullLocation);
-            std::copy (m_state.begin (), m_state.begin () + localStates.algSize, state + so.algOffset);
+            std::copy (component_state.m_state.begin (), component_state.m_state.begin () + localStates.algSize, state + so.algOffset);
         }
     }
     if (localStates.diffSize > 0)
@@ -1067,10 +1067,10 @@ void gridComponent::guessState (coreTime time, double state[], double dstate_dt[
         {
             assert (so.diffOffset != kNullLocation);
             index_t localAlgSize = algSize (cLocalSolverMode);
-            std::copy (m_state.begin () + localAlgSize, m_state.begin () + localAlgSize + localStates.diffSize,
+            std::copy (component_state.m_state.begin () + localAlgSize, component_state.m_state.begin () + localAlgSize + localStates.diffSize,
                        state + so.diffOffset);
-            std::copy (m_dstate_dt.data () + localAlgSize,
-                       m_dstate_dt.data () + localAlgSize + localStates.diffSize, dstate_dt + so.diffOffset);
+            std::copy (component_state.m_dstate_dt.data () + localAlgSize,
+                       component_state.m_dstate_dt.data () + localAlgSize + localStates.diffSize, dstate_dt + so.diffOffset);
         }
         else
         {
@@ -1083,14 +1083,14 @@ void gridComponent::guessState (coreTime time, double state[], double dstate_dt[
             }
             assert (so.diffOffset != kNullLocation);
             count_t stateCount = localStates.algSize + localStates.diffSize;
-            std::copy (m_state.begin () + localStates.algSize, m_state.begin () + stateCount,
+            std::copy (component_state.m_state.begin () + localStates.algSize, component_state.m_state.begin () + stateCount,
                        state + so.diffOffset);
-            std::copy (m_dstate_dt.data () + localStates.algSize, m_dstate_dt.data () + stateCount,
+            std::copy (component_state.m_dstate_dt.data () + localStates.algSize, component_state.m_dstate_dt.data () + stateCount,
                        dstate_dt + so.diffOffset);
         }
     }
 
-    for (auto &sub : subObjectList)
+    for (auto &sub : component_children.subObjectList)
     {
         sub->guessState (time, state, dstate_dt, sMode);
     }
@@ -1099,13 +1099,13 @@ void gridComponent::guessState (coreTime time, double state[], double dstate_dt[
 void gridComponent::setupPFlowFlags ()
 {
     auto ss = stateSize (cPflowSolverMode);
-    opFlags.set (has_pflow_states, (ss > 0));
+    component_configuration.opFlags.set (has_pflow_states, (ss > 0));
     // load the subobject pflow states;
-    for (auto &sub : subObjectList)
+    for (auto &sub : component_children.subObjectList)
     {
         if (sub->checkFlag (has_pflow_states))
         {
-            opFlags.set (has_subobject_pflow_states);
+            component_configuration.opFlags.set (has_subobject_pflow_states);
             return;
         }
     }
@@ -1115,30 +1115,30 @@ void gridComponent::setupDynFlags ()
 {
     auto ss = stateSize (cDaeSolverMode);
 
-    opFlags.set (has_dyn_states, (ss > 0));
+    component_configuration.opFlags.set (has_dyn_states, (ss > 0));
     const auto &so = offsets.getOffsets (cDaeSolverMode);
     if (so.total.algRoots > 0)
     {
-        opFlags.set (has_alg_roots);
-        opFlags.set (has_roots);
+        component_configuration.opFlags.set (has_alg_roots);
+        component_configuration.opFlags.set (has_roots);
     }
     else if (so.total.diffRoots > 0)
     {
-        opFlags.reset (has_alg_roots);
-        opFlags.set (has_roots);
+        component_configuration.opFlags.reset (has_alg_roots);
+        component_configuration.opFlags.set (has_roots);
     }
     else
     {
-        opFlags.reset (has_alg_roots);
-        opFlags.reset (has_roots);
+        component_configuration.opFlags.reset (has_alg_roots);
+        component_configuration.opFlags.reset (has_roots);
     }
 }
 
 double gridComponent::getState (index_t offset) const
 {
-    if (isValidIndex (offset, m_state))
+    if (isValidIndex (offset, component_state.m_state))
     {
-        return m_state[offset];
+        return component_state.m_state[offset];
     }
     return kNullVal;
 }
@@ -1150,7 +1150,7 @@ void gridComponent::loadSizesSub (const solverMode &sMode, sizeCategory category
     {
     case sizeCategory::state_size_update:
         so.localStateLoad (false);
-        for (auto &sub : subObjectList)
+        for (auto &sub : component_children.subObjectList)
         {
             if (sub->isEnabled ())
             {
@@ -1169,7 +1169,7 @@ void gridComponent::loadSizesSub (const solverMode &sMode, sizeCategory category
         break;
     case sizeCategory::jacobian_size_update:
         so.total.jacSize = so.local.jacSize;
-        for (auto &sub : subObjectList)
+        for (auto &sub : component_children.subObjectList)
         {
             if (sub->isEnabled ())
             {
@@ -1189,7 +1189,7 @@ void gridComponent::loadSizesSub (const solverMode &sMode, sizeCategory category
     case sizeCategory::root_size_update:
         so.total.algRoots = so.local.algRoots;
         so.total.diffRoots = so.local.diffRoots;
-        for (auto &sub : subObjectList)
+        for (auto &sub : component_children.subObjectList)
         {
             if (sub->isEnabled ())
             {
@@ -1235,13 +1235,13 @@ void gridComponent::loadStateSizes (const solverMode &sMode)
         so.setLoaded ();
         return;
     }
-    if ((!isDynamic (sMode)) && (opFlags[no_powerflow_operations]))
+    if ((!isDynamic (sMode)) && (component_configuration.opFlags[no_powerflow_operations]))
     {
         so.stateReset ();
         so.stateLoaded = true;
         return;
     }
-    if ((isDynamic (sMode)) && (opFlags[no_dynamics]))
+    if ((isDynamic (sMode)) && (component_configuration.opFlags[no_dynamics]))
     {
         so.stateReset ();
         so.stateLoaded = true;
@@ -1266,11 +1266,11 @@ void gridComponent::loadStateSizes (const solverMode &sMode)
         }
     }
 
-    if (opFlags[sampled_only])  // no states
+    if (component_configuration.opFlags[sampled_only])  // no states
     {
         if (sMode == cLocalSolverMode)
         {
-            for (auto &sub : subObjectList)
+            for (auto &sub : component_children.subObjectList)
             {
                 sub->setFlag ("sampled_only");
             }
@@ -1281,7 +1281,7 @@ void gridComponent::loadStateSizes (const solverMode &sMode)
             so.total.reset ();
         }
     }
-    if (subObjectList.empty ())
+    if (component_children.subObjectList.empty ())
     {
         so.localStateLoad (true);
     }
@@ -1322,7 +1322,7 @@ void gridComponent::loadRootSizes (const solverMode &sMode)
         so.local.diffRoots = selfSizes.second;
     }
 
-    if (subObjectList.empty ())
+    if (component_children.subObjectList.empty ())
     {
         so.total.algRoots = so.local.algRoots;
         so.total.diffRoots = so.local.diffRoots;
@@ -1334,16 +1334,16 @@ void gridComponent::loadRootSizes (const solverMode &sMode)
     }
     if ((so.total.diffRoots > 0) || (so.total.algRoots > 0))
     {
-        opFlags.set (has_roots);
+        component_configuration.opFlags.set (has_roots);
         if (so.total.algRoots > 0)
         {
-            opFlags.set (has_alg_roots);
+            component_configuration.opFlags.set (has_alg_roots);
         }
     }
     else
     {
-        opFlags.reset (has_roots);
-        opFlags.reset (has_alg_roots);
+        component_configuration.opFlags.reset (has_roots);
+        component_configuration.opFlags.reset (has_alg_roots);
     }
 }
 
@@ -1373,7 +1373,7 @@ void gridComponent::loadJacobianSizes (const solverMode &sMode)
         so.local.jacSize = selfJacCount;
     }
 
-    if (subObjectList.empty ())
+    if (component_children.subObjectList.empty ())
     {
         so.total.jacSize = so.local.jacSize;
         so.jacobianLoaded = true;
@@ -1386,7 +1386,7 @@ void gridComponent::loadJacobianSizes (const solverMode &sMode)
 
 void gridComponent::getTols (double tols[], const solverMode &sMode)
 {
-    for (auto &subObj : subObjectList)
+    for (auto &subObj : component_children.subObjectList)
     {
         if (subObj->isEnabled ())
         {
@@ -1398,7 +1398,7 @@ void gridComponent::getTols (double tols[], const solverMode &sMode)
 void gridComponent::getVariableType (double sdata[], const solverMode &sMode)
 {
     auto &so = offsets.getOffsets (sMode);
-    if (subObjectList.empty ())
+    if (component_children.subObjectList.empty ())
     {
         if (so.total.algSize > 0)
         {
@@ -1435,7 +1435,7 @@ void gridComponent::getVariableType (double sdata[], const solverMode &sMode)
                 sdata[offset + kk] = DIFFERENTIAL_VARIABLE;
             }
         }
-        for (auto &subobj : subObjectList)
+        for (auto &subobj : component_children.subObjectList)
         {
             if (subobj->isEnabled ())
             {
@@ -1471,13 +1471,13 @@ void gridComponent::alert (coreObject *object, int code)
         auto res = alertFlags.find (code);
         if (res != alertFlags.end ())
         {
-            if (!opFlags[disable_flag_updates])
+            if (!component_configuration.opFlags[disable_flag_updates])
             {
                 updateFlags ();
             }
             else
             {
-                opFlags.set (flag_update_required);
+                component_configuration.opFlags.set (flag_update_required);
             }
             switch (res->second)
             {
@@ -1506,7 +1506,7 @@ void gridComponent::alert (coreObject *object, int code)
 
 void gridComponent::getConstraints (double constraints[], const solverMode &sMode)
 {
-    for (auto &subobj : subObjectList)
+    for (auto &subobj : component_children.subObjectList)
     {
         if ((subobj->isEnabled ()) && (subobj->checkFlag (has_constraints)))
         {
@@ -1520,7 +1520,7 @@ void gridComponent::setRootOffset (index_t newRootOffset, const solverMode &sMod
     offsets.setRootOffset (newRootOffset, sMode);
     auto &so = offsets.getOffsets (sMode);
     auto nR = so.local.algRoots + so.local.diffRoots;
-    for (auto &ro : subObjectList)
+    for (auto &ro : component_children.subObjectList)
     {
         ro->setRootOffset (newRootOffset + nR, sMode);
         nR += ro->rootSize (sMode);
@@ -1592,7 +1592,7 @@ index_t gridComponent::findIndex (const std::string &field, const solverMode &sM
             }
             return kNullLocation;
         }
-        if (!opFlags[dyn_initialized])
+        if (!component_configuration.opFlags[dyn_initialized])
         {
             return kNullLocation;
         }
@@ -1609,7 +1609,7 @@ index_t gridComponent::findIndex (const std::string &field, const solverMode &sM
             }
             return kNullLocation;
         }
-        if (!opFlags[dyn_initialized])
+        if (!component_configuration.opFlags[dyn_initialized])
         {
             return kNullLocation;
         }
@@ -1637,14 +1637,14 @@ index_t gridComponent::findIndex (const std::string &field, const solverMode &sM
                 }
                 return kNullLocation;
             }
-            if (!opFlags[dyn_initialized])
+            if (!component_configuration.opFlags[dyn_initialized])
             {
                 return kNullLocation;
             }
             return kInvalidLocation;
         }
     }
-    for (auto &subobj : subObjectList)
+    for (auto &subobj : component_children.subObjectList)
     {
         auto ret = subobj->findIndex (field, sMode);
         if (ret != kInvalidLocation)
@@ -1749,7 +1749,7 @@ void gridComponent::getStateName (stringVec &stNames, const solverMode &sMode, c
         }
     }
 
-    for (auto &subobj : subObjectList)
+    for (auto &subobj : component_children.subObjectList)
     {
         subobj->getStateName (stNames, sMode, prefix2 + ':');
     }
@@ -1757,14 +1757,14 @@ void gridComponent::getStateName (stringVec &stNames, const solverMode &sMode, c
 
 void gridComponent::updateFlags (bool dynamicsFlags)
 {
-    for (auto &subobj : subObjectList)
+    for (auto &subobj : component_children.subObjectList)
     {
         if (subobj->isEnabled ())
         {
-            opFlags |= subobj->cascadingFlags ();
+            component_configuration.opFlags |= subobj->cascadingFlags ();
         }
     }
-    if ((opFlags[dyn_initialized]) && (dynamicsFlags))
+    if ((component_configuration.opFlags[dyn_initialized]) && (dynamicsFlags))
     {
         setupDynFlags ();
     }
@@ -1773,12 +1773,12 @@ void gridComponent::updateFlags (bool dynamicsFlags)
         setupPFlowFlags ();
     }
 
-    opFlags.reset (flag_update_required);
+    component_configuration.opFlags.reset (flag_update_required);
 }
 
 void gridComponent::updateLocalCache (const IOdata &inputs, const stateData &sD, const solverMode &sMode)
 {
-    for (auto &sub : subObjectList)
+    for (auto &sub : component_children.subObjectList)
     {
         sub->updateLocalCache (inputs, sD, sMode);
     }
@@ -1786,9 +1786,9 @@ void gridComponent::updateLocalCache (const IOdata &inputs, const stateData &sD,
 
 coreObject *gridComponent::find (const std::string &object) const
 {
-    auto foundobj = std::find_if (subObjectList.begin (), subObjectList.end (),
+    auto foundobj = std::find_if (component_children.subObjectList.begin (), component_children.subObjectList.end (),
                                   [object](gridComponent *comp) { return (object == comp->getName ()); });
-    if (foundobj != subObjectList.end ())
+    if (foundobj != component_children.subObjectList.end ())
     {
         return *foundobj;
     }
@@ -1805,9 +1805,9 @@ coreObject *gridComponent::getSubObject (const std::string &typeName, index_t ob
 {
     if ((typeName == "sub") || (typeName == "subobject") || (typeName == "object"))
     {
-        if (isValidIndex (objectNum, subObjectList))
+        if (isValidIndex (objectNum, component_children.subObjectList))
         {
-            return subObjectList[objectNum];
+            return component_children.subObjectList[objectNum];
         }
     }
     return nullptr;
@@ -1818,9 +1818,9 @@ coreObject *gridComponent::findByUserID (const std::string &typeName, index_t se
     if ((typeName == "sub") || (typeName == "subobject") || (typeName == "object"))
     {
         auto foundobj =
-          std::find_if (subObjectList.begin (), subObjectList.end (),
+          std::find_if (component_children.subObjectList.begin (), component_children.subObjectList.end (),
                         [searchID](gridComponent *comp) { return (comp->getUserID () == searchID); });
-        if (foundobj == subObjectList.end ())
+        if (foundobj == component_children.subObjectList.end ())
         {
             return nullptr;
         }
@@ -1833,7 +1833,7 @@ void gridComponent::timestep (coreTime time, const IOdata &inputs, const solverM
 {
     object_time.prevTime = time;
 
-    for (auto &subobj : subObjectList)
+    for (auto &subobj : component_children.subObjectList)
     {
         if (subobj->currentTime () < time)
         {
@@ -1862,7 +1862,7 @@ void gridComponent::outputPartialDerivatives (const IOdata & /*inputs*/,
                                               const solverMode &sMode)
 {
     /* assume the output is a state and compute accordingly*/
-    for (index_t kk = 0; kk < m_outputSize; ++kk)
+    for (index_t kk = 0; kk < component_ports.m_outputSize; ++kk)
     {
         index_t oLoc = getOutputLoc (sMode, kk);
         md.assignCheckCol (kk, oLoc, 1.0);
@@ -1879,7 +1879,7 @@ count_t gridComponent::outputDependencyCount (index_t outputNum, const solverMod
 
 void gridComponent::preEx (const IOdata &inputs, const stateData &sD, const solverMode &sMode)
 {
-    for (auto &subobj : subObjectList)
+    for (auto &subobj : component_children.subObjectList)
     {
         if (!(subobj->checkFlag (preEx_requested)))
         {
@@ -1894,7 +1894,7 @@ void gridComponent::preEx (const IOdata &inputs, const stateData &sD, const solv
 
 void gridComponent::residual (const IOdata &inputs, const stateData &sD, double resid[], const solverMode &sMode)
 {
-    for (auto &sub : subObjectList)
+    for (auto &sub : component_children.subObjectList)
     {
         if (!sub->checkFlag (separate_processing))
         {
@@ -1908,7 +1908,7 @@ void gridComponent::residual (const IOdata &inputs, const stateData &sD, double 
 
 void gridComponent::derivative (const IOdata &inputs, const stateData &sD, double deriv[], const solverMode &sMode)
 {
-    for (auto &sub : subObjectList)
+    for (auto &sub : component_children.subObjectList)
     {
         if (!sub->checkFlag (separate_processing))
         {
@@ -1926,7 +1926,7 @@ void gridComponent::algebraicUpdate (const IOdata &inputs,
                                      const solverMode &sMode,
                                      double alpha)
 {
-    for (auto &sub : subObjectList)
+    for (auto &sub : component_children.subObjectList)
     {
         if (!sub->checkFlag (separate_processing))
         {
@@ -1944,7 +1944,7 @@ void gridComponent::jacobianElements (const IOdata &inputs,
                                       const IOlocs &inputLocs,
                                       const solverMode &sMode)
 {
-    for (auto &sub : subObjectList)
+    for (auto &sub : component_children.subObjectList)
     {
         if (!sub->checkFlag (separate_processing))
         {
@@ -1957,7 +1957,7 @@ void gridComponent::jacobianElements (const IOdata &inputs,
 }
 void gridComponent::rootTest (const IOdata &inputs, const stateData &sD, double roots[], const solverMode &sMode)
 {
-    for (auto &subobj : subObjectList)
+    for (auto &subobj : component_children.subObjectList)
     {
         if (!subobj->checkFlag (separate_processing))
         {
@@ -1975,7 +1975,7 @@ void gridComponent::rootTrigger (coreTime time,
                                  const std::vector<int> &rootMask,
                                  const solverMode &sMode)
 {
-    for (auto &subobj : subObjectList)
+    for (auto &subobj : component_children.subObjectList)
     {
         if (!(subobj->checkFlag (has_roots)))
         {
@@ -1993,7 +1993,7 @@ gridComponent::rootCheck (const IOdata &inputs, const stateData &sD, const solve
 {
     auto ret = change_code::no_change;
 
-    for (auto &subobj : subObjectList)
+    for (auto &subobj : component_children.subObjectList)
     {
         if (!(subobj->checkFlag (has_roots)))
         {
@@ -2010,7 +2010,7 @@ gridComponent::rootCheck (const IOdata &inputs, const stateData &sD, const solve
 index_t gridComponent::lookupOutputIndex (const std::string &outputName) const
 {
     auto &outputStr = outputNames ();
-    index_t outputsize = (std::min) (static_cast<index_t> (outputStr.size ()), m_outputSize);
+    index_t outputsize = (std::min) (static_cast<index_t> (outputStr.size ()), component_ports.m_outputSize);
     for (index_t kk = 0; kk < outputsize; ++kk)
     {
         for (auto &onm : outputStr[kk])
@@ -2023,7 +2023,7 @@ index_t gridComponent::lookupOutputIndex (const std::string &outputName) const
     }
     // didn't find it so lookup the default output names
     auto &defOutputStr = gridComponent::outputNames ();
-    outputsize = m_outputSize;
+    outputsize = component_ports.m_outputSize;
     for (index_t kk = 0; kk < outputsize; ++kk)
     {
         for (auto &onm : defOutputStr[kk])
@@ -2042,12 +2042,12 @@ double gridComponent::getOutput (const IOdata & /*inputs*/,
                                  const solverMode &sMode,
                                  index_t outputNum) const
 {
-    if (outputNum >= m_outputSize)
+    if (outputNum >= component_ports.m_outputSize)
     {
         return kNullVal;
     }
     auto Loc = offsets.getLocations (sD, sMode, this);
-    if (opFlags[differential_output])
+    if (component_configuration.opFlags[differential_output])
     {
         if (Loc.diffSize > outputNum)
         {
@@ -2068,7 +2068,7 @@ double gridComponent::getOutput (const IOdata & /*inputs*/,
         assert (Loc.diffStateLoc != nullptr);
         return Loc.diffStateLoc[outputNum - Loc.algSize];
     }
-    return (static_cast<index_t> (m_state.size ()) > outputNum) ? m_state[outputNum] : kNullVal;
+    return (static_cast<index_t> (component_state.m_state.size ()) > outputNum) ? component_state.m_state[outputNum] : kNullVal;
 }
 
 double gridComponent::getOutput (index_t outputNum) const
@@ -2078,8 +2078,8 @@ double gridComponent::getOutput (index_t outputNum) const
 
 IOdata gridComponent::getOutputs (const IOdata &inputs, const stateData &sD, const solverMode &sMode) const
 {
-    IOdata mout (m_outputSize);
-    for (count_t pp = 0; pp < m_outputSize; ++pp)
+    IOdata mout (component_ports.m_outputSize);
+    for (count_t pp = 0; pp < component_ports.m_outputSize; ++pp)
     {
         mout[pp] = getOutput (inputs, sD, sMode, pp);
     }
@@ -2093,12 +2093,12 @@ double gridComponent::getDoutdt (const IOdata & /*inputs*/,
                                  const solverMode &sMode,
                                  index_t outputNum) const
 {
-    if (outputNum >= m_outputSize)
+    if (outputNum >= component_ports.m_outputSize)
     {
         return kNullVal;
     }
     auto Loc = offsets.getLocations (sD, sMode, this);
-    if (opFlags[differential_output])
+    if (component_configuration.opFlags[differential_output])
     {
         assert (Loc.dstateLoc != nullptr);
         return Loc.dstateLoc[outputNum];
@@ -2118,12 +2118,12 @@ double gridComponent::getDoutdt (const IOdata & /*inputs*/,
 
 index_t gridComponent::getOutputLoc (const solverMode &sMode, index_t outputNum) const
 {
-    if (outputNum >= m_outputSize)
+    if (outputNum >= component_ports.m_outputSize)
     {
         return kNullLocation;
     }
 
-    if (opFlags[differential_output])
+    if (component_configuration.opFlags[differential_output])
     {
         if (outputNum < diffSize (sMode))
         {
@@ -2148,18 +2148,18 @@ index_t gridComponent::getOutputLoc (const solverMode &sMode, index_t outputNum)
 
 IOlocs gridComponent::getOutputLocs (const solverMode &sMode) const
 {
-    IOlocs oloc (m_outputSize);
+    IOlocs oloc (component_ports.m_outputSize);
 
     if (!isLocal (sMode))
     {
-        for (count_t pp = 0; pp < m_outputSize; ++pp)
+        for (count_t pp = 0; pp < component_ports.m_outputSize; ++pp)
         {
             oloc[pp] = getOutputLoc (sMode, pp);
         }
     }
     else
     {
-        for (count_t pp = 0; pp < m_outputSize; ++pp)
+        for (count_t pp = 0; pp < component_ports.m_outputSize; ++pp)
         {
             oloc[pp] = kNullLocation;
         }
@@ -2210,5 +2210,14 @@ void printStateNames (const gridComponent *comp, const solverMode &sMode)
         }
     }
 }
+
+parameter_t gridComponent::basePower () const { return component_parameters.systemBasePower; }
+parameter_t gridComponent::baseVoltage () const { return component_parameters.localBaseVoltage; }
+const objVector<gridComponent *> &gridComponent::getSubObjects () const { return component_children.subObjectList; }
+count_t gridComponent::numOutputs () const { return component_ports.m_outputSize; }
+count_t gridComponent::numInputs () const { return component_ports.m_inputSize; }
+const std::vector<double> &gridComponent::getStates () const { return component_state.m_state; }
+const std::vector<double> &gridComponent::getDerivs () const { return component_state.m_dstate_dt; }
+std::uint64_t gridComponent::cascadingFlags () const { return (component_configuration.opFlags.to_ullong () & flagMask); }
 
 }  // namespace griddyn

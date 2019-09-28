@@ -27,7 +27,7 @@ namespace griddyn
 {
 namespace relays
 {
-zonalRelay::zonalRelay (const std::string &objName) : Relay (objName) { opFlags.set (continuous_flag); }
+zonalRelay::zonalRelay (const std::string &objName) : Relay (objName) { component_configuration.opFlags.set (continuous_flag); }
 
 coreObject *zonalRelay::clone (coreObject *obj) const
 {
@@ -51,7 +51,7 @@ void zonalRelay::setFlag (const std::string &flag, bool val)
 {
     if (flag == "nondirectional")
     {
-        opFlags.set (nondirectional_flag, val);
+        component_configuration.opFlags.set (nondirectional_flag, val);
     }
     else
     {
@@ -189,7 +189,7 @@ void zonalRelay::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
     double baseImpedance = m_sourceObject->get ("impedance");
     for (index_t kk = 0; kk < m_zones; ++kk)
     {
-        if (opFlags[nondirectional_flag])
+        if (component_configuration.opFlags[nondirectional_flag])
         {
             add (std::shared_ptr<Condition> (make_condition ("abs(admittance" + std::to_string (m_terminal) + ")",
                                                              ">=", 1.0 / (m_zoneLevels[kk] * baseImpedance),
@@ -214,7 +214,7 @@ void zonalRelay::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
         setActionTrigger (0, kk, m_zoneDelays[kk]);
     }
 
-    if (opFlags[use_commLink])
+    if (component_configuration.opFlags[use_commLink])
     {
         if (cManager.destName ().compare (0, 4, "auto") == 0)
         {
@@ -251,7 +251,7 @@ void zonalRelay::actionTaken (index_t ActionNum,
     LOG_NORMAL (
       (boost::format ("condition %d action %d taken terminal %d") % conditionNum % ActionNum % m_terminal).str ());
 
-    if (opFlags[use_commLink])
+    if (component_configuration.opFlags[use_commLink])
     {
         if (ActionNum == 0)
         {
@@ -276,7 +276,7 @@ void zonalRelay::conditionTriggered (index_t conditionNum, coreTime /*triggerTim
     {
         m_condition_level = conditionNum;
     }
-    if (opFlags[use_commLink])
+    if (component_configuration.opFlags[use_commLink])
     {
         if (conditionNum > m_condition_level)
         {
@@ -312,7 +312,7 @@ void zonalRelay::conditionCleared (index_t conditionNum, coreTime /*triggerTime*
             return;
         }
     }
-    if (opFlags[use_commLink])
+    if (component_configuration.opFlags[use_commLink])
     {
         auto P = std::make_shared<relayMessage> ();
         if (conditionNum == 0)

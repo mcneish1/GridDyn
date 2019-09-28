@@ -28,9 +28,9 @@ namespace griddyn {
 namespace extra {
 txThermalModel::txThermalModel(const std::string &objName) : sensor(objName)
 {
-	opFlags.reset(continuous_flag);  //this is a not a continuous model
+	component_configuration.opFlags.reset(continuous_flag);  //this is a not a continuous model
 	outputStrings = { {"ambient","ambientTemp","airTemp"}, {"top_oil","top_oil_temp"}, {"hot_spot","hot_spot_temp"} }; //preset the outputNames
-	m_outputSize = 3;
+	component_ports.m_outputSize = 3;
 }
 
 coreObject * txThermalModel::clone(coreObject *obj) const
@@ -65,15 +65,15 @@ void txThermalModel::setFlag(const std::string &flag, bool val)
 {
 	if (flag == "auto")
 	{
-		opFlags.set(auto_parameter_load, val);
+		component_configuration.opFlags.set(auto_parameter_load, val);
 	}
 	else if (flag == "parameter_updates")
 	{
-		opFlags.set(enable_parameter_updates, val);
+		component_configuration.opFlags.set(enable_parameter_updates, val);
 	}
 	else if (flag == "enable_alarms")
 	{
-		opFlags.set(enable_alarms, val);
+		component_configuration.opFlags.set(enable_alarms, val);
 	}
 	else
 	{
@@ -88,7 +88,7 @@ void txThermalModel::set(const std::string &param, const std::string &val)
 		auto v2 = convertToLowerCase(val);
 		if (v2 == "auto")
 		{
-			opFlags.set(auto_parameter_load);
+			component_configuration.opFlags.set(auto_parameter_load);
 		}
 		else if (v2 == "oa")
 		{
@@ -179,7 +179,7 @@ void txThermalModel::set(const std::string &param, double val, units_t unitType)
 	else if ((param == "alarmtemp") || (param == "alarmtemp1"))
 	{
 		alarmTemp1 = unitConversionTemperature(val, unitType, C);
-		if (opFlags[dyn_initialized])
+		if (component_configuration.opFlags[dyn_initialized])
 		{
 			getCondition(0)->setConditionRHS(alarmTemp1);
 			setConditionStatus(0, (alarmTemp1 > 0.1) ? condition_status_t::active : condition_status_t::disabled);
@@ -188,7 +188,7 @@ void txThermalModel::set(const std::string &param, double val, units_t unitType)
 	else if (param == "alarmtemp2")
 	{
 		alarmTemp2 = unitConversionTemperature(val, unitType, C);
-		if (opFlags[dyn_initialized])
+		if (component_configuration.opFlags[dyn_initialized])
 		{
 			getCondition(1)->setConditionRHS(alarmTemp1);
 			setConditionStatus(1, (alarmTemp1 > 0.1) ? condition_status_t::active : condition_status_t::disabled);
@@ -197,7 +197,7 @@ void txThermalModel::set(const std::string &param, double val, units_t unitType)
 	else if (param == "cutouttemp")
 	{
 		cutoutTemp = unitConversionTemperature(val, unitType, C);
-		if (opFlags[dyn_initialized])
+		if (component_configuration.opFlags[dyn_initialized])
 		{
 			getCondition(2)->setConditionRHS(alarmTemp1);
 			setConditionStatus(2, (alarmTemp1 > 0.1) ? condition_status_t::active : condition_status_t::disabled);
@@ -206,7 +206,7 @@ void txThermalModel::set(const std::string &param, double val, units_t unitType)
 	else if (param == "alarmdelay")
 	{
 		alarmDelay = unitConversionTime(val, unitType, sec);
-		if (opFlags[dyn_initialized])
+		if (component_configuration.opFlags[dyn_initialized])
 		{
 			setActionTrigger(0, 0, alarmDelay);
 			setActionTrigger(1, 1, alarmDelay);
@@ -268,7 +268,7 @@ void txThermalModel::dynObjectInitializeA(coreTime time0, std::uint32_t flags)
 
 	rating = m_sourceObject->get("rating");
 	double bp = m_sourceObject->get("basepower");
-	if (opFlags[auto_parameter_load])
+	if (component_configuration.opFlags[auto_parameter_load])
 	{
 		if (rating*bp < 2.5)
 		{
@@ -302,7 +302,7 @@ void txThermalModel::dynObjectInitializeA(coreTime time0, std::uint32_t flags)
 
 	m_k = Plossr / DTtor;  //compute the radiation constant
 	m_C = Ttor*Plossr / DTtor; //compute the thermal mass constant
-	if (!opFlags[dyn_initialized])
+	if (!component_configuration.opFlags[dyn_initialized])
 	{
 		sensor::setFlag("sampled", true);
 		sensor::set("input0", "current");
@@ -320,12 +320,12 @@ void txThermalModel::dynObjectInitializeA(coreTime time0, std::uint32_t flags)
 		g1->setGrabberFunction("ambient", [this](coreObject *)->double {return ambientTemp; });
 		sensor::add(g1);
 
-		m_outputSize = (m_outputSize > 3) ? m_outputSize : 3;
+		component_ports.m_outputSize = (component_ports.m_outputSize > 3) ? component_ports.m_outputSize : 3;
 
 
-		outputMode.resize(m_outputSize);
-		outputs.resize(m_outputSize);
-		outGrabbers.resize(m_outputSize, nullptr);
+		outputMode.resize(component_ports.m_outputSize);
+		outputs.resize(component_ports.m_outputSize);
+		outGrabbers.resize(component_ports.m_outputSize, nullptr);
 		outputMode[0] = outputMode_t::direct;
 		outputMode[1] = outputMode_t::block;
 		outputs[0] = 3;  //the first input was setup as the current, second as the loss, 3rd as attached

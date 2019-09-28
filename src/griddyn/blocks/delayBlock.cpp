@@ -21,32 +21,32 @@ namespace blocks
 {
 delayBlock::delayBlock (const std::string &objName) : Block (objName)
 {
-    opFlags.set (differential_output);
-    opFlags.set (use_state);
+    component_configuration.opFlags.set (differential_output);
+    component_configuration.opFlags.set (use_state);
 }
 
 delayBlock::delayBlock (double t1, const std::string &objName) : Block (objName), m_T1 (t1)
 {
     if (std::abs (m_T1) < kMin_Res)
     {
-        opFlags.set (simplified);
+        component_configuration.opFlags.set (simplified);
     }
     else
     {
-        opFlags.set (differential_output);
-        opFlags.set (use_state);
+        component_configuration.opFlags.set (differential_output);
+        component_configuration.opFlags.set (use_state);
     }
 }
 delayBlock::delayBlock (double t1, double gain, const std::string &objName) : Block (gain, objName), m_T1 (t1)
 {
     if (std::abs (m_T1) < kMin_Res)
     {
-        opFlags.set (simplified);
+        component_configuration.opFlags.set (simplified);
     }
     else
     {
-        opFlags.set (differential_output);
-        opFlags.set (use_state);
+        component_configuration.opFlags.set (differential_output);
+        component_configuration.opFlags.set (use_state);
     }
 }
 
@@ -64,11 +64,11 @@ coreObject *delayBlock::clone (coreObject *obj) const
 
 void delayBlock::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
 {
-    if ((m_T1 < kMin_Res) || (opFlags[simplified]))
+    if ((m_T1 < kMin_Res) || (component_configuration.opFlags[simplified]))
     {
-        opFlags.set (simplified);
-        opFlags.reset (differential_output);
-        opFlags.reset (use_state);
+        component_configuration.opFlags.set (simplified);
+        component_configuration.opFlags.reset (differential_output);
+        component_configuration.opFlags.reset (use_state);
     }
 
     Block::dynObjectInitializeA (time0, flags);
@@ -79,17 +79,17 @@ void delayBlock::dynObjectInitializeB (const IOdata &inputs, const IOdata &desir
     Block::dynObjectInitializeB (inputs, desiredOutput, fieldSet);
     if (inputs.empty ())
     {
-        m_state[limiter_diff] = desiredOutput[0];
+        component_state.m_state[limiter_diff] = desiredOutput[0];
     }
     else
     {
-        m_state[limiter_diff] = K * (inputs[0] + bias);
+        component_state.m_state[limiter_diff] = K * (inputs[0] + bias);
     }
 }
 
 double delayBlock::step (coreTime time, double inputA)
 {
-    if (opFlags[simplified])
+    if (component_configuration.opFlags[simplified])
     {
         return Block::step (time, inputA);
     }
@@ -99,11 +99,11 @@ double delayBlock::step (coreTime time, double inputA)
     index_t loc = limiter_diff;
     if (dt >= fabs (5.0 * m_T1))
     {
-        m_state[loc] = K * input;
+        component_state.m_state[loc] = K * input;
     }
     else if (dt <= std::abs (0.05 * m_T1))
     {
-        m_state[loc] = m_state[loc] + 1.0 / m_T1 * (K * (input + prevInput) / 2.0 - m_state[loc]) * dt;
+        component_state.m_state[loc] = component_state.m_state[loc] + 1.0 / m_T1 * (K * (input + prevInput) / 2.0 - component_state.m_state[loc]) * dt;
     }
     else
     {
@@ -111,7 +111,7 @@ double delayBlock::step (coreTime time, double inputA)
         double ct = object_time.prevTime + tstep;
         double in = prevInput;
         double pin = prevInput;
-        double ival = m_state[loc];
+        double ival = component_state.m_state[loc];
         while (ct < time)
         {
             in = in + (input - prevInput) / dt * tstep;
@@ -119,7 +119,7 @@ double delayBlock::step (coreTime time, double inputA)
             ct += tstep;
             pin = in;
         }
-        m_state[loc] = ival + 1.0 / m_T1 * (K * (pin + input) / 2.0 - ival) * (time - ct + tstep);
+        component_state.m_state[loc] = ival + 1.0 / m_T1 * (K * (pin + input) / 2.0 - ival) * (time - ct + tstep);
     }
     prevInput = input;
     double out;
@@ -129,7 +129,7 @@ double delayBlock::step (coreTime time, double inputA)
     }
     else
     {
-        out = m_state[loc];
+        out = component_state.m_state[loc];
         object_time.prevTime = time;
         m_output = out;
     }
@@ -158,7 +158,7 @@ void delayBlock::blockJacobianElements (double input,
                               index_t argLoc,
                               const solverMode &sMode)
 {
-    if ((isAlgebraicOnly (sMode)) || (opFlags[simplified]))
+    if ((isAlgebraicOnly (sMode)) || (component_configuration.opFlags[simplified]))
     {
         Block::blockJacobianElements (input, didt, sD, md, argLoc, sMode);
         return;
@@ -175,9 +175,9 @@ void delayBlock::set (const std::string &param, double val, gridUnits::units_t u
     // param = gridDynSimulation::toLower(param);
     if ((param == "t1") || (param == "t"))
     {
-        if (opFlags[dyn_initialized])
+        if (component_configuration.opFlags[dyn_initialized])
         {
-            if (!opFlags[simplified])
+            if (!component_configuration.opFlags[simplified])
             {
                 // parameter doesn't get used in simplified mode
                 if (std::abs (val) < kMin_Res)

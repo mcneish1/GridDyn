@@ -26,7 +26,7 @@ void fDepLoad::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
 {
     if ((betaP != 0.0) || (betaQ != 0.0))
     {
-        opFlags.set (uses_bus_frequency);
+        component_configuration.opFlags.set (uses_bus_frequency);
     }
     return exponentialLoad::dynObjectInitializeA (time0, flags);
 }
@@ -126,7 +126,7 @@ void fDepLoad::set (const std::string &param, double val, gridUnits::units_t uni
     }
     if ((betaP != 0.0) || (betaQ != 0.0))
     {
-        opFlags.set (uses_bus_frequency);
+        component_configuration.opFlags.set (uses_bus_frequency);
     }
 }
 

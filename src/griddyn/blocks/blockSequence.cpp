@@ -21,7 +21,7 @@ namespace griddyn
 {
 namespace blocks
 {
-blockSequence::blockSequence (const std::string &objName) : Block (objName) { opFlags[use_direct] = true; }
+blockSequence::blockSequence (const std::string &objName) : Block (objName) { component_configuration.opFlags[use_direct] = true; }
 coreObject *blockSequence::clone (coreObject *obj) const
 {
     auto nobj = cloneBase<blockSequence, Block> (this, obj);
@@ -35,7 +35,7 @@ coreObject *blockSequence::clone (coreObject *obj) const
 
 void blockSequence::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
 {
-    bool diffInput = opFlags[differential_inputActual];
+    bool diffInput = component_configuration.opFlags[differential_inputActual];
     if (sequence.empty ())
     {  // create a default sequence with all the blocks
         for (int kk = 0; kk < static_cast<int> (blocks.size ()); ++kk)
@@ -52,7 +52,7 @@ void blockSequence::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
         blocks[nn]->dynInitializeA (time0, flags);
         diffInput = blocks[nn]->checkFlag (differential_output);
     }
-    opFlags[differential_input] = diffInput;
+    component_configuration.opFlags[differential_input] = diffInput;
     Block::dynObjectInitializeA (time0, flags);
     updateFlags ();  // update the flags for the subObjects;
 }
@@ -289,7 +289,7 @@ void blockSequence::setFlag (const std::string &flag, bool val)
 {
     if (flag == "differential_input")
     {
-        opFlags.set (differential_inputActual, val);
+        component_configuration.opFlags.set (differential_inputActual, val);
     }
     else
     {

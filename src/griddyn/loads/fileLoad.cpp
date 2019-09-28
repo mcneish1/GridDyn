@@ -97,7 +97,7 @@ void fileLoad::updateA (coreTime time)
         double val = schedLoad.data (pp, currIndex) * scaleFactor;
         if (currIndex < count - 1)
         {
-            diffrate = (opFlags[use_step_change_flag]) ?
+            diffrate = (component_configuration.opFlags[use_step_change_flag]) ?
                          0.0 :
                          (schedLoad.data (pp, currIndex + 1) * scaleFactor - val) / dt;
         }
@@ -162,7 +162,7 @@ void fileLoad::updateA (coreTime time)
         }
     }
     lastTime = object_time.prevTime;
-    if (!opFlags[use_step_change_flag])
+    if (!component_configuration.opFlags[use_step_change_flag])
     {
         rampLoad::updateLocalCache (noInputs, stateData (time), cLocalSolverMode);
     }
@@ -184,19 +184,19 @@ void fileLoad::setFlag (const std::string &flag, bool val)
 {
     if (flag == "absolute")
     {
-        opFlags.set (use_absolute_time_flag, val);
+        component_configuration.opFlags.set (use_absolute_time_flag, val);
     }
     else if (flag == "relative")
     {
-        opFlags.set (use_absolute_time_flag, !val);
+        component_configuration.opFlags.set (use_absolute_time_flag, !val);
     }
     else if (flag == "step")
     {
-        opFlags.set (use_step_change_flag, val);
+        component_configuration.opFlags.set (use_step_change_flag, val);
     }
     else if (flag == "interpolate")
     {
-        opFlags.set (use_step_change_flag, !val);
+        component_configuration.opFlags.set (use_step_change_flag, !val);
     }
     else
     {
@@ -209,7 +209,7 @@ void fileLoad::set (const std::string &param, const std::string &val)
     if ((param == "fileName") || (param == "file"))
     {
         fileName_ = val;
-        if (opFlags[pFlow_initialized])
+        if (component_configuration.opFlags[pFlow_initialized])
         {
             count = 0;
             currIndex = 0;
@@ -305,7 +305,7 @@ count_t fileLoad::loadFile ()
         if (inputUnits != gridUnits::defUnit)
         {
             double scalar =
-              gridUnits::unitConversion (1.0, inputUnits, gridUnits::puMW, systemBasePower, localBaseVoltage);
+              gridUnits::unitConversion (1.0, inputUnits, gridUnits::puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
             if (scalar != 1.0)
             {
                 schedLoad.scaleData (scalar);

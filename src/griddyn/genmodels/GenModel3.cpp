@@ -53,7 +53,7 @@ void GenModel3::dynObjectInitializeA (coreTime /*time0*/, std::uint32_t /*flags*
 void GenModel3::dynObjectInitializeB (const IOdata &inputs, const IOdata &desiredOutput, IOdata &fieldSet)
 {
     computeInitialAngleAndCurrent (inputs, desiredOutput, Rs, Xq);
-    double *gm = m_state.data ();
+    double *gm = component_state.m_state.data ();
     // Edp and Eqp
     E = Vd + Rs * gm[0] + (Xq)*gm[1];
     gm[4] = Vq + Rs * gm[1] - (Xdp)*gm[0];
@@ -83,7 +83,7 @@ void GenModel3::derivative (const IOdata &inputs, const stateData &sD, double de
     // Id and Iq
 
     // delta
-    dv[0] = systemBaseFrequency * (gmd[1] - 1.0);
+    dv[0] = component_parameters.systemBaseFrequency * (gmd[1] - 1.0);
     // Eqp
     dv[2] = (-gmd[2] + Eft + (Xd - Xdp) * gm[0]) / Tdop;
 
@@ -132,7 +132,7 @@ void GenModel3::residual (const IOdata &inputs, const stateData &sD, double resi
         // Id and Iq
 
         // delta
-        rvd[0] = systemBaseFrequency * (gmd[1] - 1.0) - gmp[0];
+        rvd[0] = component_parameters.systemBaseFrequency * (gmd[1] - 1.0) - gmp[0];
         // Eqp
         rvd[2] = (-gmd[2] + Eft + (Xd - Xdp) * gm[0]) / Tdop - gmp[2];
 
@@ -201,7 +201,7 @@ void GenModel3::jacobianElements (const IOdata &inputs,
     {
         // delta
         md.assign (refDiff, refDiff, -sD.cj);
-        md.assign (refDiff, refDiff + 1, systemBaseFrequency);
+        md.assign (refDiff, refDiff + 1, component_parameters.systemBaseFrequency);
 
         // omega
         double kVal = -0.5 / H;

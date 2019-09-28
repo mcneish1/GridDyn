@@ -61,14 +61,14 @@ void ExciterIEEEtype1::dynObjectInitializeB(const IOdata &inputs,
 {
 	Exciter::dynObjectInitializeB(inputs, desiredOutput,
 		fieldSet);  // this will dynInitializeB the field state if need be
-	double *gs = m_state.data();
+	double *gs = component_state.m_state.data();
 	gs[1] = (Ke + Aex * exp(Bex * gs[0])) * gs[0];  // Vr
 	gs[2] = gs[0] * Kf / Tf;  // Rf
 	vBias = inputs[voltageInLocation] + gs[1] / Ka - Vref;
 	fieldSet[1] = Vref;
-	m_dstate_dt[0] = 0.0;
-	m_dstate_dt[1] = 0.0;
-	m_dstate_dt[2] = 0.0;
+	component_state.m_dstate_dt[0] = 0.0;
+	component_state.m_dstate_dt[1] = 0.0;
+	component_state.m_dstate_dt[2] = 0.0;
 }
 
 // residual
@@ -86,9 +86,9 @@ void ExciterIEEEtype1::residual(const IOdata &inputs,
 	const double *esp = sD.dstate_dt + offset;
 	double *rv = resid + offset;
 	rv[0] = (-(Ke + Aex * exp(Bex * es[0])) * es[0] + es[1]) / Te - esp[0];
-	if (opFlags[outside_vlim])
+	if (component_configuration.opFlags[outside_vlim])
 	{
-		if (opFlags[etrigger_high])
+		if (component_configuration.opFlags[etrigger_high])
 		{
 			rv[1] = esp[1];
 		}
@@ -108,11 +108,11 @@ void ExciterIEEEtype1::residual(const IOdata &inputs,
 
 void ExciterIEEEtype1::timestep(coreTime time, const IOdata &inputs, const solverMode & /*sMode*/)
 {
-	derivative(inputs, emptyStateData, m_dstate_dt.data(), cLocalSolverMode);
+	derivative(inputs, emptyStateData, component_state.m_dstate_dt.data(), cLocalSolverMode);
 	double dt = time - object_time.prevTime;  // convert from a coreTime
-	m_state[0] += dt * m_dstate_dt[0];
-	m_state[1] += dt * m_dstate_dt[1];
-	m_state[2] += dt * m_dstate_dt[2];
+	component_state.m_state[0] += dt * component_state.m_dstate_dt[0];
+	component_state.m_state[1] += dt * component_state.m_dstate_dt[1];
+	component_state.m_state[2] += dt * component_state.m_dstate_dt[2];
 	object_time.prevTime = time;
 }
 
@@ -125,7 +125,7 @@ void ExciterIEEEtype1::derivative(const IOdata &inputs,
 	const double *es = Loc.diffStateLoc;
 	auto d = Loc.destDiffLoc;
 	d[0] = (-(Ke + Aex * exp(Bex * es[0])) * es[0] + es[1]) / Te;
-	if (opFlags[outside_vlim])
+	if (component_configuration.opFlags[outside_vlim])
 	{
 		d[1] = 0;
 	}
@@ -156,7 +156,7 @@ void ExciterIEEEtype1::jacobianElements(const IOdata & /*inputs*/,
 	double temp1 = -(Ke + Aex * exp(Bex * sD.state[offset]) * (1.0 + Bex * sD.state[offset])) / Te - sD.cj;
 	md.assign(offset, offset, temp1);
 	md.assign(offset, offset + 1, 1 / Te);
-	if (opFlags[outside_vlim])
+	if (component_configuration.opFlags[outside_vlim])
 	{
 		md.assign(offset + 1, offset + 1, sD.cj);
 	}
@@ -188,7 +188,7 @@ void ExciterIEEEtype1::rootTest(const IOdata &inputs,
 
 	// printf("t=%f V=%f\n", time, inputs[voltageInLocation]);
 
-	if (opFlags[outside_vlim])
+	if (component_configuration.opFlags[outside_vlim])
 	{
 		roots[rootOffset] = es[2] - es[0] * Kf / Tf + (Vref + vBias - inputs[voltageInLocation]) - es[1] / Ka +
 			0.001 * es[1] / Ka / Ta;
@@ -198,7 +198,7 @@ void ExciterIEEEtype1::rootTest(const IOdata &inputs,
 		roots[rootOffset] = std::min(Vrmax - es[1], es[1] - Vrmin) + 0.00001;
 		if (es[1] >= Vrmax)
 		{
-			opFlags.set(etrigger_high);
+			component_configuration.opFlags.set(etrigger_high);
 		}
 	}
 }
@@ -208,21 +208,21 @@ change_code ExciterIEEEtype1::rootCheck(const IOdata &inputs,
 	const solverMode & /*sMode*/,
 	check_level_t /*level*/)
 {
-	const double *es = m_state.data();
+	const double *es = component_state.m_state.data();
 	change_code ret = change_code::no_change;
-	if (opFlags[outside_vlim])
+	if (component_configuration.opFlags[outside_vlim])
 	{
 		double test = es[2] - es[0] * Kf / Tf + (Vref + vBias - inputs[voltageInLocation]) - es[1] / Ka;
 
-		if (opFlags[etrigger_high])
+		if (component_configuration.opFlags[etrigger_high])
 		{
 			if (test < -0.001 * es[1] / Ka / Ta)
 			{
 				ret = change_code::jacobian_change;
 
 				LOG_DEBUG("root change V=" + std::to_string(inputs[voltageInLocation]));
-				opFlags.reset(outside_vlim);
-				opFlags.reset(etrigger_high);
+				component_configuration.opFlags.reset(outside_vlim);
+				component_configuration.opFlags.reset(etrigger_high);
 				alert(this, JAC_COUNT_INCREASE);
 			}
 		}
@@ -232,7 +232,7 @@ change_code ExciterIEEEtype1::rootCheck(const IOdata &inputs,
 			{
 				LOG_DEBUG("root change V=" + std::to_string(inputs[voltageInLocation]));
 				ret = change_code::jacobian_change;
-				opFlags.reset(outside_vlim);
+				component_configuration.opFlags.reset(outside_vlim);
 				alert(this, JAC_COUNT_INCREASE);
 			}
 		}
@@ -242,10 +242,10 @@ change_code ExciterIEEEtype1::rootCheck(const IOdata &inputs,
 		if (es[1] > Vrmax + 0.00001)
 		{
 			LOG_DEBUG("root toggle V=" + std::to_string(inputs[voltageInLocation]));
-			opFlags.set(etrigger_high);
-			opFlags.set(outside_vlim);
-			m_state[1] = Vrmax;
-			m_dstate_dt[1] = 0.0;
+			component_configuration.opFlags.set(etrigger_high);
+			component_configuration.opFlags.set(outside_vlim);
+			component_state.m_state[1] = Vrmax;
+			component_state.m_dstate_dt[1] = 0.0;
 			ret = change_code::jacobian_change;
 			alert(this, JAC_COUNT_DECREASE);
 		}
@@ -253,10 +253,10 @@ change_code ExciterIEEEtype1::rootCheck(const IOdata &inputs,
 		{
 			LOG_DEBUG("root toggle V=" + std::to_string(inputs[voltageInLocation]));
 
-			opFlags.reset(etrigger_high);
-			opFlags.set(outside_vlim);
-			m_state[1] = Vrmin;
-			m_dstate_dt[1] = 0.0;
+			component_configuration.opFlags.reset(etrigger_high);
+			component_configuration.opFlags.set(outside_vlim);
+			component_state.m_state[1] = Vrmin;
+			component_state.m_dstate_dt[1] = 0.0;
 			ret = change_code::jacobian_change;
 			alert(this, JAC_COUNT_DECREASE);
 		}
@@ -304,18 +304,18 @@ void ExciterIEEEtype1::set(const std::string &param, double val, gridUnits::unit
 	{
 		if (val > 0.1)
 		{
-			opFlags.set(etrigger_high);
-			opFlags.set(outside_vlim);
+			component_configuration.opFlags.set(etrigger_high);
+			component_configuration.opFlags.set(outside_vlim);
 		}
 		else if (val < -0.1)
 		{
-			opFlags.reset(etrigger_high);
-			opFlags.set(outside_vlim);
+			component_configuration.opFlags.reset(etrigger_high);
+			component_configuration.opFlags.set(outside_vlim);
 		}
 		else
 		{
-			opFlags.reset(etrigger_high);
-			opFlags.reset(outside_vlim);
+			component_configuration.opFlags.reset(etrigger_high);
+			component_configuration.opFlags.reset(outside_vlim);
 		}
 	}
 	else

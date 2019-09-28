@@ -47,25 +47,25 @@ void motorLoad5::pFlowObjectInitializeA (coreTime time0, std::uint32_t flags)
     // setup the parameters
     x0 = x + xm;
     xp = x + x1 * xm / (x1 + xm);
-    T0p = (x1 + xm) / (systemBaseFrequency * r1);
+    T0p = (x1 + xm) / (component_parameters.systemBaseFrequency * r1);
 
-    T0pp = (x2 + x1 * xm / (x1 + xm)) / (systemBaseFrequency * r2);
+    T0pp = (x2 + x1 * xm / (x1 + xm)) / (component_parameters.systemBaseFrequency * r2);
     xpp = x + x1 * x2 * xm / (x1 * x2 + x1 * xm + x2 * xm);
 
-    scale = mBase / systemBasePower;
-    m_state.resize (7, 0);
-    if (opFlags[init_transient])
+    scale = mBase / component_parameters.systemBasePower;
+    component_state.m_state.resize (7, 0);
+    if (component_configuration.opFlags[init_transient])
     {
-        m_state[2] = init_slip;
+        component_state.m_state[2] = init_slip;
     }
     else if (Pmot > -kHalfBigNum)
     {
-        m_state[2] = computeSlip (Pmot);
+        component_state.m_state[2] = computeSlip (Pmot);
     }
     else
     {
-        m_state[2] = 1.0;
-        opFlags.set (init_transient);
+        component_state.m_state[2] = 1.0;
+        component_configuration.opFlags.set (init_transient);
     }
 
     Load::pFlowObjectInitializeA (time0, flags);
@@ -79,8 +79,8 @@ void motorLoad5::converge ()
 {
     double V = bus->getVoltage ();
     double theta = bus->getAngle ();
-    double slip = m_state[2];
-    double Qtest = qPower (V, m_state[2]);
+    double slip = component_state.m_state[2];
+    double Qtest = qPower (V, component_state.m_state[2]);
     double im, ir;
     double er, em;
 
@@ -89,7 +89,7 @@ void motorLoad5::converge ()
     solve2x2 (Vr, Vm, Vm, -Vr, getP (), Qtest, ir, im);
     double err = 10;
     int ccnt = 0;
-    double fbs = slip * systemBaseFrequency;
+    double fbs = slip * component_parameters.systemBaseFrequency;
 
     double perr = 10;
     while (err > 1e-6)
@@ -99,7 +99,7 @@ void motorLoad5::converge ()
         solve2x2 (fbs, -1.0 / T0pp, 1.0 / T0pp, fbs, fbs * erp - erp / T0pp + (xp - xpp) / T0pp * ir,
                   fbs * emp - emp / T0pp + (xp - xpp) / T0pp * im, er, em);
 
-        double slipp = (er + (x0 - xp) * im) / T0p / systemBaseFrequency / em;
+        double slipp = (er + (x0 - xp) * im) / T0p / component_parameters.systemBaseFrequency / em;
         double dslip = slipp - slip;
         if (getP () > 0)
         {
@@ -119,13 +119,13 @@ void motorLoad5::converge ()
             break;
         }
         // just archiving the states in case we need to break;
-        m_state[0] = ir;
-        m_state[1] = im;
-        m_state[2] = slip;
-        m_state[3] = er;
-        m_state[4] = em;
-        m_state[5] = erp;
-        m_state[6] = emp;
+        component_state.m_state[0] = ir;
+        component_state.m_state[1] = im;
+        component_state.m_state[2] = slip;
+        component_state.m_state[3] = er;
+        component_state.m_state[4] = em;
+        component_state.m_state[5] = erp;
+        component_state.m_state[6] = emp;
         if (++ccnt > 50)
         {
             break;
@@ -133,7 +133,7 @@ void motorLoad5::converge ()
 
         perr = err;
 
-        fbs = slip * systemBaseFrequency;
+        fbs = slip * component_parameters.systemBaseFrequency;
         ir = (-fbs * er * T0p - em) / (-(x0 - xp));
         im = (mechPower (slip) - erp * ir) / emp;
     }
@@ -144,9 +144,9 @@ void motorLoad5::dynObjectInitializeB (const IOdata &inputs,
                                        const IOdata & /*desiredOutput*/,
                                        IOdata & /*fieldSet*/)
 {
-    if (opFlags[init_transient])
+    if (component_configuration.opFlags[init_transient])
     {
-        derivative (inputs, emptyStateData, m_dstate_dt.data (), cLocalSolverMode);
+        derivative (inputs, emptyStateData, component_state.m_dstate_dt.data (), cLocalSolverMode);
     }
 }
 
@@ -181,7 +181,7 @@ count_t motorLoad5::LocalJacobianCount (const solverMode &sMode) const
     }
     else
     {
-        if (opFlags[init_transient])
+        if (component_configuration.opFlags[init_transient])
         {
             localJacSize = 31;
         }
@@ -279,9 +279,9 @@ void motorLoad5::residual (const IOdata &inputs, const stateData &sD, double res
         double slip = gm[slipA];
         // printf("angle=%f, slip=%f\n", theta, slip);
         // slip
-        if (opFlags[init_transient])
+        if (component_configuration.opFlags[init_transient])
         {
-            rv[slipA] = slip - m_state[slipA];
+            rv[slipA] = slip - component_state.m_state[slipA];
         }
         else
         {
@@ -289,11 +289,11 @@ void motorLoad5::residual (const IOdata &inputs, const stateData &sD, double res
             rv[slipA] = (mechPower (slip) - Te) / (2 * H);
         }
         // Erp and Emp
-        rv[erpA] = systemBaseFrequency * slip * gm[empA] - (gm[erpA] + (x0 - xp) * gm[imA]) / T0p;
-        rv[empA] = -systemBaseFrequency * slip * gm[erpA] - (gm[empA] - (x0 - xp) * gm[irA]) / T0p;
-        rv[erppA] = -systemBaseFrequency * slip * (gm[empA] - gm[emppA]) -
+        rv[erpA] = component_parameters.systemBaseFrequency * slip * gm[empA] - (gm[erpA] + (x0 - xp) * gm[imA]) / T0p;
+        rv[empA] = -component_parameters.systemBaseFrequency * slip * gm[erpA] - (gm[empA] - (x0 - xp) * gm[irA]) / T0p;
+        rv[erppA] = -component_parameters.systemBaseFrequency * slip * (gm[empA] - gm[emppA]) -
                     (gm[erpA] - gm[emppA] - (xp - xpp) * gm[imA]) / T0pp;
-        rv[emppA] = systemBaseFrequency * slip * (gm[erpA] - gm[erppA]) -
+        rv[emppA] = component_parameters.systemBaseFrequency * slip * (gm[erpA] - gm[erppA]) -
                     (gm[empA] - gm[erppA] + (xp - xpp) * gm[irA]) / T0pp;
     }
 }
@@ -331,15 +331,15 @@ void motorLoad5::getStateName (stringVec &stNames, const solverMode &sMode, cons
 }
 void motorLoad5::timestep (coreTime time, const IOdata &inputs, const solverMode & /*sMode*/)
 {
-    stateData sD (time, m_state.data ());
+    stateData sD (time, component_state.m_state.data ());
 
-    derivative (inputs, sD, m_dstate_dt.data (), cLocalSolverMode);
+    derivative (inputs, sD, component_state.m_dstate_dt.data (), cLocalSolverMode);
     double dt = time - object_time.prevTime;
-    m_state[2] += dt * m_dstate_dt[2];
-    m_state[3] += dt * m_dstate_dt[3];
-    m_state[4] += dt * m_dstate_dt[4];
-    m_state[5] += dt * m_dstate_dt[5];
-    m_state[6] += dt * m_dstate_dt[6];
+    component_state.m_state[2] += dt * component_state.m_dstate_dt[2];
+    component_state.m_state[3] += dt * component_state.m_dstate_dt[3];
+    component_state.m_state[4] += dt * component_state.m_dstate_dt[4];
+    component_state.m_state[5] += dt * component_state.m_dstate_dt[5];
+    component_state.m_state[6] += dt * component_state.m_dstate_dt[6];
     object_time.prevTime = time;
     updateCurrents (inputs, sD, cLocalSolverMode);
 }
@@ -376,7 +376,7 @@ void motorLoad5::derivative (const IOdata & /*inputs*/,
     }
 
     // slip
-    if (opFlags[stalled])
+    if (component_configuration.opFlags[stalled])
     {
         dv[slipD] = 0;
     }
@@ -387,11 +387,11 @@ void motorLoad5::derivative (const IOdata & /*inputs*/,
     }
     // printf("t=%f, slip=%f mp=%f, te=%f, dslip=%e\n", sD.time, slip,mechPower(slip), Te,dv[0] );
     // Edp and Eqp
-    dv[erpD] = systemBaseFrequency * slip * dst[empD] - (dst[erpD] + (x0 - xp) * ast[imA]) / T0p;
-    dv[empD] = -systemBaseFrequency * slip * dst[erpD] - (dst[empD] - (x0 - xp) * ast[irA]) / T0p;
-    dv[erppD] = -systemBaseFrequency * slip * (dst[empD] - dst[emppD]) + ddt[erpD] -
+    dv[erpD] = component_parameters.systemBaseFrequency * slip * dst[empD] - (dst[erpD] + (x0 - xp) * ast[imA]) / T0p;
+    dv[empD] = -component_parameters.systemBaseFrequency * slip * dst[erpD] - (dst[empD] - (x0 - xp) * ast[irA]) / T0p;
+    dv[erppD] = -component_parameters.systemBaseFrequency * slip * (dst[empD] - dst[emppD]) + ddt[erpD] -
                 (dst[erpD] - dst[emppD] - (xp - xpp) * ast[imA]) / T0pp;
-    dv[emppD] = systemBaseFrequency * slip * (dst[erpD] - dst[erppD]) + ddt[empD] -
+    dv[emppD] = component_parameters.systemBaseFrequency * slip * (dst[erpD] - dst[erppD]) + ddt[empD] -
                 (dst[empD] - dst[erppD] + (xp - xpp) * ast[irA]) / T0pp;
 }
 
@@ -468,7 +468,7 @@ void motorLoad5::jacobianElements (const IOdata &inputs,
     md.assign (refAlg + 1, refDiff + 3, -1);
 
     double slip = dst[0];
-    if ((isDynamic (sMode)) || (!opFlags[init_transient]))
+    if ((isDynamic (sMode)) || (!component_configuration.opFlags[init_transient]))
     {
         /*
         // slip
@@ -477,7 +477,7 @@ void motorLoad5::jacobianElements (const IOdata &inputs,
 
         */
         // slip
-        if (opFlags[stalled])
+        if (component_configuration.opFlags[stalled])
         {
             md.assign (refDiff, refDiff, -cj);
         }
@@ -497,34 +497,34 @@ void motorLoad5::jacobianElements (const IOdata &inputs,
     // omega
 
     // Erp and Emp
-    // dv[1] = systemBaseFrequency*slip*dst[2] - (dst[1] + (x0 - xp)*ast[1]) / T0p;
-    // dv[2] = -systemBaseFrequency*slip*dst[1] - (dst[2] + (x0 - xp)*ast[0]) / T0p;
+    // dv[1] = component_parameters.systemBaseFrequency*slip*dst[2] - (dst[1] + (x0 - xp)*ast[1]) / T0p;
+    // dv[2] = -component_parameters.systemBaseFrequency*slip*dst[1] - (dst[2] + (x0 - xp)*ast[0]) / T0p;
 
     md.assign (refDiff + 1, refAlg + 1, -(x0 - xp) / T0p);
-    md.assign (refDiff + 1, refDiff, systemBaseFrequency * dst[2]);
+    md.assign (refDiff + 1, refDiff, component_parameters.systemBaseFrequency * dst[2]);
     md.assign (refDiff + 1, refDiff + 1, -1 / T0p - cj);
-    md.assign (refDiff + 1, refDiff + 2, systemBaseFrequency * slip);
+    md.assign (refDiff + 1, refDiff + 2, component_parameters.systemBaseFrequency * slip);
 
     md.assign (refDiff + 2, refAlg, (x0 - xp) / T0p);
-    md.assign (refDiff + 2, refDiff, -systemBaseFrequency * dst[1]);
-    md.assign (refDiff + 2, refDiff + 1, -systemBaseFrequency * slip);
+    md.assign (refDiff + 2, refDiff, -component_parameters.systemBaseFrequency * dst[1]);
+    md.assign (refDiff + 2, refDiff + 1, -component_parameters.systemBaseFrequency * slip);
     md.assign (refDiff + 2, refDiff + 2, -1 / T0p - cj);
 
     // Erpp and Empp
-    // dv[3] = -systemBaseFrequency*slip*(dst[2] - dst[4]) + ddt[1] - (dst[1] - dst[4] - (xp - xpp)*ast[1]) / T0pp;
-    // dv[4] = systemBaseFrequency*slip*(dst[1] - dst[3]) + ddt[2] - (dst[2] - dst[3] + (xp - xpp)*ast[0]) / T0pp;
+    // dv[3] = -component_parameters.systemBaseFrequency*slip*(dst[2] - dst[4]) + ddt[1] - (dst[1] - dst[4] - (xp - xpp)*ast[1]) / T0pp;
+    // dv[4] = component_parameters.systemBaseFrequency*slip*(dst[1] - dst[3]) + ddt[2] - (dst[2] - dst[3] + (xp - xpp)*ast[0]) / T0pp;
     md.assign (refDiff + 3, refAlg + 1, (xp - xpp) / T0pp);
-    md.assign (refDiff + 3, refDiff, -systemBaseFrequency * (dst[2] - dst[4]));
+    md.assign (refDiff + 3, refDiff, -component_parameters.systemBaseFrequency * (dst[2] - dst[4]));
     md.assign (refDiff + 3, refDiff + 1, -1 / T0pp + cj);
-    md.assign (refDiff + 3, refDiff + 2, -systemBaseFrequency * slip);
+    md.assign (refDiff + 3, refDiff + 2, -component_parameters.systemBaseFrequency * slip);
     md.assign (refDiff + 3, refDiff + 3, -cj);
-    md.assign (refDiff + 3, refDiff + 4, systemBaseFrequency * slip + 1 / T0pp);
+    md.assign (refDiff + 3, refDiff + 4, component_parameters.systemBaseFrequency * slip + 1 / T0pp);
 
     md.assign (refDiff + 4, refAlg, -(xp - xpp) / T0pp);
-    md.assign (refDiff + 4, refDiff, systemBaseFrequency * (dst[1] - dst[3]));
-    md.assign (refDiff + 4, refDiff + 1, systemBaseFrequency * slip);
+    md.assign (refDiff + 4, refDiff, component_parameters.systemBaseFrequency * (dst[1] - dst[3]));
+    md.assign (refDiff + 4, refDiff + 1, component_parameters.systemBaseFrequency * slip);
     md.assign (refDiff + 4, refDiff + 2, -1 / T0pp + cj);
-    md.assign (refDiff + 4, refDiff + 3, -systemBaseFrequency * slip + 1 / T0pp);
+    md.assign (refDiff + 4, refDiff + 3, -component_parameters.systemBaseFrequency * slip + 1 / T0pp);
     md.assign (refDiff + 4, refDiff + 4, -cj);
 }
 
@@ -577,7 +577,7 @@ void motorLoad5::rootTest (const IOdata & /*inputs*/, const stateData &sD, doubl
 {
     auto Loc = offsets.getLocations (sD, sMode, this);
     auto ro = offsets.getRootOffset (sMode);
-    if (opFlags[stalled])
+    if (component_configuration.opFlags[stalled])
     {
         double Te =
           Loc.diffStateLoc[erppD] * Loc.algStateLoc[irA] + Loc.diffStateLoc[emppD] * Loc.algStateLoc[imA];
@@ -599,20 +599,20 @@ void motorLoad5::rootTrigger (coreTime /*time*/,
     {
         return;
     }
-    if (opFlags[stalled])
+    if (component_configuration.opFlags[stalled])
     {
         if (inputs[voltageInLocation] > 0.5)
         {
-            opFlags.reset (stalled);
+            component_configuration.opFlags.reset (stalled);
             alert (this, JAC_COUNT_INCREASE);
-            m_state[slipA] = 1.0 - 1e-7;
+            component_state.m_state[slipA] = 1.0 - 1e-7;
         }
     }
     else
     {
-        opFlags.set (stalled);
+        component_configuration.opFlags.set (stalled);
         alert (this, JAC_COUNT_DECREASE);
-        m_state[slipA] = 1.0;
+        component_state.m_state[slipA] = 1.0;
     }
 }
 
@@ -621,14 +621,14 @@ change_code motorLoad5::rootCheck (const IOdata & /*inputs*/,
                                    const solverMode &sMode,
                                    check_level_t /*level*/)
 {
-    if (opFlags[stalled])
+    if (component_configuration.opFlags[stalled])
     {
         auto Loc = offsets.getLocations (sD, sMode, this);
         double Te =
           Loc.diffStateLoc[erppD] * Loc.algStateLoc[irA] + Loc.diffStateLoc[emppD] * Loc.algStateLoc[imA];
         if (Te - mechPower (1.0) > 0)
         {
-            opFlags.reset (stalled);
+            component_configuration.opFlags.reset (stalled);
             alert (this, JAC_COUNT_INCREASE);
             return change_code::jacobian_change;
         }

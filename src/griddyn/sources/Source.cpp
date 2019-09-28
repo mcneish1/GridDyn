@@ -33,9 +33,9 @@ static childTypeFactory<grabberSource, Source> grbsrc("source", stringVec{ "grab
 Source::Source (const std::string &objName, double startVal) : gridSubModel (objName), m_tempOut (startVal)
 {
     m_output = startVal;
-    m_inputSize = 0;
-    m_outputSize = 1;
-    opFlags.set (pflow_init_required);
+    component_ports.m_inputSize = 0;
+    component_ports.m_outputSize = 1;
+    component_configuration.opFlags.set (pflow_init_required);
 }
 
 coreObject *Source::clone (coreObject *obj) const
@@ -73,7 +73,7 @@ void Source::set (const std::string &param, double val, gridUnits::units_t unitT
 {
     if ((param == "val") || (param == "setval") || (param == "level") || (param == "value") || (param == "output"))
     {
-        setLevel (gridUnits::unitConversion(val,unitType,outputUnits_,systemBasePower,localBaseVoltage));
+        setLevel (gridUnits::unitConversion(val,unitType,outputUnits_,component_parameters.systemBasePower,component_parameters.localBaseVoltage));
     }
     else
     {

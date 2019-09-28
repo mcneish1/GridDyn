@@ -27,7 +27,7 @@ using namespace gridUnits;
 
 static typeFactory<zBreaker> glf ("link", stringVec{"zbreaker", "zline", "busbreaker"});
 
-zBreaker::zBreaker (const std::string &objName) : Link (objName),merged(object_bools.extra_bool) { opFlags.set (network_connected); }
+zBreaker::zBreaker (const std::string &objName) : Link (objName),merged(object_bools.extra_bool) { component_configuration.opFlags.set (network_connected); }
 coreObject *zBreaker::clone (coreObject *obj) const
 {
     auto lnk = cloneBase<zBreaker, Link> (this, obj);
@@ -68,14 +68,14 @@ void zBreaker::switchMode (index_t /*num*/, bool mode)
 {
     // TODO:PT: this shouldn't cause enable disable, I need to replace this with some of the checks for enabled
     // disable
-    if (mode == opFlags[switch1_open_flag])
+    if (mode == component_configuration.opFlags[switch1_open_flag])
     {
         return;
     }
 
-    opFlags.flip (switch1_open_flag);
-    opFlags.flip (switch2_open_flag);
-    if (opFlags[pFlow_initialized])
+    component_configuration.opFlags.flip (switch1_open_flag);
+    component_configuration.opFlags.flip (switch2_open_flag);
+    if (component_configuration.opFlags[pFlow_initialized])
     {
         if (linkInfo.v1 < 0.2)
         {
@@ -84,15 +84,15 @@ void zBreaker::switchMode (index_t /*num*/, bool mode)
         coordinateMergeStatus ();
     }
 
-    /*if (opFlags[switch2_open_flag])
+    /*if (component_configuration.opFlags[switch2_open_flag])
     {
     enable();
-    opFlags.reset(switch2_open_flag);
+    component_configuration.opFlags.reset(switch2_open_flag);
     }
     else
     {
     disable();
-    opFlags.set(switch2_open_flag);
+    component_configuration.opFlags.set(switch2_open_flag);
     }*/
 }
 

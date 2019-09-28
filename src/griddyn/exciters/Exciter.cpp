@@ -37,7 +37,7 @@ static childTypeFactory<ExciterIEEEtype2, Exciter> gfet2("exciter", "type2");
 
 }//namespace exciters
 
-Exciter::Exciter(const std::string &objName) : gridSubModel(objName) { m_inputSize = 4; m_outputSize = 1; }
+Exciter::Exciter(const std::string &objName) : gridSubModel(objName) { component_ports.m_inputSize = 4; component_ports.m_outputSize = 1; }
 // cloning function
 coreObject *Exciter::clone (coreObject *obj) const
 {
@@ -74,7 +74,7 @@ void Exciter::checkForLimits ()
 // initial conditions
 void Exciter::dynObjectInitializeB (const IOdata &inputs, const IOdata &desiredOutput, IOdata &fieldSet)
 {
-    double *gs = m_state.data ();
+    double *gs = component_state.m_state.data ();
     double V = inputs[voltageInLocation];
     if (desiredOutput.empty () || (desiredOutput[0] == kNullVal))
     {
@@ -101,7 +101,7 @@ void Exciter::residual (const IOdata &inputs, const stateData &sD, double resid[
     const double *es = sD.state + offset;
     const double *esp = sD.dstate_dt + offset;
     double *rv = resid + offset;
-    if (opFlags[outside_vlim])
+    if (component_configuration.opFlags[outside_vlim])
     {
         rv[0] = -esp[0];
     }
@@ -119,7 +119,7 @@ void Exciter::derivative (const IOdata &inputs,
     auto Loc = offsets.getLocations (sD, deriv, sMode, this);
     const double *es = Loc.diffStateLoc;
     double *d = Loc.destDiffLoc;
-    if (opFlags[outside_vlim])
+    if (component_configuration.opFlags[outside_vlim])
     {
         d[0] = 0.0;
     }
@@ -143,7 +143,7 @@ void Exciter::jacobianElements (const IOdata & /*inputs*/,
     auto offset = offsets.getDiffOffset (sMode);
 
     // Ef (Vr)
-    if (opFlags[outside_vlim])
+    if (component_configuration.opFlags[outside_vlim])
     {
         md.assign (offset, offset, -sD.cj);
     }
@@ -162,7 +162,7 @@ void Exciter::rootTest (const IOdata &inputs, const stateData &sD, double root[]
     int rootOffset = offsets.getRootOffset (sMode);
     double Efield = sD.state[offset];
 
-    if (opFlags[outside_vlim])
+    if (component_configuration.opFlags[outside_vlim])
     {
         root[rootOffset] = Vref + vBias - inputs[voltageInLocation];
     }
@@ -171,7 +171,7 @@ void Exciter::rootTest (const IOdata &inputs, const stateData &sD, double root[]
         root[rootOffset] = std::min (Vrmax - Efield, Efield - Vrmin) + 0.0001;
         if (Efield > Vrmax)
         {
-            opFlags.set (etrigger_high);
+            component_configuration.opFlags.set (etrigger_high);
         }
     }
 }
@@ -184,31 +184,31 @@ void Exciter::rootTrigger (coreTime time,
     int rootOffset = offsets.getRootOffset (sMode);
     if (rootMask[rootOffset]!=0)
     {
-        if (opFlags[outside_vlim])
+        if (component_configuration.opFlags[outside_vlim])
         {
             LOG_NORMAL ("root trigger back in bounds");
             alert (this, JAC_COUNT_INCREASE);
-            opFlags.reset (outside_vlim);
-            opFlags.reset (etrigger_high);
+            component_configuration.opFlags.reset (outside_vlim);
+            component_configuration.opFlags.reset (etrigger_high);
         }
         else
         {
-            opFlags.set (outside_vlim);
-            if (opFlags[etrigger_high])
+            component_configuration.opFlags.set (outside_vlim);
+            if (component_configuration.opFlags[etrigger_high])
             {
                 LOG_NORMAL ("root trigger above bounds");
-                m_state[limitState] -= 0.0001;
+                component_state.m_state[limitState] -= 0.0001;
             }
             else
             {
                 LOG_NORMAL ("root trigger below bounds");
-                m_state[limitState] += 0.0001;
+                component_state.m_state[limitState] += 0.0001;
             }
             alert (this, JAC_COUNT_DECREASE);
         }
-        stateData sD (time, m_state.data ());
+        stateData sD (time, component_state.m_state.data ());
 
-        derivative (inputs, sD, m_dstate_dt.data (), cLocalSolverMode);
+        derivative (inputs, sD, component_state.m_dstate_dt.data (), cLocalSolverMode);
     }
 }
 
@@ -217,17 +217,17 @@ change_code Exciter::rootCheck (const IOdata &inputs,
                                        const solverMode & /*sMode*/,
                                        check_level_t /*level*/)
 {
-    double Efield = m_state[0];
+    double Efield = component_state.m_state[0];
     change_code ret = change_code::no_change;
-    if (opFlags[outside_vlim])
+    if (component_configuration.opFlags[outside_vlim])
     {
         double test = Vref + vBias - inputs[voltageInLocation];
-        if (opFlags[etrigger_high])
+        if (component_configuration.opFlags[etrigger_high])
         {
             if (test < 0)
             {
-                opFlags.reset (outside_vlim);
-                opFlags.reset (etrigger_high);
+                component_configuration.opFlags.reset (outside_vlim);
+                component_configuration.opFlags.reset (etrigger_high);
                 alert (this, JAC_COUNT_INCREASE);
                 ret = change_code::jacobian_change;
             }
@@ -236,7 +236,7 @@ change_code Exciter::rootCheck (const IOdata &inputs,
         {
             if (test > 0)
             {
-                opFlags.reset (outside_vlim);
+                component_configuration.opFlags.reset (outside_vlim);
                 alert (this, JAC_COUNT_INCREASE);
                 ret = change_code::jacobian_change;
             }
@@ -246,16 +246,16 @@ change_code Exciter::rootCheck (const IOdata &inputs,
     {
         if (Efield > Vrmax + 0.0001)
         {
-            opFlags.set (etrigger_high);
-            opFlags.set (outside_vlim);
-            m_state[0] = Vrmax;
+            component_configuration.opFlags.set (etrigger_high);
+            component_configuration.opFlags.set (outside_vlim);
+            component_state.m_state[0] = Vrmax;
             alert (this, JAC_COUNT_DECREASE);
             ret = change_code::jacobian_change;
         }
         else if (Efield < Vrmin - 0.0001)
         {
-            opFlags.set (outside_vlim);
-            m_state[0] = Vrmin;
+            component_configuration.opFlags.set (outside_vlim);
+            component_state.m_state[0] = Vrmin;
             alert (this, JAC_COUNT_DECREASE);
             ret = change_code::jacobian_change;
         }

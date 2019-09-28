@@ -27,7 +27,7 @@ namespace relays
 {
 differentialRelay::differentialRelay (const std::string &objName) : Relay (objName)
 {
-    opFlags.set (continuous_flag);
+    component_configuration.opFlags.set (continuous_flag);
 }
 
 coreObject *differentialRelay::clone (coreObject *obj) const
@@ -48,11 +48,11 @@ void differentialRelay::setFlag (const std::string &flag, bool val)
 {
     if (flag == "relative")
     {
-        opFlags.set (relative_differential_flag, val);
+        component_configuration.opFlags.set (relative_differential_flag, val);
     }
     if (flag == "absolute")
     {
-        opFlags.set (relative_differential_flag, !val);
+        component_configuration.opFlags.set (relative_differential_flag, !val);
     }
     else
     {
@@ -64,7 +64,7 @@ bool differentialRelay::getFlag (const std::string &flag) const
 {
     if (flag == "relative")
     {
-        return opFlags[relative_differential_flag];
+        return component_configuration.opFlags[relative_differential_flag];
     }
     return Relay::getFlag (flag);
 }
@@ -120,7 +120,7 @@ void differentialRelay::pFlowObjectInitializeA (coreTime time0, std::uint32_t fl
     if (dynamic_cast<Link *> (m_sourceObject) != nullptr)
     {
         double tap = m_sourceObject->get ("tap");
-        if (opFlags[relative_differential_flag])
+        if (component_configuration.opFlags[relative_differential_flag])
         {
             if (tap != 1.0)
             {
@@ -160,14 +160,14 @@ void differentialRelay::pFlowObjectInitializeA (coreTime time0, std::uint32_t fl
                   make_condition ("abs(current1-current2)", ">", m_max_differential, m_sourceObject)));
             }
         }
-        opFlags.set (link_mode);
-        opFlags.reset (bus_mode);
+        component_configuration.opFlags.set (link_mode);
+        component_configuration.opFlags.reset (bus_mode);
     }
     else if (dynamic_cast<gridBus *> (m_sourceObject) != nullptr)
     {
         add (std::shared_ptr<Condition> (make_condition ("abs(load)", "<=", m_max_differential, m_sourceObject)));
-        opFlags.set (bus_mode);
-        opFlags.reset (link_mode);
+        component_configuration.opFlags.set (bus_mode);
+        component_configuration.opFlags.reset (link_mode);
     }
 
     // using make shared here since we need a shared object and it won't get translated
@@ -177,7 +177,7 @@ void differentialRelay::pFlowObjectInitializeA (coreTime time0, std::uint32_t fl
     // action 2 to reenable object
 
     add (std::move (ge));
-    if ((opFlags[relative_differential_flag]) && (opFlags[link_mode]) && (m_minLevel > 0.0))
+    if ((component_configuration.opFlags[relative_differential_flag]) && (component_configuration.opFlags[link_mode]) && (m_minLevel > 0.0))
     {
         setActionMultiTrigger (0, {0, 1}, m_delayTime);
     }
@@ -198,7 +198,7 @@ void differentialRelay::actionTaken (index_t ActionNum,
 {
     LOG_NORMAL ("Relay Tripped");
 
-    if (opFlags[use_commLink])
+    if (component_configuration.opFlags[use_commLink])
     {
         if (ActionNum == 0)
         {
@@ -211,7 +211,7 @@ void differentialRelay::actionTaken (index_t ActionNum,
 void differentialRelay::conditionTriggered (index_t /*conditionNum*/, coreTime /*triggerTime*/)
 {
     LOG_NORMAL ("differential condition met");
-    if (opFlags.test (use_commLink))
+    if (component_configuration.opFlags.test (use_commLink))
     {
         // std::cout << "GridDyn conditionTriggered(), conditionNum = " << conditionNum << '\n';
         auto P = std::make_shared<relayMessage> (relayMessage::LOCAL_FAULT_EVENT);
@@ -223,7 +223,7 @@ void differentialRelay::conditionCleared (index_t /*conditionNum*/, coreTime /*t
 {
     LOG_NORMAL ("differential condition cleared");
 
-    if (opFlags.test (use_commLink))
+    if (component_configuration.opFlags.test (use_commLink))
     {
         auto P = std::make_shared<relayMessage> (relayMessage::LOCAL_FAULT_CLEARED);
         cManager.send (P);

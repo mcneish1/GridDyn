@@ -82,7 +82,7 @@ int powerFlowErrorRecovery::attempts () const { return attempt_number; }
 // Try any non-reversible adjustments which might be out there
 bool powerFlowErrorRecovery::powerFlowFix1 ()
 {
-    if (!sim->opFlags[has_powerflow_adjustments])
+    if (!sim->component_configuration.opFlags[has_powerflow_adjustments])
     {
         return false;
     }
@@ -104,7 +104,7 @@ bool powerFlowErrorRecovery::powerFlowFix2 ()
     sim->converge (sim->getSimulationTime(), solver->state_data (), nullptr, solver->getSolverMode (),
                    converge_mode::block_iteration, 0.1);
     sim->setState (sim->getSimulationTime(), solver->state_data (), nullptr, solver->getSolverMode ());
-    if (sim->opFlags[has_powerflow_adjustments])
+    if (sim->component_configuration.opFlags[has_powerflow_adjustments])
     {
         sim->updateLocalCache ();
         change_code eval =
@@ -125,11 +125,11 @@ bool powerFlowErrorRecovery::powerFlowFix3 ()
         sim->converge (sim->getSimulationTime(), solver->state_data (), nullptr, solver->getSolverMode (),
                        converge_mode::single_iteration, 0);
         sim->setState (sim->getSimulationTime(), solver->state_data (), nullptr, solver->getSolverMode ());
-        if (!sim->opFlags[prev_setall_pqvlimit])
+        if (!sim->component_configuration.opFlags[prev_setall_pqvlimit])
         {
             sim->setAll ("load", "pqlowvlimit", 1.0);
             sim->controlFlags.set (voltage_constraints_flag);
-            sim->opFlags.set (prev_setall_pqvlimit);
+            sim->component_configuration.opFlags.set (prev_setall_pqvlimit);
             sim->log (sim, print_level::debug, "pq adjust on load");
         }
         sim->updateLocalCache ();

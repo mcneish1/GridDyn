@@ -22,7 +22,7 @@ namespace griddyn
 {
 namespace blocks
 {
-lutBlock::lutBlock (const std::string &objName) : Block (objName) { opFlags.set (use_state); }
+lutBlock::lutBlock (const std::string &objName) : Block (objName) { component_configuration.opFlags.set (use_state); }
 coreObject *lutBlock::clone (coreObject *obj) const
 {
     auto nobj = cloneBase<lutBlock, Block> (this, obj);
@@ -44,7 +44,7 @@ void lutBlock::dynObjectInitializeB (const IOdata &inputs, const IOdata &desired
 {
     if (desiredOutput.empty ())
     {
-        m_state[limiter_alg] = K * computeValue (inputs[0] + bias);
+        component_state.m_state[limiter_alg] = K * computeValue (inputs[0] + bias);
         Block::dynObjectInitializeB (inputs, desiredOutput, fieldSet);
     }
     else
@@ -144,7 +144,7 @@ void lutBlock::set (const std::string &param, double val, gridUnits::units_t uni
 
 double lutBlock::step (coreTime time, double input)
 {
-    m_state[limiter_alg] = K * computeValue (input + bias);
+    component_state.m_state[limiter_alg] = K * computeValue (input + bias);
 
     if (limiter_alg > 0)
     {
@@ -152,11 +152,11 @@ double lutBlock::step (coreTime time, double input)
     }
     else
     {
-        m_output = m_state[0];
+        m_output = component_state.m_state[0];
         object_time.prevTime = time;
     }
 
-    return m_state[0];
+    return component_state.m_state[0];
 }
 
 double lutBlock::computeValue (double input)

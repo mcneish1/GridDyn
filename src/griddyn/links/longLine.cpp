@@ -30,7 +30,7 @@ coreObject *longLine::clone (coreObject *obj) const
         return obj;
     }
     line->segmentationLength = segmentationLength;
-    if (opFlags[pFlow_initialized])
+    if (component_configuration.opFlags[pFlow_initialized])
     {
         subsystem::clone (line);
     }
@@ -82,7 +82,7 @@ void longLine::set (const std::string &param, double val, gridUnits::units_t uni
     }
     else if (param == "fault")
     {
-        if (opFlags[pFlow_initialized])
+        if (component_configuration.opFlags[pFlow_initialized])
         {
             fault = val;
             if (fault > 1.0)

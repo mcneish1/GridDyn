@@ -22,17 +22,17 @@ using namespace gridUnits;
 
 variableGenerator::variableGenerator (const std::string &objName) : DynamicGenerator (objName)
 {
-    opFlags[variable_generation] = true;
-    opFlags.reset (adjustable_P);
-    opFlags.reset (local_power_control);
+    component_configuration.opFlags[variable_generation] = true;
+    component_configuration.opFlags.reset (adjustable_P);
+    component_configuration.opFlags.reset (local_power_control);
 }
 
 variableGenerator::variableGenerator (dynModel_t dynModel, const std::string &objName)
     : DynamicGenerator (dynModel, objName)
 {
-    opFlags[variable_generation] = true;
-    opFlags.reset (adjustable_P);
-    opFlags.reset (local_power_control);
+    component_configuration.opFlags[variable_generation] = true;
+    component_configuration.opFlags.reset (adjustable_P);
+    component_configuration.opFlags.reset (local_power_control);
 }
 
 coreObject *variableGenerator::clone (coreObject *obj) const
@@ -93,7 +93,7 @@ void variableGenerator::add (gridSubModel *obj)
         m_source = static_cast<Source *> (obj);
         m_source->locIndex = source_loc;
 
-        obj->set ("basefreq", systemBaseFrequency);
+        obj->set ("basefreq", component_parameters.systemBaseFrequency);
         addSubObject (obj);
     }
     else if (dynamic_cast<Block *> (obj) != nullptr)
@@ -109,7 +109,7 @@ void variableGenerator::add (gridSubModel *obj)
         }
         m_cBlock = static_cast<Block *> (obj);
         m_cBlock->locIndex = control_block_loc;
-        obj->set ("basefreq", systemBaseFrequency);
+        obj->set ("basefreq", component_parameters.systemBaseFrequency);
         addSubObject (obj);
     }
     else
@@ -128,11 +128,11 @@ void variableGenerator::set (const std::string &param, double val, units_t unitT
 {
     if (param == "vcutout")
     {
-        mp_Vcutout = unitConversion (val, unitType, puV, systemBasePower, localBaseVoltage);
+        mp_Vcutout = unitConversion (val, unitType, puV, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if (param == "vmax")
     {
-        mp_Vmax = unitConversion (val, unitType, puV, systemBasePower, localBaseVoltage);
+        mp_Vmax = unitConversion (val, unitType, puV, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else
 

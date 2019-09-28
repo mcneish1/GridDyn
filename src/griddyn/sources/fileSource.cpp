@@ -51,7 +51,7 @@ int fileSource::setFile (const std::string &fileName, index_t column)
 void fileSource::pFlowObjectInitializeA (coreTime time0, std::uint32_t flags)
 {
     object_time.prevTime = time0;
-    if (opFlags[use_absolute_time_flag])
+    if (component_configuration.opFlags[use_absolute_time_flag])
     {
         double abstime0 = get ("abstime0");
         index_t ii = 0;
@@ -98,7 +98,7 @@ void fileSource::updateA (coreTime time)
             break;
         }
 
-        if (opFlags[use_step_change_flag])
+        if (component_configuration.opFlags[use_step_change_flag])
         {
             mp_dOdt = 0;
         }
@@ -127,19 +127,19 @@ void fileSource::setFlag (const std::string &flag, bool val)
 {
     if (flag == "absolute")
     {
-        opFlags.set (use_absolute_time_flag, val);
+        component_configuration.opFlags.set (use_absolute_time_flag, val);
     }
     else if (flag == "relative")
     {
-        opFlags.set (use_absolute_time_flag, !val);
+        component_configuration.opFlags.set (use_absolute_time_flag, !val);
     }
     else if (flag == "step")
     {
-        opFlags.set (use_step_change_flag, val);
+        component_configuration.opFlags.set (use_step_change_flag, val);
     }
     else if (flag == "interpolate")
     {
-        opFlags.set (use_step_change_flag, !val);
+        component_configuration.opFlags.set (use_step_change_flag, !val);
     }
     else
     {

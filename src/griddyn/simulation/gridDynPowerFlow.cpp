@@ -176,7 +176,7 @@ int gridDynSimulation::powerflow ()
                     {
                         reset (reset_levels::minimal);
                     }
-                    if (opFlags[state_change_flag])
+                    if (component_configuration.opFlags[state_change_flag])
                     {
                         reInitpFlow (sm);
                     }
@@ -204,10 +204,10 @@ int gridDynSimulation::powerflow ()
 
     if (pState == gridState_t::INITIALIZED)
     {
-        if ((controlFlags[save_power_flow_data]) && (!opFlags[powerflow_saved]))
+        if ((controlFlags[save_power_flow_data]) && (!component_configuration.opFlags[powerflow_saved]))
         {
             savePowerFlow (this, powerFlowFile);
-            opFlags[powerflow_saved] = true;
+            component_configuration.opFlags[powerflow_saved] = true;
         }
     }
     // store the results to the buses
@@ -218,24 +218,24 @@ int gridDynSimulation::powerflow ()
 
 void gridDynSimulation::reInitpFlow (const solverMode &sMode, change_code change)
 {
-    if (opFlags[slack_bus_change])
+    if (component_configuration.opFlags[slack_bus_change])
     {
         checkNetwork (network_check_type::full);
     }
-    else if (opFlags[connectivity_change_flag])
+    else if (component_configuration.opFlags[connectivity_change_flag])
     {
         checkNetwork (network_check_type::simplified);
     }
-    if (opFlags[reset_voltage_flag])
+    if (component_configuration.opFlags[reset_voltage_flag])
     {
         reset (reset_levels::full);
-        opFlags.reset (reset_voltage_flag);
+        component_configuration.opFlags.reset (reset_voltage_flag);
     }
 
     try
     {
         auto pFlowData = getSolverInterface (sMode);
-        if ((opFlags[state_change_flag]) || (change == change_code::state_count_change))
+        if ((component_configuration.opFlags[state_change_flag]) || (change == change_code::state_count_change))
         {
             updateOffsets (sMode);
             auto ssize = stateSize (sMode);
@@ -243,7 +243,7 @@ void gridDynSimulation::reInitpFlow (const solverMode &sMode, change_code change
             pFlowData->initialize (currentTime);
             pState = gridState_t::INITIALIZED;
         }
-        else if ((opFlags[object_change_flag]) || (change == change_code::object_change))
+        else if ((component_configuration.opFlags[object_change_flag]) || (change == change_code::object_change))
         {
             if (pState > gridState_t::POWERFLOW_COMPLETE)
             {  // we have to reset for the dynamic computation
@@ -275,12 +275,12 @@ void gridDynSimulation::reInitpFlow (const solverMode &sMode, change_code change
                     pState = gridState_t::INITIALIZED;
                 }
             }
-            if ((!controlFlags[dense_solver]) && (opFlags[jacobian_count_change_flag]))
+            if ((!controlFlags[dense_solver]) && (component_configuration.opFlags[jacobian_count_change_flag]))
             {
                 pFlowData->sparseReInit (SolverInterface::sparse_reinit_modes::resize);
             }
         }
-        opFlags &= RESET_CHANGE_FLAG_MASK;
+        component_configuration.opFlags &= RESET_CHANGE_FLAG_MASK;
     }
     catch (const std::bad_alloc &)
     {
@@ -471,7 +471,7 @@ int gridDynSimulation::eventDrivenPowerflow (coreTime t_end, coreTime t_step)
     {
         t_step = stepTime;
     }
-    if (!opFlags[dyn_initialized])
+    if (!component_configuration.opFlags[dyn_initialized])
     {
         dynInitialize (currentTime);
     }

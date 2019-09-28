@@ -27,9 +27,9 @@ namespace griddyn {
 namespace extra {
 txLifeSpan::txLifeSpan(const std::string &objName):sensor(objName)
 {
-	opFlags.reset(continuous_flag);  //this is a not a continuous model everything is slow so no need to make it continuous
+	component_configuration.opFlags.reset(continuous_flag);  //this is a not a continuous model everything is slow so no need to make it continuous
 	outputStrings = { {"remaininglife","liferemaining"}, {"lossoflife"} ,{"rate","rateofloss"} };
-	m_outputSize = 3;
+	component_ports.m_outputSize = 3;
 }
 
 coreObject * txLifeSpan::clone(coreObject *obj) const
@@ -51,15 +51,15 @@ void txLifeSpan::setFlag(const std::string &flag, bool val)
 {
 	if ((flag == "useiec") || (flag == "iec"))
 	{
-		opFlags.set(useIECmethod,val);
+		component_configuration.opFlags.set(useIECmethod,val);
 	}
 	else if ((flag == "useieee") || (flag == "ieee"))
 	{
-		opFlags.set(useIECmethod,!val);
+		component_configuration.opFlags.set(useIECmethod,!val);
 	}
 	else if (flag == "no_discconect")
 	{
-		opFlags.set(no_disconnect, val);
+		component_configuration.opFlags.set(no_disconnect, val);
 	}
 	else
 	{
@@ -137,7 +137,7 @@ void txLifeSpan::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
 			object_time.updatePeriod = pstep;
 		}
 	}
-	if (!opFlags[dyn_initialized])
+	if (!component_configuration.opFlags[dyn_initialized])
 	{
 		sensor::setFlag("sampled", true);
 		if (inputStrings.empty())
@@ -178,7 +178,7 @@ void txLifeSpan::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
 			Relay::add(std::shared_ptr<Condition>(std::move(cond)));
 
 			setActionTrigger(0, 0);
-			if (!opFlags[no_disconnect])
+			if (!component_configuration.opFlags[no_disconnect])
 			{
 				setActionTrigger(1, 0);
 				setActionTrigger(2, 0);
@@ -203,7 +203,7 @@ void txLifeSpan::updateA(coreTime time)
 		return;
 	}
 	double Temperature = dataSources[0]->grabData();
-	if (!opFlags[useIECmethod])
+	if (!component_configuration.opFlags[useIECmethod])
 	{
 		Faa = agingFactor*exp(agingConstant / (baseTemp + 273.0) - (agingConstant / (Temperature + 273.0)));
 	}

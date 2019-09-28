@@ -20,14 +20,14 @@ namespace blocks
 {
 integralBlock::integralBlock (const std::string &objName) : Block (objName)
 {
-    opFlags.set (differential_output);
-    opFlags.set (use_state);
+    component_configuration.opFlags.set (differential_output);
+    component_configuration.opFlags.set (use_state);
 }
 
 integralBlock::integralBlock (double gain, const std::string &objName) : Block (gain, objName)
 {
-    opFlags.set (differential_output);
-    opFlags.set (use_state);
+    component_configuration.opFlags.set (differential_output);
+    component_configuration.opFlags.set (use_state);
 }
 
 coreObject *integralBlock::clone (coreObject *obj) const
@@ -47,12 +47,12 @@ void integralBlock::dynObjectInitializeB (const IOdata &inputs, const IOdata &de
     index_t loc = limiter_diff;
     if (desiredOutput.empty ())
     {
-        m_state[loc] = iv;
+        component_state.m_state[loc] = iv;
         if (limiter_diff > 0)
         {
             Block::dynObjectInitializeB (inputs, desiredOutput, fieldSet);
         }
-        m_dstate_dt[loc] = K * (inputs[0] + bias);
+        component_state.m_dstate_dt[loc] = K * (inputs[0] + bias);
     }
     else
     {
@@ -85,7 +85,7 @@ void integralBlock::blockDerivative (double input,
 {
     auto offset = offsets.getDiffOffset (sMode);
     deriv[offset + limiter_diff] = K * (input + bias);
-    if (opFlags[use_ramp_limits])
+    if (component_configuration.opFlags[use_ramp_limits])
     {
         Block::blockDerivative (input, didt, sD, deriv, sMode);
     }
@@ -116,7 +116,7 @@ double integralBlock::step (coreTime time, double inputA)
     double out;
     double input = inputA + bias;
     index_t loc = limiter_diff + limiter_alg;
-    m_state[loc] = m_state[loc] + K * (input + prevInput) / 2.0 * dt;
+    component_state.m_state[loc] = component_state.m_state[loc] + K * (input + prevInput) / 2.0 * dt;
     prevInput = input;
     if (loc > 0)
     {
@@ -124,7 +124,7 @@ double integralBlock::step (coreTime time, double inputA)
     }
     else
     {
-        out = m_state[0];
+        out = component_state.m_state[0];
         object_time.prevTime = time;
         m_output = out;
     }

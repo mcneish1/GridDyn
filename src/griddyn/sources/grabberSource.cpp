@@ -53,7 +53,7 @@ void grabberSource::set (const std::string &param, const std::string &val)
 {
     if (param == "field")
     {
-        if (opFlags[dyn_initialized])
+        if (component_configuration.opFlags[dyn_initialized])
         {
             updateField (val);
         }
@@ -64,7 +64,7 @@ void grabberSource::set (const std::string &param, const std::string &val)
     }
     else if (param == "target")
     {
-        if (opFlags[dyn_initialized])
+        if (component_configuration.opFlags[dyn_initialized])
         {
             updateTarget (target);
         }

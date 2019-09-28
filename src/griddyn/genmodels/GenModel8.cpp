@@ -42,7 +42,7 @@ void GenModel8::dynObjectInitializeA (coreTime /*time0*/, std::uint32_t /*flags*
 void GenModel8::dynObjectInitializeB (const IOdata &inputs, const IOdata &desiredOutput, IOdata &fieldSet)
 {
     computeInitialAngleAndCurrent (inputs, desiredOutput, Rs, Xq - Xl);
-    double *gm = m_state.data ();
+    double *gm = component_state.m_state.data ();
 
     // Edp and Eqp  and Edpp
 
@@ -91,7 +91,7 @@ void GenModel8::derivative (const IOdata &inputs, const stateData &sD, double de
     double qrat = Tqopp * (Xqpp + Xl) / (Tqop * (Xqp + Xl));
     double drat = Tdopp * (Xdpp + Xl) / (Tdop * (Xdp + Xl));
 
-    rvd[0] = systemBaseFrequency * (gmd[1] - 1.0);
+    rvd[0] = component_parameters.systemBaseFrequency * (gmd[1] - 1.0);
     // Edp and Eqp
     rvd[2] = (-gmd[2] - (Xq - Xqp - qrat * (Xq - Xqp)) * gm[1]) / Tqop;
     rvd[3] = (-gmd[3] + (Xd - Xdp - drat * (Xd - Xdp)) * gm[0] + (1.0 - Taa / Tdop) * Eft) / Tdop;
@@ -103,8 +103,8 @@ void GenModel8::derivative (const IOdata &inputs, const stateData &sD, double de
     double Pe2 = gmd[6] * gm[1] - gmd[7] * gm[0];
     rvd[1] = 0.5 * (Pmt - Pe2 - D * (gmd[1] - 1.0)) / H;
     // psid and psiq
-    rvd[6] = systemBaseFrequency * (Vd + Rs * gm[0] + gmd[1] * gmd[7]);
-    rvd[7] = systemBaseFrequency * (Vq + Rs * gm[1] - gmd[1] * gmd[6]);
+    rvd[6] = component_parameters.systemBaseFrequency * (Vd + Rs * gm[0] + gmd[1] * gmd[7]);
+    rvd[7] = component_parameters.systemBaseFrequency * (Vq + Rs * gm[1] - gmd[1] * gmd[6]);
 }
 
 void GenModel8::residual (const IOdata &inputs, const stateData &sD, double resid[], const solverMode &sMode)
@@ -201,7 +201,7 @@ void GenModel8::jacobianElements (const IOdata &inputs,
     }
     // delta
     md.assign (refDiff, refDiff, -sD.cj);
-    md.assign (refDiff, refDiff + 1, systemBaseFrequency);
+    md.assign (refDiff, refDiff + 1, component_parameters.systemBaseFrequency);
 
     // omega
     // Pe2 = gm[8] * gm[1] - gm[9] * gm[0];
@@ -256,37 +256,37 @@ void GenModel8::jacobianElements (const IOdata &inputs,
     md.assign (refDiff + 5, refDiff + 5, -1.0 / Tdopp - sD.cj);
 
     /*
-    rv[8] = systemBaseFrequency*(Vd + Rs*gm[0] + gm[3] / systemBaseFrequency*gm[9]) - gmp[8];
-    rv[9] = systemBaseFrequency*(Vq + Rs*gm[1] - gm[3] / systemBaseFrequency*gm[8]) - gmp[9];
+    rv[8] = component_parameters.systemBaseFrequency*(Vd + Rs*gm[0] + gm[3] / component_parameters.systemBaseFrequency*gm[9]) - gmp[8];
+    rv[9] = component_parameters.systemBaseFrequency*(Vq + Rs*gm[1] - gm[3] / component_parameters.systemBaseFrequency*gm[8]) - gmp[9];
     */
     // psib and psiq
     if (hasAlgebraic (sMode))
     {
-        md.assign (refDiff + 6, refAlg, Rs * systemBaseFrequency);
+        md.assign (refDiff + 6, refAlg, Rs * component_parameters.systemBaseFrequency);
     }
-    md.assign (refDiff + 6, refDiff + 1, gmd[7] * systemBaseFrequency);
+    md.assign (refDiff + 6, refDiff + 1, gmd[7] * component_parameters.systemBaseFrequency);
     md.assign (refDiff + 6, refDiff + 6, -sD.cj);
-    md.assign (refDiff + 6, refDiff + 7, gmd[1] * systemBaseFrequency);
-    md.assign (refDiff + 6, refDiff, -Vq * systemBaseFrequency);
+    md.assign (refDiff + 6, refDiff + 7, gmd[1] * component_parameters.systemBaseFrequency);
+    md.assign (refDiff + 6, refDiff, -Vq * component_parameters.systemBaseFrequency);
 
     if (hasAlgebraic (sMode))
     {
-        md.assign (refDiff + 7, refAlg + 1, Rs * systemBaseFrequency);
+        md.assign (refDiff + 7, refAlg + 1, Rs * component_parameters.systemBaseFrequency);
     }
-    md.assign (refDiff + 7, refDiff + 1, -gmd[6] * systemBaseFrequency);
-    md.assign (refDiff + 7, refDiff + 6, -gmd[1] * systemBaseFrequency);
+    md.assign (refDiff + 7, refDiff + 1, -gmd[6] * component_parameters.systemBaseFrequency);
+    md.assign (refDiff + 7, refDiff + 6, -gmd[1] * component_parameters.systemBaseFrequency);
     md.assign (refDiff + 7, refDiff + 7, -sD.cj);
-    md.assign (refDiff + 7, refDiff, Vd * systemBaseFrequency);
+    md.assign (refDiff + 7, refDiff, Vd * component_parameters.systemBaseFrequency);
 
     if (VLoc != kNullLocation)
     {
-        md.assign (refDiff + 6, VLoc, Vd / V * systemBaseFrequency);
-        md.assign (refDiff + 7, VLoc, Vq / V * systemBaseFrequency);
+        md.assign (refDiff + 6, VLoc, Vd / V * component_parameters.systemBaseFrequency);
+        md.assign (refDiff + 7, VLoc, Vq / V * component_parameters.systemBaseFrequency);
     }
     if (TLoc != kNullLocation)
     {
-        md.assign (refDiff + 6, TLoc, Vq * systemBaseFrequency);
-        md.assign (refDiff + 7, TLoc, -Vd * systemBaseFrequency);
+        md.assign (refDiff + 6, TLoc, Vq * component_parameters.systemBaseFrequency);
+        md.assign (refDiff + 7, TLoc, -Vd * component_parameters.systemBaseFrequency);
     }
 }
 

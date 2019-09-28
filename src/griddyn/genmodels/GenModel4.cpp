@@ -47,7 +47,7 @@ void GenModel4::dynObjectInitializeA (coreTime /*time0*/, std::uint32_t /*flags*
 void GenModel4::dynObjectInitializeB (const IOdata &inputs, const IOdata &desiredOutput, IOdata &fieldSet)
 {
     computeInitialAngleAndCurrent (inputs, desiredOutput, Rs, Xq);
-    double *gm = m_state.data ();
+    double *gm = component_state.m_state.data ();
 
     // Edp and Eqp
     gm[4] = Vd + Rs * gm[0] + (Xqp)*gm[1];
@@ -88,7 +88,7 @@ void GenModel4::residual (const IOdata &inputs, const stateData &sD, double resi
         double Pmt = inputs[genModelPmechInLocation];
         const double *gmp = Loc.dstateLoc;
         // delta
-        rvd[0] = systemBaseFrequency * (gmd[1] - 1.0) - gmp[0];
+        rvd[0] = component_parameters.systemBaseFrequency * (gmd[1] - 1.0) - gmp[0];
         // Edp and Eqp
         rvd[2] = (-gmd[2] - (Xq - Xqp) * gm[1]) / Tqop - gmp[2];
         rvd[3] = (-gmd[3] + (Xd - Xdp) * gm[0] + Eft) / Tdop - gmp[3];
@@ -109,15 +109,15 @@ void GenModel4::residual (const IOdata &inputs, const stateData &sD, double resi
 
 void GenModel4::timestep (coreTime time, const IOdata &inputs, const solverMode & /*sMode*/)
 {
-    stateData sD (time, m_state.data ());
-    derivative (inputs, sD, m_dstate_dt.data (), cLocalSolverMode);
+    stateData sD (time, component_state.m_state.data ());
+    derivative (inputs, sD, component_state.m_dstate_dt.data (), cLocalSolverMode);
     double dt = time - object_time.prevTime;
-    m_state[2] += dt * m_dstate_dt[2];
-    m_state[3] += dt * m_dstate_dt[3];
-    m_state[4] += dt * m_dstate_dt[4];
-    m_state[5] += dt * m_dstate_dt[5];
+    component_state.m_state[2] += dt * component_state.m_dstate_dt[2];
+    component_state.m_state[3] += dt * component_state.m_dstate_dt[3];
+    component_state.m_state[4] += dt * component_state.m_dstate_dt[4];
+    component_state.m_state[5] += dt * component_state.m_dstate_dt[5];
     object_time.prevTime = time;
-    algebraicUpdate (inputs, sD, m_state.data (), cLocalSolverMode, 1.0);
+    algebraicUpdate (inputs, sD, component_state.m_state.data (), cLocalSolverMode, 1.0);
 }
 
 void GenModel4::algebraicUpdate (const IOdata &inputs,
@@ -146,7 +146,7 @@ void GenModel4::derivative (const IOdata &inputs, const stateData &sD, double de
     // Id and Iq
 
     // delta
-    dv[0] = systemBaseFrequency * (dst[1] - 1.0);
+    dv[0] = component_parameters.systemBaseFrequency * (dst[1] - 1.0);
     // Edp and Eqp
     dv[2] = (-dst[2] - (Xq - Xqp) * ast[1]) / Tqop;
     dv[3] = (-dst[3] + (Xd - Xdp) * ast[0] + Eft) / Tdop;
@@ -217,7 +217,7 @@ void GenModel4::jacobianElements (const IOdata &inputs,
     {
         // delta
         md.assign (refDiff, refDiff, -sD.cj);
-        md.assign (refDiff, refDiff + 1, systemBaseFrequency);
+        md.assign (refDiff, refDiff + 1, component_parameters.systemBaseFrequency);
 
         // omega
         double kVal = -0.5 / H;

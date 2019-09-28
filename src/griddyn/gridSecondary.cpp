@@ -23,8 +23,8 @@ static gridBus defBus (1.0, 0);
 
 gridSecondary::gridSecondary (const std::string &objName) : gridComponent (objName), bus (&defBus)
 {
-    m_outputSize = 2;
-    m_inputSize = 3;
+    component_ports.m_outputSize = 2;
+    component_ports.m_inputSize = 3;
 }
 
 coreObject *gridSecondary::clone (coreObject *obj) const
@@ -34,14 +34,14 @@ coreObject *gridSecondary::clone (coreObject *obj) const
     {
         return obj;
     }
-    nobj->localBaseVoltage = localBaseVoltage;
+    nobj->component_parameters.localBaseVoltage = component_parameters.localBaseVoltage;
     nobj->bus = bus;
     return nobj;
 }
 
 void gridSecondary::updateObjectLinkages (coreObject *newRoot)
 {
-    if (opFlags[pFlow_initialized])
+    if (component_configuration.opFlags[pFlow_initialized])
     {
         auto nobj = findMatchingObject (bus, newRoot);
         if (dynamic_cast<gridBus *> (nobj) != nullptr)
@@ -73,9 +73,9 @@ void gridSecondary::dynInitializeB (const IOdata &inputs, const IOdata &desiredO
     if (isEnabled ())
     {
         auto ns = stateSize (cLocalSolverMode);
-        m_state.resize (ns, 0);
-        m_dstate_dt.clear ();
-        m_dstate_dt.resize (ns, 0);
+        component_state.m_state.resize (ns, 0);
+        component_state.m_dstate_dt.clear ();
+        component_state.m_dstate_dt.resize (ns, 0);
         dynObjectInitializeB (inputs, desiredOutput, fieldSet);
         if (object_time.updatePeriod < maxTime)
         {
@@ -83,7 +83,7 @@ void gridSecondary::dynInitializeB (const IOdata &inputs, const IOdata &desiredO
             enable_updates ();
             alert (this, UPDATE_REQUIRED);
         }
-        opFlags.set (dyn_initialized);
+        component_configuration.opFlags.set (dyn_initialized);
     }
 }
 

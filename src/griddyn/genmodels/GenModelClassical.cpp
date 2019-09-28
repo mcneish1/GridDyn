@@ -31,7 +31,7 @@ namespace genmodels
 GenModelClassical::GenModelClassical (const std::string &objName) : GenModel (objName)
 {
     // default values
-    opFlags.set (internal_frequency_calculation);
+    component_configuration.opFlags.set (internal_frequency_calculation);
     Xd = 0.85;
 }
 
@@ -59,7 +59,7 @@ void GenModelClassical::dynObjectInitializeA (coreTime /*time0*/, std::uint32_t 
 void GenModelClassical::dynObjectInitializeB (const IOdata &inputs, const IOdata &desiredOutput, IOdata &fieldSet)
 {
     computeInitialAngleAndCurrent (inputs, desiredOutput, Rs, Xd);
-    double *gm = m_state.data ();
+    double *gm = component_state.m_state.data ();
     double Eft = Vq + Rs * gm[1] - Xd * gm[0];
     // record Pm = Pset
     // this should be close to P from above
@@ -73,7 +73,7 @@ void GenModelClassical::computeInitialAngleAndCurrent (const IOdata &inputs,
                                                        double R1,
                                                        double X1)
 {
-    double *gm = m_state.data ();
+    double *gm = component_state.m_state.data ();
     double V = inputs[voltageInLocation];
     double theta = inputs[angleInLocation];
     std::complex<double> SS (desiredOutput[0], -desiredOutput[1]);
@@ -150,7 +150,7 @@ void GenModelClassical::residual (const IOdata &inputs,
             return;
     }
     // delta
-    rvd[0] = systemBaseFrequency * (gmd[1] - 1.0) - gmp[0];
+    rvd[0] = component_parameters.systemBaseFrequency * (gmd[1] - 1.0) - gmp[0];
     // Edp and Eqp
     rvd[2] = (-gmd[2] - (Xq - Xqp) * gm[1]) / Tqop - gmp[2];
     rvd[3] = (-gmd[3] + (Xd - Xdp) * gm[0] + Eft) / Tdop - gmp[3];
@@ -170,7 +170,7 @@ void GenModelClassical::residual (const IOdata &inputs,
     if (hasDifferential (sMode))
     {
         // delta
-        rvd[0] = systemBaseFrequency * (gmd[1] - 1.0) - gmp[0];
+        rvd[0] = component_parameters.systemBaseFrequency * (gmd[1] - 1.0) - gmp[0];
 
         // omega
         double Pe = (Eft + mp_Kw * (gmd[1] - 1.0)) * gm[1];
@@ -193,7 +193,7 @@ void GenModelClassical::derivative (const IOdata &inputs,
     // Id and Iq
 
     // delta
-    dv[0] = systemBaseFrequency * omega;
+    dv[0] = component_parameters.systemBaseFrequency * omega;
     // Edp and Eqp
 
     // omega
@@ -207,7 +207,7 @@ double GenModelClassical::getFreq (const stateData &sD, const solverMode &sMode,
 
     if (isLocal (sMode))
     {
-        omega = m_state[3];
+        omega = component_state.m_state[3];
         if (freqOffset!=nullptr)
         {
             *freqOffset = kNullLocation;
@@ -243,7 +243,7 @@ double GenModelClassical::getAngle (const stateData &sD, const solverMode &sMode
 
     if (isLocal (sMode))
     {
-        angle = m_state[2];
+        angle = component_state.m_state[2];
         if (angleOffset!=nullptr)
         {
             *angleOffset = kNullLocation;
@@ -396,7 +396,7 @@ void GenModelClassical::jacobianElements (const IOdata &inputs,
     // md.assignCheckCol (refAlg + 1, inputLocs[genModelEftInLocation], -1.0);
     // delta
     md.assign (refDiff, refDiff, -sD.cj);
-    md.assign (refDiff, refDiff + 1, systemBaseFrequency);
+    md.assign (refDiff, refDiff + 1, component_parameters.systemBaseFrequency);
     // omega
 
     double Eft = inputs[genModelEftInLocation];
@@ -473,7 +473,7 @@ void GenModelClassical::set (const std::string &param, double val, gridUnits::un
             H = val / 2.0;
             break;
         case 'd':
-            D = gridUnits::unitConversionFreq (val, unitType, gridUnits::puHz, systemBaseFrequency);
+            D = gridUnits::unitConversionFreq (val, unitType, gridUnits::puHz, component_parameters.systemBaseFrequency);
             break;
 
         default:

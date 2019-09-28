@@ -44,7 +44,7 @@ void GenModel6type2::dynObjectInitializeA (coreTime /*time0*/, std::uint32_t /*f
 void GenModel6type2::dynObjectInitializeB (const IOdata &inputs, const IOdata &desiredOutput, IOdata &fieldSet)
 {
     computeInitialAngleAndCurrent (inputs, desiredOutput, Rs, Xq);
-    double *gm = m_state.data ();
+    double *gm = component_state.m_state.data ();
 
     double qrat = Tqopp * (Xqpp + Xl) / (Tqop * (Xqp + Xl));
     double drat = Tdopp * (Xdpp + Xl) / (Tdop * (Xdp + Xl));
@@ -104,7 +104,7 @@ void GenModel6type2::derivative (const IOdata &inputs,
     double drat = Tdopp * (Xdpp + Xl) / (Tdop * (Xdp + Xl));
 
     // delta
-    rvd[0] = systemBaseFrequency * (gmd[1] - 1.0);
+    rvd[0] = component_parameters.systemBaseFrequency * (gmd[1] - 1.0);
     // Edp and Eqp
     rvd[2] = (-gmd[2] - (Xq - Xqp - qrat * (Xq - Xqp)) * gm[1]) / Tqop;
     rvd[3] = (-gmd[3] + (Xd - Xdp - drat * (Xd - Xdp)) * gm[0] + (1.0 - Taa / Tdop) * Eft) / Tdop;
@@ -211,7 +211,7 @@ void GenModel6type2::jacobianElements (const IOdata &inputs,
 
     // delta
     md.assign (refDiff, refDiff, -sD.cj);
-    md.assign (refDiff, refDiff + 1, systemBaseFrequency);
+    md.assign (refDiff, refDiff + 1, component_parameters.systemBaseFrequency);
 
     // omega
     double kVal = -0.5 / H;

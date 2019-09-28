@@ -87,11 +87,11 @@ void infiniteBus::set (const std::string &param, double val, units_t unitType)
 {
     if (param == "dvdt")
     {
-        dvdt = unitConversion (val, unitType, puV, systemBasePower, localBaseVoltage);
+        dvdt = unitConversion (val, unitType, puV, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if (param == "dfdt")
     {
-        dfdt = unitConversionFreq (val, unitType, puHz, systemBaseFrequency);
+        dfdt = unitConversionFreq (val, unitType, puHz, component_parameters.systemBaseFrequency);
     }
     else
     {

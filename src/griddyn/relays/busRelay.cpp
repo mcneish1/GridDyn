@@ -24,8 +24,8 @@ namespace relays
 {
 busRelay::busRelay (const std::string &objName) : Relay (objName)
 {
-    opFlags.set (continuous_flag);
-    opFlags.set (power_flow_checks_flag);  // enable power flow checks for busRelay
+    component_configuration.opFlags.set (continuous_flag);
+    component_configuration.opFlags.set (power_flow_checks_flag);  // enable power flow checks for busRelay
 }
 
 coreObject *busRelay::clone (coreObject *obj) const
@@ -72,16 +72,16 @@ void busRelay::set (const std::string &param, double val, gridUnits::units_t uni
 {
     if ((param == "cutoutvoltage") || (param == "voltagelimit"))
     {
-        cutoutVoltage = gridUnits::unitConversion (val, unitType, gridUnits::puV, systemBasePower);
-        if (opFlags[dyn_initialized])
+        cutoutVoltage = gridUnits::unitConversion (val, unitType, gridUnits::puV, component_parameters.systemBasePower);
+        if (component_configuration.opFlags[dyn_initialized])
         {
             setConditionLevel (0, cutoutVoltage);
         }
     }
     else if ((param == "cutoutfrequency") || (param == "freqlimit"))
     {
-        cutoutFrequency = gridUnits::unitConversion (val, unitType, gridUnits::puHz, systemBaseFrequency);
-        if (opFlags[dyn_initialized])
+        cutoutFrequency = gridUnits::unitConversion (val, unitType, gridUnits::puHz, component_parameters.systemBaseFrequency);
+        if (component_configuration.opFlags[dyn_initialized])
         {
             setConditionLevel (1, cutoutFrequency);
         }
@@ -90,7 +90,7 @@ void busRelay::set (const std::string &param, double val, gridUnits::units_t uni
     {
         voltageDelay = val;
         frequencyDelay = val;
-        if (opFlags[dyn_initialized])
+        if (component_configuration.opFlags[dyn_initialized])
         {
             setActionTrigger (0, 0, voltageDelay);
             setActionTrigger (0, 1, frequencyDelay);
@@ -99,7 +99,7 @@ void busRelay::set (const std::string &param, double val, gridUnits::units_t uni
     else if (param == "voltagedelay")
     {
         voltageDelay = val;
-        if (opFlags[dyn_initialized])
+        if (component_configuration.opFlags[dyn_initialized])
         {
             setActionTrigger (0, 0, voltageDelay);
         }
@@ -107,7 +107,7 @@ void busRelay::set (const std::string &param, double val, gridUnits::units_t uni
     else if (param == "frequencydelay")
     {
         frequencyDelay = val;
-        if (opFlags[dyn_initialized])
+        if (component_configuration.opFlags[dyn_initialized])
         {
             setActionTrigger (0, 1, frequencyDelay);
         }

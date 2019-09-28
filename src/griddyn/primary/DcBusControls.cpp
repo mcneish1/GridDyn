@@ -230,7 +230,7 @@ void DcBusControls::mergeBus (dcBus *mbus)
             {
                 // This bus becomes the master of mbus
                 mbus->busController.masterBus = controlledBus;
-                mbus->opFlags.set (dcBus::bus_flags::slave_bus);
+                mbus->component_configuration.opFlags.set (dcBus::bus_flags::slave_bus);
                 slaveBusses.push_back (mbus);
                 for (auto sb : mbus->busController.slaveBusses)
                 {
@@ -303,7 +303,7 @@ void DcBusControls::unmergeBus (dcBus *mbus)
         {
             for (auto &eb : slaveBusses)
             {
-                eb->opFlags.reset (dcBus::bus_flags::slave_bus);
+                eb->component_configuration.opFlags.reset (dcBus::bus_flags::slave_bus);
             }
             checkMerge ();
             mbus->checkMerge ();

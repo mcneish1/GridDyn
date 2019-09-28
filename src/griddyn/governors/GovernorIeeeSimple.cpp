@@ -33,9 +33,9 @@ GovernorIeeeSimple::GovernorIeeeSimple (const std::string &objName) : Governor (
     offsets.local ().local.algSize = 0;
     offsets.local ().local.diffSize = 2;
     offsets.local ().local.jacSize = 6;
-    opFlags.set (ignore_deadband);
-    opFlags.set (ignore_filter);
-    opFlags.set (ignore_throttle);
+    component_configuration.opFlags.set (ignore_deadband);
+    component_configuration.opFlags.set (ignore_filter);
+    component_configuration.opFlags.set (ignore_throttle);
 }
 
 coreObject *GovernorIeeeSimple::clone (coreObject *obj) const
@@ -59,7 +59,7 @@ void GovernorIeeeSimple::dynObjectInitializeA (coreTime time0, std::uint32_t fla
     if ((Pmax < 5000) || (Pmin > -5000))
     {
         offsets.local ().local.diffRoots++;
-        opFlags.set (uses_plimits);
+        component_configuration.opFlags.set (uses_plimits);
     }
 }
 
@@ -70,10 +70,10 @@ void GovernorIeeeSimple::dynObjectInitializeB (const IOdata & /*inputs*/,
 {
     if (Wref < 0)
     {
-        Wref = systemBaseFrequency;
+        Wref = component_parameters.systemBaseFrequency;
     }
-    m_state[1] = 0;
-    m_state[0] = desiredOutput[0];
+    component_state.m_state[1] = 0;
+    component_state.m_state[0] = desiredOutput[0];
     fieldSet[1] = desiredOutput[0];
 }
 
@@ -104,7 +104,7 @@ void GovernorIeeeSimple::derivative (const IOdata &inputs,
     const double *gs = Loc.diffStateLoc;
     // double omega = getControlFrequency (inputs);
     double omega = inputs[govOmegaInLocation];
-    if (opFlags[p_limited])
+    if (component_configuration.opFlags[p_limited])
     {
         Loc.destDiffLoc[0] = 0;
     }
@@ -118,20 +118,20 @@ void GovernorIeeeSimple::derivative (const IOdata &inputs,
 
 void GovernorIeeeSimple::timestep (coreTime time, const IOdata &inputs, const solverMode & /*sMode*/)
 {
-    GovernorIeeeSimple::derivative (inputs, emptyStateData, m_dstate_dt.data (), cLocalSolverMode);
+    GovernorIeeeSimple::derivative (inputs, emptyStateData, component_state.m_dstate_dt.data (), cLocalSolverMode);
     double dt = time - object_time.prevTime;
-    m_state[0] += dt * m_dstate_dt[0];
-    m_state[1] += dt * m_dstate_dt[1];
-    if (opFlags[p_limited])
+    component_state.m_state[0] += dt * component_state.m_dstate_dt[0];
+    component_state.m_state[1] += dt * component_state.m_dstate_dt[1];
+    if (component_configuration.opFlags[p_limited])
     {
     }
     else
     {
-        if (m_state[0] > Pmax)
+        if (component_state.m_state[0] > Pmax)
         {
-            opFlags.set (p_limited);
-            opFlags.set (p_limit_high);
-            m_state[0] = Pmax;
+            component_configuration.opFlags.set (p_limited);
+            component_configuration.opFlags.set (p_limit_high);
+            component_state.m_state[0] = Pmax;
         }
     }
 
@@ -159,9 +159,9 @@ void GovernorIeeeSimple::jacobianElements (const IOdata & /*inputs*/,
         linkOmega = false;
     }
     /*
-    if (opFlags.test (uses_deadband))
+    if (component_configuration.opFlags.test (uses_deadband))
       {
-        if (!opFlags.test (outside_deadband))
+        if (!component_configuration.opFlags.test (outside_deadband))
           {
             linkOmega = false;
           }
@@ -170,13 +170,13 @@ void GovernorIeeeSimple::jacobianElements (const IOdata & /*inputs*/,
     // Pm
     if (linkOmega)
     {
-        if (!opFlags[p_limited])
+        if (!component_configuration.opFlags[p_limited])
         {
             md.assign (refI, inputLocs[govOmegaInLocation], -K * T2 / (T1 * T3));
         }
         md.assign (refI + 1, inputLocs[govOmegaInLocation], (T1 - T2) / (T1 * T1));
     }
-    if (opFlags[p_limited])
+    if (component_configuration.opFlags[p_limited])
     {
         md.assign (refI, refI, sD.cj);
     }
@@ -211,24 +211,24 @@ void GovernorIeeeSimple::rootTest (const IOdata &inputs,
                                    const solverMode &sMode)
 {
     int rootOffset = offsets.getRootOffset (sMode);
-    /*if (opFlags.test (uses_deadband))
+    /*if (component_configuration.opFlags.test (uses_deadband))
       {
         Governor::rootTest (inputs, sD, roots, sMode);
         ++rootOffset;
       }
           */
-    if (opFlags[uses_plimits])
+    if (component_configuration.opFlags[uses_plimits])
     {
         auto Loc = offsets.getLocations (sD, nullptr, sMode, this);
 
         double Pmech = Loc.diffStateLoc[0];
 
-        if (!opFlags[p_limited])
+        if (!component_configuration.opFlags[p_limited])
         {
             roots[rootOffset] = std::min (Pmax - Pmech, Pmech - Pmin);
             if (Pmech > Pmax)
             {
-                opFlags.set (p_limit_high);
+                component_configuration.opFlags.set (p_limit_high);
             }
         }
         else
@@ -248,7 +248,7 @@ void GovernorIeeeSimple::rootTrigger (coreTime /*time*/,
                                       const solverMode &sMode)
 {
     int rootOffset = offsets.getRootOffset (sMode);
-    /*if (opFlags.test (uses_deadband))
+    /*if (component_configuration.opFlags.test (uses_deadband))
       {
         if (rootMask[rootOffset])
           {
@@ -257,23 +257,23 @@ void GovernorIeeeSimple::rootTrigger (coreTime /*time*/,
         ++rootOffset;
       }
           */
-    if (opFlags.test (uses_plimits))
+    if (component_configuration.opFlags.test (uses_plimits))
     {
         if (rootMask[rootOffset] != 0)
         {
-            if (opFlags.test (p_limited))
+            if (component_configuration.opFlags.test (p_limited))
             {
-                opFlags.reset (p_limited);
-                opFlags.reset (p_limit_high);
+                component_configuration.opFlags.reset (p_limited);
+                component_configuration.opFlags.reset (p_limit_high);
                 alert (this, JAC_COUNT_INCREASE);
             }
             else
             {
-                opFlags.set (p_limited);
+                component_configuration.opFlags.set (p_limited);
                 alert (this, JAC_COUNT_DECREASE);
             }
 
-            derivative (inputs, emptyStateData, m_dstate_dt.data (), cLocalSolverMode);
+            derivative (inputs, emptyStateData, component_state.m_dstate_dt.data (), cLocalSolverMode);
         }
         ++rootOffset;
     }
@@ -291,16 +291,16 @@ void GovernorIeeeSimple::set (const std::string &param, double val, units_t unit
     }
     else if (param == "pup")
     {
-        Pup = unitConversion (val, unitType, puMW, systemBasePower);
+        Pup = unitConversion (val, unitType, puMW, component_parameters.systemBasePower);
     }
     else if (param == "pdown")
     {
-        Pdown = unitConversion (val, unitType, puMW, systemBasePower);
+        Pdown = unitConversion (val, unitType, puMW, component_parameters.systemBasePower);
     }
     else if (param == "ramplimit")
     {
-        Pup = unitConversion (val, unitType, puMW, systemBasePower);
-        Pdown = unitConversion (val, unitType, puMW, systemBasePower);
+        Pup = unitConversion (val, unitType, puMW, component_parameters.systemBasePower);
+        Pdown = unitConversion (val, unitType, puMW, component_parameters.systemBasePower);
     }
     else
     {

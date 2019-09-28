@@ -45,7 +45,7 @@ void GenModel5type2::dynObjectInitializeA (coreTime /*time0*/, std::uint32_t /*f
 // initial conditions
 void GenModel5type2::dynObjectInitializeB (const IOdata &inputs, const IOdata &desiredOutput, IOdata &fieldSet)
 {
-    double *gm = m_state.data ();
+    double *gm = component_state.m_state.data ();
     computeInitialAngleAndCurrent (inputs, desiredOutput, Rs, Xq);
 
     // Edp and Eqp  and Edpp
@@ -84,7 +84,7 @@ void GenModel5type2::derivative (const IOdata &inputs,
     // Id and Iq
 
     // delta
-    dv[0] = systemBaseFrequency * (gmd[1] - 1.0);
+    dv[0] = component_parameters.systemBaseFrequency * (gmd[1] - 1.0);
     // Edpp and Eqp
     dv[2] = (-gmd[2] - (Xq - Xqpp) * gm[1]) / Tqopp;
     dv[3] = (-gmd[3] + (Xd - Xdp - drat * (Xd - Xdp)) * gm[0] + (1.0 - Taa / Tdop) * Eft) / Tdop;
@@ -200,7 +200,7 @@ void GenModel5type2::jacobianElements (const IOdata &inputs,
     }
     // delta
     md.assign (refDiff, refDiff, -sD.cj);
-    md.assign (refDiff, refDiff + 1, systemBaseFrequency);
+    md.assign (refDiff, refDiff + 1, component_parameters.systemBaseFrequency);
 
     // omega
     double kVal = -0.5 / H;

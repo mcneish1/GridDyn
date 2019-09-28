@@ -41,27 +41,27 @@ gridLabDLoad::~gridLabDLoad () = default;
 
 void gridLabDLoad::gridLabDInitialize ()
 {
-    if (!opFlags[file_sent_flag])
+    if (!component_configuration.opFlags[file_sent_flag])
     {
         auto gsm = GhostSwingBusManager::Instance ();
         if (gsm)
         {
             task_id.resize (gridlabDfile.size ());
-            if (opFlags[dual_mode_flag])
+            if (component_configuration.opFlags[dual_mode_flag])
             {
                 forward_task_id.resize (gridlabDfile.size ());
             }
             for (size_t kk = 0; kk < gridlabDfile.size (); ++kk)
             {
                 task_id[kk] = gsm->createGridlabDInstance ("--workdir " + workdir[kk] + " " + gridlabDfile[kk]);
-                if (opFlags[dual_mode_flag])
+                if (component_configuration.opFlags[dual_mode_flag])
                 {
                     forward_task_id[kk] =
                       gsm->createGridlabDInstance ("--workdir " + workdir[kk] + " " + gridlabDfile[kk]);
                 }
             }
 
-            opFlags.set (file_sent_flag);
+            component_configuration.opFlags.set (file_sent_flag);
 #ifndef ENABLE_MPI
             for (size_t kk = 0; kk < gridlabDfile.size (); ++kk)
             {
@@ -76,7 +76,7 @@ void gridLabDLoad::gridLabDInitialize ()
                 gsm->setDummyLoadFunction (task_id[kk], [=](VoltageMessage *vm, CurrentMessage *cm) {
                     run_dummy_load (static_cast<index_t> (kk), vm, cm);
                 });
-                if (opFlags[dual_mode_flag])
+                if (component_configuration.opFlags[dual_mode_flag])
                 {
                     dummy_load_forward[kk] =
                       std::unique_ptr<zipLoad> (static_cast<zipLoad *> (dummy_load[kk]->clone ()));
@@ -111,7 +111,7 @@ coreObject *gridLabDLoad::clone (coreObject *obj) const
             {
                 ld->dummy_load[kk].reset (static_cast<zipLoad *> (dummy_load[kk]->clone (nullptr)));
                 ld->dummy_load[kk]->setParent (ld);
-                if (opFlags[dual_mode_flag])
+                if (component_configuration.opFlags[dual_mode_flag])
                 {
                     ld->dummy_load_forward[kk].reset (static_cast<zipLoad *> (dummy_load[kk]->clone ()));
                     ld->dummy_load_forward[kk]->setParent (ld);
@@ -122,7 +122,7 @@ coreObject *gridLabDLoad::clone (coreObject *obj) const
         {
             dummy_load[kk]->clone (ld->dummy_load[kk].get ());
             ld->dummy_load[kk]->setParent (ld);
-            if (opFlags[dual_mode_flag])
+            if (component_configuration.opFlags[dual_mode_flag])
             {
                 dummy_load_forward[kk]->clone (ld->dummy_load_forward[kk].get ());
                 ld->dummy_load_forward[kk]->setParent (ld);
@@ -147,7 +147,7 @@ void gridLabDLoad::add (coreObject *obj)
             }
             dummy_load[kk].reset (static_cast<Load *> (obj));
             obj->setParent (this);
-            if (opFlags[dual_mode_flag])
+            if (component_configuration.opFlags[dual_mode_flag])
             {
                 dummy_load_forward[kk].reset (static_cast<Load *> (obj->clone ()));
                 dummy_load_forward[kk]->setParent (this);
@@ -157,7 +157,7 @@ void gridLabDLoad::add (coreObject *obj)
         {
             dummy_load.push_back (std::unique_ptr<Load> (static_cast<Load *> (obj)));
             obj->setParent (this);
-            if (opFlags[dual_mode_flag])
+            if (component_configuration.opFlags[dual_mode_flag])
             {
                 dummy_load_forward.push_back (std::unique_ptr<Load> (static_cast<Load *> (obj->clone ())));
                 dummy_load_forward.back ()->setParent (this);
@@ -172,13 +172,13 @@ void gridLabDLoad::add (coreObject *obj)
 
 void gridLabDLoad::pFlowObjectInitializeA (coreTime time0, std::uint32_t flags)
 {
-    if (!opFlags[file_sent_flag])
+    if (!component_configuration.opFlags[file_sent_flag])
     {
         gridLabDInitialize ();
     }
     m_lastCallTime = time0;
     updateA (time0);
-    opFlags[preEx_requested] = true;
+    component_configuration.opFlags[preEx_requested] = true;
     rampLoad::pFlowObjectInitializeA (time0, flags);
 }
 
@@ -188,23 +188,23 @@ void gridLabDLoad::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
     switch (dynCoupling)
     {
     case coupling_mode_t::none:
-        opFlags.reset (preEx_requested);
+        component_configuration.opFlags.reset (preEx_requested);
         offsets.local ().local.algRoots = 0;
         break;
     case coupling_mode_t::interval:
-        opFlags.reset (preEx_requested);
+        component_configuration.opFlags.reset (preEx_requested);
 
         break;
     case coupling_mode_t::trigger:
-        opFlags.reset (preEx_requested);
+        component_configuration.opFlags.reset (preEx_requested);
         offsets.local ().local.algRoots = 1;
         break;
 
     case coupling_mode_t::full:
-        opFlags.set (preEx_requested);
+        component_configuration.opFlags.set (preEx_requested);
         break;
     }
-    if (opFlags[dual_mode_flag])
+    if (component_configuration.opFlags[dual_mode_flag])
     {
     }
     rampLoad::dynObjectInitializeA (time0, flags);
@@ -214,7 +214,7 @@ void gridLabDLoad::dynObjectInitializeB (const IOdata & /*inputs*/,
                                          const IOdata & /*desiredOutput*/,
                                          IOdata & /*fieldSet*/)
 {
-    if (opFlags[dual_mode_flag])
+    if (component_configuration.opFlags[dual_mode_flag])
     {
     }
 }
@@ -464,7 +464,7 @@ void gridLabDLoad::preEx (const IOdata &inputs, const stateData &sD, const solve
 
 void gridLabDLoad::updateLocalCache (const IOdata &inputs, const stateData &sD, const solverMode &sMode)
 {
-    if (opFlags[waiting_flag])
+    if (component_configuration.opFlags[waiting_flag])
     {
         updateB ();
     }
@@ -473,7 +473,7 @@ void gridLabDLoad::updateLocalCache (const IOdata &inputs, const stateData &sD, 
 
 void gridLabDLoad::runGridLabA (coreTime time, const IOdata &inputs)
 {
-    assert (!opFlags[waiting_flag]);  // this should not happen;
+    assert (!component_configuration.opFlags[waiting_flag]);  // this should not happen;
     LOG_TRACE ("calling gridlab load 1A");
     GhostSwingBusManager::cvec Vg (3);
 
@@ -490,8 +490,8 @@ void gridLabDLoad::runGridLabA (coreTime time, const IOdata &inputs)
     Vprev = inputs[voltageInLocation];
     Thprev = inputs[angleInLocation];
     // static double *res=new double[8];
-    double V1 = inputs[voltageInLocation] * localBaseVoltage *
-                1000.0;  // localBaseVoltage is in KV  we ignore the angle since it shouldn't matter
+    double V1 = inputs[voltageInLocation] * component_parameters.localBaseVoltage *
+                1000.0;  // component_parameters.localBaseVoltage is in KV  we ignore the angle since it shouldn't matter
     Vg[0] = std::complex<double> (V1, 0);
     Vg[1] = Vg[0] * rotn120;
     Vg[2] = Vg[0] * rotp120;
@@ -502,28 +502,28 @@ void gridLabDLoad::runGridLabA (coreTime time, const IOdata &inputs)
         for (size_t kk = 0; kk < task_id.size (); ++kk)
         {
             gsm->sendVoltageStep (task_id[kk], Vg, tInt);
-            if (opFlags[dual_mode_flag])
+            if (component_configuration.opFlags[dual_mode_flag])
             {
-                if (opFlags[dyn_initialized])
+                if (component_configuration.opFlags[dyn_initialized])
                 {
                     (void) kk; // ignore for loop conversion suggestion
                     // GhostSwingBusManager::Instance ()->sendVoltageStep (forward_task_id[kk], Vg, tInt);
                 }
             }
         }
-        opFlags.set (waiting_flag);
+        component_configuration.opFlags.set (waiting_flag);
     }
 }
 
 std::vector<double> gridLabDLoad::runGridLabB (bool unbalancedAlert)
 {
     LOG_TRACE ("calling gridlab-d load 1B");
-    assert (opFlags[waiting_flag]);  // this should not happen;
+    assert (component_configuration.opFlags[waiting_flag]);  // this should not happen;
     GhostSwingBusManager::cvec Ig (3);
     GhostSwingBusManager::cvec Ig2 (3);
     GhostSwingBusManager::cvec Vg (3);
 
-    Vg[0] = std::complex<double> (Vprev * localBaseVoltage * 1000.0, 0);
+    Vg[0] = std::complex<double> (Vprev * component_parameters.localBaseVoltage * 1000.0, 0);
     Vg[1] = Vg[0] * rotn120;
     Vg[2] = Vg[0] * rotp120;
 
@@ -551,7 +551,7 @@ std::vector<double> gridLabDLoad::runGridLabB (bool unbalancedAlert)
             }
         }
 
-        opFlags.reset (waiting_flag);
+        component_configuration.opFlags.reset (waiting_flag);
     }
 #if CONJUGATE
     std::complex<double> S1 = Vg[0] * conj (Ig[0]);
@@ -566,12 +566,12 @@ std::vector<double> gridLabDLoad::runGridLabB (bool unbalancedAlert)
     double P1 = S1.real ();
     double retP = P1 + S2.real () + S3.real ();
     double retQ = S1.imag () + S2.imag () + S3.imag ();
-    double scale = m_mult / (systemBasePower * 1000000.0);
+    double scale = m_mult / (component_parameters.systemBasePower * 1000000.0);
     retP = retP * scale;  // basepower is MW
     retQ = retQ * scale;
 
 #ifdef SGS_DEBUG
-    std::cout << "SGS : retP = " << retP << " systemBasePower = " << systemBasePower << '\n';
+    std::cout << "SGS : retP = " << retP << " component_parameters.systemBasePower = " << component_parameters.systemBasePower << '\n';
 
     std::cout << "SGS : " << prevTime << " : " << name << " gridLabDLoad::runGridLabB P = " << retP
               << " Q = " << retQ << '\n';
@@ -590,7 +590,7 @@ std::vector<double> gridLabDLoad::runGridLabB (bool unbalancedAlert)
 
 void gridLabDLoad::run2GridLabA (coreTime time, const IOdata &inputs)
 {
-    assert (opFlags[waiting_flag] == false);  // this should not happen;
+    assert (component_configuration.opFlags[waiting_flag] == false);  // this should not happen;
     LOG_TRACE ("calling gridlab load 2A");
     GhostSwingBusManager::cvec Vg (6);
 
@@ -608,7 +608,7 @@ void gridLabDLoad::run2GridLabA (coreTime time, const IOdata &inputs)
     Vprev = inputs[voltageInLocation];
     Thprev = inputs[angleInLocation];
 
-    Vg[3] = std::complex<double> (V * localBaseVoltage * 1000.0, 0);
+    Vg[3] = std::complex<double> (V * component_parameters.localBaseVoltage * 1000.0, 0);
     Vg[4] = Vg[3] * rotn120;
     Vg[5] = Vg[3] * rotp120;
 
@@ -622,22 +622,22 @@ void gridLabDLoad::run2GridLabA (coreTime time, const IOdata &inputs)
         for (size_t kk = 0; kk < task_id.size (); ++kk)
         {
             GhostSwingBusManager::Instance ()->sendVoltageStep (task_id[kk], Vg, tInt);
-            if (opFlags[dual_mode_flag])
+            if (component_configuration.opFlags[dual_mode_flag])
             {
-                if (opFlags[dyn_initialized])
+                if (component_configuration.opFlags[dyn_initialized])
                 {
                     (void) kk; // ignore for loop conversion suggestion
                     // GhostSwingBusManager::Instance ()->sendVoltageStep (forward_task_id[kk], Vg, tInt);
                 }
             }
         }
-        opFlags.set (waiting_flag);
+        component_configuration.opFlags.set (waiting_flag);
     }
 }
 
 std::vector<double> gridLabDLoad::run2GridLabB (bool unbalancedAlert)
 {
-    assert (opFlags[waiting_flag]);  // this should not happen;
+    assert (component_configuration.opFlags[waiting_flag]);  // this should not happen;
     LOG_TRACE ("calling gridlab-d load 2B");
     // Model linear dependence on V
     GhostSwingBusManager::cvec Ig (6);
@@ -646,7 +646,7 @@ std::vector<double> gridLabDLoad::run2GridLabB (bool unbalancedAlert)
 
     double V = Vprev;
 
-    Vg[3] = std::complex<double> (V * localBaseVoltage * 1000.0, 0);
+    Vg[3] = std::complex<double> (V * component_parameters.localBaseVoltage * 1000.0, 0);
     Vg[4] = Vg[3] * rotn120;
     Vg[5] = Vg[3] * rotp120;
 
@@ -679,7 +679,7 @@ std::vector<double> gridLabDLoad::run2GridLabB (bool unbalancedAlert)
             }
         }
     }
-    opFlags.reset (waiting_flag);
+    component_configuration.opFlags.reset (waiting_flag);
 #if CONJUGATE
     std::complex<double> S1 = Vg[0] * conj (Ig[0]) + Vg[1] * conj (Ig[1]) + Vg[2] * conj (Ig[2]);
     std::complex<double> S2 = Vg[3] * conj (Ig[3]) + Vg[4] * conj (Ig[4]) + Vg[5] * conj (Ig[5]);
@@ -687,13 +687,13 @@ std::vector<double> gridLabDLoad::run2GridLabB (bool unbalancedAlert)
     std::complex<double> S1 = Vg[0] * Ig[0] + Vg[1] * Ig[1] + Vg[2] * Ig[2];
     std::complex<double> S2 = Vg[3] * Ig[3] + Vg[4] * Ig[4] + Vg[5] * Ig[5];
 #endif
-    double scale = m_mult / (systemBasePower * 1000000.0);
+    double scale = m_mult / (component_parameters.systemBasePower * 1000000.0);
     double P1 = S1.real () * scale;  // basePower is MW
     double P2 = S2.real () * scale;  // basePower is MW
     double Q1 = S1.imag () * scale;  // basePower is MW
     double Q2 = S2.imag () * scale;  // basePower is MW
 
-    double V2 = V;  // localBaseVoltage is in KV  we ignore the angle since it shouldn't matter
+    double V2 = V;  // component_parameters.localBaseVoltage is in KV  we ignore the angle since it shouldn't matter
     double V1 = V * (1.0 + spread);
 
     std::vector<double> retP (4);
@@ -723,7 +723,7 @@ std::vector<double> gridLabDLoad::run2GridLabB (bool unbalancedAlert)
 
 void gridLabDLoad::run3GridLabA (coreTime time, const IOdata &inputs)
 {
-    assert (!opFlags[waiting_flag]);  // this should not happen;
+    assert (!component_configuration.opFlags[waiting_flag]);  // this should not happen;
     LOG_TRACE ("calling gridLab-d load 3A");
 
     GhostSwingBusManager::cvec Vg (9);
@@ -741,8 +741,8 @@ void gridLabDLoad::run3GridLabA (coreTime time, const IOdata &inputs)
     Thprev = inputs[angleInLocation];
 
     // send the current voltage as the last in the series
-    Vg[6] = std::complex<double> (V * localBaseVoltage * 1000.0,
-                                  0);  // localBaseVoltage is in KV  we ignore the angle since it shouldn't matter
+    Vg[6] = std::complex<double> (V * component_parameters.localBaseVoltage * 1000.0,
+                                  0);  // component_parameters.localBaseVoltage is in KV  we ignore the angle since it shouldn't matter
     Vg[7] = Vg[6] * rotn120;
     Vg[8] = Vg[6] * rotp120;
 
@@ -761,22 +761,22 @@ void gridLabDLoad::run3GridLabA (coreTime time, const IOdata &inputs)
         for (size_t kk = 0; kk < task_id.size (); ++kk)
         {
             gsm->sendVoltageStep (task_id[kk], Vg, tInt);
-            if (opFlags[dual_mode_flag])
+            if (component_configuration.opFlags[dual_mode_flag])
             {
-                if (opFlags[dyn_initialized])
+                if (component_configuration.opFlags[dyn_initialized])
                 {
                     (void) kk; // ignore for loop conversion suggestion
                     // GhostSwingBusManager::Instance ()->sendVoltageStep (forward_task_id[kk], Vg, tInt);
                 }
             }
         }
-        opFlags.set (waiting_flag);
+        component_configuration.opFlags.set (waiting_flag);
     }
 }
 
 std::vector<double> gridLabDLoad::run3GridLabB (bool unbalancedAlert)
 {
-    assert (opFlags[waiting_flag]);  // this should not happen;
+    assert (component_configuration.opFlags[waiting_flag]);  // this should not happen;
 
     LOG_TRACE ("calling gridLab-d load 3B");
     GhostSwingBusManager::cvec Ig (9);
@@ -784,8 +784,8 @@ std::vector<double> gridLabDLoad::run3GridLabB (bool unbalancedAlert)
     GhostSwingBusManager::cvec Vg (9);
     double P1;
     double V = Vprev;
-    Vg[6] = std::complex<double> (V * localBaseVoltage * 1000.0,
-                                  0);  // localBaseVoltage is in KV  we ignore the angle since it shouldn't matter
+    Vg[6] = std::complex<double> (V * component_parameters.localBaseVoltage * 1000.0,
+                                  0);  // component_parameters.localBaseVoltage is in KV  we ignore the angle since it shouldn't matter
     Vg[7] = Vg[6] * rotn120;
     Vg[8] = Vg[6] * rotp120;
 
@@ -822,7 +822,7 @@ std::vector<double> gridLabDLoad::run3GridLabB (bool unbalancedAlert)
             }
         }
     }
-    opFlags.reset (waiting_flag);
+    component_configuration.opFlags.reset (waiting_flag);
 
 #if CONJUGATE
     std::complex<double> S1 = Vg[0] * conj (Ig[0]) + Vg[1] * conj (Ig[1]) + Vg[2] * conj (Ig[2]);
@@ -847,7 +847,7 @@ std::vector<double> gridLabDLoad::run3GridLabB (bool unbalancedAlert)
             alert (this, UNBALANCED_LOAD_ALERT);
         }
     }
-    double scale = m_mult / (systemBasePower * 1000000.0);
+    double scale = m_mult / (component_parameters.systemBasePower * 1000000.0);
     P1 = S1.real () * scale;  // basePower is MW
     double P2 = S2.real () * scale;  // basePower is MW
     double P3 = S3.real () * scale;  // basePower is MW
@@ -904,7 +904,7 @@ std::vector<double> gridLabDLoad::run3GridLabB (bool unbalancedAlert)
 
     double X1 = (P2 - P1) / (V2 - V1);
     double X2 = (P3 - P1) / (V3 - V1);
-    if ((opFlags[linearize_triple]) || (std::abs (X1 - X2) < 0.0001))  // we are pretty well linear here
+    if ((component_configuration.opFlags[linearize_triple]) || (std::abs (X1 - X2) < 0.0001))  // we are pretty well linear here
     {
         retP[4] = 0;
         retP[0] = P1 - V1 * (X1 + X2) / 2;
@@ -923,7 +923,7 @@ std::vector<double> gridLabDLoad::run3GridLabB (bool unbalancedAlert)
 
     X1 = (Q2 - Q1) / (V2 - V1);
     X2 = (Q3 - Q1) / (V3 - V1);
-    if ((opFlags[linearize_triple]) || (std::abs (X1 - X2) < 0.0001))  // we are pretty well linear here
+    if ((component_configuration.opFlags[linearize_triple]) || (std::abs (X1 - X2) < 0.0001))  // we are pretty well linear here
     {
         retP[1] = Q1 - V1 * (X1 + X2) / 2;
         retP[3] = (X1 + X2) / 2.0;
@@ -942,7 +942,7 @@ std::vector<double> gridLabDLoad::run3GridLabB (bool unbalancedAlert)
 #endif
 
 #ifdef SGS_DEBUG
-    std::cout << "SGS : gridLabDLoad::run3GridLabB systemBasePower = " << systemBasePower << '\n';
+    std::cout << "SGS : gridLabDLoad::run3GridLabB component_parameters.systemBasePower = " << component_parameters.systemBasePower << '\n';
 
     std::cout << "SGS : gridlabDLaod::run3GridLabB V1 = " << V1 << " V2 = " << V2 << " V3 = " << V3 << '\n';
 
@@ -1031,7 +1031,7 @@ void gridLabDLoad::set (const std::string &param, const std::string &val)
         else if ((v2 == "lineartriple") || (v2 == "linear3"))
         {
             cDetail = coupling_detail_t::triple;
-            opFlags.set (linearize_triple);
+            component_configuration.opFlags.set (linearize_triple);
         }
         else if ((v2 == "single") || (v2 == "low") || (v2 == "constant") || (v2 == "1"))
         {
@@ -1104,7 +1104,7 @@ void gridLabDLoad::set (const std::string &param, double val, gridUnits::units_t
     }
     else if ((param == "bounds") || (param == "usebounds"))
     {
-        opFlags.set (uses_bounds_flag, (val > 0));
+        component_configuration.opFlags.set (uses_bounds_flag, (val > 0));
     }
     else if ((param == "mult") || (param == "multiplier"))
     {
@@ -1123,7 +1123,7 @@ void gridLabDLoad::set (const std::string &param, double val, gridUnits::units_t
         else if (val < 2.75)
         {
             cDetail = coupling_detail_t::triple;
-            opFlags.set (linearize_triple);
+            component_configuration.opFlags.set (linearize_triple);
         }
         else if (val >= 2.75)
         {
@@ -1132,11 +1132,11 @@ void gridLabDLoad::set (const std::string &param, double val, gridUnits::units_t
     }
     else if ((param == "dual") || (param == "dualmode"))
     {
-        opFlags.set (dual_mode_flag, (val > 0.0));
+        component_configuration.opFlags.set (dual_mode_flag, (val > 0.0));
     }
     else if (param == "lineartriple")
     {
-        opFlags.set (linearize_triple, (val > 0.0));
+        component_configuration.opFlags.set (linearize_triple, (val > 0.0));
     }
     else
     {
@@ -1189,7 +1189,7 @@ change_code gridLabDLoad::rootCheck (const IOdata &inputs,
 int gridLabDLoad::mpiCount () const
 {
     int cnt = 0;
-    if (opFlags[dual_mode_flag])
+    if (component_configuration.opFlags[dual_mode_flag])
     {
         for (auto &gfl : gridlabDfile)
         {
@@ -1220,9 +1220,9 @@ void gridLabDLoad::run_dummy_load (index_t kk, VoltageMessage *vm, CurrentMessag
         auto vtest = std::hypot (vm->voltage[ii].real[0], vm->voltage[ii].imag[0]);
 
         auto rP =
-          dummy_load[kk]->getRealPower ({vtest / localBaseVoltage * 0.001}, emptyStateData, cLocalSolverMode);
+          dummy_load[kk]->getRealPower ({vtest / component_parameters.localBaseVoltage * 0.001}, emptyStateData, cLocalSolverMode);
         auto rQ =
-          dummy_load[kk]->getReactivePower ({vtest / localBaseVoltage * 0.001}, emptyStateData, cLocalSolverMode);
+          dummy_load[kk]->getReactivePower ({vtest / component_parameters.localBaseVoltage * 0.001}, emptyStateData, cLocalSolverMode);
         auto vcom = std::complex<double> (vtest, 0);
         auto power = std::complex<double> (rP, rQ) / 3.0;
         auto ctest = power * (dummy_load[kk]->get ("basepower")) * 1000000.0 / vcom;
@@ -1246,9 +1246,9 @@ void gridLabDLoad::run_dummy_load_forward (index_t kk, VoltageMessage *vm, Curre
     {
         auto vtest = std::hypot (vm->voltage[ii].real[0], vm->voltage[ii].imag[0]);
 
-        auto rP = dummy_load_forward[kk]->getRealPower ({vtest / localBaseVoltage / 1000}, emptyStateData,
+        auto rP = dummy_load_forward[kk]->getRealPower ({vtest / component_parameters.localBaseVoltage / 1000}, emptyStateData,
                                                         cLocalSolverMode);
-        auto rQ = dummy_load_forward[kk]->getReactivePower ({vtest / localBaseVoltage / 1000}, emptyStateData,
+        auto rQ = dummy_load_forward[kk]->getReactivePower ({vtest / component_parameters.localBaseVoltage / 1000}, emptyStateData,
                                                             cLocalSolverMode);
         auto vcom = std::complex<double> (vtest, 0);
         auto power = std::complex<double> (rP, rQ) / 3.0;

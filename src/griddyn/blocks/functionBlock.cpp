@@ -25,7 +25,7 @@ functionBlock::functionBlock () : Block ("functionBlock_#")
 {
     offsets.local ().local.algSize = 2;
     offsets.local ().local.diffSize = 0;
-    opFlags.set (use_state);
+    component_configuration.opFlags.set (use_state);
     offsets.local ().local.jacSize = 3;
 }
 
@@ -33,7 +33,7 @@ functionBlock::functionBlock (const std::string &functionName) : Block ("functio
 {
     offsets.local ().local.algSize = 2;
     offsets.local ().local.diffSize = 0;
-    opFlags.set (use_state);
+    component_configuration.opFlags.set (use_state);
     offsets.local ().local.jacSize = 3;
     setFunction (functionName);
 }
@@ -56,13 +56,13 @@ void functionBlock::dynObjectInitializeB (const IOdata &inputs, const IOdata &de
 {
     if (desiredOutput.empty ())
     {
-        if (opFlags[uses_constantarg])
+        if (component_configuration.opFlags[uses_constantarg])
         {
-            m_state[limiter_alg] = K * fptr2 (gain * (inputs[0] + bias), arg2);
+            component_state.m_state[limiter_alg] = K * fptr2 (gain * (inputs[0] + bias), arg2);
         }
         else
         {
-            m_state[limiter_alg] = K * fptr (gain * (inputs[0] + bias));
+            component_state.m_state[limiter_alg] = K * fptr (gain * (inputs[0] + bias));
         }
         Block::dynObjectInitializeB (inputs, desiredOutput, fieldSet);
     }
@@ -75,7 +75,7 @@ void functionBlock::dynObjectInitializeB (const IOdata &inputs, const IOdata &de
 void functionBlock::blockAlgebraicUpdate (double input, const stateData &sD, double update[], const solverMode &sMode)
 {
     auto offset = offsets.getAlgOffset (sMode) + limiter_alg;
-    if (opFlags[uses_constantarg])
+    if (component_configuration.opFlags[uses_constantarg])
     {
         update[offset] = K * fptr2 (gain * (input + bias), arg2);
     }
@@ -99,7 +99,7 @@ void functionBlock::blockJacobianElements (double input,
     auto offset = offsets.getAlgOffset (sMode) + limiter_alg;
     // use the md.assign Macro defined in basicDefs
     // md.assign(arrayIndex, RowIndex, ColIndex, value)
-    if (opFlags[uses_constantarg])
+    if (component_configuration.opFlags[uses_constantarg])
     {
         double temp1 = fptr2 (gain * (input + bias), arg2);
         double temp2 = fptr2 (gain * (input + 1e-8 + bias), arg2);
@@ -120,21 +120,21 @@ void functionBlock::blockJacobianElements (double input,
 
 double functionBlock::step (coreTime time, double input)
 {
-    if (opFlags[uses_constantarg])
+    if (component_configuration.opFlags[uses_constantarg])
     {
-        m_state[limiter_alg] = K * fptr2 (gain * (input + bias), arg2);
+        component_state.m_state[limiter_alg] = K * fptr2 (gain * (input + bias), arg2);
     }
     else
     {
-        m_state[limiter_alg] = K * fptr (gain * (input + bias));
+        component_state.m_state[limiter_alg] = K * fptr (gain * (input + bias));
     }
     if (limiter_alg > 0)
     {
         Block::step (time, input);
     }
-    m_output = m_state[0];
+    m_output = component_state.m_state[0];
     object_time.prevTime = time;
-    return m_state[0];
+    return component_state.m_state[0];
 }
 
 // set parameters
@@ -172,12 +172,12 @@ void functionBlock::setFunction (const std::string &functionName)
     if (isFunctionName (functionName, function_type::arg))
     {
         fptr = get1ArgFunction (functionName);
-        opFlags.reset (uses_constantarg);
+        component_configuration.opFlags.reset (uses_constantarg);
     }
     else if (isFunctionName (functionName, function_type::arg2))
     {
         fptr2 = get2ArgFunction (functionName);
-        opFlags.set (uses_constantarg);
+        component_configuration.opFlags.set (uses_constantarg);
     }
 }
 
@@ -190,7 +190,7 @@ const solverMode &sMode) const
   double val = Loc.algStateLoc[1];
   if (!inputs.empty())
   {
-    if (opFlags[uses_constantarg])
+    if (component_configuration.opFlags[uses_constantarg])
     {
       val = fptr2(gain*(inputs[0] + bias), arg2);
     }
@@ -204,7 +204,7 @@ const solverMode &sMode) const
 
 double functionBlock::currentValue() const
 {
-  return m_state[0];
+  return component_state.m_state[0];
 }
 */
 }  // namespace blocks

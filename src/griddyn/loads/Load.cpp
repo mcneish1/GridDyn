@@ -54,13 +54,13 @@ coreObject *Load::clone (coreObject *obj) const
 
 void Load::setLoad (double level, units_t unitType)
 {
-    setP (unitConversion (level, unitType, puMW, systemBasePower));
+    setP (unitConversion (level, unitType, puMW, component_parameters.systemBasePower));
 }
 
 void Load::setLoad (double Plevel, double Qlevel, units_t unitType)
 {
-    setP (unitConversion (Plevel, unitType, puMW, systemBasePower));
-    setQ (unitConversion (Qlevel, unitType, puMW, systemBasePower));
+    setP (unitConversion (Plevel, unitType, puMW, component_parameters.systemBasePower));
+    setQ (unitConversion (Qlevel, unitType, puMW, component_parameters.systemBasePower));
 }
 
 static const stringVec locNumStrings{"p", "q", "pf"};
@@ -82,15 +82,15 @@ void Load::setFlag (const std::string &flag, bool val)
     {
         if (val)
         {
-            if (!(opFlags[use_power_factor_flag]))
+            if (!(component_configuration.opFlags[use_power_factor_flag]))
             {
-                opFlags.set (use_power_factor_flag);
+                component_configuration.opFlags.set (use_power_factor_flag);
                 updatepfq ();
             }
         }
         else
         {
-            opFlags.reset (use_power_factor_flag);
+            component_configuration.opFlags.reset (use_power_factor_flag);
         }
     }
     else
@@ -119,10 +119,10 @@ double Load::get (const std::string &param, units_t unitType) const
         switch (param[0])
         {
         case 'p':
-            val = unitConversion (P, puMW, unitType, systemBasePower, localBaseVoltage);
+            val = unitConversion (P, puMW, unitType, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
             break;
         case 'q':
-            val = unitConversion (Q, puMW, unitType, systemBasePower, localBaseVoltage);
+            val = unitConversion (Q, puMW, unitType, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
             break;
         default:
             break;
@@ -138,7 +138,7 @@ double Load::get (const std::string &param, units_t unitType) const
     {
         auto unit = getObjectFunction (this, param).second;
         coreObject *tobj = const_cast<Load *> (this);
-        val = unitConversion (fptr (tobj), unit, unitType, systemBasePower, localBaseVoltage);
+        val = unitConversion (fptr (tobj), unit, unitType, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else
     {
@@ -158,10 +158,10 @@ void Load::set (const std::string &param, double val, units_t unitType)
         switch (param.front ())
         {
         case 'p':
-            setP (unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage));
+            setP (unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage));
             break;
         case 'q':
-            setQ (unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage));
+            setQ (unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage));
             break;
         default:
             throw (unrecognizedParameter (param));
@@ -178,12 +178,12 @@ void Load::set (const std::string &param, double val, units_t unitType)
         // load increments  allows a delta on the load through the set functions
         if (param == "p+")
         {
-            P += unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+            P += unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
             checkpfq ();
         }
         else if (param == "q+")
         {
-            Q += unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+            Q += unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
             updatepfq ();
         }
         else
@@ -211,11 +211,11 @@ void Load::set (const std::string &param, double val, units_t unitType)
     }
     else if (param == "load p")
     {
-        setP (unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage));
+        setP (unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage));
     }
     else if (param == "load q")
     {
-        setQ (unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage));
+        setQ (unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage));
     }
     else if ((param == "pf") || (param == "powerfactor"))
     {
@@ -234,12 +234,12 @@ void Load::set (const std::string &param, double val, units_t unitType)
         {
             pfq = kBigNum;
         }
-        opFlags.set (use_power_factor_flag);
+        component_configuration.opFlags.set (use_power_factor_flag);
     }
     else if (param == "qratio")
     {
         pfq = val;
-        opFlags.set (use_power_factor_flag);
+        component_configuration.opFlags.set (use_power_factor_flag);
     }
     else
     {
@@ -263,7 +263,7 @@ void Load::setQ (double newQ)
 
 void Load::updatepfq ()
 {
-    if (opFlags[use_power_factor_flag])
+    if (component_configuration.opFlags[use_power_factor_flag])
     {
         pfq = (P == 0.0) ? kBigNum : Q / P;
     }
@@ -271,7 +271,7 @@ void Load::updatepfq ()
 
 void Load::checkpfq ()
 {
-    if (opFlags[use_power_factor_flag])
+    if (component_configuration.opFlags[use_power_factor_flag])
     {
         if (pfq > 1000.0)  // if the pfq is screwy, recalculate, otherwise leave it the same.
         {
@@ -285,7 +285,7 @@ void Load::checkpfq ()
 
 void Load::checkFaultChange ()
 {
-    if ((opFlags[pFlow_initialized]) && (bus->getVoltage () < 0.05))
+    if ((component_configuration.opFlags[pFlow_initialized]) && (bus->getVoltage () < 0.05))
     {
         alert (this, POTENTIAL_FAULT_CHANGE);
     }

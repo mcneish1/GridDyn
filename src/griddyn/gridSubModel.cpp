@@ -17,8 +17,8 @@ namespace griddyn
 {
 gridSubModel::gridSubModel (const std::string &objName) : gridComponent (objName)
 {
-    opFlags.set (no_powerflow_operations);
-    m_outputSize = 1;
+    component_configuration.opFlags.set (no_powerflow_operations);
+    component_ports.m_outputSize = 1;
 }
 
 void gridSubModel::pFlowInitializeA (coreTime time, std::uint32_t flags)
@@ -56,9 +56,9 @@ void gridSubModel::dynInitializeB (const IOdata &inputs, const IOdata &desiredOu
     {
         // make sure the state vectors are sized properly
         auto ns = offsets.local ().local.totalSize ();
-        m_state.resize (ns, 0);
-        m_dstate_dt.clear ();
-        m_dstate_dt.resize (ns, 0);
+        component_state.m_state.resize (ns, 0);
+        component_state.m_dstate_dt.clear ();
+        component_state.m_dstate_dt.resize (ns, 0);
 
         dynObjectInitializeB (inputs, desiredOutput, fieldSet);
         if (object_time.updatePeriod < maxTime)
@@ -67,7 +67,7 @@ void gridSubModel::dynInitializeB (const IOdata &inputs, const IOdata &desiredOu
             setUpdateTime (object_time.prevTime + object_time.updatePeriod);
             alert (this, UPDATE_REQUIRED);
         }
-        opFlags.set (dyn_initialized);
+        component_configuration.opFlags.set (dyn_initialized);
     }
 }
 
@@ -77,7 +77,7 @@ double gridSubModel::get (const std::string &param, gridUnits::units_t unitType)
     if (fptr.first)
     {
         coreObject *tobj = const_cast<gridSubModel *> (this);
-        return unitConversion (fptr.first (tobj), fptr.second, unitType, systemBasePower);
+        return unitConversion (fptr.first (tobj), fptr.second, unitType, component_parameters.systemBasePower);
     }
 
     return gridComponent::get (param, unitType);

@@ -71,7 +71,7 @@ void approximatingLoad::pFlowObjectInitializeA (coreTime time0, std::uint32_t fl
 {
     m_lastCallTime = time0;
 
-    opFlags[preEx_requested] = true;
+    component_configuration.opFlags[preEx_requested] = true;
     rampLoad::pFlowObjectInitializeA (time0, flags);
     updateA (time0);
 }
@@ -87,23 +87,23 @@ void approximatingLoad::dynObjectInitializeA (coreTime time0, std::uint32_t flag
     switch (dynCoupling)
     {
     case coupling_mode_t::none:
-        opFlags.reset (preEx_requested);
+        component_configuration.opFlags.reset (preEx_requested);
         offsets.local ().local.algRoots = 0;
         break;
     case coupling_mode_t::interval:
-        opFlags.reset (preEx_requested);
+        component_configuration.opFlags.reset (preEx_requested);
 
         break;
     case coupling_mode_t::trigger:
-        opFlags.reset (preEx_requested);
+        component_configuration.opFlags.reset (preEx_requested);
         offsets.local ().local.algRoots = 1;
         break;
 
     case coupling_mode_t::full:
-        opFlags.set (preEx_requested);
+        component_configuration.opFlags.set (preEx_requested);
         break;
     }
-    if (opFlags[dual_mode_flag])
+    if (component_configuration.opFlags[dual_mode_flag])
     {
     }
     rampLoad::dynObjectInitializeA (time0, flags);
@@ -113,7 +113,7 @@ void approximatingLoad::dynObjectInitializeB (const IOdata & /*inputs*/,
                                               const IOdata & /*desiredOutput*/,
                                               IOdata & /*fieldSet*/)
 {
-    if (opFlags[dual_mode_flag])
+    if (component_configuration.opFlags[dual_mode_flag])
     {
     }
 }
@@ -325,7 +325,7 @@ void approximatingLoad::preEx (const IOdata &inputs, const stateData &sD, const 
 
 void approximatingLoad::updateLocalCache (const IOdata &inputs, const stateData &sD, const solverMode &sMode)
 {
-    if (opFlags[waiting_flag])
+    if (component_configuration.opFlags[waiting_flag])
     {
         updateB ();
     }
@@ -355,7 +355,7 @@ approximatingLoad::getLoadValues (const std::vector<double> &inputs, const std::
 
 void approximatingLoad::run1ApproxA (coreTime /*time*/, const IOdata &inputs)
 {
-    assert (!opFlags[waiting_flag]);  // this should not happen;
+    assert (!component_configuration.opFlags[waiting_flag]);  // this should not happen;
 
     // auto dt = time - m_lastCallTime;
 
@@ -365,19 +365,19 @@ void approximatingLoad::run1ApproxA (coreTime /*time*/, const IOdata &inputs)
     auto wb = make_workBlock ([inputb, voltages, this]() { return getLoadValues (inputb, voltages); });
     vres = wb->get_future ();
     workQueue::instance ()->addWorkBlock (std::move (wb));
-    opFlags.set (waiting_flag);
+    component_configuration.opFlags.set (waiting_flag);
 }
 
 std::vector<double> approximatingLoad::run1ApproxB ()
 {
     auto res = vres.get ();
-    opFlags.reset (waiting_flag);
+    component_configuration.opFlags.reset (waiting_flag);
     return {std::get<1> (res[0]), std::get<2> (res[0])};
 }
 
 void approximatingLoad::run2ApproxA (coreTime /*time*/, const IOdata &inputs)
 {
-    assert (!opFlags[waiting_flag]);  // this should not happen;
+    assert (!component_configuration.opFlags[waiting_flag]);  // this should not happen;
 
     // auto dt = time - m_lastCallTime;
 
@@ -390,14 +390,14 @@ void approximatingLoad::run2ApproxA (coreTime /*time*/, const IOdata &inputs)
     auto wb = make_workBlock ([inputb, voltages, this]() { return getLoadValues (inputb, voltages); });
     vres = wb->get_future ();
     workQueue::instance ()->addWorkBlock (std::move (wb));
-    opFlags.set (waiting_flag);
+    component_configuration.opFlags.set (waiting_flag);
 }
 
 std::vector<double> approximatingLoad::run2ApproxB ()
 {
-    assert (opFlags[waiting_flag]);  // this should not happen;
+    assert (component_configuration.opFlags[waiting_flag]);  // this should not happen;
     auto res = vres.get ();
-    opFlags.reset (waiting_flag);
+    component_configuration.opFlags.reset (waiting_flag);
     double V1 = std::get<0> (res[0]);
     double P1 = std::get<1> (res[0]);
     double Q1 = std::get<2> (res[0]);
@@ -414,7 +414,7 @@ std::vector<double> approximatingLoad::run2ApproxB ()
 
 void approximatingLoad::run3ApproxA (coreTime /*time*/, const IOdata &inputs)
 {
-    assert (!opFlags[waiting_flag]);  // this should not happen;
+    assert (!component_configuration.opFlags[waiting_flag]);  // this should not happen;
 
     // auto dt = time - m_lastCallTime;
 
@@ -430,14 +430,14 @@ void approximatingLoad::run3ApproxA (coreTime /*time*/, const IOdata &inputs)
     auto wb = make_workBlock ([inputb, voltages, this]() { return getLoadValues (inputb, voltages); });
     vres = wb->get_future ();
     workQueue::instance ()->addWorkBlock (std::move (wb));
-    opFlags.set (waiting_flag);
+    component_configuration.opFlags.set (waiting_flag);
 }
 
 std::vector<double> approximatingLoad::run3ApproxB ()
 {
-    assert (opFlags[waiting_flag]);  // this should not happen;
+    assert (component_configuration.opFlags[waiting_flag]);  // this should not happen;
     auto res = vres.get ();
-    opFlags.reset (waiting_flag);
+    component_configuration.opFlags.reset (waiting_flag);
     double V1 = std::get<0> (res[0]);
     double P1 = std::get<1> (res[0]);
     double Q1 = std::get<2> (res[0]);
@@ -493,7 +493,7 @@ std::vector<double> approximatingLoad::run3ApproxB ()
 
     double X1 = (P2 - P1) / (V2 - V1);
     double X2 = (P3 - P1) / (V3 - V1);
-    if ((opFlags[linearize_triple]) || (std::abs (X1 - X2) < 0.0001))  // we are pretty well linear here
+    if ((component_configuration.opFlags[linearize_triple]) || (std::abs (X1 - X2) < 0.0001))  // we are pretty well linear here
     {
         retP[4] = 0;
         retP[0] = P1 - V1 * (X1 + X2) / 2;
@@ -512,7 +512,7 @@ std::vector<double> approximatingLoad::run3ApproxB ()
 
     X1 = (Q2 - Q1) / (V2 - V1);
     X2 = (Q3 - Q1) / (V3 - V1);
-    if ((opFlags[linearize_triple]) || (std::abs (X1 - X2) < 0.0001))  // we are pretty well linear here
+    if ((component_configuration.opFlags[linearize_triple]) || (std::abs (X1 - X2) < 0.0001))  // we are pretty well linear here
     {
         retP[1] = Q1 - V1 * (X1 + X2) / 2;
         retP[3] = (X1 + X2) / 2.0;
@@ -545,7 +545,7 @@ void approximatingLoad::set (const std::string &param, const std::string &val)
         else if ((v2 == "lineartriple") || (v2 == "linear3"))
         {
             cDetail = coupling_detail_t::triple;
-            opFlags.set (linearize_triple);
+            component_configuration.opFlags.set (linearize_triple);
         }
         else if ((v2 == "single") || (v2 == "low") || (v2 == "constant") || (v2 == "1"))
         {
@@ -618,7 +618,7 @@ void approximatingLoad::set (const std::string &param, double val, gridUnits::un
     }
     else if ((param == "bounds") || (param == "usebounds"))
     {
-        opFlags.set (uses_bounds_flag, (val > 0));
+        component_configuration.opFlags.set (uses_bounds_flag, (val > 0));
     }
     else if ((param == "mult") || (param == "multiplier"))
     {
@@ -637,7 +637,7 @@ void approximatingLoad::set (const std::string &param, double val, gridUnits::un
         else if (val < 2.75)
         {
             cDetail = coupling_detail_t::triple;
-            opFlags.set (linearize_triple);
+            component_configuration.opFlags.set (linearize_triple);
         }
         else if (val >= 2.75)
         {
@@ -646,11 +646,11 @@ void approximatingLoad::set (const std::string &param, double val, gridUnits::un
     }
     else if ((param == "dual") || (param == "dualmode"))
     {
-        opFlags.set (dual_mode_flag, (val > 0.0));
+        component_configuration.opFlags.set (dual_mode_flag, (val > 0.0));
     }
     else if (param == "lineartriple")
     {
-        opFlags.set (linearize_triple, (val > 0.0));
+        component_configuration.opFlags.set (linearize_triple, (val > 0.0));
     }
     else
     {

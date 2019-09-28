@@ -202,11 +202,11 @@ void pulseSource::set (const std::string &param, double val, units_t unitType)
     {
         if (val > 0)
         {
-            opFlags.set (invert_flag);
+            component_configuration.opFlags.set (invert_flag);
         }
         else
         {
-            opFlags.reset (invert_flag);
+            component_configuration.opFlags.reset (invert_flag);
         }
         cycleTime -= period;
     }
@@ -223,7 +223,7 @@ double pulseSource::pulseCalc (double td) const
     double prop = (cloc - dutyCycle / 2) / dutyCycle;
     if ((prop < 0) || (prop >= 1.0))
     {
-        return (opFlags[invert_flag]) ? Amplitude : 0.0;
+        return (component_configuration.opFlags[invert_flag]) ? Amplitude : 0.0;
     }
 
     // calculate the multiplier
@@ -289,7 +289,7 @@ double pulseSource::pulseCalc (double td) const
     default:
         break;
     }
-    if (opFlags[invert_flag])
+    if (component_configuration.opFlags[invert_flag])
     {
         pamp = Amplitude - pamp;
     }

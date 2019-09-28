@@ -56,15 +56,15 @@ void pmu::setFlag (const std::string &flag, bool val)
 {
     if ((flag == "transmit") || (flag == "transmitactive") || (flag == "transmit_active"))
     {
-        opFlags.set (transmit_active, val);
+        component_configuration.opFlags.set (transmit_active, val);
     }
     else if ((flag == "three_phase") || (flag == "3phase") || (flag == "three_phase_active"))
     {
-        opFlags.set (three_phase_capable, val);
+        component_configuration.opFlags.set (three_phase_capable, val);
     }
     else if ((flag == "current_active") || (flag == "current"))
     {
-        opFlags.set (current_active, val);
+        component_configuration.opFlags.set (current_active, val);
     }
     else
     {
@@ -90,28 +90,28 @@ void pmu::set (const std::string &param, double val, units_t unitType)
     if ((param == "tv") || (param == "voltagedelay"))
     {
         Tv = val;
-        if (opFlags[dyn_initialized])
+        if (component_configuration.opFlags[dyn_initialized])
         {
         }
     }
     else if ((param == "ttheta") || (param == "tangle") || (param == "angledelay"))
     {
         Ttheta = val;
-        if (opFlags[dyn_initialized])
+        if (component_configuration.opFlags[dyn_initialized])
         {
         }
     }
     else if (param == "trocof")
     {
         Trocof = val;
-        if (opFlags[dyn_initialized])
+        if (component_configuration.opFlags[dyn_initialized])
         {
         }
     }
     else if ((param == "tcurrent") || (param == "tI") || (param == "currentdelay"))
     {
         Tcurrent = val;
-        if (opFlags[dyn_initialized])
+        if (component_configuration.opFlags[dyn_initialized])
         {
         }
     }
@@ -192,21 +192,21 @@ void pmu::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
     {
         if (static_cast<gridComponent *> (m_sourceObject)->checkFlag (three_phase_capable))
         {
-            if (!opFlags[three_phase_set])
+            if (!component_configuration.opFlags[three_phase_set])
             {
-                opFlags[three_phase_active] = true;
+                component_configuration.opFlags[three_phase_active] = true;
             }
         }
         else
         {
-            opFlags[three_phase_active] = false;
+            component_configuration.opFlags[three_phase_active] = false;
         }
     }
 
     if (dynamic_cast<gridBus *> (m_sourceObject) != nullptr)
     {
         // no way to get current from a bus
-        opFlags[current_active] = false;
+        component_configuration.opFlags[current_active] = false;
     }
     generateOutputNames ();
     createFilterBlocks ();
@@ -216,9 +216,9 @@ void pmu::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
 void pmu::generateOutputNames ()
 {
     // 4 different scenarios
-    if (opFlags[three_phase_active])
+    if (component_configuration.opFlags[three_phase_active])
     {
-        if (opFlags[current_active])
+        if (component_configuration.opFlags[current_active])
         {
             // three phase voltage and current
             outputStrings = {{"voltageA"},      {"angleA"},        {"voltageB"},      {"angleB"},
@@ -235,7 +235,7 @@ void pmu::generateOutputNames ()
     }
     else
     {
-        if (opFlags[current_active])
+        if (component_configuration.opFlags[current_active])
         {
             // single phase voltage and current
             outputStrings = {{"voltage"}, {"angle"}, {"current_real"}, {"current_imag"}, {"frequency"}, {"rocof"}};
@@ -251,9 +251,9 @@ void pmu::generateOutputNames ()
 void pmu::createFilterBlocks ()
 {
     // 4 different scenarios
-    if (opFlags[three_phase_active])
+    if (component_configuration.opFlags[three_phase_active])
     {
-        if (opFlags[current_active])
+        if (component_configuration.opFlags[current_active])
         {
             // three phase voltage and current
         }
@@ -276,7 +276,7 @@ void pmu::createFilterBlocks ()
         set ("blockinput1", 1);
         setupOutput (0, "block0");
         setupOutput (1, "block1");
-        if (opFlags[current_active])
+        if (component_configuration.opFlags[current_active])
         {
             B = new blocks::delayBlock (Tcurrent);
             B->setName ("current_real");
@@ -327,7 +327,7 @@ coreTime pmu::updateB ()
 
 void pmu::generateAndTransmitMessage () const
 {
-    if (opFlags[use_commLink])
+    if (component_configuration.opFlags[use_commLink])
     {
         auto &oname = outputNames ();
 

@@ -105,15 +105,15 @@ int dynamicInitialConditionRecovery::dynamicFix2 ()
     sim->getVoltage (v, solver->state_data (), solver->getSolverMode ());
     if (std::any_of (v.begin (), v.end (), [](double a) { return (a < 0.7); }))
     {
-        if (!sim->opFlags[prev_setall_pqvlimit])
+        if (!sim->component_configuration.opFlags[prev_setall_pqvlimit])
         {
             sim->log (sim, print_level::debug, "setting all load to PQ at V=0.9");
-            sim->opFlags.set (disable_flag_updates);
+            sim->component_configuration.opFlags.set (disable_flag_updates);
             sim->setAll ("load", "pqlowvlimit", 0.9);
             sim->controlFlags.set (voltage_constraints_flag);
-            sim->opFlags.set (prev_setall_pqvlimit);
-            sim->opFlags.reset (reset_voltage_flag);
-            sim->opFlags.reset (disable_flag_updates);
+            sim->component_configuration.opFlags.set (prev_setall_pqvlimit);
+            sim->component_configuration.opFlags.reset (reset_voltage_flag);
+            sim->component_configuration.opFlags.reset (disable_flag_updates);
             sim->updateFlags ();
             sim->handleRootChange (solver->getSolverMode (), solver);
             stateData sD (sim->getSimulationTime(), solver->state_data (), solver->deriv_data ());

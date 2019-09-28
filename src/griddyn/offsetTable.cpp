@@ -341,7 +341,7 @@ Lp offsetTable::getLocations (const stateData &sD,
     if ((sMode.local) || (sD.empty ()))
     {
         Loc.destLoc =
-          (dest == nullptr) ? const_cast<double *> (comp->m_state.data ()) + offsetContainer[0].algOffset : dest;
+          (dest == nullptr) ? const_cast<double *> (comp->component_state.m_state.data ()) + offsetContainer[0].algOffset : dest;
         Loc.destDiffLoc = Loc.destLoc + Loc.algSize;
     }
     else if (isDAE (sMode))
@@ -362,7 +362,7 @@ Lp offsetTable::getLocations (const stateData &sD,
     else
     {
         Loc.destLoc =
-          (dest == nullptr) ? const_cast<double *> (comp->m_state.data ()) + offsetContainer[0].algOffset : dest;
+          (dest == nullptr) ? const_cast<double *> (comp->component_state.m_state.data ()) + offsetContainer[0].algOffset : dest;
         Loc.destDiffLoc = Loc.destLoc + Loc.algSize;
     }
     return Loc;
@@ -378,9 +378,9 @@ Lp offsetTable::getLocations (const stateData &sD, const solverMode &sMode, cons
     if ((sMode.local) || (sD.empty ()))
     {
         Loc.time = comp->object_time.prevTime;
-        Loc.algStateLoc = comp->m_state.data ();
-        Loc.diffStateLoc = comp->m_state.data () + Loc.algSize;
-        Loc.dstateLoc = comp->m_dstate_dt.data () + Loc.algSize;
+        Loc.algStateLoc = comp->component_state.m_state.data ();
+        Loc.diffStateLoc = comp->component_state.m_state.data () + Loc.algSize;
+        Loc.dstateLoc = comp->component_state.m_dstate_dt.data () + Loc.algSize;
         if (Loc.algOffset == kNullLocation)
         {
             Loc.algOffset = 0;
@@ -430,8 +430,8 @@ Lp offsetTable::getLocations (const stateData &sD, const solverMode &sMode, cons
         }
         else
         {
-            Loc.diffStateLoc = comp->m_state.data () + offsetContainer[0].diffOffset;
-            Loc.dstateLoc = comp->m_dstate_dt.data () + offsetContainer[0].diffOffset;
+            Loc.diffStateLoc = comp->component_state.m_state.data () + offsetContainer[0].diffOffset;
+            Loc.dstateLoc = comp->component_state.m_dstate_dt.data () + offsetContainer[0].diffOffset;
         }
         Loc.destDiffLoc = nullptr;
     }
@@ -464,16 +464,16 @@ Lp offsetTable::getLocations (const stateData &sD, const solverMode &sMode, cons
         }
         else
         {
-            Loc.algStateLoc = comp->m_state.data () + offsetContainer[0].algOffset;
+            Loc.algStateLoc = comp->component_state.m_state.data () + offsetContainer[0].algOffset;
         }
         Loc.destLoc = nullptr;
     }
     else
     {
         Loc.time = comp->object_time.prevTime;
-        Loc.algStateLoc = comp->m_state.data ();
-        Loc.diffStateLoc = comp->m_state.data () + Loc.algSize;
-        Loc.dstateLoc = comp->m_dstate_dt.data () + Loc.algSize;
+        Loc.algStateLoc = comp->component_state.m_state.data ();
+        Loc.diffStateLoc = comp->component_state.m_state.data () + Loc.algSize;
+        Loc.dstateLoc = comp->component_state.m_dstate_dt.data () + Loc.algSize;
         if (Loc.algOffset == kNullLocation)
         {
             Loc.algOffset = 0;

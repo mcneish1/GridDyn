@@ -19,15 +19,15 @@ namespace griddyn
 {
 namespace blocks
 {
-controlBlock::controlBlock (const std::string &objName) : Block (objName) { opFlags.set (use_state); }
+controlBlock::controlBlock (const std::string &objName) : Block (objName) { component_configuration.opFlags.set (use_state); }
 controlBlock::controlBlock (double t1, const std::string &objName) : Block (objName), m_T1 (t1)
 {
-    opFlags.set (use_state);
+    component_configuration.opFlags.set (use_state);
 }
 controlBlock::controlBlock (double t1, double t2, const std::string &objName)
     : Block (objName), m_T1 (t1), m_T2 (t2)
 {
-    opFlags.set (use_state);
+    component_configuration.opFlags.set (use_state);
 }
 
 coreObject *controlBlock::clone (coreObject *obj) const
@@ -44,9 +44,9 @@ coreObject *controlBlock::clone (coreObject *obj) const
 // set up the number of states
 void controlBlock::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
 {
-    if (opFlags[differential_input])
+    if (component_configuration.opFlags[differential_input])
     {
-        opFlags.set (differential_output);
+        component_configuration.opFlags.set (differential_output);
     }
     Block::dynObjectInitializeA (time0, flags);
 
@@ -57,22 +57,22 @@ void controlBlock::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
 void controlBlock::dynObjectInitializeB (const IOdata &inputs, const IOdata &desiredOutput, IOdata &fieldSet)
 {
 	fieldSet.resize(1);
-    if (opFlags[has_limits])
+    if (component_configuration.opFlags[has_limits])
     {
         Block::dynObjectInitializeB (inputs, desiredOutput, fieldSet);
     }
     if (desiredOutput.empty ())
     {
-        m_state[limiter_alg + 1] = K * (1.0 - m_T2 / m_T1) * (inputs[0] + bias);
-        m_state[limiter_alg] = K * (inputs[0] + bias);
+        component_state.m_state[limiter_alg + 1] = K * (1.0 - m_T2 / m_T1) * (inputs[0] + bias);
+        component_state.m_state[limiter_alg] = K * (inputs[0] + bias);
 
-        fieldSet[0] = m_state[0];
+        fieldSet[0] = component_state.m_state[0];
         prevInput = inputs[0] + bias;
     }
     else
     {
-        m_state[limiter_alg] = desiredOutput[0];
-        m_state[limiter_alg + 1] = (1.0 - m_T2 / m_T1) * desiredOutput[0] / K;
+        component_state.m_state[limiter_alg] = desiredOutput[0];
+        component_state.m_state[limiter_alg + 1] = (1.0 - m_T2 / m_T1) * desiredOutput[0] / K;
         fieldSet[0] = desiredOutput[0] / K - bias;
         prevInput = desiredOutput[0] / K;
     }
@@ -80,7 +80,7 @@ void controlBlock::dynObjectInitializeB (const IOdata &inputs, const IOdata &des
 
 void controlBlock::blockAlgebraicUpdate (double input, const stateData &sD, double update[], const solverMode &sMode)
 {
-    if (!opFlags[differential_input])
+    if (!component_configuration.opFlags[differential_input])
     {
         auto Loc = offsets.getLocations (sD, update, sMode, this);
 
@@ -99,7 +99,7 @@ void controlBlock::blockDerivative (double input,
                                   const solverMode &sMode)
 {
     auto Loc = offsets.getLocations (sD, deriv, sMode, this);
-    if (opFlags[differential_input])
+    if (component_configuration.opFlags[differential_input])
     {
         Loc.destDiffLoc[limiter_diff] = Loc.dstateLoc[limiter_diff + 1] + m_T2 / m_T1 * didt * K;
         Loc.destDiffLoc[limiter_diff + 1] = (K * (input + bias) - Loc.diffStateLoc[limiter_diff]) / m_T1;
@@ -122,7 +122,7 @@ void controlBlock::blockJacobianElements (double input,
                                 const solverMode &sMode)
 {
     auto Loc = offsets.getLocations (sD, sMode, this);
-    if (opFlags[differential_input])
+    if (component_configuration.opFlags[differential_input])
     {
     }
     else
@@ -162,7 +162,7 @@ double controlBlock::step (coreTime time, double input)
     double ival, ival2;
     if (dt >= fabs (5.0 * m_T1))
     {
-        m_state[limiter_alg + limiter_diff + 1] = K * (1.0 - m_T2 / m_T1) * (inputB);
+        component_state.m_state[limiter_alg + limiter_diff + 1] = K * (1.0 - m_T2 / m_T1) * (inputB);
     }
     else
     {
@@ -170,8 +170,8 @@ double controlBlock::step (coreTime time, double input)
         double ct = object_time.prevTime + tstep;
         double in = prevInput;
         double pin = prevInput;
-        ival = m_state[limiter_alg + limiter_diff + 1];
-        ival2 = m_state[limiter_alg + limiter_diff];
+        ival = component_state.m_state[limiter_alg + limiter_diff + 1];
+        ival2 = component_state.m_state[limiter_alg + limiter_diff];
         while (ct < time)
         {
             in = in + (inputB - prevInput) / dt * tstep;
@@ -180,19 +180,19 @@ double controlBlock::step (coreTime time, double input)
             ct += tstep;
             pin = in;
         }
-        m_state[limiter_alg + limiter_diff + 1] =
+        component_state.m_state[limiter_alg + limiter_diff + 1] =
           ival + 1.0 / m_T1 * (K * (pin + inputB) / 2.0 - ival2) * (time - ct + tstep);
     }
-    m_state[limiter_alg + limiter_diff] = m_state[limiter_alg + limiter_diff + 1] + K * m_T2 / m_T1 * (inputB);
+    component_state.m_state[limiter_alg + limiter_diff] = component_state.m_state[limiter_alg + limiter_diff + 1] + K * m_T2 / m_T1 * (inputB);
 
     prevInput = inputB;
-    if (opFlags[has_limits])
+    if (component_configuration.opFlags[has_limits])
     {
         out = Block::step (time, inputB);
     }
     else
     {
-        out = m_state[0];
+        out = component_state.m_state[0];
         object_time.prevTime = time;
         m_output = out;
     }
@@ -237,11 +237,11 @@ stringVec controlBlock::localStateNames () const
 {
     stringVec out (stateSize (cLocalSolverMode));
     int loc = 0;
-    if (opFlags[use_block_limits])
+    if (component_configuration.opFlags[use_block_limits])
     {
         out[loc++] = "limiter_out";
     }
-    if (opFlags[use_ramp_limits])
+    if (component_configuration.opFlags[use_ramp_limits])
     {
         out[loc++] = "ramp_limiter_out";
     }

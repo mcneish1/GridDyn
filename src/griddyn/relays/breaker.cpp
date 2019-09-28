@@ -34,7 +34,7 @@ namespace relays
 using namespace gridUnits;
 breaker::breaker (const std::string &objName) : Relay (objName), useCTI (object_bools.extra_bool)
 {
-    opFlags.set (continuous_flag);
+    component_configuration.opFlags.set (continuous_flag);
 }
 
 coreObject *breaker::clone (coreObject *obj) const
@@ -66,7 +66,7 @@ void breaker::setFlag (const std::string &flag, bool val)
 {
     if (flag == "nondirectional")
     {
-        opFlags.set (nondirectional_flag, val);
+        component_configuration.opFlags.set (nondirectional_flag, val);
     }
     else
     {
@@ -114,7 +114,7 @@ void breaker::set (const std::string &param, double val, gridUnits::units_t unit
     }
     else if (param == "limit")
     {
-        limit = unitConversion (val, unitType, puA, systemBasePower, Vbase);
+        limit = unitConversion (val, unitType, puA, component_parameters.systemBasePower, Vbase);
     }
     else if ((param == "reclosertap") || (param == "tap"))
     {
@@ -152,7 +152,7 @@ void breaker::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
     else
     {
         add (std::shared_ptr<Condition> (make_condition ("sqrt(p^2+q^2)/@bus:v", ">=", limit, m_sourceObject)));
-        opFlags.set (nonlink_source_flag);
+        component_configuration.opFlags.set (nonlink_source_flag);
         ge->setTarget (m_sinkObject, "status");
         ge->setValue (0.0);
         // action 2 to re-enable object
@@ -197,7 +197,7 @@ void breaker::conditionTriggered (index_t conditionNum, coreTime triggeredTime)
 {
     if (conditionNum == 0)
     {
-        opFlags.set (overlimit_flag);
+        component_configuration.opFlags.set (overlimit_flag);
         setConditionStatus (0, condition_status_t::disabled);
         if (recloserTap == 0.0)
         {
@@ -222,32 +222,32 @@ void breaker::conditionTriggered (index_t conditionNum, coreTime triggeredTime)
     }
     else if (conditionNum == 1)
     {
-        assert (opFlags[overlimit_flag]);
+        assert (component_configuration.opFlags[overlimit_flag]);
         tripBreaker (triggeredTime);
     }
     else if (conditionNum == 2)
     {
-        assert (opFlags[overlimit_flag]);
+        assert (component_configuration.opFlags[overlimit_flag]);
 
         setConditionStatus (1, condition_status_t::disabled);
         setConditionStatus (2, condition_status_t::disabled);
         setConditionStatus (0, condition_status_t::active);
         alert (this, JAC_COUNT_DECREASE);
-        opFlags.reset (overlimit_flag);
+        component_configuration.opFlags.reset (overlimit_flag);
         useCTI = false;
     }
 }
 
 void breaker::updateA (coreTime time)
 {
-    if (opFlags[breaker_tripped_flag])
+    if (component_configuration.opFlags[breaker_tripped_flag])
     {
         if (time >= object_time.nextUpdateTime)
         {
             resetBreaker (time);
         }
     }
-    else if (opFlags[overlimit_flag])
+    else if (component_configuration.opFlags[overlimit_flag])
     {
         if (time >= object_time.nextUpdateTime)
         {
@@ -257,7 +257,7 @@ void breaker::updateA (coreTime time)
             }
             else
             {
-                opFlags.reset (overlimit_flag);
+                component_configuration.opFlags.reset (overlimit_flag);
                 setConditionStatus (0, condition_status_t::active);
             }
         }
@@ -296,7 +296,7 @@ void breaker::timestep (coreTime time, const IOdata & /*inputs*/, const solverMo
         double val = getConditionValue (0);
         if (val > limit)
         {
-            opFlags.set (breaker_tripped_flag);
+            component_configuration.opFlags.set (breaker_tripped_flag);
             disable ();
             alert (this, BREAKER_TRIP_CURRENT);
         }
@@ -316,7 +316,7 @@ void breaker::jacobianElements (const IOdata & /*inputs*/,
         auto Voffset = bus->getOutputLoc (sMode, voltageInLocation);
         auto inputs = bus->getOutputs (noInputs, sD, sMode);
         auto inputLocs = bus->getOutputLocs (sMode);
-        if (opFlags[nonlink_source_flag])
+        if (component_configuration.opFlags[nonlink_source_flag])
         {
             auto gs = static_cast<gridSecondary *> (m_sourceObject);
             out = gs->getOutputs (inputs, sD, sMode);
@@ -392,7 +392,7 @@ void breaker::residual (const IOdata & /*inputs*/, const stateData &sD, double r
         auto offset = offsets.getDiffOffset (sMode);
         const double *dst = sD.dstate_dt + offset;
 
-        if (!opFlags[nonlink_source_flag])
+        if (!component_configuration.opFlags[nonlink_source_flag])
         {
             static_cast<Link *> (m_sourceObject)->updateLocalCache (noInputs, sD, sMode);
         }
@@ -473,7 +473,7 @@ void breaker::tripBreaker (coreTime time)
     alert (this, BREAKER_TRIP_CURRENT);
     LOG_NORMAL ("breaker " + std::to_string (m_terminal) + " tripped on " + m_sourceObject->getName ());
     triggerAction (0);
-    opFlags.set (breaker_tripped_flag);
+    component_configuration.opFlags.set (breaker_tripped_flag);
     useCTI = false;
     if (time > lastRecloseTime + recloserResetTime)
     {
@@ -497,11 +497,11 @@ void breaker::resetBreaker (coreTime time)
     lastRecloseTime = time;
     alert (this, BREAKER_RECLOSE);
     LOG_NORMAL ("breaker " + std::to_string (m_terminal) + " reset on " + m_sourceObject->getName ());
-    opFlags.reset (breaker_tripped_flag);
+    component_configuration.opFlags.reset (breaker_tripped_flag);
     // timestep (time, solverMode::pFlow);
     triggerAction (1);  // reclose the breaker
     object_time.nextUpdateTime = maxTime;
-    if (!opFlags[nonlink_source_flag])
+    if (!component_configuration.opFlags[nonlink_source_flag])
     {  // do a recompute power
         static_cast<Link *> (m_sourceObject)->updateLocalCache ();
     }
@@ -529,7 +529,7 @@ void breaker::resetBreaker (coreTime time)
     }
     else
     {
-        opFlags.reset (overlimit_flag);
+        component_configuration.opFlags.reset (overlimit_flag);
         setConditionStatus (0, condition_status_t::active);
         useCTI = false;
     }

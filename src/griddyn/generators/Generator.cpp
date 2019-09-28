@@ -53,10 +53,10 @@ Generator::Generator (const std::string &objName) : gridSecondary (objName)
 {
     setUserID (++genCount);
     updateName ();
-    opFlags.set (adjustable_P);
-    opFlags.set (adjustable_Q);
-    opFlags.set (local_voltage_control);
-    opFlags.set (local_power_control);
+    component_configuration.opFlags.set (adjustable_P);
+    component_configuration.opFlags.set (adjustable_Q);
+    component_configuration.opFlags.set (local_voltage_control);
+    component_configuration.opFlags.set (local_power_control);
 }
 
 Generator::~Generator () = default;
@@ -91,14 +91,14 @@ void Generator::pFlowObjectInitializeA (coreTime time0, std::uint32_t flags)
 {
     if (isConnected ())
     {
-        if (opFlags[local_voltage_control])
+        if (component_configuration.opFlags[local_voltage_control])
         {
             if (bus->getType () != gridBus::busType::PQ)
             {
                 bus->registerVoltageControl (this);
-                opFlags.reset (indirect_voltage_control);
+                component_configuration.opFlags.reset (indirect_voltage_control);
             }
-            else if (opFlags[indirect_voltage_control])
+            else if (component_configuration.opFlags[indirect_voltage_control])
             {
                 remoteBus = bus;
                 if (m_Vtarget < 0.6)
@@ -108,7 +108,7 @@ void Generator::pFlowObjectInitializeA (coreTime time0, std::uint32_t flags)
                 remoteBus->registerVoltageControl (this);
             }
         }
-        else if (opFlags[remote_voltage_control])
+        else if (component_configuration.opFlags[remote_voltage_control])
         {
             if (m_Vtarget < 0.6)
             {
@@ -117,19 +117,19 @@ void Generator::pFlowObjectInitializeA (coreTime time0, std::uint32_t flags)
             remoteBus->registerVoltageControl (this);
             if (remoteBus->getType () == gridBus::busType::PQ)
             {
-                opFlags.set (indirect_voltage_control);
+                component_configuration.opFlags.set (indirect_voltage_control);
             }
         }
         // load up power control
-        if (opFlags[local_power_control])
+        if (component_configuration.opFlags[local_power_control])
         {
             if (bus->getType () != gridBus::busType::PQ)
             {
                 bus->registerPowerControl (this);
-                opFlags.reset (indirect_voltage_control);
+                component_configuration.opFlags.reset (indirect_voltage_control);
             }
         }
-        else if (opFlags[remote_power_control])
+        else if (component_configuration.opFlags[remote_power_control])
         {
             // remote bus already configured
             remoteBus->registerPowerControl (this);
@@ -152,7 +152,7 @@ void Generator::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
 {
     if (machineBasePower < 0.0)
     {
-        machineBasePower = systemBasePower;
+        machineBasePower = component_parameters.systemBasePower;
     }
 
     gridSecondary::dynObjectInitializeA (time0, flags);
@@ -167,7 +167,7 @@ stateSizes Generator::LocalStateSizes (const solverMode &sMode) const
     }
     if (isPowerFlow (sMode))
     {
-        if ((isAC (sMode)) && (opFlags[indirect_voltage_control]))
+        if ((isAC (sMode)) && (component_configuration.opFlags[indirect_voltage_control]))
         {
             localStates.algSize = 1;
         }
@@ -183,7 +183,7 @@ count_t Generator::LocalJacobianCount (const solverMode &sMode) const
     }
     if (isPowerFlow (sMode))
     {
-        if ((isAC (sMode)) && (opFlags[indirect_voltage_control]))
+        if ((isAC (sMode)) && (component_configuration.opFlags[indirect_voltage_control]))
         {
             return 2;
         }
@@ -299,20 +299,20 @@ void Generator::setRemoteBus (coreObject *newRemoteBus)
     // update the flags as appropriate
     if (isSameObject (remoteBus, getParent ()))
     {
-        opFlags.reset (remote_voltage_control);
-        opFlags.set (local_voltage_control);
-        opFlags.reset (has_powerflow_adjustments);
+        component_configuration.opFlags.reset (remote_voltage_control);
+        component_configuration.opFlags.set (local_voltage_control);
+        component_configuration.opFlags.reset (has_powerflow_adjustments);
     }
     else
     {
-        opFlags.set (remote_voltage_control);
-        opFlags.reset (local_voltage_control);
-        opFlags.set (has_powerflow_adjustments);
+        component_configuration.opFlags.set (remote_voltage_control);
+        component_configuration.opFlags.reset (local_voltage_control);
+        component_configuration.opFlags.set (has_powerflow_adjustments);
     }
 
-    if (opFlags[pFlow_initialized])
+    if (component_configuration.opFlags[pFlow_initialized])
     {
-        if (opFlags[adjustable_Q])
+        if (component_configuration.opFlags[adjustable_Q])
         {
             remoteBus->registerVoltageControl (this);
             if (prevRbus != nullptr)
@@ -320,7 +320,7 @@ void Generator::setRemoteBus (coreObject *newRemoteBus)
                 prevRbus->removeVoltageControl (this);
             }
         }
-        if (opFlags[adjustable_P])
+        if (component_configuration.opFlags[adjustable_P])
         {
             remoteBus->registerPowerControl (this);
             if (prevRbus != nullptr)
@@ -339,8 +339,8 @@ void Generator::set (const std::string &param, const std::string &val)
     }
     else if (param == "remote_power_control")
     {
-        opFlags.set (remote_power_control);
-        opFlags.reset (local_power_control);
+        component_configuration.opFlags.set (remote_power_control);
+        component_configuration.opFlags.reset (local_power_control);
     }
     else if (param == "p")
     {
@@ -395,29 +395,29 @@ double Generator::get (const std::string &param, units_t unitType) const
     }
     else if (param == "pset")
     {
-        ret = unitConversion (getPmax (), puMW, unitType, systemBasePower, localBaseVoltage);
+        ret = unitConversion (getPmax (), puMW, unitType, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if (param == "pmax")
     {
-        ret = unitConversion (getPmax (), puMW, unitType, systemBasePower, localBaseVoltage);
+        ret = unitConversion (getPmax (), puMW, unitType, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if (param == "pmin")
     {
-        ret = unitConversion (getPmin (), puMW, unitType, systemBasePower, localBaseVoltage);
+        ret = unitConversion (getPmin (), puMW, unitType, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if (param == "qmax")
     {
-        ret = unitConversion (getQmax (), puMW, unitType, systemBasePower, localBaseVoltage);
+        ret = unitConversion (getQmax (), puMW, unitType, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if (param == "qmin")
     {
-        ret = unitConversion (getQmin (), puMW, unitType, systemBasePower, localBaseVoltage);
+        ret = unitConversion (getQmin (), puMW, unitType, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if (auto fptr = getObjectFunction (this, param).first)
     {
         auto unit = getObjectFunction (this, param).second;
         coreObject *tobj = const_cast<Generator *> (this);
-        ret = unitConversion (fptr (tobj), unit, unitType, systemBasePower, localBaseVoltage);
+        ret = unitConversion (fptr (tobj), unit, unitType, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else
     {
@@ -441,7 +441,7 @@ void Generator::timestep (coreTime time, const IOdata &inputs, const solverMode 
     Q = (Q > getQmax (dt, Pset)) ? getQmax (dt, Pset) : ((Q < getQmin (dt, Pset)) ? getQmin (dt, Pset) : Q);
     if (inputs[voltageInLocation] < 0.8)
     {
-        if (!opFlags[no_voltage_derate])
+        if (!component_configuration.opFlags[no_voltage_derate])
         {
             P = P * (inputs[voltageInLocation] * 1.25);
             Q = Q * (inputs[voltageInLocation] * 1.25);
@@ -455,20 +455,20 @@ void Generator::timestep (coreTime time, const IOdata &inputs, const solverMode 
 change_code
 Generator::powerFlowAdjust (const IOdata & /*inputs*/, std::uint32_t /*flags*/, check_level_t /*level*/)
 {
-    if (opFlags[at_limit])
+    if (component_configuration.opFlags[at_limit])
     {
         double V = remoteBus->getVoltage ();
         if (Q >= getQmax ())
         {
             if (V < m_Vtarget)
             {
-                opFlags.reset (at_limit);
+                component_configuration.opFlags.reset (at_limit);
                 return change_code::parameter_change;
             }
         }
         else if (V > m_Vtarget)
         {
-            opFlags.reset (at_limit);
+            component_configuration.opFlags.reset (at_limit);
             return change_code::parameter_change;
         }
     }
@@ -476,13 +476,13 @@ Generator::powerFlowAdjust (const IOdata & /*inputs*/, std::uint32_t /*flags*/, 
     {
         if (Q > getQmax ())
         {
-            opFlags.set (at_limit);
+            component_configuration.opFlags.set (at_limit);
             Q = getQmax ();
             return change_code::parameter_change;
         }
         if (Q < getQmin ())
         {
-            opFlags.set (at_limit);
+            component_configuration.opFlags.set (at_limit);
             Q = getQmin ();
             return change_code::parameter_change;
         }
@@ -510,7 +510,7 @@ void Generator::setFlag (const std::string &flag, bool val)
 {
     if (flag == "capabilitycurve")
     {
-        opFlags.set (use_capability_curve, val);
+        component_configuration.opFlags.set (use_capability_curve, val);
         if ((val) && (!bounds))
         {
             bounds = std::make_unique<utilities::OperatingBoundary> (Pmin, Pmax, Qmin, Qmax);
@@ -518,34 +518,34 @@ void Generator::setFlag (const std::string &flag, bool val)
     }
     else if ((flag == "variable") || (flag == "variablegen"))
     {
-        opFlags.set (variable_generation, val);
-        opFlags.set (local_power_control, false);
-        opFlags.set (adjustable_P, false);
+        component_configuration.opFlags.set (variable_generation, val);
+        component_configuration.opFlags.set (local_power_control, false);
+        component_configuration.opFlags.set (adjustable_P, false);
     }
     else if (flag == "no_control")
     {
-        opFlags.set (local_power_control, false);
-        opFlags.set (adjustable_P, false);
-        opFlags.set (adjustable_Q, false);
-        opFlags.set (remote_power_control, false);
-        opFlags.set (local_voltage_control, false);
-        opFlags.set (remote_voltage_control, false);
+        component_configuration.opFlags.set (local_power_control, false);
+        component_configuration.opFlags.set (adjustable_P, false);
+        component_configuration.opFlags.set (adjustable_Q, false);
+        component_configuration.opFlags.set (remote_power_control, false);
+        component_configuration.opFlags.set (local_voltage_control, false);
+        component_configuration.opFlags.set (remote_voltage_control, false);
     }
     else if ((flag == "reserve") || (flag == "reservecapable"))
     {
-        opFlags.set (reserve_capable, val);
+        component_configuration.opFlags.set (reserve_capable, val);
     }
     else if ((flag == "agc") || (flag == "agccapable") || (flag == "agc_capable"))
     {
-        opFlags.set (agc_capable, val);
+        component_configuration.opFlags.set (agc_capable, val);
     }
     else if (flag == "indirect_voltage_control")
     {
-        opFlags.set (indirect_voltage_control, val);
+        component_configuration.opFlags.set (indirect_voltage_control, val);
     }
     else if ((flag == "isoc") || (flag == "isochronous"))
     {
-        opFlags.set (isochronous_operation, val);
+        component_configuration.opFlags.set (isochronous_operation, val);
     }
     else
     {
@@ -560,10 +560,10 @@ void Generator::set (const std::string &param, double val, units_t unitType)
         switch (param[0])
         {
         case 'p':
-            P = unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+            P = unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
             break;
         case 'q':
-            Q = unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+            Q = unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
             break;
         case 'r':
             m_Rs = val;
@@ -580,23 +580,23 @@ void Generator::set (const std::string &param, double val, units_t unitType)
 
     if (param == "pset")
     {
-        Pset = unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+        Pset = unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if ((param == "p+") || (param == "adjustment"))
     {
-        generationAdjust (unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage));
+        generationAdjust (unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage));
     }
     else if (param == "qmax")
     {
-        Qmax = unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+        Qmax = unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if (param == "qmin")
     {
-        Qmin = unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+        Qmin = unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if (param == "qbias")
     {
-        Qbias = unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+        Qbias = unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if (param == "xs")
     {
@@ -608,20 +608,20 @@ void Generator::set (const std::string &param, double val, units_t unitType)
     }
     else if ((param == "vref") || (param == "vtarget"))
     {
-        m_Vtarget = unitConversion (val, unitType, puV, systemBasePower, localBaseVoltage);
+        m_Vtarget = unitConversion (val, unitType, puV, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if ((param == "rating") || (param == "base") || (param == "mbase"))
     {
-        machineBasePower = unitConversion (val, unitType, MVAR, systemBasePower, localBaseVoltage);
-        opFlags.set (independent_machine_base);
+        machineBasePower = unitConversion (val, unitType, MVAR, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
+        component_configuration.opFlags.set (independent_machine_base);
     }
     else if (param == "dpdt")
     {
-        dPdt = unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+        dPdt = unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if (param == "dqdt")
     {
-        dQdt = unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+        dQdt = unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
 
     else if (param == "participation")
@@ -634,10 +634,10 @@ void Generator::set (const std::string &param, double val, units_t unitType)
     }
     else if (param == "pmax")
     {
-        Pmax = unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+        Pmax = unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
         if (machineBasePower < 0)
         {
-            machineBasePower = unitConversionPower (Pmax, puMW, MW, systemBasePower);
+            machineBasePower = unitConversionPower (Pmax, puMW, MW, component_parameters.systemBasePower);
         }
         if (bounds)
         {
@@ -646,7 +646,7 @@ void Generator::set (const std::string &param, double val, units_t unitType)
     }
     else if (param == "pmin")
     {
-        Pmin = unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+        Pmin = unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
         if (bounds)
         {
             bounds->setValidRange (Pmin, Pmax);
@@ -674,7 +674,7 @@ void Generator::setCapabilityCurve (const std::vector<double> &Ppts,
             bounds = std::make_unique<utilities::OperatingBoundary> (Pmin, Pmax, Qmin, Qmax);
         }
         bounds->addPoints (Ppts, Qminpts, Qmaxpts);
-        opFlags.set (use_capability_curve);
+        component_configuration.opFlags.set (use_capability_curve);
     }
 }
 
@@ -716,7 +716,7 @@ void Generator::ioPartialDerivatives (const IOdata &inputs,
     {
         if (inputs[voltageInLocation] < 0.8)
         {
-            if (!opFlags[no_voltage_derate])
+            if (!component_configuration.opFlags[no_voltage_derate])
             {
                 md.assignCheckCol (PoutLocation, inputLocs[voltageInLocation], -P * 1.25);
                 md.assignCheckCol (QoutLocation, inputLocs[voltageInLocation], -Q * 1.25);
@@ -730,13 +730,13 @@ IOdata Generator::getOutputs (const IOdata &inputs, const stateData &sD, const s
     IOdata output = {-P, -Q};
     if (!isDynamic (sMode))  // use as a proxy for dynamic state
     {
-        if (opFlags[indirect_voltage_control])
+        if (component_configuration.opFlags[indirect_voltage_control])
         {
             auto offset = offsets.getAlgOffset (sMode);
             output[QoutLocation] = -sD.state[offset];
             if (inputs[voltageInLocation] < 0.8)
             {
-                if (!opFlags[no_voltage_derate])
+                if (!component_configuration.opFlags[no_voltage_derate])
                 {
                     output[PoutLocation] *= inputs[voltageInLocation] * 1.25;
                 }
@@ -744,7 +744,7 @@ IOdata Generator::getOutputs (const IOdata &inputs, const stateData &sD, const s
         }
         else if (inputs[voltageInLocation] < 0.8)
         {
-            if (!opFlags[no_voltage_derate])
+            if (!component_configuration.opFlags[no_voltage_derate])
             {
                 output[PoutLocation] *= inputs[voltageInLocation] * 1.25;
                 output[QoutLocation] *= inputs[voltageInLocation] * 1.25;
@@ -761,11 +761,11 @@ double Generator::getRealPower (const IOdata &inputs, const stateData & /*sD*/, 
     double output = -P;
     if (!isDynamic (sMode))  // use as a proxy for dynamic state
     {
-        if (opFlags[indirect_voltage_control])
+        if (component_configuration.opFlags[indirect_voltage_control])
         {
             if (inputs[voltageInLocation] < 0.8)
             {
-                if (!opFlags[no_voltage_derate])
+                if (!component_configuration.opFlags[no_voltage_derate])
                 {
                     output *= inputs[voltageInLocation] * 1.25;
                 }
@@ -773,7 +773,7 @@ double Generator::getRealPower (const IOdata &inputs, const stateData & /*sD*/, 
         }
         else if (inputs[voltageInLocation] < 0.8)
         {
-            if (!opFlags[no_voltage_derate])
+            if (!component_configuration.opFlags[no_voltage_derate])
             {
                 output *= inputs[voltageInLocation] * 1.25;
             }
@@ -789,14 +789,14 @@ double Generator::getReactivePower (const IOdata &inputs, const stateData &sD, c
     double output = -Q;
     if (!isDynamic (sMode))  // use as a proxy for dynamic state
     {
-        if (opFlags[indirect_voltage_control])
+        if (component_configuration.opFlags[indirect_voltage_control])
         {
             auto offset = offsets.getAlgOffset (sMode);
             output = sD.state[offset];
         }
         else if (inputs[voltageInLocation] < 0.8)
         {
-            if (!opFlags[no_voltage_derate])
+            if (!component_configuration.opFlags[no_voltage_derate])
             {
                 output *= inputs[voltageInLocation] * 1.25;
             }
@@ -816,12 +816,12 @@ void Generator::algebraicUpdate (const IOdata & /*inputs*/,
                                  const solverMode &sMode,
                                  double /*alpha*/)
 {
-    if ((!isDynamic (sMode)) && (opFlags[indirect_voltage_control]))
+    if ((!isDynamic (sMode)) && (component_configuration.opFlags[indirect_voltage_control]))
     {  // the bus is managing a remote bus voltage
         double V = remoteBus->getVoltage (sD, sMode);
         auto offset = offsets.getAlgOffset (sMode);
         // printf("Q=%f\n",sD.state[offset]);
-        if (!opFlags[at_limit])
+        if (!component_configuration.opFlags[at_limit])
         {
             update[offset] = -Qbias + (V - m_Vtarget) * vRegFraction * 10000.0;
         }
@@ -834,12 +834,12 @@ void Generator::algebraicUpdate (const IOdata & /*inputs*/,
 // compute the residual for the dynamic states
 void Generator::residual (const IOdata & /*inputs*/, const stateData &sD, double resid[], const solverMode &sMode)
 {
-    if ((!isDynamic (sMode)) && (opFlags[indirect_voltage_control]))
+    if ((!isDynamic (sMode)) && (component_configuration.opFlags[indirect_voltage_control]))
     {  // the bus is managing a remote bus voltage
         double V = remoteBus->getVoltage (sD, sMode);
         auto offset = offsets.getAlgOffset (sMode);
         // printf("Q=%f\n",sD.state[offset]);
-        if (!opFlags[at_limit])
+        if (!component_configuration.opFlags[at_limit])
         {
             resid[offset] = sD.state[offset] + Qbias - (V - m_Vtarget) * vRegFraction * 10000.0;
         }
@@ -856,11 +856,11 @@ void Generator::jacobianElements (const IOdata & /*inputs*/,
                                   const IOlocs & /*inputLocs*/,
                                   const solverMode &sMode)
 {
-    if ((!isDynamic (sMode)) && (opFlags[indirect_voltage_control]))
+    if ((!isDynamic (sMode)) && (component_configuration.opFlags[indirect_voltage_control]))
     {  // the bus is managing a remote bus voltage
         auto Voff = remoteBus->getOutputLoc (sMode, voltageInLocation);
         auto offset = offsets.getAlgOffset (sMode);
-        if (!opFlags[at_limit])
+        if (!component_configuration.opFlags[at_limit])
         {
             // resid[offset] = sD.state[offset] - (V - m_Vtarget)*remoteVRegFraction * 10000;
             md.assignCheck (offset, offset, 1);
@@ -950,7 +950,7 @@ double Generator::getPmax (const coreTime time) const
 
 double Generator::getQmax (const coreTime /*time*/, double Ptest) const
 {
-    if (opFlags[use_capability_curve])
+    if (component_configuration.opFlags[use_capability_curve])
     {
         return bounds->getMax ((Ptest == kNullVal) ? P : Ptest);
     }
@@ -967,7 +967,7 @@ double Generator::getPmin (const coreTime time) const
 }
 double Generator::getQmin (const coreTime /*time*/, double Ptest) const
 {
-    if (opFlags[use_capability_curve])
+    if (component_configuration.opFlags[use_capability_curve])
     {
         return bounds->getMin ((Ptest == kNullVal) ? P : Ptest);
     }

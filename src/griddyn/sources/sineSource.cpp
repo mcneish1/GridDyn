@@ -75,7 +75,7 @@ double sineSource::computeOutput (coreTime time) const
     double addComponent = NAmp * sin (2.0 * kPI * (Nfrequency * tdiff) + phase);
     double mult = 1.0;
 
-    if (opFlags[pulsed_flag])
+    if (component_configuration.opFlags[pulsed_flag])
     {
         auto tdiff2 = time - cycleTime;
         if (tdiff2 > period)
@@ -107,7 +107,7 @@ void sineSource::updateOutput (coreTime time)
         tdiff -= sinePeriod;
         lastCycle += sinePeriod;
     }
-    if (opFlags[pulsed_flag])
+    if (component_configuration.opFlags[pulsed_flag])
     {
         auto tdiff2 = time - cycleTime;
         while (tdiff2 > period)
@@ -164,15 +164,15 @@ void sineSource::set (const std::string &param, double val, gridUnits::units_t u
     {
         if (val > 0.0)
         {
-            if (!(opFlags[pulsed_flag]))
+            if (!(component_configuration.opFlags[pulsed_flag]))
             {
                 cycleTime = object_time.prevTime;
             }
-            opFlags.set (pulsed_flag);
+            component_configuration.opFlags.set (pulsed_flag);
         }
         else
         {
-            opFlags.reset (pulsed_flag);
+            component_configuration.opFlags.reset (pulsed_flag);
         }
     }
     else

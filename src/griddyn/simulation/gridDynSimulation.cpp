@@ -924,7 +924,7 @@ void gridDynSimulation::setDefaultMode (solution_modes_t mode, const solverMode 
     case solution_modes_t::powerflow_mode:
         if (isAlgebraicOnly (sMode))
         {
-            if (opFlags[pFlow_initialized])
+            if (component_configuration.opFlags[pFlow_initialized])
             {
                 if (sd->isInitialized ())
                 {
@@ -942,7 +942,7 @@ void gridDynSimulation::setDefaultMode (solution_modes_t mode, const solverMode 
     case solution_modes_t::dae_mode:
         if (isDAE (sMode))
         {
-            if (opFlags[dyn_initialized])
+            if (component_configuration.opFlags[dyn_initialized])
             {
                 if (sd->isInitialized ())
                 {
@@ -960,7 +960,7 @@ void gridDynSimulation::setDefaultMode (solution_modes_t mode, const solverMode 
     case solution_modes_t::algebraic_mode:
         if (isAlgebraicOnly (sMode))
         {
-            if (opFlags[dyn_initialized])
+            if (component_configuration.opFlags[dyn_initialized])
             {
                 if (sd->isInitialized ())
                 {
@@ -978,7 +978,7 @@ void gridDynSimulation::setDefaultMode (solution_modes_t mode, const solverMode 
     case solution_modes_t::differential_mode:
         if (isDifferentialOnly (sMode))
         {
-            if (opFlags[dyn_initialized])
+            if (component_configuration.opFlags[dyn_initialized])
             {
                 if (sd->isInitialized ())
                 {
@@ -1065,7 +1065,7 @@ void gridDynSimulation::set (const std::string &param, double val, gridUnits::un
     }
     else if (param == "voltagetolerance")
     {
-        tols.voltageTolerance = unitConversionPower (val, unitType, puV, systemBasePower);
+        tols.voltageTolerance = unitConversionPower (val, unitType, puV, component_parameters.systemBasePower);
     }
     else if (param == "angletolerance")
     {
@@ -1089,7 +1089,7 @@ void gridDynSimulation::set (const std::string &param, double val, gridUnits::un
     }
     else if (param == "poweradjustthreshold")
     {
-        powerAdjustThreshold = unitConversionPower (val, unitType, puMW, systemBasePower);
+        powerAdjustThreshold = unitConversionPower (val, unitType, puMW, component_parameters.systemBasePower);
     }
     else if (param == "maxpoweradjustiterations")
     {
@@ -1325,7 +1325,7 @@ void gridDynSimulation::alert (coreObject *object, int code)
         if (res != alertFlags.end ())
         {
             auto flagNum = res->second;
-            opFlags.set (flagNum);
+            component_configuration.opFlags.set (flagNum);
         }
         else
         {
@@ -1963,6 +1963,11 @@ count_t searchForGridlabDobject (const coreObject *obj)
         cnt += gLd->mpiCount ();
     }
     return cnt;
+}
+
+bool gridDynSimulation::hasConstraints () const
+{
+    return ((component_configuration.opFlags[has_constraints]) || (controlFlags[voltage_constraints_flag]));
 }
 
 }  // namespace griddyn

@@ -231,7 +231,7 @@ void scheduler::set (const std::string &param, double val, units_t unitType)
     }
     else if (param == "base")
     {
-        m_Base = unitConversion (val, unitType, MW, systemBasePower);
+        m_Base = unitConversion (val, unitType, MW, component_parameters.systemBasePower);
     }
     else if (param == "target")
     {

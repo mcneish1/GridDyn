@@ -427,7 +427,7 @@ void subsystem::updateBus (gridBus *bus, index_t busnumber)
     }
     else
     {
-        if (opFlags[direct_connection])
+        if (component_configuration.opFlags[direct_connection])
         {
             Link::updateBus (bus, busnumber);
         }

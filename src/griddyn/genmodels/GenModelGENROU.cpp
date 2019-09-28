@@ -52,7 +52,7 @@ void GenModelGENROU::dynObjectInitializeA (coreTime /*time0*/, std::uint32_t /*f
 void GenModelGENROU::dynObjectInitializeB (const IOdata &inputs, const IOdata &desiredOutput, IOdata &fieldSet)
 {
     computeInitialAngleAndCurrent (inputs, desiredOutput, Rs, Xq);
-    double *gm = m_state.data ();
+    double *gm = component_state.m_state.data ();
 
     double D1 = (Xdpp) / (Xdp);
     double Q1 = (Xqpp) / (Xqp);
@@ -124,7 +124,7 @@ void GenModelGENROU::derivative (const IOdata &inputs,
     double Q2 = (Xqp - Xqpp) / (Xqp);
 
     // delta
-    rvd[0] = systemBaseFrequency * (gmd[1] - 1.0);
+    rvd[0] = component_parameters.systemBaseFrequency * (gmd[1] - 1.0);
     // Edp and Eqp
     rvd[2] = (-gmd[2] - (Xq - Xqp) * (gm[1] - (Q2 / (Xqp)) * (gmd[5] + (Xqp)*gm[1] + gmd[2]))) / Tqop;
 
@@ -254,7 +254,7 @@ void GenModelGENROU::jacobianElements (const IOdata &inputs,
     }
     // delta
     md.assign (refDiff, refDiff, -sD.cj);
-    md.assign (refDiff, refDiff + 1, systemBaseFrequency);
+    md.assign (refDiff, refDiff + 1, component_parameters.systemBaseFrequency);
 
     // double Pe =D1*gmd[3] * gm[1] + D2*gmd[4] * gm[1] - Q1*gmd[2] * gm[0] +
     // Q2*gmd[5] * gm[0];

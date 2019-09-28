@@ -28,14 +28,14 @@ namespace links
 using namespace gridUnits;
 dcLink::dcLink (const std::string &objName) : Link (objName)
 {
-    opFlags.set (dc_only);
-    opFlags.set (network_connected);
+    component_configuration.opFlags.set (dc_only);
+    component_configuration.opFlags.set (network_connected);
 }
 
 dcLink::dcLink (double rP, double Lp, const std::string &objName) : Link (objName), r (rP), x (Lp)
 {
-    opFlags.set (dc_only);
-    opFlags.set (network_connected);
+    component_configuration.opFlags.set (dc_only);
+    component_configuration.opFlags.set (network_connected);
 }
 
 coreObject *dcLink::clone (coreObject *obj) const
@@ -122,7 +122,7 @@ void dcLink::pFlowObjectInitializeA (coreTime time0, std::uint32_t flags)
     Link::pFlowObjectInitializeA (time0, flags);
     if (isEnabled ())
     {
-        if (opFlags[fixed_target_power])
+        if (component_configuration.opFlags[fixed_target_power])
         {
             fixRealPower (Pset, 1);
         }
@@ -134,7 +134,7 @@ void dcLink::pFlowObjectInitializeB ()
     if (isEnabled ())
     {
         updateLocalCache ();
-        if (opFlags[fixed_target_power])
+        if (component_configuration.opFlags[fixed_target_power])
         {
             fixRealPower (Pset, 1);
         }
@@ -143,13 +143,13 @@ void dcLink::pFlowObjectInitializeB ()
 
 void dcLink::dynObjectInitializeA (coreTime /*time0*/, std::uint32_t /*flags*/)
 {
-    m_dstate_dt.resize (1);
-    m_state.resize (1);
+    component_state.m_dstate_dt.resize (1);
+    component_state.m_state.resize (1);
     updateLocalCache ();
     if (x != 0)
     {
-        m_state[0] = Idc;
-        m_dstate_dt[0] = 0.0;
+        component_state.m_state[0] = Idc;
+        component_state.m_dstate_dt[0] = 0.0;
     }
     else
     {
@@ -305,7 +305,7 @@ void dcLink::jacobianElements (const IOdata & /*inputs*/,
             auto offset = offsets.getAlgOffset (sMode);
             md.assignCheckCol (offset, B1Voffset, 1.0);
             md.assignCheckCol (offset, B2Voffset, -1.0);
-            if (opFlags[fixed_target_power])
+            if (component_configuration.opFlags[fixed_target_power])
             {
                 md.assignCheckCol (offset, B1Voffset, -Pset / (linkInfo.v1 * linkInfo.v1));
                 md.assign (offset, offset, -1.0);
@@ -327,7 +327,7 @@ void dcLink::residual (const IOdata &inputs, const stateData &sD, double resid[]
         else
         {
             auto offset = offsets.getAlgOffset (sMode);
-            if (opFlags[fixed_target_power])
+            if (component_configuration.opFlags[fixed_target_power])
             {
                 resid[offset] = (linkInfo.v1 - linkInfo.v2) + Pset / linkInfo.v1 - sD.state[offset];
             }
@@ -346,9 +346,9 @@ void dcLink::setState (coreTime time, const double state[], const double dstate_
         if (isDynamic (sMode))
         {
             auto offset = offsets.getDiffOffset (sMode);
-            m_state[0] = state[offset];
-            m_dstate_dt[0] = dstate_dt[offset];
-            Idc = m_state[0];
+            component_state.m_state[0] = state[offset];
+            component_state.m_dstate_dt[0] = dstate_dt[offset];
+            Idc = component_state.m_state[0];
         }
         else
         {
@@ -366,8 +366,8 @@ void dcLink::guessState (const coreTime /*time*/, double state[], double dstate_
         if (isDynamic (sMode))
         {
             auto offset = offsets.getDiffOffset (sMode);
-            state[offset] = m_state[0];
-            dstate_dt[offset] = m_dstate_dt[0];
+            state[offset] = component_state.m_state[0];
+            dstate_dt[offset] = component_state.m_dstate_dt[0];
         }
         else
         {
@@ -443,12 +443,12 @@ int dcLink::fixRealPower (double power,
                           gridUnits::units_t unitType)
 {
     int ret = 0;
-    opFlags.set (fixed_target_power);
+    component_configuration.opFlags.set (fixed_target_power);
     if (fixedTerminal == 0)
     {
         fixedTerminal = measureTerminal;
     }
-    Pset = unitConversion (power, unitType, puMW, systemBasePower);
+    Pset = unitConversion (power, unitType, puMW, component_parameters.systemBasePower);
     if ((fixedTerminal == 2) || (fixedTerminal == B2->getID ()))
     {
         if (B2->getType () == gridBus::busType::SLK)

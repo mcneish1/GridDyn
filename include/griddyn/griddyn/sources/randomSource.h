@@ -58,10 +58,7 @@ public:
 	virtual void timestep(coreTime time, const IOdata &inputs, const solverMode &sMode) override;
 
 	/** check if the random number generation has been triggered*/
-	bool isTriggered()
-	{
-		return opFlags[triggered_flag];
-	}
+	bool isTriggered();
 	virtual void reset(reset_levels level = reset_levels::minimal) override;
 
 	virtual void set(const std::string &param, const std::string &val) override;

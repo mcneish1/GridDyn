@@ -52,7 +52,7 @@ void ExciterIEEEtype2::dynObjectInitializeB(const IOdata &inputs,
 {
 	Exciter::dynObjectInitializeB(inputs, desiredOutput,
 		fieldSet);  // this will dynInitializeB the field state if need be
-	double *gs = m_state.data();
+	double *gs = component_state.m_state.data();
 	gs[1] = (Ke + Aex * exp(Bex * gs[0])) * gs[0];  // Vr
 	gs[2] = 0;  // X1
 	gs[3] = gs[1];  // X2
@@ -76,9 +76,9 @@ void ExciterIEEEtype2::residual(const IOdata &inputs,
 	const double *esp = sD.dstate_dt + offset;
 	double *rv = resid + offset;
 	rv[0] = (-(Ke + Aex * exp(Bex * es[0])) * es[0] + es[1]) / Te - esp[0];
-	if (opFlags[outside_vlim])
+	if (component_configuration.opFlags[outside_vlim])
 	{
-		if (opFlags[etrigger_high])
+		if (component_configuration.opFlags[etrigger_high])
 		{
 			rv[1] = esp[1];
 		}
@@ -104,7 +104,7 @@ void ExciterIEEEtype2::derivative(const IOdata &inputs,
 	const double *es = Loc.diffStateLoc;
 	double *d = Loc.destDiffLoc;
 	d[0] = (-(Ke + Aex * exp(Bex * es[0])) * es[0] + es[1]) / Te;
-	if (opFlags[outside_vlim])
+	if (component_configuration.opFlags[outside_vlim])
 	{
 		d[1] = 0;
 	}
@@ -141,7 +141,7 @@ void ExciterIEEEtype2::jacobianElements(const IOdata & /*inputs*/,
 	md.assign(refI, refI, temp1);
 	md.assign(refI, refI + 1, 1.0 / Te);
 
-	if (opFlags[outside_vlim])
+	if (component_configuration.opFlags[outside_vlim])
 	{
 		md.assign(refI + 1, refI + 1, sD.cj);
 	}
@@ -180,7 +180,7 @@ void ExciterIEEEtype2::rootTest(const IOdata &inputs,
 	int rootOffset = offsets.getRootOffset(sMode);
 	const double *es = sD.state + offset;
 
-	if (opFlags[outside_vlim])
+	if (component_configuration.opFlags[outside_vlim])
 	{
 		roots[rootOffset] = Ka * Kf * es[2] + Ka * (Vref + vBias - inputs[voltageInLocation]) - es[1];
 	}
@@ -189,7 +189,7 @@ void ExciterIEEEtype2::rootTest(const IOdata &inputs,
 		roots[rootOffset] = std::min(Vrmax - es[1], es[1] - Vrmin) + 0.0001;
 		if (es[1] > Vrmax)
 		{
-			opFlags.set(etrigger_high);
+			component_configuration.opFlags.set(etrigger_high);
 		}
 	}
 }
@@ -199,18 +199,18 @@ change_code ExciterIEEEtype2::rootCheck(const IOdata &inputs,
 	const solverMode & /*sMode*/,
 	check_level_t /*level*/)
 {
-	double *es = m_state.data();
+	double *es = component_state.m_state.data();
 	change_code ret = change_code::no_change;
-	if (opFlags[outside_vlim])
+	if (component_configuration.opFlags[outside_vlim])
 	{
 		double test = Ka * Kf * es[2] + Ka * (Vref + vBias - inputs[voltageInLocation]) - es[1];
-		if (opFlags[etrigger_high])
+		if (component_configuration.opFlags[etrigger_high])
 		{
 			if (test < 0.0)
 			{
 				ret = change_code::jacobian_change;
-				opFlags.reset(outside_vlim);
-				opFlags.reset(etrigger_high);
+				component_configuration.opFlags.reset(outside_vlim);
+				component_configuration.opFlags.reset(etrigger_high);
 				alert(this, JAC_COUNT_INCREASE);
 			}
 		}
@@ -219,7 +219,7 @@ change_code ExciterIEEEtype2::rootCheck(const IOdata &inputs,
 			if (test > 0.0)
 			{
 				ret = change_code::jacobian_change;
-				opFlags.reset(outside_vlim);
+				component_configuration.opFlags.reset(outside_vlim);
 				alert(this, JAC_COUNT_INCREASE);
 			}
 		}
@@ -228,16 +228,16 @@ change_code ExciterIEEEtype2::rootCheck(const IOdata &inputs,
 	{
 		if (es[1] > Vrmax + 0.0001)
 		{
-			opFlags.set(etrigger_high);
-			opFlags.set(outside_vlim);
+			component_configuration.opFlags.set(etrigger_high);
+			component_configuration.opFlags.set(outside_vlim);
 			es[1] = Vrmax;
 			ret = change_code::jacobian_change;
 			alert(this, JAC_COUNT_DECREASE);
 		}
 		else if (es[1] < Vrmin - 0.0001)
 		{
-			opFlags.reset(etrigger_high);
-			opFlags.set(outside_vlim);
+			component_configuration.opFlags.reset(etrigger_high);
+			component_configuration.opFlags.set(outside_vlim);
 			es[1] = Vrmin;
 			ret = change_code::jacobian_change;
 			alert(this, JAC_COUNT_DECREASE);

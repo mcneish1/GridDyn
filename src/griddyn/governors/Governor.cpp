@@ -50,8 +50,8 @@ Governor::Governor (const std::string &objName)
     dbb.addOwningReference ();
     cb.addOwningReference ();
     delay.addOwningReference ();
-    m_inputSize = 2;
-    m_outputSize = 1;
+    component_ports.m_inputSize = 2;
+    component_ports.m_outputSize = 1;
 }
 
 coreObject *Governor::clone (coreObject *obj) const
@@ -87,17 +87,17 @@ void Governor::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
     object_time.prevTime = time0;
     if (Wref < 0)
     {
-        Wref = systemBaseFrequency;
+        Wref = component_parameters.systemBaseFrequency;
     }
-    if (!opFlags[ignore_throttle])
+    if (!component_configuration.opFlags[ignore_throttle])
     {
         addSubObject (&delay);  // delay block comes first to set the first state as the output
     }
-    if (!opFlags[ignore_filter])
+    if (!component_configuration.opFlags[ignore_filter])
     {
         addSubObject (&cb);
     }
-    if (!opFlags[ignore_deadband])
+    if (!component_configuration.opFlags[ignore_deadband])
     {
         addSubObject (&dbb);
     }
@@ -324,17 +324,17 @@ void Governor::set (const std::string &param, double val, units_t unitType)
     }
     else if (param == "pmax")
     {
-        Pmax = unitConversion (val, unitType, puMW, systemBasePower);
+        Pmax = unitConversion (val, unitType, puMW, component_parameters.systemBasePower);
         delay.set ("max", Pmax);
     }
     else if (param == "pmin")
     {
-        Pmin = unitConversion (val, unitType, puMW, systemBasePower);
+        Pmin = unitConversion (val, unitType, puMW, component_parameters.systemBasePower);
         delay.set ("min", Pmin);
     }
     else if (param == "deadband")
     {
-        deadbandHigh = unitConversionFreq (val, unitType, puHz, systemBaseFrequency);
+        deadbandHigh = unitConversionFreq (val, unitType, puHz, component_parameters.systemBaseFrequency);
         if (deadbandHigh > 1.0)
         {
             deadbandHigh = deadbandHigh - 1.0;
@@ -344,7 +344,7 @@ void Governor::set (const std::string &param, double val, units_t unitType)
     }
     else if (param == "deadbandhigh")
     {
-        deadbandHigh = unitConversionFreq (val, unitType, puHz, systemBaseFrequency);
+        deadbandHigh = unitConversionFreq (val, unitType, puHz, component_parameters.systemBaseFrequency);
         if (deadbandHigh > 1.0)
         {
             deadbandHigh = deadbandHigh - 1.0;
@@ -353,7 +353,7 @@ void Governor::set (const std::string &param, double val, units_t unitType)
     }
     else if (param == "deadbandlow")
     {
-        deadbandLow = -unitConversionFreq (val, unitType, puHz, systemBaseFrequency);
+        deadbandLow = -unitConversionFreq (val, unitType, puHz, component_parameters.systemBaseFrequency);
         if (deadbandLow > 0.95)
         {
             deadbandLow = deadbandLow - 1.0;
@@ -399,23 +399,23 @@ double Governor::get (const std::string &param, gridUnits::units_t unitType) con
     }
     else if (param == "pmax")
     {
-        out = unitConversion (Pmax, puMW, unitType, puMW, systemBasePower);
+        out = unitConversion (Pmax, puMW, unitType, puMW, component_parameters.systemBasePower);
     }
     else if (param == "pmin")
     {
-        out = unitConversion (Pmin, puMW, unitType, puMW, systemBasePower);
+        out = unitConversion (Pmin, puMW, unitType, puMW, component_parameters.systemBasePower);
     }
     else if (param == "deadband")
     {
-        out = unitConversionFreq (deadbandHigh, puHz, unitType, systemBaseFrequency);
+        out = unitConversionFreq (deadbandHigh, puHz, unitType, component_parameters.systemBaseFrequency);
     }
     else if (param == "deadbandhigh")
     {
-        out = unitConversionFreq (deadbandHigh, puHz, unitType, systemBaseFrequency);
+        out = unitConversionFreq (deadbandHigh, puHz, unitType, component_parameters.systemBaseFrequency);
     }
     else if (param == "deadbandlow")
     {
-        out = unitConversionFreq (deadbandHigh, puHz, unitType, systemBaseFrequency);
+        out = unitConversionFreq (deadbandHigh, puHz, unitType, component_parameters.systemBaseFrequency);
     }
     else
     {

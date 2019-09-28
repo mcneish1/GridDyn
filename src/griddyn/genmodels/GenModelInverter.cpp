@@ -50,7 +50,7 @@ void GenModelInverter::dynObjectInitializeA (coreTime /*time0*/, std::uint32_t /
 // initial conditions
 void GenModelInverter::dynObjectInitializeB (const IOdata &inputs, const IOdata &desiredOutput, IOdata &fieldSet)
 {
-    double *gm = m_state.data ();
+    double *gm = component_state.m_state.data ();
     double V = inputs[voltageInLocation];
     std::complex<double> outCurrent (desiredOutput[PoutLocation] / V, -desiredOutput[QoutLocation] / V);
     auto Z = std::complex<double> (Rs, Xd);
@@ -86,7 +86,7 @@ void GenModelInverter::algebraicUpdate (const IOdata &inputs,
     // double angle = std::atan2(g, b);
 
     double Pmt = inputs[genModelPmechInLocation];
-    if (opFlags[at_angle_limits])
+    if (component_configuration.opFlags[at_angle_limits])
     {
         if (Pmt > 0)
         {
@@ -149,7 +149,7 @@ void GenModelInverter::residual (const IOdata &inputs,
     double angle = *Loc.algStateLoc;
     // printf("time=%f, angle=%f\n", sD.time, angle);
     double Pmt = inputs[genModelPmechInLocation];
-    if (opFlags[at_angle_limits])
+    if (component_configuration.opFlags[at_angle_limits])
     {
         if (Pmt > 0)
         {
@@ -203,7 +203,7 @@ double GenModelInverter::getAngle (const stateData &sD, const solverMode &sMode,
         *angleOffset = offset;
     }
 
-    return (!sD.empty ()) ? sD.state[offset] : m_state[0];
+    return (!sD.empty ()) ? sD.state[offset] : component_state.m_state[0];
 }
 
 IOdata GenModelInverter::getOutputs (const IOdata &inputs, const stateData &sD, const solverMode &sMode) const
@@ -296,7 +296,7 @@ void GenModelInverter::jacobianElements (const IOdata &inputs,
     }
     auto Loc = offsets.getLocations (sD, sMode, this);
     auto offset = Loc.algOffset;
-    if (opFlags[at_angle_limits])
+    if (component_configuration.opFlags[at_angle_limits])
     {
         md.assign (offset, offset, -1.0);
     }
@@ -415,7 +415,7 @@ void GenModelInverter::rootTest (const IOdata &inputs,
         auto ro = offsets.getRootOffset (sMode);
         auto so = offsets.getAlgOffset (sMode);
         double angle = sD.state[so];
-        if (opFlags[at_angle_limits])
+        if (component_configuration.opFlags[at_angle_limits])
         {
             if (inputs[genModelPmechInLocation] > 0)
             {
@@ -447,23 +447,23 @@ void GenModelInverter::rootTrigger (coreTime /*time*/,
         auto ro = offsets.getRootOffset (sMode);
         if (rootMask[ro] > 0)
         {
-            if (opFlags[at_angle_limits])
+            if (component_configuration.opFlags[at_angle_limits])
             {
-                opFlags.reset (at_angle_limits);
+                component_configuration.opFlags.reset (at_angle_limits);
                 LOG_DEBUG ("reset angle limit");
-                algebraicUpdate (inputs, emptyStateData, m_state.data (), sMode, 1.0);
+                algebraicUpdate (inputs, emptyStateData, component_state.m_state.data (), sMode, 1.0);
             }
             else
             {
-                opFlags.set (at_angle_limits);
+                component_configuration.opFlags.set (at_angle_limits);
                 LOG_DEBUG ("angle at limits");
                 if (inputs[genModelPmechInLocation] > 0)
                 {
-                    m_state[0] = maxAngle;
+                    component_state.m_state[0] = maxAngle;
                 }
                 else
                 {
-                    m_state[0] = minAngle;
+                    component_state.m_state[0] = minAngle;
                 }
             }
         }
@@ -479,7 +479,7 @@ change_code GenModelInverter::rootCheck (const IOdata &inputs,
     {
         auto Loc = offsets.getLocations (sD, sMode, this);
         double angle = Loc.algStateLoc[0];
-        if (opFlags[at_angle_limits])
+        if (component_configuration.opFlags[at_angle_limits])
         {
             if (inputs[genModelPmechInLocation] > 0)
             {
@@ -487,9 +487,9 @@ change_code GenModelInverter::rootCheck (const IOdata &inputs,
                                                  cos (maxAngle), sin (maxAngle));
                 if (inputs[genModelPmechInLocation] - pmax < -0.0001)
                 {
-                    opFlags.reset (at_angle_limits);
+                    component_configuration.opFlags.reset (at_angle_limits);
                     LOG_DEBUG ("reset angle limit-from root check");
-                    algebraicUpdate (inputs, emptyStateData, m_state.data (), sMode, 1.0);
+                    algebraicUpdate (inputs, emptyStateData, component_state.m_state.data (), sMode, 1.0);
                     return change_code::jacobian_change;
                 }
             }
@@ -499,9 +499,9 @@ change_code GenModelInverter::rootCheck (const IOdata &inputs,
                                                  cos (minAngle), sin (minAngle));
                 if (pmin - inputs[genModelPmechInLocation] < -0.0001)
                 {
-                    opFlags.reset (at_angle_limits);
+                    component_configuration.opFlags.reset (at_angle_limits);
                     LOG_DEBUG ("reset angle limit- from root check");
-                    algebraicUpdate (inputs, emptyStateData, m_state.data (), sMode, 1.0);
+                    algebraicUpdate (inputs, emptyStateData, component_state.m_state.data (), sMode, 1.0);
                     return change_code::jacobian_change;
                 }
             }
@@ -511,15 +511,15 @@ change_code GenModelInverter::rootCheck (const IOdata &inputs,
             auto remAngle = std::min (angle - minAngle, maxAngle - angle);
             if (remAngle < 0.0000001)
             {
-                opFlags.set (at_angle_limits);
+                component_configuration.opFlags.set (at_angle_limits);
                 LOG_DEBUG ("angle at limit from check");
                 if (inputs[genModelPmechInLocation] > 0)
                 {
-                    m_state[0] = maxAngle;
+                    component_state.m_state[0] = maxAngle;
                 }
                 else
                 {
-                    m_state[0] = minAngle;
+                    component_state.m_state[0] = minAngle;
                 }
                 return change_code::jacobian_change;
             }

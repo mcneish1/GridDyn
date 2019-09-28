@@ -24,26 +24,26 @@ namespace blocks
 transferFunctionBlock::transferFunctionBlock (const std::string &objName) : Block (objName), a (2, 1), b (2, 0)
 {
     b[0] = 1;
-    opFlags.set (use_state);
+    component_configuration.opFlags.set (use_state);
 }
 
 transferFunctionBlock::transferFunctionBlock (int order) : a (order + 1, 1), b (order + 1, 0)
 {
     b[0] = 1;
-    opFlags.set (use_state);
+    component_configuration.opFlags.set (use_state);
 }
 
 transferFunctionBlock::transferFunctionBlock (std::vector<double> Acoef) : a (std::move (Acoef)), b (a.size (), 0)
 {
     b[0] = 1;
-    opFlags.set (use_state);
+    component_configuration.opFlags.set (use_state);
 }
 
 transferFunctionBlock::transferFunctionBlock (std::vector<double> Acoef, std::vector<double> Bcoef)
     : a (std::move (Acoef)), b (std::move (Bcoef))
 {
     b.resize (a.size (), 0);
-    opFlags.set (use_state);
+    component_configuration.opFlags.set (use_state);
 }
 
 coreObject *transferFunctionBlock::clone (coreObject *obj) const
@@ -63,7 +63,7 @@ void transferFunctionBlock::dynObjectInitializeA (coreTime time0, std::uint32_t 
 {
     if (b.back () == 0)
     {
-        opFlags[differential_output] = true;
+        component_configuration.opFlags[differential_output] = true;
         extraOutputState = false;
     }
     else
@@ -86,21 +86,21 @@ void transferFunctionBlock::dynObjectInitializeB (const IOdata &inputs,
 {
     if (desiredOutput.empty ())
     {
-        //	m_state[2] = (1.0 - m_T2 / m_T1) * (inputs[0] + bias);
-        m_state[1] = (inputs[0] + bias);
-        m_state[0] = m_state[1] * K;
-        if (opFlags[has_limits])
+        //	component_state.m_state[2] = (1.0 - m_T2 / m_T1) * (inputs[0] + bias);
+        component_state.m_state[1] = (inputs[0] + bias);
+        component_state.m_state[0] = component_state.m_state[1] * K;
+        if (component_configuration.opFlags[has_limits])
         {
             Block::rootCheck (inputs, emptyStateData, cLocalSolverMode, check_level_t::reversable_only);
-            m_state[0] = valLimit (m_state[0], Omin, Omax);
+            component_state.m_state[0] = valLimit (component_state.m_state[0], Omin, Omax);
         }
-        fieldSet[0] = m_state[0];
+        fieldSet[0] = component_state.m_state[0];
         prevInput = inputs[0] + bias;
     }
     else
     {
-        m_state[0] = desiredOutput[0];
-        //	m_state[1] = (1.0 - m_T2 / m_T1) * desiredOutput[0] / K;
+        component_state.m_state[0] = desiredOutput[0];
+        //	component_state.m_state[1] = (1.0 - m_T2 / m_T1) * desiredOutput[0] / K;
         fieldSet[0] = desiredOutput[0] - bias;
         prevInput = desiredOutput[0] / K;
     }
@@ -140,7 +140,7 @@ void transferFunctionBlock::blockDerivative (double input,
     // auto Aoffset = offsets.getAlgOffset (sMode);
     // deriv[offset + limiter_diff] = K*(input + bias - sD.state[Aoffset +
     // limiter_alg]) / m_T1;
-    if (opFlags[use_ramp_limits])
+    if (component_configuration.opFlags[use_ramp_limits])
     {
         Block::blockDerivative (input, didt, sD, deriv, sMode);
     }
@@ -179,12 +179,12 @@ double transferFunctionBlock::step (coreTime time, double inputA)
     // double ival, ival2;
     if (dt >= fabs (5.0))
     {
-        m_state[2] = input;
+        component_state.m_state[2] = input;
     }
     else if (dt <= fabs (0.05))
     {
-        // m_state[2] = m_state[2] + 1.0 / m_T1 * ((input + prevInput) / 2.0 -
-        // m_state[1]) * dt;
+        // component_state.m_state[2] = component_state.m_state[2] + 1.0 / m_T1 * ((input + prevInput) / 2.0 -
+        // component_state.m_state[1]) * dt;
     }
     else
     {
@@ -192,8 +192,8 @@ double transferFunctionBlock::step (coreTime time, double inputA)
         double ct = object_time.prevTime + tstep;
         double in = prevInput;
         // double pin = prevInput;
-        //   ival = m_state[2];
-        //    ival2 = m_state[1];
+        //   ival = component_state.m_state[2];
+        //    ival2 = component_state.m_state[1];
         while (ct < time)
         {
             in = in + (input - prevInput) / dt * tstep;
@@ -202,20 +202,20 @@ double transferFunctionBlock::step (coreTime time, double inputA)
             ct += tstep;
             //  pin = in;
         }
-        // m_state[2] = ival + 1.0 / m_T1 * ((pin + input) / 2.0 - ival2) * (time -
+        // component_state.m_state[2] = ival + 1.0 / m_T1 * ((pin + input) / 2.0 - ival2) * (time -
         // ct + tstep);
     }
-    // m_state[1] = m_state[2] + m_T2 / m_T1 * (input);
+    // component_state.m_state[1] = component_state.m_state[2] + m_T2 / m_T1 * (input);
 
     prevInput = input;
-    if (opFlags[has_limits])
+    if (component_configuration.opFlags[has_limits])
     {
         out = Block::step (time, input);
     }
     else
     {
-        out = K * m_state[1];
-        m_state[0] = out;
+        out = K * component_state.m_state[1];
+        component_state.m_state[0] = out;
         object_time.prevTime = time;
         m_output = out;
     }

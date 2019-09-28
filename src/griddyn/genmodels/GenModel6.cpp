@@ -61,7 +61,7 @@ void GenModel6::dynObjectInitializeB (const IOdata &inputs, const IOdata &desire
         Tdop = 0.01;
     }
     computeInitialAngleAndCurrent (inputs, desiredOutput, Rs, Xq);
-    double *gm = m_state.data ();
+    double *gm = component_state.m_state.data ();
 
     // Edp and Eqp  and Edpp
 
@@ -119,7 +119,7 @@ void GenModel6::derivative (const IOdata &inputs, const stateData &sD, double de
     double Pmt = inputs[genModelPmechInLocation];
 
     // delta
-    rvd[0] = systemBaseFrequency * (gmd[1] - 1.0);
+    rvd[0] = component_parameters.systemBaseFrequency * (gmd[1] - 1.0);
     // Edp and Eqp
     rvd[2] = (-gmd[2] - (Xq - Xqp) * gm[1]) / Tqop;
     rvd[3] = (-gmd[3] + (Xd - Xdp) * gm[0] + Eft) / Tdop;
@@ -229,7 +229,7 @@ void GenModel6::jacobianElements (const IOdata &inputs,
 
     // delta
     md.assign (refDiff, refDiff, -sD.cj);
-    md.assign (refDiff, refDiff + 1, systemBaseFrequency);
+    md.assign (refDiff, refDiff + 1, component_parameters.systemBaseFrequency);
 
     // omega
     double kVal = -0.5 / H;

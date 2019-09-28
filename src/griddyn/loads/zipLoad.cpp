@@ -69,7 +69,7 @@ coreObject *zipLoad::clone (coreObject *obj) const
     nobj->Pout = Pout;
     nobj->Vpqmax = Vpqmax;
     nobj->Vpqmin = Vpqmin;
-    nobj->localBaseVoltage = localBaseVoltage;
+    nobj->component_parameters.localBaseVoltage = component_parameters.localBaseVoltage;
     nobj->trigVVlow = trigVVlow;
     nobj->trigVVhigh = trigVVhigh;
     return nobj;
@@ -90,13 +90,13 @@ void zipLoad::pFlowObjectInitializeA (coreTime time0, std::uint32_t flags)
 
 void zipLoad::dynObjectInitializeA (coreTime /*time0*/, std::uint32_t flags)
 {
-    if ((opFlags[convert_to_constant_impedance]) || CHECK_CONTROLFLAG (flags, all_loads_to_constant_impedence))
+    if ((component_configuration.opFlags[convert_to_constant_impedance]) || CHECK_CONTROLFLAG (flags, all_loads_to_constant_impedence))
     {
         double V = bus->getVoltage ();
         double invVsquared = 1.0 / (V * V);
         Yp = Yp + P * invVsquared;
         P = 0;
-        if (opFlags[use_power_factor_flag])
+        if (component_configuration.opFlags[use_power_factor_flag])
         {
             Yq = Yq + P * pfq * invVsquared;
             Q = 0;
@@ -157,25 +157,25 @@ void zipLoad::setFlag (const std::string &flag, bool val)
     {
         if (val)
         {
-            if (!(opFlags[use_power_factor_flag]))
+            if (!(component_configuration.opFlags[use_power_factor_flag]))
             {
-                opFlags.set (use_power_factor_flag);
+                component_configuration.opFlags.set (use_power_factor_flag);
                 updatepfq ();
             }
         }
         else
         {
-            opFlags.reset (use_power_factor_flag);
+            component_configuration.opFlags.reset (use_power_factor_flag);
         }
     }
     else if (flag == "converttoimpedance")
     {
-        opFlags.set (convert_to_constant_impedance, val);
+        component_configuration.opFlags.set (convert_to_constant_impedance, val);
     }
     else if (flag == "no_pqvoltage_limit")
     {
-        opFlags.set (no_pqvoltage_limit, val);
-        if (opFlags[no_pqvoltage_limit])
+        component_configuration.opFlags.set (no_pqvoltage_limit, val);
+        if (component_configuration.opFlags[no_pqvoltage_limit])
         {
             Vpqmax = 100;
             Vpqmin = -1.0;
@@ -207,10 +207,10 @@ double zipLoad::get (const std::string &param, units_t unitType) const
         switch (param[0])
         {
         case 'p':
-            val = unitConversion (getP (), puMW, unitType, systemBasePower);
+            val = unitConversion (getP (), puMW, unitType, component_parameters.systemBasePower);
             break;
         case 'q':
-            val = unitConversion (getQ (), puMW, unitType, systemBasePower);
+            val = unitConversion (getQ (), puMW, unitType, component_parameters.systemBasePower);
             break;
         case 'r':
             val = getr ();
@@ -237,19 +237,19 @@ double zipLoad::get (const std::string &param, units_t unitType) const
     }
     if (param == "yp")
     {
-        val = unitConversion (Yp, puMW, unitType, systemBasePower);
+        val = unitConversion (Yp, puMW, unitType, component_parameters.systemBasePower);
     }
     else if (param == "yq")
     {
-        val = unitConversion (Yq, puMW, unitType, systemBasePower);
+        val = unitConversion (Yq, puMW, unitType, component_parameters.systemBasePower);
     }
     else if (param == "ip")
     {
-        val = unitConversion (Ip, puMW, unitType, systemBasePower);
+        val = unitConversion (Ip, puMW, unitType, component_parameters.systemBasePower);
     }
     else if (param == "iq")
     {
-        val = unitConversion (Iq, puMW, unitType, systemBasePower);
+        val = unitConversion (Iq, puMW, unitType, component_parameters.systemBasePower);
     }
     else if (param == "pf")
     {
@@ -273,22 +273,22 @@ void zipLoad::set (const std::string &param, double val, units_t unitType)
         switch (param[0])
         {
         case 'p':
-            setP (unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage));
+            setP (unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage));
             break;
         case 'q':
-            setQ (unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage));
+            setQ (unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage));
             break;
         case 'r':
-            setr (unitConversion (val, unitType, puOhm, systemBasePower, localBaseVoltage));
+            setr (unitConversion (val, unitType, puOhm, component_parameters.systemBasePower, component_parameters.localBaseVoltage));
             break;
         case 'x':
-            setx (unitConversion (val, unitType, puOhm, systemBasePower, localBaseVoltage));
+            setx (unitConversion (val, unitType, puOhm, component_parameters.systemBasePower, component_parameters.localBaseVoltage));
             break;
         case 'g':
-            setYp (unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage));
+            setYp (unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage));
             break;
         case 'b':
-            setYq (unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage));
+            setYq (unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage));
             break;
         default:
             throw (unrecognizedParameter (param));
@@ -301,32 +301,32 @@ void zipLoad::set (const std::string &param, double val, units_t unitType)
         // load increments  allows a delta on the load through the set functions
         if (param == "p+")
         {
-            P += unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+            P += unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
             checkpfq ();
         }
         else if (param == "q+")
         {
-            Q += unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+            Q += unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
             updatepfq ();
         }
         else if ((param == "yp+") || (param == "zr+"))
         {
-            Yp += unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+            Yp += unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
             checkFaultChange ();
         }
         else if ((param == "yq+") || (param == "zq+"))
         {
-            Yq += unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+            Yq += unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
             checkFaultChange ();
         }
         else if ((param == "ir+") || (param == "ip+"))
         {
-            Ip += unitConversion (val, unitType, puA, systemBasePower, localBaseVoltage);
+            Ip += unitConversion (val, unitType, puA, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
             checkFaultChange ();
         }
         else if (param == "iq+")
         {
-            Iq += unitConversion (val, unitType, puA, systemBasePower, localBaseVoltage);
+            Iq += unitConversion (val, unitType, puA, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
             checkFaultChange ();
         }
         else
@@ -374,27 +374,27 @@ void zipLoad::set (const std::string &param, double val, units_t unitType)
     }
     else if (param == "load p")
     {
-        setP (unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage));
+        setP (unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage));
     }
     else if (param == "load q")
     {
-        setQ (unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage));
+        setQ (unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage));
     }
     else if ((param == "yp") || (param == "shunt g") || (param == "zr"))
     {
-        setYp (unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage));
+        setYp (unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage));
     }
     else if ((param == "yq") || (param == "shunt b") || (param == "zq"))
     {
-        setYq (unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage));
+        setYq (unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage));
     }
     else if ((param == "ir") || (param == "ip"))
     {
-        setIp (unitConversion (val, unitType, puA, systemBasePower, localBaseVoltage));
+        setIp (unitConversion (val, unitType, puA, component_parameters.systemBasePower, component_parameters.localBaseVoltage));
     }
     else if (param == "iq")
     {
-        setIq (unitConversion (val, unitType, puA, systemBasePower, localBaseVoltage));
+        setIq (unitConversion (val, unitType, puA, component_parameters.systemBasePower, component_parameters.localBaseVoltage));
     }
     else if ((param == "pf") || (param == "powerfactor"))
     {
@@ -413,26 +413,26 @@ void zipLoad::set (const std::string &param, double val, units_t unitType)
         {
             pfq = kBigNum;
         }
-        opFlags.set (use_power_factor_flag);
+        component_configuration.opFlags.set (use_power_factor_flag);
     }
     else if (param == "qratio")
     {
         pfq = val;
-        opFlags.set (use_power_factor_flag);
+        component_configuration.opFlags.set (use_power_factor_flag);
     }
     else if (param == "vpqmin")
     {
-        if (!opFlags[no_pqvoltage_limit])
+        if (!component_configuration.opFlags[no_pqvoltage_limit])
         {
-            Vpqmin = unitConversion (val, unitType, puV, systemBasePower, localBaseVoltage);
+            Vpqmin = unitConversion (val, unitType, puV, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
             trigVVlow = 1.0 / (Vpqmin * Vpqmin);
         }
     }
     else if (param == "vpqmax")
     {
-        if (!opFlags[no_pqvoltage_limit])
+        if (!component_configuration.opFlags[no_pqvoltage_limit])
         {
-            Vpqmax = unitConversion (val, unitType, puV, systemBasePower, localBaseVoltage);
+            Vpqmax = unitConversion (val, unitType, puV, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
             trigVVhigh = 1.0 / (Vpqmax * Vpqmax);
         }
     }
@@ -442,7 +442,7 @@ void zipLoad::set (const std::string &param, double val, units_t unitType)
         {
             if (Vpqmin < 0.5)
             {
-                if (!opFlags[no_pqvoltage_limit])
+                if (!component_configuration.opFlags[no_pqvoltage_limit])
                 {
                     Vpqmin = 0.9;
                     trigVVlow = 1.0 / (Vpqmin * Vpqmin);
@@ -453,7 +453,7 @@ void zipLoad::set (const std::string &param, double val, units_t unitType)
     // SGS added to set the base voltage 2015-01-30
     else if ((param == "basevoltage") || (param == "base vol"))
     {
-        localBaseVoltage = val;
+        component_parameters.localBaseVoltage = val;
     }
     else
     {
@@ -563,7 +563,7 @@ double zipLoad::getQval () const
 {
     double val = Q;
 
-    if (opFlags[use_power_factor_flag])
+    if (component_configuration.opFlags[use_power_factor_flag])
     {
         if (pfq < 1000.0)
         {
@@ -658,7 +658,7 @@ void zipLoad::ioPartialDerivatives (const IOdata &inputs,
 
     md.assignCheckCol (PoutLocation, inputLocs[voltageInLocation], 2.0 * V * Yp + Ip + 2.0 * V * P * tv);
 
-    if (opFlags[use_power_factor_flag])
+    if (component_configuration.opFlags[use_power_factor_flag])
     {
         if (pfq < 1000.0)
         {
@@ -680,7 +680,7 @@ bool compareLoad (zipLoad *ld1, zipLoad *ld2, bool /*printDiff*/)
 {
     bool cmp = true;
 
-    if ((ld1->opFlags.to_ullong () & flagMask) != (ld2->opFlags.to_ullong () & flagMask))
+    if ((ld1->component_configuration.opFlags.to_ullong () & flagMask) != (ld2->component_configuration.opFlags.to_ullong () & flagMask))
     {
         cmp = false;
     }

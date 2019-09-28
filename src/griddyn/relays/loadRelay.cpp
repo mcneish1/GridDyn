@@ -23,7 +23,7 @@ namespace relays
 {
 loadRelay::loadRelay (const std::string &objName) : Relay (objName)
 {
-    // opFlags.set(continuous_flag);
+    // component_configuration.opFlags.set(continuous_flag);
 }
 
 coreObject *loadRelay::clone (coreObject *obj) const
@@ -46,7 +46,7 @@ void loadRelay::setFlag (const std::string &flag, bool val)
 {
     if (flag == "nondirectional")
     {
-        opFlags.set (nondirectional_flag, val);
+        component_configuration.opFlags.set (nondirectional_flag, val);
     }
     else
     {
@@ -73,11 +73,11 @@ void loadRelay::set (const std::string &param, double val, gridUnits::units_t un
 {
     if ((param == "cutoutvoltage") || (param == "voltagelimit"))
     {
-        cutoutVoltage = gridUnits::unitConversion (val, unitType, gridUnits::puV, systemBasePower);
+        cutoutVoltage = gridUnits::unitConversion (val, unitType, gridUnits::puV, component_parameters.systemBasePower);
     }
     else if ((param == "cutoutfrequency") || (param == "freqlimit"))
     {
-        cutoutFrequency = gridUnits::unitConversion (val, unitType, gridUnits::puHz, systemBaseFrequency);
+        cutoutFrequency = gridUnits::unitConversion (val, unitType, gridUnits::puHz, component_parameters.systemBaseFrequency);
     }
     else if (param == "delay")
     {
@@ -141,7 +141,7 @@ void loadRelay::actionTaken (index_t ActionNum,
     ((void)(ActionNum));
     ((void)(conditionNum));
     /*
-    if (opFlags.test (use_commLink))
+    if (component_configuration.opFlags.test (use_commLink))
     {
     relayMessage P;
     if (ActionNum == 0)
@@ -179,7 +179,7 @@ void loadRelay::conditionTriggered (index_t conditionNum, coreTime /*triggerTime
     {
     m_condition_level = conditionNum;
     }
-    if (opFlags.test (use_commLink))
+    if (component_configuration.opFlags.test (use_commLink))
     {
     if (conditionNum > m_condition_level)
     {
@@ -226,7 +226,7 @@ void loadRelay::conditionCleared (index_t conditionNum, coreTime /*triggerTime*/
    return;
    }
    }
-   if (opFlags.test (use_commLink))
+   if (component_configuration.opFlags.test (use_commLink))
    {
    relayMessage P;
    if (conditionNum == 0)

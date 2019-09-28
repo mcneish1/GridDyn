@@ -94,7 +94,7 @@ void adjustableTransformer::set (const std::string &param, const std::string &va
         if ((cmstr == "mw") || (cmstr == "power"))
         {
             cMode = control_mode_t::MW_control;
-            opFlags.set (adjustable_P);
+            component_configuration.opFlags.set (adjustable_P);
         }
         else if ((cmstr == "mvar") || (cmstr == "reactive"))
         {
@@ -118,11 +118,11 @@ void adjustableTransformer::set (const std::string &param, const std::string &va
         auto cmstr = convertToLowerCase (val);
         if (cmstr == "continuous")
         {
-            opFlags.set (continuous_flag);
+            component_configuration.opFlags.set (continuous_flag);
         }
         else if ((cmstr == "stepped") || (cmstr == "step"))
         {
-            opFlags.set (continuous_flag, false);
+            component_configuration.opFlags.set (continuous_flag, false);
         }
         else
         {
@@ -134,11 +134,11 @@ void adjustableTransformer::set (const std::string &param, const std::string &va
         auto cmstr = convertToLowerCase (val);
         if (cmstr == "bounds")
         {
-            opFlags.set (use_target_mode, false);
+            component_configuration.opFlags.set (use_target_mode, false);
         }
         else if ((cmstr == "target") || (cmstr == "center"))
         {
-            opFlags.set (use_target_mode);
+            component_configuration.opFlags.set (use_target_mode);
         }
         else
         {
@@ -178,7 +178,7 @@ void adjustableTransformer::set (const std::string &param, double val, units_t u
     }
     else if ((param == "no_pflow_control") || (param == "no_pflow_adjustments"))
     {
-        opFlags.set (no_pFlow_adjustments, (val > 0));
+        component_configuration.opFlags.set (no_pFlow_adjustments, (val > 0));
     }
     else if ((param == "cbus") || (param == "controlbus"))
     {
@@ -242,37 +242,37 @@ void adjustableTransformer::set (const std::string &param, double val, units_t u
     }
     else if (param == "pmin")
     {
-        Pmin = unitConversion (val, unitType, puMW, systemBasePower);
+        Pmin = unitConversion (val, unitType, puMW, component_parameters.systemBasePower);
     }
     else if (param == "pmax")
     {
-        Pmax = unitConversion (val, unitType, puMW, systemBasePower);
+        Pmax = unitConversion (val, unitType, puMW, component_parameters.systemBasePower);
     }
     else if (param == "ptarget")
     {
-        Ptarget = unitConversion (val, unitType, puMW, systemBasePower);
+        Ptarget = unitConversion (val, unitType, puMW, component_parameters.systemBasePower);
     }
     else if (param == "qmin")
     {
-        Qmin = unitConversion (val, unitType, puMW, systemBasePower);
+        Qmin = unitConversion (val, unitType, puMW, component_parameters.systemBasePower);
     }
     else if (param == "qmax")
     {
-        Qmax = unitConversion (val, unitType, puMW, systemBasePower);
+        Qmax = unitConversion (val, unitType, puMW, component_parameters.systemBasePower);
     }
     else if (param == "qtarget")
     {
-        Qtarget = unitConversion (val, unitType, puMW, systemBasePower);
+        Qtarget = unitConversion (val, unitType, puMW, component_parameters.systemBasePower);
     }
     else if (param == "target")
     {
         if (cMode == control_mode_t::MVar_control)
         {
-            Qtarget = unitConversion (val, unitType, puMW, systemBasePower);
+            Qtarget = unitConversion (val, unitType, puMW, component_parameters.systemBasePower);
         }
         else if (cMode == control_mode_t::MW_control)
         {
-            Ptarget = unitConversion (val, unitType, puMW, systemBasePower);
+            Ptarget = unitConversion (val, unitType, puMW, component_parameters.systemBasePower);
         }
         else
         {
@@ -283,11 +283,11 @@ void adjustableTransformer::set (const std::string &param, double val, units_t u
     {
         if (cMode == control_mode_t::MVar_control)
         {
-            Qmin = unitConversion (val, unitType, puMW, systemBasePower);
+            Qmin = unitConversion (val, unitType, puMW, component_parameters.systemBasePower);
         }
         else if (cMode == control_mode_t::MW_control)
         {
-            Pmin = unitConversion (val, unitType, puMW, systemBasePower);
+            Pmin = unitConversion (val, unitType, puMW, component_parameters.systemBasePower);
         }
         else
         {
@@ -298,11 +298,11 @@ void adjustableTransformer::set (const std::string &param, double val, units_t u
     {
         if (cMode == control_mode_t::MVar_control)
         {
-            Qmax = unitConversion (val, unitType, puMW, systemBasePower);
+            Qmax = unitConversion (val, unitType, puMW, component_parameters.systemBasePower);
         }
         else if (cMode == control_mode_t::MW_control)
         {
-            Pmax = unitConversion (val, unitType, puMW, systemBasePower);
+            Pmax = unitConversion (val, unitType, puMW, component_parameters.systemBasePower);
         }
         else
         {
@@ -374,7 +374,7 @@ void adjustableTransformer::set (const std::string &param, double val, units_t u
         }
         if (stepSize == 0)  // if stepsize==0 we are continuous otherwise leave it where it was
         {
-            opFlags.set (continuous_flag);
+            component_configuration.opFlags.set (continuous_flag);
         }
     }
     else if (param == "nsteps")
@@ -428,37 +428,37 @@ double adjustableTransformer::get (const std::string &param, gridUnits::units_t 
     }
     else if (param == "pmin")
     {
-        val = unitConversion (Pmin, puMW, unitType, systemBasePower);
+        val = unitConversion (Pmin, puMW, unitType, component_parameters.systemBasePower);
     }
     else if (param == "pmax")
     {
-        val = unitConversion (Pmax, puMW, unitType, systemBasePower);
+        val = unitConversion (Pmax, puMW, unitType, component_parameters.systemBasePower);
     }
     else if (param == "ptarget")
     {
-        val = unitConversion (Ptarget, puMW, unitType, systemBasePower);
+        val = unitConversion (Ptarget, puMW, unitType, component_parameters.systemBasePower);
     }
     else if (param == "qmin")
     {
-        val = unitConversion (Qmin, puMW, unitType, systemBasePower);
+        val = unitConversion (Qmin, puMW, unitType, component_parameters.systemBasePower);
     }
     else if (param == "qmax")
     {
-        val = unitConversion (Qmin, puMW, unitType, systemBasePower);
+        val = unitConversion (Qmin, puMW, unitType, component_parameters.systemBasePower);
     }
     else if (param == "qtarget")
     {
-        val = unitConversion (Qtarget, puMW, unitType, systemBasePower);
+        val = unitConversion (Qtarget, puMW, unitType, component_parameters.systemBasePower);
     }
     else if (param == "target")
     {
         if (cMode == control_mode_t::MVar_control)
         {
-            val = unitConversion (Qtarget, puMW, unitType, systemBasePower);
+            val = unitConversion (Qtarget, puMW, unitType, component_parameters.systemBasePower);
         }
         else if (cMode == control_mode_t::MW_control)
         {
-            val = unitConversion (Ptarget, puMW, unitType, systemBasePower);
+            val = unitConversion (Ptarget, puMW, unitType, component_parameters.systemBasePower);
         }
         else
         {
@@ -469,11 +469,11 @@ double adjustableTransformer::get (const std::string &param, gridUnits::units_t 
     {
         if (cMode == control_mode_t::MVar_control)
         {
-            val = unitConversion (Qmin, puMW, unitType, systemBasePower);
+            val = unitConversion (Qmin, puMW, unitType, component_parameters.systemBasePower);
         }
         else if (cMode == control_mode_t::MW_control)
         {
-            val = unitConversion (Pmin, puMW, unitType, systemBasePower);
+            val = unitConversion (Pmin, puMW, unitType, component_parameters.systemBasePower);
         }
         else
         {
@@ -484,11 +484,11 @@ double adjustableTransformer::get (const std::string &param, gridUnits::units_t 
     {
         if (cMode == control_mode_t::MVar_control)
         {
-            val = unitConversion (Qmax, puMW, unitType, systemBasePower);
+            val = unitConversion (Qmax, puMW, unitType, component_parameters.systemBasePower);
         }
         else if (cMode == control_mode_t::MW_control)
         {
-            val = unitConversion (Pmax, puMW, unitType, systemBasePower);
+            val = unitConversion (Pmax, puMW, unitType, component_parameters.systemBasePower);
         }
         else
         {
@@ -581,7 +581,7 @@ void adjustableTransformer::followNetwork (int network, std::queue<gridBus *> &s
     {
         if (cMode == control_mode_t::MW_control)
         {
-            if (!opFlags[no_pFlow_adjustments])
+            if (!component_configuration.opFlags[no_pFlow_adjustments])
             {
                 return;  // no network connection if the MW flow is controlled since the angle relationship is
                 // variable
@@ -636,15 +636,15 @@ void adjustableTransformer::pFlowObjectInitializeA (coreTime time0, std::uint32_
                 direction = 1;
             }
         }
-        if ((opFlags[continuous_flag]) && (!opFlags[no_pFlow_adjustments]))
+        if ((component_configuration.opFlags[continuous_flag]) && (!component_configuration.opFlags[no_pFlow_adjustments]))
         {
-            opFlags.set (has_pflow_states);
-            opFlags.set (has_powerflow_adjustments);
+            component_configuration.opFlags.set (has_pflow_states);
+            component_configuration.opFlags.set (has_powerflow_adjustments);
         }
         else
         {
-            opFlags[has_powerflow_adjustments] = !opFlags[no_pFlow_adjustments];
-            opFlags.reset (has_pflow_states);
+            component_configuration.opFlags[has_powerflow_adjustments] = !component_configuration.opFlags[no_pFlow_adjustments];
+            component_configuration.opFlags.reset (has_pflow_states);
         }
         if (cMode == control_mode_t::voltage_control)
         {
@@ -670,8 +670,8 @@ void adjustableTransformer::pFlowObjectInitializeA (coreTime time0, std::uint32_
     }
     else
     {
-        opFlags.reset (has_pflow_states);
-        opFlags.reset (has_powerflow_adjustments);
+        component_configuration.opFlags.reset (has_pflow_states);
+        component_configuration.opFlags.reset (has_powerflow_adjustments);
     }
     adjCount = 0;
     oCount = 0;
@@ -685,7 +685,7 @@ stateSizes adjustableTransformer::LocalStateSizes (const solverMode &sMode) cons
     stateSizes lcStates;
     if (isDynamic (sMode))
     {
-        if (opFlags[continuous_flag])
+        if (component_configuration.opFlags[continuous_flag])
         {
             switch (cMode)
             {
@@ -701,7 +701,7 @@ stateSizes adjustableTransformer::LocalStateSizes (const solverMode &sMode) cons
     }
     else
     {
-        if ((opFlags[continuous_flag]) && (!opFlags[no_pFlow_adjustments]))
+        if ((component_configuration.opFlags[continuous_flag]) && (!component_configuration.opFlags[no_pFlow_adjustments]))
         {
             lcStates.algSize = 1;
         }
@@ -714,7 +714,7 @@ count_t adjustableTransformer::LocalJacobianCount (const solverMode &sMode) cons
     count_t localJacSize = 0;
     if (isDynamic (sMode))
     {
-        if (opFlags[continuous_flag])
+        if (component_configuration.opFlags[continuous_flag])
         {
             switch (cMode)
             {
@@ -732,7 +732,7 @@ count_t adjustableTransformer::LocalJacobianCount (const solverMode &sMode) cons
     }
     else
     {
-        if ((opFlags[continuous_flag]) && (!opFlags[no_pFlow_adjustments]))
+        if ((component_configuration.opFlags[continuous_flag]) && (!component_configuration.opFlags[no_pFlow_adjustments]))
         {
             switch (cMode)
             {
@@ -797,7 +797,7 @@ void adjustableTransformer::reset (reset_levels level)
         case control_mode_t::MVar_control:
         {
             double midTap = (minTap + maxTap) / 2.0;
-            if (opFlags[continuous_flag])
+            if (component_configuration.opFlags[continuous_flag])
             {
                 tap = midTap;
                 tap0 = tap;
@@ -829,7 +829,7 @@ void adjustableTransformer::reset (reset_levels level)
         case control_mode_t::MW_control:
         {
             double midTap = (minTapAngle + maxTapAngle) / 2.0;
-            if (opFlags[continuous_flag])
+            if (component_configuration.opFlags[continuous_flag])
             {
                 tapAngle = midTap;
                 tapAngle0 = tapAngle;
@@ -872,19 +872,19 @@ adjustableTransformer::powerFlowAdjust (const IOdata & /*inputs*/, std::uint32_t
     auto ret = change_code::no_change;
     if (cMode == control_mode_t::MW_control)
     {
-        if (opFlags[continuous_flag])  // if continuous mode just check the min and max angle
+        if (component_configuration.opFlags[continuous_flag])  // if continuous mode just check the min and max angle
         {
             if (tapAngle < minTapAngle)
             {
                 tapAngle = minTapAngle;
-                opFlags.set (at_limit);
+                component_configuration.opFlags.set (at_limit);
                 alert (this, JAC_COUNT_DECREASE);
                 return change_code::jacobian_change;
             }
             if (tapAngle > maxTapAngle)
             {
                 tapAngle = maxTapAngle;
-                opFlags.reset (has_pflow_states);
+                component_configuration.opFlags.reset (has_pflow_states);
                 alert (this, JAC_COUNT_DECREASE);
                 return change_code::jacobian_change;
             }
@@ -949,19 +949,19 @@ adjustableTransformer::powerFlowAdjust (const IOdata & /*inputs*/, std::uint32_t
     }
     else if (cMode == control_mode_t::voltage_control)
     {
-        if (opFlags[continuous_flag])  // if continuous mode just check the min and max tap angle
+        if (component_configuration.opFlags[continuous_flag])  // if continuous mode just check the min and max tap angle
         {
             if (tap < minTap)
             {
                 tap = minTap;
-                opFlags.set (at_limit);
+                component_configuration.opFlags.set (at_limit);
                 alert (this, JAC_COUNT_DECREASE);
                 return change_code::jacobian_change;
             }
             if (tap > maxTap)
             {
                 tap = maxTap;
-                opFlags.set (at_limit);
+                component_configuration.opFlags.set (at_limit);
                 alert (this, JAC_COUNT_DECREASE);
                 return change_code::jacobian_change;
             }
@@ -973,19 +973,19 @@ adjustableTransformer::powerFlowAdjust (const IOdata & /*inputs*/, std::uint32_t
     }
     else if (cMode == control_mode_t::MVar_control)
     {
-        if (opFlags[continuous_flag])
+        if (component_configuration.opFlags[continuous_flag])
         {
             if (tap < minTap)
             {
                 tap = minTap;
-                opFlags.set (at_limit);
+                component_configuration.opFlags.set (at_limit);
                 alert (this, JAC_COUNT_DECREASE);
                 return change_code::jacobian_change;
             }
             if (tap > maxTap)
             {
                 tap = maxTap;
-                opFlags.set (at_limit);
+                component_configuration.opFlags.set (at_limit);
                 alert (this, JAC_COUNT_DECREASE);
                 return change_code::jacobian_change;
             }
@@ -1061,7 +1061,7 @@ void adjustableTransformer::guessState (coreTime /*time*/,
                                         const solverMode &sMode)
 {
     auto offset = offsets.getAlgOffset (sMode);
-    if ((!(isDynamic (sMode))) && (opFlags[has_pflow_states]))
+    if ((!(isDynamic (sMode))) && (component_configuration.opFlags[has_pflow_states]))
     {
         if (cMode == control_mode_t::MW_control)
         {
@@ -1072,7 +1072,7 @@ void adjustableTransformer::guessState (coreTime /*time*/,
             state[offset] = tap0;
         }
     }
-    else if ((isDynamic (sMode)) && (opFlags[has_dyn_states]))
+    else if ((isDynamic (sMode)) && (component_configuration.opFlags[has_dyn_states]))
     {
         auto dOffset = offsets.getDiffOffset (sMode);
         dstate_dt[dOffset] = 0;
@@ -1086,7 +1086,7 @@ void adjustableTransformer::ioPartialDerivatives (id_type_t busId,
                                                   const IOlocs &inputLocs,
                                                   const solverMode &sMode)
 {
-    if ((!(isDynamic (sMode))) && (opFlags[has_pflow_states]))
+    if ((!(isDynamic (sMode))) && (component_configuration.opFlags[has_pflow_states]))
     {
         auto offset = offsets.getAlgOffset (sMode);
         if (cMode == control_mode_t::MW_control)
@@ -1098,7 +1098,7 @@ void adjustableTransformer::ioPartialDerivatives (id_type_t busId,
             tap = sD.state[offset];
         }
     }
-    else if ((isDynamic (sMode)) && (opFlags[has_dyn_states]))
+    else if ((isDynamic (sMode)) && (component_configuration.opFlags[has_dyn_states]))
     {
     }
     return acLine::ioPartialDerivatives (busId, sD, md, inputLocs, sMode);
@@ -1110,7 +1110,7 @@ void adjustableTransformer::outputPartialDerivatives (const IOdata &inputs,
                                                       const solverMode &sMode)
 {
     // if the terminal is not specified assume there are 4 outputs
-    if ((!(isDynamic (sMode))) && (opFlags[has_pflow_states]))
+    if ((!(isDynamic (sMode))) && (component_configuration.opFlags[has_pflow_states]))
     {
         auto offset = offsets.getAlgOffset (sMode);
         matrixDataTranslate<2> mtrans (md);
@@ -1129,7 +1129,7 @@ void adjustableTransformer::outputPartialDerivatives (const IOdata &inputs,
             tapPartial (2, sD, mtrans, sMode);
         }
     }
-    else if ((isDynamic (sMode)) && (opFlags[has_dyn_states]))
+    else if ((isDynamic (sMode)) && (component_configuration.opFlags[has_dyn_states]))
     {
     }
     return acLine::outputPartialDerivatives (inputs, sD, md, sMode);
@@ -1140,7 +1140,7 @@ void adjustableTransformer::outputPartialDerivatives (id_type_t busId,
                                                       matrixData<double> &md,
                                                       const solverMode &sMode)
 {
-    if ((!(isDynamic (sMode))) && (opFlags[has_pflow_states]))
+    if ((!(isDynamic (sMode))) && (component_configuration.opFlags[has_pflow_states]))
     {
         auto offset = offsets.getAlgOffset (sMode);
         if (cMode == control_mode_t::MW_control)
@@ -1154,7 +1154,7 @@ void adjustableTransformer::outputPartialDerivatives (id_type_t busId,
             tapPartial (busId, sD, md, sMode);
         }
     }
-    else if ((isDynamic (sMode)) && (opFlags[has_dyn_states]))
+    else if ((isDynamic (sMode)) && (component_configuration.opFlags[has_dyn_states]))
     {
     }
     return acLine::outputPartialDerivatives (busId, sD, md, sMode);
@@ -1166,7 +1166,7 @@ void adjustableTransformer::jacobianElements (const IOdata & /*inputs*/,
                                               const IOlocs & /*inputLocs*/,
                                               const solverMode &sMode)
 {
-    if ((!(isDynamic (sMode))) && (opFlags[has_pflow_states]))
+    if ((!(isDynamic (sMode))) && (component_configuration.opFlags[has_pflow_states]))
     {
         auto offset = offsets.getAlgOffset (sMode);
         if (cMode == control_mode_t::MW_control)
@@ -1177,7 +1177,7 @@ void adjustableTransformer::jacobianElements (const IOdata & /*inputs*/,
         {
             tap = sD.state[offset];
         }
-        if (opFlags[at_limit])
+        if (component_configuration.opFlags[at_limit])
         {
             md.assign (offset, offset, 1);
         }
@@ -1197,7 +1197,7 @@ void adjustableTransformer::jacobianElements (const IOdata & /*inputs*/,
             }
         }
     }
-    else if ((isDynamic (sMode)) && (opFlags[has_dyn_states]))
+    else if ((isDynamic (sMode)) && (component_configuration.opFlags[has_dyn_states]))
     {
     }
 }
@@ -1210,12 +1210,12 @@ void adjustableTransformer::residual (const IOdata & /*inputs*/,
     double v1;
 
     auto offset = offsets.getAlgOffset (sMode);
-    if ((!(isDynamic (sMode))) && (opFlags[has_pflow_states]))
+    if ((!(isDynamic (sMode))) && (component_configuration.opFlags[has_pflow_states]))
     {
         switch (cMode)
         {
         case control_mode_t::voltage_control:
-            if (opFlags[at_limit])
+            if (component_configuration.opFlags[at_limit])
             {
                 if (tap > tap0)
                 {
@@ -1233,7 +1233,7 @@ void adjustableTransformer::residual (const IOdata & /*inputs*/,
             }
             break;
         case control_mode_t::MW_control:
-            if (opFlags[at_limit])
+            if (component_configuration.opFlags[at_limit])
             {
                 if (tapAngle > tapAngle0)
                 {
@@ -1253,7 +1253,7 @@ void adjustableTransformer::residual (const IOdata & /*inputs*/,
             break;
         case control_mode_t::MVar_control:
             tap = sD.state[offset];
-            if (opFlags[at_limit])
+            if (component_configuration.opFlags[at_limit])
             {
                 if (tap > tap0)
                 {
@@ -1275,7 +1275,7 @@ void adjustableTransformer::residual (const IOdata & /*inputs*/,
             assert (false);
         }
     }
-    else if (isDynamic (sMode) && (opFlags[has_dyn_states]))
+    else if (isDynamic (sMode) && (component_configuration.opFlags[has_dyn_states]))
     {
     }
 }
@@ -1286,7 +1286,7 @@ void adjustableTransformer::setState (coreTime time,
                                       const solverMode &sMode)
 {
     auto offset = offsets.getAlgOffset (sMode);
-    if ((!(isDynamic (sMode))) && (opFlags[has_pflow_states]))
+    if ((!(isDynamic (sMode))) && (component_configuration.opFlags[has_pflow_states]))
     {
         if (cMode == control_mode_t::MW_control)
         {
@@ -1313,7 +1313,7 @@ void adjustableTransformer::setState (coreTime time,
             }
         }
     }
-    else if ((isDynamic (sMode)) && (opFlags[has_dyn_states]))
+    else if ((isDynamic (sMode)) && (component_configuration.opFlags[has_dyn_states]))
     {
     }
     acLine::setState (time, state, dstate_dt, sMode);
@@ -1327,7 +1327,7 @@ void adjustableTransformer::dynObjectInitializeA (coreTime time0, std::uint32_t 
 void adjustableTransformer::updateLocalCache () { acLine::updateLocalCache (); }
 void adjustableTransformer::updateLocalCache (const IOdata &inputs, const stateData &sD, const solverMode &sMode)
 {
-    if ((!(isDynamic (sMode))) && (opFlags[has_pflow_states]))
+    if ((!(isDynamic (sMode))) && (component_configuration.opFlags[has_pflow_states]))
     {
         auto offset = offsets.getAlgOffset (sMode);
         if (cMode == control_mode_t::MW_control)
@@ -1340,7 +1340,7 @@ void adjustableTransformer::updateLocalCache (const IOdata &inputs, const stateD
         }
         acLine::updateLocalCache (inputs, sD, sMode);
     }
-    else if ((isDynamic (sMode)) && (opFlags[has_dyn_states]))
+    else if ((isDynamic (sMode)) && (component_configuration.opFlags[has_dyn_states]))
     {
     }
     else
@@ -1351,7 +1351,7 @@ void adjustableTransformer::updateLocalCache (const IOdata &inputs, const stateD
 
 count_t adjustableTransformer::outputDependencyCount (index_t /*num*/, const solverMode &sMode) const
 {
-    if ((!(isDynamic (sMode))) && (opFlags[has_pflow_states]))
+    if ((!(isDynamic (sMode))) && (component_configuration.opFlags[has_pflow_states]))
     {
         return 3;
     }
@@ -1624,7 +1624,7 @@ change_code adjustableTransformer::voltageControlAdjust ()
     double V;
     // check the voltage to make it is within the appropriate band
     V = controlBus->getVoltage ();
-    if (!(opFlags[use_target_mode]))
+    if (!(component_configuration.opFlags[use_target_mode]))
     {
         if (V > Vmax)
         {

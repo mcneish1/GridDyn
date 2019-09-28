@@ -28,7 +28,7 @@ using namespace gridUnits;
 svd::svd (const std::string &objName) : rampLoad (objName) {}
 svd::svd (double rP, double rQ, const std::string &objName) : rampLoad (rP, rQ, objName)
 {
-    opFlags.set (adjustable_Q);
+    component_configuration.opFlags.set (adjustable_Q);
 }
 
 svd::~svd () = default;
@@ -64,7 +64,7 @@ void svd::setControlBus (gridBus *cBus)
 
 void svd::setLoad (double level, units_t unitType)
 {
-    double dlevel = unitConversion (level, unitType, puMW, systemBasePower);
+    double dlevel = unitConversion (level, unitType, puMW, component_parameters.systemBasePower);
     int setLevel = checkSetting (dlevel);
     if (setLevel >= 0)
     {
@@ -74,8 +74,8 @@ void svd::setLoad (double level, units_t unitType)
 
 void svd::setLoad (double Plevel, double Qlevel, units_t unitType)
 {
-    setYp (unitConversion (Plevel, unitType, puMW, systemBasePower));
-    double dlevel = unitConversion (Qlevel, unitType, puMW, systemBasePower);
+    setYp (unitConversion (Plevel, unitType, puMW, component_parameters.systemBasePower));
+    double dlevel = unitConversion (Qlevel, unitType, puMW, component_parameters.systemBasePower);
     int setLevel = checkSetting (dlevel);
     if (setLevel >= 0)
     {
@@ -89,14 +89,14 @@ int svd::checkSetting (double level)
     {
         return 0;
     }
-    if (opFlags[continuous_flag])
+    if (component_configuration.opFlags[continuous_flag])
     {
         return ((level >= Qlow) && (level <= Qhigh)) ? 1 : -1;
     }
 
     int setting = 0;
 	double totalQ = Qlow;
-	if (!opFlags[reverse_control_flag])
+	if (!component_configuration.opFlags[reverse_control_flag])
 	{
 		auto block = Cblocks.begin();
 		while (std::abs(totalQ) < std::abs(level))
@@ -140,16 +140,16 @@ int svd::checkSetting (double level)
 	}
     if (std::abs (totalQ) > std::abs (level))
     {
-		if (opFlags[reverse_toggled_flag])
+		if (component_configuration.opFlags[reverse_toggled_flag])
 		{
-			opFlags.flip(reverse_control_flag);
-			opFlags.reset(reverse_toggled_flag);
+			component_configuration.opFlags.flip(reverse_control_flag);
+			component_configuration.opFlags.reset(reverse_toggled_flag);
 			LOG_WARNING("unable to match requested level");
 		}
 		else
 		{
-			opFlags.flip(reverse_control_flag);
-			opFlags.set(reverse_toggled_flag);
+			component_configuration.opFlags.flip(reverse_control_flag);
+			component_configuration.opFlags.set(reverse_toggled_flag);
 			return checkSetting(level);
 		}
     }
@@ -171,7 +171,7 @@ void svd::updateSetting (int step)
     else
     {
 		double qlevel = Qlow;
-		if (opFlags[reverse_control_flag])
+		if (component_configuration.opFlags[reverse_control_flag])
 		{
 			auto block = Cblocks.begin();
 			int scount = 0;
@@ -211,19 +211,19 @@ void svd::updateSetting (int step)
 
 void svd::pFlowObjectInitializeA (coreTime time0, std::uint32_t flags)
 {
-    if (opFlags[continuous_flag])
+    if (component_configuration.opFlags[continuous_flag])
     {
-        if (!opFlags[locked_flag])
+        if (!component_configuration.opFlags[locked_flag])
         {
-            opFlags.set (has_pflow_states);
-            opFlags.set (has_powerflow_adjustments);
+            component_configuration.opFlags.set (has_pflow_states);
+            component_configuration.opFlags.set (has_powerflow_adjustments);
         }
     }
     else
     {
-        if (!opFlags[locked_flag])
+        if (!component_configuration.opFlags[locked_flag])
         {
-            opFlags.set (has_powerflow_adjustments);
+            component_configuration.opFlags.set (has_powerflow_adjustments);
         }
     }
     return zipLoad::pFlowObjectInitializeA (time0, flags);
@@ -277,17 +277,17 @@ void svd::set (const std::string &param, const std::string &val)
         auto v2 = convertToLowerCase (val);
         if ((v2 == "manual") || (v2 == "locked"))
         {
-            opFlags.set (locked_flag);
+            component_configuration.opFlags.set (locked_flag);
         }
         if ((v2 == "cont") || (v2 == "continuous"))
         {
-            opFlags.set (continuous_flag, true);
-            opFlags.reset (locked_flag);
+            component_configuration.opFlags.set (continuous_flag, true);
+            component_configuration.opFlags.reset (locked_flag);
         }
         else if ((v2 == "stepped") || (v2 == "discrete"))
         {
-            opFlags.reset (continuous_flag);
-            opFlags.reset (locked_flag);
+            component_configuration.opFlags.reset (continuous_flag);
+            component_configuration.opFlags.reset (locked_flag);
         }
     }
     else if (param == "control")
@@ -295,7 +295,7 @@ void svd::set (const std::string &param, const std::string &val)
         auto v2 = convertToLowerCase (val);
         if (v2 == "reactive")
         {
-            opFlags.set (reactive_control_flag, true);
+            component_configuration.opFlags.set (reactive_control_flag, true);
         }
     }
     else
@@ -307,31 +307,31 @@ void svd::set (const std::string &param, double val, units_t unitType)
 {
     if (param == "qlow")
     {
-        Qlow = unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+        Qlow = unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if (param == "qhigh")
     {
-        Qhigh = unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+        Qhigh = unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if (param == "qmin")
     {
-        Qmin = unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+        Qmin = unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     if (param == "qmax")
     {
-        Qmax = unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+        Qmax = unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if (param == "vmax")
     {
-        Vmax = unitConversion (val, unitType, puV, systemBasePower, localBaseVoltage);
+        Vmax = unitConversion (val, unitType, puV, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if (param == "vmin")
     {
-        Vmin = unitConversion (val, unitType, puV, systemBasePower, localBaseVoltage);
+        Vmin = unitConversion (val, unitType, puV, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if (param == "yq")
     {
-        double temp = unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+        double temp = unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
         setLoad (temp);
     }
     else if (param == "step")
@@ -348,7 +348,7 @@ void svd::set (const std::string &param, double val, units_t unitType)
         {
             if (Cblocks[0].second == 0)
             {
-                Cblocks[0].second = unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+                Cblocks[0].second = unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
                 Qhigh = Qlow + Cblocks[0].first * Cblocks[0].second;
                 stepCount = Cblocks[0].first;
             }
@@ -392,7 +392,7 @@ void svd::set (const std::string &param, double val, units_t unitType)
 
 void svd::addBlock (int steps, double Qstep, gridUnits::units_t unitType)
 {
-    Qstep = gridUnits::unitConversion (Qstep, unitType, gridUnits::puMW, systemBasePower);
+    Qstep = gridUnits::unitConversion (Qstep, unitType, gridUnits::puMW, component_parameters.systemBasePower);
     Cblocks.emplace_back (steps, Qstep);
     Qhigh += steps * Qstep;
     stepCount += steps;

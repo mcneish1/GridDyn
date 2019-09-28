@@ -22,10 +22,10 @@ namespace griddyn
 {
 namespace blocks
 {
-derivativeBlock::derivativeBlock (const std::string &objName) : Block (objName) { opFlags.set (use_state); }
+derivativeBlock::derivativeBlock (const std::string &objName) : Block (objName) { component_configuration.opFlags.set (use_state); }
 derivativeBlock::derivativeBlock (double t1, const std::string &objName) : Block (objName), m_T1 (t1)
 {
-    opFlags.set (use_state);
+    component_configuration.opFlags.set (use_state);
 }
 
 coreObject *derivativeBlock::clone (coreObject *obj) const
@@ -52,21 +52,21 @@ void derivativeBlock::dynObjectInitializeB (const IOdata &inputs, const IOdata &
     index_t loc = limiter_alg;  // can't have a ramp limiter
     if (desiredOutput.empty ())
     {
-        m_state[loc + 1] = K * (inputs[0] + bias);
+        component_state.m_state[loc + 1] = K * (inputs[0] + bias);
         Block::dynObjectInitializeB (inputs, desiredOutput, fieldSet);
-        m_state[loc] = 0;
+        component_state.m_state[loc] = 0;
     }
     else
     {
         Block::dynObjectInitializeB (inputs, desiredOutput, fieldSet);
-        m_dstate_dt[loc + 1] = desiredOutput[0];
-        if (std::abs (m_dstate_dt[loc + 1]) < 1e-7)
+        component_state.m_dstate_dt[loc + 1] = desiredOutput[0];
+        if (std::abs (component_state.m_dstate_dt[loc + 1]) < 1e-7)
         {
-            m_state[loc + 1] = K * (inputs[0] + bias);
+            component_state.m_state[loc + 1] = K * (inputs[0] + bias);
         }
         else
         {
-            m_state[loc + 1] = (m_state[loc] - m_dstate_dt[loc + 1] * m_T1);
+            component_state.m_state[loc + 1] = (component_state.m_state[loc] - component_state.m_dstate_dt[loc + 1] * m_T1);
         }
     }
 }
@@ -80,13 +80,13 @@ double derivativeBlock::step (coreTime time, double inputA)
     double ival;
     if (dt >= fabs (5.0 * m_T1))
     {
-        m_state[loc + 1] = K * input;
-        m_state[loc] = 0;
+        component_state.m_state[loc + 1] = K * input;
+        component_state.m_state[loc] = 0;
     }
     else if (dt <= fabs (0.05 * m_T1))
     {
-        m_state[loc + 1] = m_state[loc + 1] + 1.0 / m_T1 * (K * (input + prevInput) / 2.0 - m_state[loc + 1]) * dt;
-        m_state[loc] = 1.0 / m_T1 * (K * (input + prevInput) / 2.0 - m_state[loc + 1]);
+        component_state.m_state[loc + 1] = component_state.m_state[loc + 1] + 1.0 / m_T1 * (K * (input + prevInput) / 2.0 - component_state.m_state[loc + 1]) * dt;
+        component_state.m_state[loc] = 1.0 / m_T1 * (K * (input + prevInput) / 2.0 - component_state.m_state[loc + 1]);
     }
     else
     {
@@ -94,7 +94,7 @@ double derivativeBlock::step (coreTime time, double inputA)
         double ct = object_time.prevTime + tstep;
         double in = prevInput;
         double pin = prevInput;
-        ival = m_state[loc + 1];
+        ival = component_state.m_state[loc + 1];
         while (ct < time)
         {
             in = in + (input - prevInput) / dt * tstep;
@@ -102,8 +102,8 @@ double derivativeBlock::step (coreTime time, double inputA)
             ct += tstep;
             pin = in;
         }
-        m_state[loc + 1] = ival + K / m_T1 * ((pin + input) / 2.0 - ival) * (time - ct + tstep);
-        m_state[loc] = K / m_T1 * ((pin + input) / 2.0 - ival);
+        component_state.m_state[loc + 1] = ival + K / m_T1 * ((pin + input) / 2.0 - ival) * (time - ct + tstep);
+        component_state.m_state[loc] = K / m_T1 * ((pin + input) / 2.0 - ival);
     }
     prevInput = input;
     if (loc > 0)
@@ -112,7 +112,7 @@ double derivativeBlock::step (coreTime time, double inputA)
     }
     else
     {
-        out = m_state[0];
+        out = component_state.m_state[0];
         object_time.prevTime = time;
         m_output = out;
     }

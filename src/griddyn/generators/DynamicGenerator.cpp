@@ -210,7 +210,7 @@ void DynamicGenerator::dynObjectInitializeA (coreTime time0, std::uint32_t flags
 {
     if (machineBasePower < 0)
     {
-        machineBasePower = systemBasePower;
+        machineBasePower = component_parameters.systemBasePower;
     }
     // automatically define a trivial generator model if none has been specified
     if (genModel == nullptr)
@@ -221,13 +221,13 @@ void DynamicGenerator::dynObjectInitializeA (coreTime time0, std::uint32_t flags
     {
         if (!genModel->checkFlag (GenModel::genModel_flags::internal_frequency_calculation))
         {
-            opFlags.set (uses_bus_frequency);
+            component_configuration.opFlags.set (uses_bus_frequency);
         }
     }
-    if (opFlags[isochronous_operation])
+    if (component_configuration.opFlags[isochronous_operation])
     {
         bus->setFlag ("compute_frequency", true);
-        // opFlags.set(uses_bus_frequency);
+        // component_configuration.opFlags.set(uses_bus_frequency);
     }
     gridSecondary::dynObjectInitializeA (time0, flags);
 }
@@ -238,7 +238,7 @@ void DynamicGenerator::dynObjectInitializeB (const IOdata &inputs, const IOdata 
     Generator::dynObjectInitializeB (inputs, desiredOutput, fieldSet);
 
     // load the power set point
-    if (opFlags[isochronous_operation])
+    if (component_configuration.opFlags[isochronous_operation])
     {
         if (Pset > -kHalfBigNum)
         {
@@ -253,7 +253,7 @@ void DynamicGenerator::dynObjectInitializeB (const IOdata &inputs, const IOdata 
         }
     }
 
-    double scale = systemBasePower / machineBasePower;
+    double scale = component_parameters.systemBasePower / machineBasePower;
     IOdata inputArgs (4);
     IOdata localDesiredOutput (4);
 
@@ -273,7 +273,7 @@ void DynamicGenerator::dynObjectInitializeB (const IOdata &inputs, const IOdata 
     m_Pmech = computedInputs[genModelPmechInLocation];
 
     m_Eft = computedInputs[genModelEftInLocation];
-    //  genModel->guessState (prevTime, m_state.data (), m_dstate_dt.data (), cLocalbSolverMode);
+    //  genModel->guessState (prevTime, m_state.data (), component_state.m_dstate_dt.data (), cLocalbSolverMode);
 
     Pset = m_Pmech / scale;
     if (isoc != nullptr)
@@ -290,12 +290,12 @@ void DynamicGenerator::dynObjectInitializeB (const IOdata &inputs, const IOdata 
         localDesiredOutput[0] = m_Eft;
         ext->dynInitializeB (inputArgs, localDesiredOutput, computedInputs);
 
-        //    ext->guessState (prevTime, m_state.data (), m_dstate_dt.data (), cLocalbSolverMode);
+        //    ext->guessState (prevTime, m_state.data (), component_state.m_dstate_dt.data (), cLocalbSolverMode);
         // Vset=inputSetup[1];
     }
     if ((gov != nullptr) && (gov->isEnabled ()))
     {
-        inputArgs[govOmegaInLocation] = systemBaseFrequency;
+        inputArgs[govOmegaInLocation] = component_parameters.systemBaseFrequency;
         inputArgs[govpSetInLocation] = kNullVal;
 
         localDesiredOutput[0] = Pset * scale;
@@ -305,16 +305,16 @@ void DynamicGenerator::dynObjectInitializeB (const IOdata &inputs, const IOdata 
         }
         gov->dynInitializeB (inputArgs, localDesiredOutput, computedInputs);
 
-        //     gov->guessState (prevTime, m_state.data (), m_dstate_dt.data (), cLocalbSolverMode);
+        //     gov->guessState (prevTime, m_state.data (), component_state.m_dstate_dt.data (), cLocalbSolverMode);
     }
 
     if ((pss != nullptr) && (pss->isEnabled ()))
     {
-        inputArgs[0] = systemBaseFrequency;
+        inputArgs[0] = component_parameters.systemBaseFrequency;
         inputArgs[1] = kNullVal;
         localDesiredOutput[0] = 0;
         pss->dynInitializeB (inputArgs, desiredOutput, computedInputs);
-        //    pss->guessState (prevTime, m_state.data (), m_dstate_dt.data (), cLocalbSolverMode);
+        //    pss->guessState (prevTime, m_state.data (), component_state.m_dstate_dt.data (), cLocalbSolverMode);
     }
 
     inputArgs.resize (0);
@@ -328,12 +328,12 @@ void DynamicGenerator::dynObjectInitializeB (const IOdata &inputs, const IOdata 
         if (sub->isEnabled ())
         {
             sub->dynInitializeB (inputArgs, localDesiredOutput, computedInputs);
-            //    sub->guessState (prevTime, m_state.data (), m_dstate_dt.data (), cLocalbSolverMode);
+            //    sub->guessState (prevTime, m_state.data (), component_state.m_dstate_dt.data (), cLocalbSolverMode);
         }
     }
 
     //  m_stateTemp = m_state.data ();
-    // m_dstate_dt_Temp = m_dstate_dt.data ();
+    // component_state.m_dstate_dt_Temp = component_state.m_dstate_dt.data ();
 }
 
 // save an external state to the internal one
@@ -349,7 +349,7 @@ void DynamicGenerator::setState (coreTime time,
             if (subobj->isEnabled ())
             {
                 subobj->setState (time, state, dstate_dt, sMode);
-                // subobj->guessState (time, m_state.data (), m_dstate_dt.data (), cLocalbSolverMode);
+                // subobj->guessState (time, m_state.data (), component_state.m_dstate_dt.data (), cLocalbSolverMode);
             }
         }
         Pset += dPdt * (time - object_time.prevTime);
@@ -377,7 +377,7 @@ void DynamicGenerator::updateLocalCache (const IOdata &inputs, const stateData &
         }
         // generate updated input values which in many cases will be the same as before
         generateSubModelInputs (inputs, sD, sMode);
-        double scale = machineBasePower / systemBasePower;
+        double scale = machineBasePower / component_parameters.systemBasePower;
         P = -genModel->getOutput (subInputs.inputs[genmodel_loc], sD, sMode, PoutLocation) * scale;
         Q = -genModel->getOutput (subInputs.inputs[genmodel_loc], sD, sMode, QoutLocation) * scale;
     }
@@ -393,7 +393,7 @@ void DynamicGenerator::guessState (coreTime time, double state[], double dstate_
             if (subobj->isEnabled ())
             {
                 subobj->guessState (time, state, dstate_dt, sMode);
-                // subobj->guessState (time, m_state.data (), m_dstate_dt.data (), cLocalbSolverMode);
+                // subobj->guessState (time, m_state.data (), component_state.m_dstate_dt.data (), cLocalbSolverMode);
             }
         }
     }
@@ -431,13 +431,13 @@ void DynamicGenerator::add (gridSubModel *obj)
         double govpmin = gov->get ("pmin");
         if (govpmax < kHalfBigNum)
         {
-            Pmax = govpmax * machineBasePower / systemBasePower;
-            Pmin = govpmin * machineBasePower / systemBasePower;
+            Pmax = govpmax * machineBasePower / component_parameters.systemBasePower;
+            Pmin = govpmin * machineBasePower / component_parameters.systemBasePower;
         }
         else
         {
-            gov->set ("pmax", Pmax * systemBasePower / machineBasePower);
-            gov->set ("pmin", Pmin * systemBasePower / machineBasePower);
+            gov->set ("pmax", Pmax * component_parameters.systemBasePower / machineBasePower);
+            gov->set ("pmin", Pmin * component_parameters.systemBasePower / machineBasePower);
         }
     }
     else if (dynamic_cast<Stabilizer *> (obj) != nullptr)
@@ -542,7 +542,7 @@ void DynamicGenerator::timestep (coreTime time, const IOdata &inputs, const solv
     Generator::timestep (time, inputs, sMode);
     if (isDynamic (sMode))
     {
-        double scale = machineBasePower / systemBasePower;
+        double scale = machineBasePower / component_parameters.systemBasePower;
         double omega = genModel->getFreq (emptyStateData, cLocalSolverMode);
 
         if ((gov != nullptr) && (gov->isEnabled ()))
@@ -586,7 +586,7 @@ void DynamicGenerator::algebraicUpdate (const IOdata &inputs,
             return;
         }
         Generator::algebraicUpdate (inputs, sD, update, sMode, alpha);
-        if (!opFlags[has_subobject_pflow_states])
+        if (!component_configuration.opFlags[has_subobject_pflow_states])
         {
             return;
         }
@@ -621,13 +621,13 @@ void DynamicGenerator::setFlag (const std::string &flag, bool val)
 {
     if ((flag == "isoc") || (flag == "isochronous"))
     {
-        opFlags.set (isochronous_operation, val);
+        component_configuration.opFlags.set (isochronous_operation, val);
         if (val)
         {
             if (isoc == nullptr)
             {
                 add (new isocController (getName ()));
-                if (opFlags[dyn_initialized])
+                if (component_configuration.opFlags[dyn_initialized])
                 {
                     alert (isoc, UPDATE_REQUIRED);
                 }
@@ -717,13 +717,13 @@ void DynamicGenerator::set (const std::string &param, double val, units_t unitTy
         }
         else
         {
-            m_Vtarget = unitConversion (val, unitType, puV, systemBasePower, localBaseVoltage);
+            m_Vtarget = unitConversion (val, unitType, puV, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
         }
     }
     else if ((param == "rating") || (param == "base") || (param == "mbase"))
     {
-        machineBasePower = unitConversion (val, unitType, MVAR, systemBasePower, localBaseVoltage);
-        opFlags.set (independent_machine_base);
+        machineBasePower = unitConversion (val, unitType, MVAR, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
+        component_configuration.opFlags.set (independent_machine_base);
         if (genModel != nullptr)
         {
             genModel->set ("base", machineBasePower);
@@ -732,13 +732,13 @@ void DynamicGenerator::set (const std::string &param, double val, units_t unitTy
 
     else if (param == "basepower")
     {
-        systemBasePower = unitConversion (val, unitType, gridUnits::MW);
-        if (opFlags[independent_machine_base])
+        component_parameters.systemBasePower = unitConversion (val, unitType, gridUnits::MW);
+        if (component_configuration.opFlags[independent_machine_base])
         {
         }
         else
         {
-            machineBasePower = systemBasePower;
+            machineBasePower = component_parameters.systemBasePower;
             for (auto &subobj : getSubObjects ())
             {
                 subobj->set ("basepower", machineBasePower);
@@ -747,35 +747,35 @@ void DynamicGenerator::set (const std::string &param, double val, units_t unitTy
     }
     else if ((param == "basefrequency") || (param == "basefreq"))
     {
-        systemBaseFrequency = unitConversionFreq (val, unitType, rps);
+        component_parameters.systemBaseFrequency = unitConversionFreq (val, unitType, rps);
         if (genModel != nullptr)
         {
-            genModel->set (param, systemBaseFrequency);
+            genModel->set (param, component_parameters.systemBaseFrequency);
         }
         if (gov != nullptr)
         {
-            gov->set (param, systemBaseFrequency);
+            gov->set (param, component_parameters.systemBaseFrequency);
         }
     }
 
     else if (param == "pmax")
     {
-        Pmax = unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+        Pmax = unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
         if (machineBasePower < 0)
         {
-            machineBasePower = unitConversionPower (Pmax, puMW, MW, systemBasePower);
+            machineBasePower = unitConversionPower (Pmax, puMW, MW, component_parameters.systemBasePower);
         }
         if (gov != nullptr)
         {
-            gov->set (param, Pmax * systemBasePower / machineBasePower);
+            gov->set (param, Pmax * component_parameters.systemBasePower / machineBasePower);
         }
     }
     else if (param == "pmin")
     {
-        Pmin = unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+        Pmin = unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
         if (gov != nullptr)
         {
-            gov->set ("pmin", Pmin * systemBasePower / machineBasePower);
+            gov->set ("pmin", Pmin * component_parameters.systemBasePower / machineBasePower);
         }
     }
     else
@@ -818,7 +818,7 @@ void DynamicGenerator::outputPartialDerivatives (const IOdata &inputs,
         }
         return;
     }
-    double scale = machineBasePower / systemBasePower;
+    double scale = machineBasePower / component_parameters.systemBasePower;
     // matrixDataSparse<double> d;
     matrixDataScale<double> d (md, scale);
     // compute the Jacobian
@@ -850,7 +850,7 @@ void DynamicGenerator::ioPartialDerivatives (const IOdata &inputs,
 {
     if (isDynamic (sMode))
     {
-        double scale = machineBasePower / systemBasePower;
+        double scale = machineBasePower / component_parameters.systemBasePower;
         matrixDataScale<double> d (md, scale);
         auto gmLocs = subInputLocs.genModelInputLocsExternal;
         gmLocs[voltageInLocation] = inputLocs[voltageInLocation];
@@ -867,7 +867,7 @@ IOdata DynamicGenerator::getOutputs (const IOdata &inputs, const stateData &sD, 
 {
     if (isDynamic (sMode))  // use as a proxy for dynamic state
     {
-        double scale = machineBasePower / systemBasePower;
+        double scale = machineBasePower / component_parameters.systemBasePower;
         auto output = genModel->getOutputs (subInputs.inputs[genmodel_loc], sD, sMode);
         output[PoutLocation] *= scale;
         output[QoutLocation] *= scale;
@@ -880,7 +880,7 @@ double DynamicGenerator::getRealPower (const IOdata &inputs, const stateData &sD
 {
     if (isDynamic (sMode))  // use as a proxy for dynamic state
     {
-        double scale = machineBasePower / systemBasePower;
+        double scale = machineBasePower / component_parameters.systemBasePower;
         double output = genModel->getOutput (subInputs.inputs[genmodel_loc], sD, sMode, 0) * scale;
         // printf("t=%f (%s ) V=%f T=%f, P=%f\n", time, parent->name.c_str(), inputs[voltageInLocation],
         // inputs[angleInLocation], output[PoutLocation]);
@@ -893,7 +893,7 @@ DynamicGenerator::getReactivePower (const IOdata &inputs, const stateData &sD, c
 {
     if (isDynamic (sMode))  // use as a proxy for dynamic state
     {
-        double scale = machineBasePower / systemBasePower;
+        double scale = machineBasePower / component_parameters.systemBasePower;
         double output = genModel->getOutput (subInputs.inputs[genmodel_loc], sD, sMode, 1) * scale;
         return output;
     }
@@ -909,7 +909,7 @@ void DynamicGenerator::residual (const IOdata &inputs,
     if (!isDynamic (sMode))
     {  // the bus is managing a remote bus voltage
         Generator::residual (inputs, sD, resid, sMode);
-        if (!opFlags[has_subobject_pflow_states])
+        if (!component_configuration.opFlags[has_subobject_pflow_states])
         {
             return;
         }
@@ -951,7 +951,7 @@ void DynamicGenerator::jacobianElements (const IOdata &inputs,
     if (!isDynamic (sMode))
     {  // the bus is managing a remote bus voltage
         Generator::jacobianElements (inputs, sD, md, inputLocs, sMode);
-        if (!opFlags[has_subobject_pflow_states])
+        if (!component_configuration.opFlags[has_subobject_pflow_states])
         {
             return;
         }
@@ -1157,7 +1157,7 @@ void DynamicGenerator::generateSubModelInputs (const IOdata &inputs, const state
             subInputs.inputs[isoc_control][0] = inputs[frequencyInLocation] - 1.0;
         }
     }
-    if (!opFlags[uses_bus_frequency])
+    if (!component_configuration.opFlags[uses_bus_frequency])
     {
         subInputs.inputs[governor_loc][govOmegaInLocation] = genModel->getFreq (sD, sMode);
         if (isoc != nullptr)
@@ -1166,7 +1166,7 @@ void DynamicGenerator::generateSubModelInputs (const IOdata &inputs, const state
         }
     }
 
-    double scale = systemBasePower / machineBasePower;
+    double scale = component_parameters.systemBasePower / machineBasePower;
     double Pcontrol = pSetControlUpdate (inputs, sD, sMode);
     Pcontrol = valLimit (Pcontrol, Pmin, Pmax);
 
@@ -1262,12 +1262,12 @@ double DynamicGenerator::pSetControlUpdate (const IOdata &inputs, const stateDat
     {
         val = (!sD.empty ()) ? (Pset + dPdt * (sD.time - object_time.prevTime)) : Pset;
     }
-    if (opFlags[isochronous_operation])
+    if (component_configuration.opFlags[isochronous_operation])
     {
         isoc->setLimits (Pmin - val, Pmax - val);
         isoc->setFreq (subInputs.inputs[isoc_control][0]);
 
-        val = val + isoc->getOutput () * machineBasePower / systemBasePower;
+        val = val + isoc->getOutput () * machineBasePower / component_parameters.systemBasePower;
     }
     return val;
 }

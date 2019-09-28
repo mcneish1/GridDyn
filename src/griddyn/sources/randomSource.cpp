@@ -40,9 +40,9 @@ coreObject *randomSource::clone (coreObject *obj) const
     src->param2_t = param2_t;
     src->param1_L = param1_L;
     src->param2_L = param2_L;
-    src->opFlags.reset (triggered_flag);
+    src->component_configuration.opFlags.reset (triggered_flag);
     src->zbias = zbias;
-    src->opFlags.reset (object_armed_flag);
+    src->component_configuration.opFlags.reset (object_armed_flag);
     src->keyTime = keyTime;
     src->timeDistribution = timeDistribution;
     src->valDistribution = valDistribution;
@@ -58,7 +58,7 @@ void randomSource::set (const std::string &param, const std::string &val)
     if ((param == "trigger_dist") || (param == "time_dist"))
     {
         timeDistribution = convertToLowerCase (val);
-        if (opFlags[dyn_initialized])
+        if (component_configuration.opFlags[dyn_initialized])
         {
             timeGenerator->setDistribution (getDist (timeDistribution));
         }
@@ -66,7 +66,7 @@ void randomSource::set (const std::string &param, const std::string &val)
     else if ((param == "size_dist") || (param == "change_dist"))
     {
         valDistribution = convertToLowerCase (val);
-        if (opFlags[dyn_initialized])
+        if (component_configuration.opFlags[dyn_initialized])
         {
             valGenerator->setDistribution (getDist (valDistribution));
         }
@@ -92,7 +92,7 @@ void randomSource::setFlag (const std::string &flag, bool val)
     armed_flag=object_flag8,*/
     if (flag == "interpolate")
     {
-        opFlags.set (interpolate_flag, val);
+        component_configuration.opFlags.set (interpolate_flag, val);
         if (!val)
         {
             mp_dOdt = 0.0;
@@ -100,7 +100,7 @@ void randomSource::setFlag (const std::string &flag, bool val)
     }
     else if (flag == "step")
     {
-        opFlags.set (interpolate_flag, !val);
+        component_configuration.opFlags.set (interpolate_flag, !val);
         if (val)
         {
             mp_dOdt = 0.0;
@@ -108,11 +108,11 @@ void randomSource::setFlag (const std::string &flag, bool val)
     }
     else if (flag == "repeated")
     {
-        opFlags.set (repeated_flag, val);
+        component_configuration.opFlags.set (repeated_flag, val);
     }
     else if (flag == "proportional")
     {
-        opFlags.set (proportional_flag, val);
+        component_configuration.opFlags.set (proportional_flag, val);
     }
     else
     {
@@ -186,8 +186,8 @@ void randomSource::set (const std::string &param, double val, gridUnits::units_t
 
 void randomSource::reset (reset_levels /*level*/)
 {
-    opFlags.reset (triggered_flag);
-    opFlags.reset (object_armed_flag);
+    component_configuration.opFlags.reset (triggered_flag);
+    component_configuration.opFlags.reset (object_armed_flag);
     offset = 0.0;
 }
 
@@ -199,12 +199,12 @@ void randomSource::pFlowObjectInitializeA (coreTime time0, std::uint32_t /*flags
     valGenerator = std::make_unique<utilities::gridRandom> (valDistribution, param1_L, param2_L);
     coreTime triggerTime = time0 + ntime ();
 
-    if (opFlags[interpolate_flag])
+    if (component_configuration.opFlags[interpolate_flag])
     {
         nextStep (triggerTime);
     }
     object_time.nextUpdateTime = triggerTime;
-    opFlags.set (object_armed_flag);
+    component_configuration.opFlags.set (object_armed_flag);
 }
 
 void randomSource::updateOutput (coreTime time)
@@ -225,12 +225,12 @@ void randomSource::updateA (coreTime time)
     }
 
     object_time.lastUpdateTime = object_time.nextUpdateTime;
-    opFlags.set (triggered_flag);
+    component_configuration.opFlags.set (triggered_flag);
     auto triggerTime = object_time.lastUpdateTime + ntime ();
-    if (opFlags[interpolate_flag])
+    if (component_configuration.opFlags[interpolate_flag])
     {
         rampSource::setState (object_time.nextUpdateTime, nullptr, nullptr, cLocalSolverMode);
-        if (opFlags[repeated_flag])
+        if (component_configuration.opFlags[repeated_flag])
         {
             nextStep (triggerTime);
             object_time.nextUpdateTime = triggerTime;
@@ -240,7 +240,7 @@ void randomSource::updateA (coreTime time)
         {
             rampSource::clearRamp ();
             object_time.nextUpdateTime = maxTime;
-            opFlags.set (object_armed_flag, false);
+            component_configuration.opFlags.set (object_armed_flag, false);
             object_time.prevTime = time;
             keyTime = time;
         }
@@ -249,16 +249,16 @@ void randomSource::updateA (coreTime time)
     {
         double rval = nval ();
 
-        m_output = (opFlags[proportional_flag]) ? m_output + rval * m_output : m_output + rval;
+        m_output = (component_configuration.opFlags[proportional_flag]) ? m_output + rval * m_output : m_output + rval;
 
-        if (opFlags[repeated_flag])
+        if (component_configuration.opFlags[repeated_flag])
         {
             object_time.nextUpdateTime = triggerTime;
         }
         else
         {
             object_time.nextUpdateTime = maxTime;
-            opFlags.reset (object_armed_flag);
+            component_configuration.opFlags.reset (object_armed_flag);
         }
         object_time.prevTime = time;
         keyTime = time;
@@ -293,8 +293,8 @@ double randomSource::nval ()
 void randomSource::nextStep (coreTime triggerTime)
 {
     double rval = nval ();
-    double nextVal = (opFlags[proportional_flag]) ? m_output + rval * m_output : m_output + rval;
-    if (opFlags[interpolate_flag])
+    double nextVal = (component_configuration.opFlags[proportional_flag]) ? m_output + rval * m_output : m_output + rval;
+    if (component_configuration.opFlags[interpolate_flag])
     {
         mp_dOdt = (nextVal - m_output) / (triggerTime - keyTime);
     }
@@ -316,14 +316,14 @@ void randomSource::timestep (coreTime time, const IOdata &inputs, const solverMo
 
 void randomSource::timeParamUpdate ()
 {
-    if (opFlags[dyn_initialized])
+    if (component_configuration.opFlags[dyn_initialized])
     {
         timeGenerator->setParameters (param1_t, param2_t);
     }
 }
 void randomSource::valParamUpdate ()
 {
-    if (opFlags[dyn_initialized])
+    if (component_configuration.opFlags[dyn_initialized])
     {
         valGenerator->setParameters (param1_L, param2_L);
     }
@@ -354,5 +354,11 @@ double randomSource::computeBiasAdjust ()
     }
     return bias;
 }
+
+bool randomSource::isTriggered()
+{
+    return component_configuration.opFlags[triggered_flag];
+}
+
 }  // namespace sources
 }  // namespace griddyn

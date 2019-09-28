@@ -34,8 +34,8 @@ using namespace stringOps;
 
 sensor::sensor (const std::string &objName) : Relay (objName)
 {
-    opFlags.set (continuous_flag);
-    opFlags.set (late_b_initialize);
+    component_configuration.opFlags.set (continuous_flag);
+    component_configuration.opFlags.set (late_b_initialize);
 }
 
 coreObject *sensor::clone (coreObject *obj) const
@@ -115,7 +115,7 @@ void sensor::add (std::shared_ptr<grabberSet> dGr)
 
         if (!(dGr->stateCapable ()))
         {
-            opFlags.set (continuous_flag, false);
+            component_configuration.opFlags.set (continuous_flag, false);
         }
         dataSources[cnum] = std::move (dGr);
     }
@@ -139,17 +139,17 @@ void sensor::setFlag (const std::string &flag, bool val)
 {
     if ((flag == "direct_io") || (flag == "direct"))
     {
-        opFlags.set (direct_IO, val);
+        component_configuration.opFlags.set (direct_IO, val);
     }
     else if (flag == "sampled")
     {
-        opFlags[sampled_only] = val;
-        opFlags[continuous_flag] = !val;
+        component_configuration.opFlags[sampled_only] = val;
+        component_configuration.opFlags[continuous_flag] = !val;
     }
     else if (flag == "continuous")
     {
-        opFlags[sampled_only] = !val;
-        opFlags[continuous_flag] = val;
+        component_configuration.opFlags[sampled_only] = !val;
+        component_configuration.opFlags[continuous_flag] = val;
     }
     else
     {
@@ -185,7 +185,7 @@ void sensor::set (const std::string &param, const std::string &val)
                 inputStrings.push_back (istr);
             }
         }
-        if (opFlags[direct_IO])
+        if (component_configuration.opFlags[direct_IO])
         {
             if (num >= 0)
             {
@@ -205,9 +205,9 @@ void sensor::set (const std::string &param, const std::string &val)
                     outputStrings.push_back ({getTailString (istr, ':')});
                 }
             }
-            m_outputSize = static_cast<count_t> (outputStrings.size ());
+            component_ports.m_outputSize = static_cast<count_t> (outputStrings.size ());
         }
-        m_inputSize = static_cast<count_t> (inputStrings.size ());
+        component_ports.m_inputSize = static_cast<count_t> (inputStrings.size ());
     }
     else if (param == "condition")
     {
@@ -249,7 +249,7 @@ void sensor::set (const std::string &param, const std::string &val)
                 outputStrings.push_back (splitline (outputStr));
             }
         }
-        m_outputSize = static_cast<count_t> (outputStrings.size ());
+        component_ports.m_outputSize = static_cast<count_t> (outputStrings.size ());
     }
     else if ((iparam == "output") || (param == "outputs"))
     {
@@ -296,7 +296,7 @@ void sensor::setupOutput (index_t num, const std::string &outputString)
         ensureSizeAtLeast (outputStrings, num + 1);
         ensureSizeAtLeast (outputMode, num + 1, outputMode_t::block);
         ensureSizeAtLeast (outGrabbers, num + 1);
-        m_outputSize = static_cast<count_t> (outputs.size ());
+        component_ports.m_outputSize = static_cast<count_t> (outputs.size ());
         if (!sval.empty ())
         {
             outputStrings[num] = {sval};
@@ -366,7 +366,7 @@ void sensor::set (const std::string &param, double val, gridUnits::units_t unitT
     }
     else if (param == "direct")
     {
-        opFlags.set (direct_IO, (val > 0.1));
+        component_configuration.opFlags.set (direct_IO, (val > 0.1));
     }
     else if (iparam == "output")
     {
@@ -452,7 +452,7 @@ void sensor::generateInputGrabbers ()
 
         if (cloc == std::string::npos)
         {  // if there is a colon assume the input is fully specified
-            if ((opFlags[link_type_source]) && (isdigit (istr.back ()) == 0))
+            if ((component_configuration.opFlags[link_type_source]) && (isdigit (istr.back ()) == 0))
             {
                 if (m_terminal > 0)
                 {
@@ -462,7 +462,7 @@ void sensor::generateInputGrabbers ()
         }
         coreObject *target_obj = (m_sourceObject != nullptr) ? m_sourceObject : getParent ();
 
-        dataSources[ii] = std::make_shared<grabberSet> (istr, target_obj, opFlags[sampled_only]);
+        dataSources[ii] = std::make_shared<grabberSet> (istr, target_obj, component_configuration.opFlags[sampled_only]);
     }
 }
 using cm = comms::controlMessagePayload;
@@ -480,7 +480,7 @@ void sensor::receiveMessage (std::uint64_t sourceID, std::shared_ptr<commMessage
         try
         {
             set (convertToLowerCase (m->m_field), m->m_value, gridUnits::getUnits (m->m_units));
-            if (!opFlags[no_message_reply])  // unless told not to respond return with the
+            if (!component_configuration.opFlags[no_message_reply])  // unless told not to respond return with the
             {
                 auto gres = std::make_shared<commMessage> (cm::SET_SUCCESS);
                 assert (gres->getPayload<cm> ());
@@ -490,7 +490,7 @@ void sensor::receiveMessage (std::uint64_t sourceID, std::shared_ptr<commMessage
         }
         catch (const std::invalid_argument &)
         {
-            if (!opFlags[no_message_reply])  // unless told not to respond return with the
+            if (!component_configuration.opFlags[no_message_reply])  // unless told not to respond return with the
             {
                 auto gres = std::make_shared<commMessage> (cm::SET_FAIL);
                 assert (gres->getPayload<cm> ());
@@ -611,32 +611,32 @@ void sensor::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
 {
     if (dynamic_cast<Link *> (m_sourceObject) != nullptr)
     {
-        opFlags.set (link_type_source);
+        component_configuration.opFlags.set (link_type_source);
     }
 
     if (dynamic_cast<Link *> (m_sinkObject) != nullptr)
     {
-        opFlags.set (link_type_sink);
+        component_configuration.opFlags.set (link_type_sink);
     }
     generateInputGrabbers ();
     // check if we need to go to sampled mode
-    if (opFlags[continuous_flag])
+    if (component_configuration.opFlags[continuous_flag])
     {
         for (auto &dgs : dataSources)
         {
             if ((dgs) && (!dgs->stateCapable ()))
             {
                 // TODO::PT Make it so it can partially support continuous sensors
-                opFlags.set (continuous_flag, false);
+                component_configuration.opFlags.set (continuous_flag, false);
                 LOG_WARNING ("not all data sources support continuous operation , reverting to sampled mode");
                 break;
             }
         }
     }
 
-    if (!opFlags[continuous_flag])
+    if (!component_configuration.opFlags[continuous_flag])
     {
-        opFlags.set (sampled_only);
+        component_configuration.opFlags.set (sampled_only);
         for (auto &fb : filterBlocks)
         {
             fb->setFlag ("sampled_only", true);
@@ -650,7 +650,7 @@ void sensor::dynObjectInitializeB (const IOdata &inputs, const IOdata & /*desire
 {
     if (filterBlocks.empty ())  // no filter blocks, use direct output
     {
-        opFlags.set (direct_IO);
+        component_configuration.opFlags.set (direct_IO);
     }
     for (size_t kk = 0; kk < filterBlocks.size (); ++kk)
     {
@@ -673,7 +673,7 @@ void sensor::dynObjectInitializeB (const IOdata &inputs, const IOdata & /*desire
 
     if (outputs.empty ())
     {
-        if (opFlags[direct_IO])
+        if (component_configuration.opFlags[direct_IO])
         {
             for (int kk = 0; kk < static_cast<int> (dataSources.size ()); ++kk)
             {
@@ -696,12 +696,12 @@ void sensor::dynObjectInitializeB (const IOdata &inputs, const IOdata & /*desire
     int blkcnt = 0;
     int ocount = 0;
 
-    if (outputMode.size() <= static_cast<size_t>(m_outputSize) and m_outputSize > 0)
+    if (outputMode.size() <= static_cast<size_t>(component_ports.m_outputSize) and component_ports.m_outputSize > 0)
     {
         throw std::logic_error("outputMode not large enough");
     }
 
-    for (int kk = 0; kk < m_outputSize; ++kk)
+    for (int kk = 0; kk < component_ports.m_outputSize; ++kk)
     {
         switch (outputMode[kk])
         {
@@ -758,7 +758,7 @@ void sensor::dynObjectInitializeB (const IOdata &inputs, const IOdata & /*desire
         double cv = getBlockInput (kk, noInputs);
         filterBlocks[kk]->blockInitialize (cv, kNullVal);
     }
-    m_outputSize = static_cast<index_t> (outputMode.size ());
+    component_ports.m_outputSize = static_cast<index_t> (outputMode.size ());
 
     // generate the output
     fieldSet = getOutputs (inputs, emptyStateData, cLocalSolverMode);
@@ -892,7 +892,7 @@ double sensor::getBlockInput (index_t blockNum, const IOdata & /*inputs*/) const
 
 const std::vector<stringVec> &sensor::outputNames () const
 {
-    if (static_cast<count_t> (outputStrings.size ()) < m_outputSize)
+    if (static_cast<count_t> (outputStrings.size ()) < component_ports.m_outputSize)
     {
         // TODO:: this should be corrected before it gets here
         return gridComponent::outputNames ();
@@ -902,8 +902,8 @@ const std::vector<stringVec> &sensor::outputNames () const
 
 IOdata sensor::getOutputs (const IOdata &inputs, const stateData &sD, const solverMode &sMode) const
 {
-    IOdata out (m_outputSize);
-    for (index_t pp = 0; pp < m_outputSize; ++pp)
+    IOdata out (component_ports.m_outputSize);
+    for (index_t pp = 0; pp < component_ports.m_outputSize; ++pp)
     {
         out[pp] = getOutput (inputs, sD, sMode, pp);
     }

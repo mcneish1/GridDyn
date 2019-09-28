@@ -20,11 +20,11 @@ namespace griddyn
 {
 namespace blocks
 {
-deadbandBlock::deadbandBlock (const std::string &objName) : Block (objName) { opFlags.set (use_state); }
+deadbandBlock::deadbandBlock (const std::string &objName) : Block (objName) { component_configuration.opFlags.set (use_state); }
 deadbandBlock::deadbandBlock (double db, const std::string &objName)
     : Block (objName), deadbandHigh (db), deadbandLow (-db)
 {
-    opFlags.set (use_state);
+    component_configuration.opFlags.set (use_state);
 }
 
 coreObject *deadbandBlock::clone (coreObject *obj) const
@@ -49,10 +49,10 @@ void deadbandBlock::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
     Block::dynObjectInitializeA (time0, flags);
     if (deadbandLow < deadbandHigh)  // this means it was set to some value
     {
-        opFlags[has_roots] = true;
+        component_configuration.opFlags[has_roots] = true;
         offsets.local ().local.algRoots++;
-        opFlags.set (has_alg_roots);
-        opFlags[uses_deadband] = true;
+        component_configuration.opFlags.set (has_alg_roots);
+        component_configuration.opFlags[uses_deadband] = true;
     }
     if (resetHigh < -kHalfBigNum)  // this means we are using default
     {
@@ -68,9 +68,9 @@ void deadbandBlock::dynObjectInitializeB (const IOdata &inputs, const IOdata &de
 {
     if (desiredOutput.empty ())
     {
-        m_state[limiter_alg] = deadbandLevel;
+        component_state.m_state[limiter_alg] = deadbandLevel;
         rootCheck (inputs, emptyStateData, cLocalSolverMode, check_level_t::reversable_only);
-        m_state[limiter_alg] = K * computeValue (inputs[0] + bias);
+        component_state.m_state[limiter_alg] = K * computeValue (inputs[0] + bias);
         if (limiter_alg > 0)
         {
             Block::rootCheck (inputs, emptyStateData, cLocalSolverMode, check_level_t::reversable_only);
@@ -85,10 +85,10 @@ void deadbandBlock::dynObjectInitializeB (const IOdata &inputs, const IOdata &de
             Block::rootCheck (inputs, emptyStateData, cLocalSolverMode, check_level_t::reversable_only);
         }
         dbstate = deadbandstate_t::normal;
-        double ival = m_state[limiter_alg] / K;
+        double ival = component_state.m_state[limiter_alg] / K;
         if (std::abs (ival - deadbandLevel) > 1e-6)
         {
-            if (opFlags[uses_shiftedoutput])
+            if (component_configuration.opFlags[uses_shiftedoutput])
             {
                 dbstate = deadbandstate_t::shifted;
                 if (ival > deadbandLevel)
@@ -224,7 +224,7 @@ double deadbandBlock::computeDoutDin (double input) const
 double deadbandBlock::step (coreTime time, double input)
 {
     rootCheck ({input}, emptyStateData, cLocalSolverMode, check_level_t::reversable_only);
-    m_state[limiter_alg] = K * computeValue (input + bias);
+    component_state.m_state[limiter_alg] = K * computeValue (input + bias);
     if (limiter_alg > 0)
     {
         Block::step (time, input);
@@ -232,11 +232,11 @@ double deadbandBlock::step (coreTime time, double input)
     else
     {
         object_time.prevTime = time;
-        m_output = m_state[0];
+        m_output = component_state.m_state[0];
     }
-    // printf("deadband input=%f, step out=%f, check out =%f\n",input, m_state[0],
-    // m_state[limiter_alg]);
-    return m_state[0];
+    // printf("deadband input=%f, step out=%f, check out =%f\n",input, component_state.m_state[0],
+    // component_state.m_state[limiter_alg]);
+    return component_state.m_state[0];
 }
 
 void deadbandBlock::blockDerivative (double input,
@@ -245,7 +245,7 @@ void deadbandBlock::blockDerivative (double input,
                                    double deriv[],
                                    const solverMode &sMode)
 {
-    if (opFlags[differential_input])
+    if (component_configuration.opFlags[differential_input])
     {
         auto offset = offsets.getDiffOffset (sMode) + limiter_diff;
         double ival = input + bias;
@@ -260,7 +260,7 @@ void deadbandBlock::blockDerivative (double input,
 
 void deadbandBlock::blockAlgebraicUpdate (double input, const stateData &sD, double update[], const solverMode &sMode)
 {
-    if (!opFlags[differential_input])
+    if (!component_configuration.opFlags[differential_input])
     {
         auto offset = offsets.getAlgOffset (sMode) + limiter_alg;
         double ival = input + bias;
@@ -281,7 +281,7 @@ void deadbandBlock::blockJacobianElements (double input,
                                  index_t argLoc,
                                  const solverMode &sMode)
 {
-    if ((!opFlags[differential_input]) && (hasAlgebraic (sMode)))
+    if ((!component_configuration.opFlags[differential_input]) && (hasAlgebraic (sMode)))
     {
         auto offset = offsets.getAlgOffset (sMode) + limiter_alg;
         md.assign (offset, offset, -1.0);
@@ -296,7 +296,7 @@ void deadbandBlock::blockJacobianElements (double input,
             Block::blockJacobianElements (input, didt, sD, md, argLoc, sMode);
         }
     }
-    else if ((opFlags[differential_input]) && (hasDifferential (sMode)))
+    else if ((component_configuration.opFlags[differential_input]) && (hasDifferential (sMode)))
     {
         auto offset = offsets.getDiffOffset (sMode) + limiter_diff;
         md.assign (offset, offset, -sD.cj);
@@ -320,7 +320,7 @@ void deadbandBlock::rootTest (const IOdata &inputs, const stateData &sD, double 
     {
         Block::rootTest (inputs, sD, roots, sMode);
     }
-    if (opFlags[uses_deadband])
+    if (component_configuration.opFlags[uses_deadband])
     {
         int rootOffset = offsets.getRootOffset (sMode) + limiter_alg + limiter_diff;
 
@@ -332,11 +332,11 @@ void deadbandBlock::rootTest (const IOdata &inputs, const stateData &sD, double 
             roots[rootOffset] = std::min (deadbandHigh - ival, ival - deadbandLow);
             if (ival > deadbandHigh)
             {
-                opFlags.set (dbtrigger_high);
+                component_configuration.opFlags.set (dbtrigger_high);
             }
             break;
         case deadbandstate_t::outside:
-            if (opFlags[dbtrigger_high])
+            if (component_configuration.opFlags[dbtrigger_high])
             {
                 roots[rootOffset] = ival - resetHigh + tolerance;
             }
@@ -346,7 +346,7 @@ void deadbandBlock::rootTest (const IOdata &inputs, const stateData &sD, double 
             }
             break;
         case deadbandstate_t::shifted:
-            if (opFlags[dbtrigger_high])
+            if (component_configuration.opFlags[dbtrigger_high])
             {
                 roots[rootOffset] = ival - deadbandHigh + tolerance;
             }
@@ -357,7 +357,7 @@ void deadbandBlock::rootTest (const IOdata &inputs, const stateData &sD, double 
             break;
 
         case deadbandstate_t::rampup:
-            if (opFlags[dbtrigger_high])
+            if (component_configuration.opFlags[dbtrigger_high])
             {
                 roots[rootOffset] = std::min (deadbandHigh + rampUpband - ival, ival - deadbandHigh) + tolerance;
             }
@@ -367,7 +367,7 @@ void deadbandBlock::rootTest (const IOdata &inputs, const stateData &sD, double 
             }
             break;
         case deadbandstate_t::rampdown:
-            if (opFlags[dbtrigger_high])
+            if (component_configuration.opFlags[dbtrigger_high])
             {
                 roots[rootOffset] = std::min (ival - resetHigh - rampDownband, resetHigh - ival) + tolerance;
             }
@@ -399,7 +399,7 @@ void deadbandBlock::rootTrigger (coreTime time,
         rootOffset += limiter_alg + limiter_diff;
     }
     // auto cstate = dbstate;
-    if (opFlags[uses_deadband])
+    if (component_configuration.opFlags[uses_deadband])
     {
         if (rootMask[rootOffset] == 0)
         {
@@ -409,7 +409,7 @@ void deadbandBlock::rootTrigger (coreTime time,
         switch (dbstate)
         {
         case deadbandstate_t::normal:
-            if (opFlags[uses_shiftedoutput])
+            if (component_configuration.opFlags[uses_shiftedoutput])
             {
                 dbstate = deadbandstate_t::shifted;
             }
@@ -459,9 +459,9 @@ void deadbandBlock::rootTrigger (coreTime time,
         }
         if (dbstate == deadbandstate_t::normal)
         {
-            opFlags.reset (dbtrigger_high);
+            component_configuration.opFlags.reset (dbtrigger_high);
         }
-        m_state[limiter_alg] = computeValue (prevInput);
+        component_state.m_state[limiter_alg] = computeValue (prevInput);
         // if (dbstate != cstate)
         // {
         //	  printf("rt--%f, %d::change deadband state from %d to %d\n",
@@ -478,7 +478,7 @@ change_code deadbandBlock::rootCheck (const IOdata &inputs,
 {
     change_code ret = change_code::no_change;
     auto cstate = dbstate;
-    if (opFlags[uses_deadband])
+    if (component_configuration.opFlags[uses_deadband])
     {
         double ival = inputs[0] + bias;
         switch (dbstate)
@@ -486,7 +486,7 @@ change_code deadbandBlock::rootCheck (const IOdata &inputs,
         case deadbandstate_t::normal:
             if (std::min (deadbandHigh - ival, ival - deadbandLow) < -tolerance)
             {
-                if (opFlags[uses_shiftedoutput])
+                if (component_configuration.opFlags[uses_shiftedoutput])
                 {
                     dbstate = deadbandstate_t::shifted;
                 }
@@ -500,16 +500,16 @@ change_code deadbandBlock::rootCheck (const IOdata &inputs,
                 }
                 if (ival >= deadbandHigh)
                 {
-                    opFlags.set (dbtrigger_high);
+                    component_configuration.opFlags.set (dbtrigger_high);
                 }
                 else
                 {
-                    opFlags.reset (dbtrigger_high);
+                    component_configuration.opFlags.reset (dbtrigger_high);
                 }
             }
             break;
         case deadbandstate_t::outside:
-            if (opFlags[dbtrigger_high])
+            if (component_configuration.opFlags[dbtrigger_high])
             {
                 if (ival < resetHigh)
                 {
@@ -560,7 +560,7 @@ change_code deadbandBlock::rootCheck (const IOdata &inputs,
             break;
 
         case deadbandstate_t::rampup:
-            if (opFlags[dbtrigger_high])
+            if (component_configuration.opFlags[dbtrigger_high])
             {
                 if (ival > deadbandHigh + rampUpband + tolerance)
                 {
@@ -585,7 +585,7 @@ change_code deadbandBlock::rootCheck (const IOdata &inputs,
             }
             break;
         case deadbandstate_t::rampdown:
-            if (opFlags[dbtrigger_high])
+            if (component_configuration.opFlags[dbtrigger_high])
             {
                 if (ival > deadbandHigh + rampDownband + tolerance)
                 {
@@ -636,11 +636,11 @@ void deadbandBlock::setFlag (const std::string &flag, bool val)
 {
     if (flag == "shifted")
     {
-        opFlags.set (uses_shiftedoutput, val);
+        component_configuration.opFlags.set (uses_shiftedoutput, val);
     }
     else if (flag == "unshifted")
     {
-        opFlags.set (uses_shiftedoutput, !val);
+        component_configuration.opFlags.set (uses_shiftedoutput, !val);
     }
     else if (flag == "no_down_deadband")
     {

@@ -46,20 +46,20 @@ using namespace gridUnits;
 gridBus::gridBus (const std::string &objName) : gridPrimary (objName), outputs (3), outLocs (3)
 {
     // default values
-    m_outputSize = 3;
+    component_ports.m_outputSize = 3;
     setUserID (++busCount);
     updateName ();
-    localBaseVoltage = 120.0;
+    component_parameters.localBaseVoltage = 120.0;
 }
 
 gridBus::gridBus (double voltageStart, double angleStart, const std::string &objName)
     : gridPrimary (objName), angle (angleStart), voltage (voltageStart)
 {
-    m_outputSize = 3;
+    component_ports.m_outputSize = 3;
     // default values
     setUserID (++busCount);
     updateName ();
-    localBaseVoltage = 120.0;
+    component_parameters.localBaseVoltage = 120.0;
 }
 
 coreObject *gridBus::clone (coreObject *obj) const
@@ -73,7 +73,7 @@ coreObject *gridBus::clone (coreObject *obj) const
     nobj->dynType = dynType;
     nobj->angle = angle;
     nobj->voltage = voltage;
-    nobj->set ("basevoltage", localBaseVoltage);  // this is to set all the sub objects as well
+    nobj->set ("basevoltage", component_parameters.localBaseVoltage);  // this is to set all the sub objects as well
     nobj->freq = freq;
     nobj->Vtol = Vtol;
     nobj->Atol = Atol;
@@ -87,7 +87,7 @@ coreObject *gridBus::clone (coreObject *obj) const
 bool gridBus::checkCapable ()
 {
     double remainingCapacity = 0.0;
-    if (!opFlags[pFlow_initialized])
+    if (!component_configuration.opFlags[pFlow_initialized])
     {
         return true;
     }
@@ -160,7 +160,7 @@ void addObject (gridBus *bus, X *obj, objVector<X *> &OVector)
     {
         obj->locIndex = static_cast<index_t> (OVector.size ());
         OVector.push_back (obj);
-        obj->set ("basevoltage", bus->localBaseVoltage);
+        obj->set ("basevoltage", bus->component_parameters.localBaseVoltage);
         bus->addSubObject (obj);
         if (bus->checkFlag (pFlow_initialized))
         {
@@ -277,7 +277,7 @@ void gridBus::alert (coreObject *obj, int code)
     case OBJECT_ID_CHANGE:
         break;
     case POTENTIAL_FAULT_CHANGE:
-        if (opFlags[disconnected])
+        if (component_configuration.opFlags[disconnected])
         {
             reconnect ();
         }
@@ -319,7 +319,7 @@ void gridBus::pFlowObjectInitializeA (coreTime time0, std::uint32_t flags)
     }
     if (CHECK_CONTROLFLAG (flags, low_voltage_checking))
     {
-        opFlags.set (low_voltage_check_flag);
+        component_configuration.opFlags.set (low_voltage_check_flag);
     }
 }
 
@@ -333,9 +333,9 @@ void gridBus::pFlowObjectInitializeB ()
     {
         load->pFlowInitializeB ();
     }
-    m_dstate_dt.resize (3, 0);
-    m_dstate_dt[angleInLocation] = systemBaseFrequency * (freq - 1.0);
-    m_state = {voltage, angle, freq};
+    component_state.m_dstate_dt.resize (3, 0);
+    component_state.m_dstate_dt[angleInLocation] = component_parameters.systemBaseFrequency * (freq - 1.0);
+    component_state.m_state = {voltage, angle, freq};
 }
 
 void gridBus::preEx (const IOdata & /*inputs*/, const stateData &sD, const solverMode &sMode)
@@ -347,7 +347,7 @@ void gridBus::preEx (const IOdata & /*inputs*/, const stateData &sD, const solve
 
 void gridBus::reset (reset_levels level)
 {
-    if (opFlags[disconnected])
+    if (component_configuration.opFlags[disconnected])
     {
         for (auto &link : attachedLinks)
         {
@@ -401,8 +401,8 @@ change_code gridBus::powerFlowAdjust (const IOdata & /*inputs*/, std::uint32_t f
 // dynInitializeB states for dynamic solution
 void gridBus::dynObjectInitializeA (coreTime time0, std::uint32_t flags)
 {
-    opFlags[preEx_requested] = false;
-    opFlags[has_constraints] = false;
+    component_configuration.opFlags[preEx_requested] = false;
+    component_configuration.opFlags[has_constraints] = false;
     offsets.unload (true);
     for (auto &gen : attachedGens)
     {
@@ -442,9 +442,9 @@ void gridBus::dynObjectInitializeB (const IOdata & /*inputs*/, const IOdata &des
     }
     updateLocalCache ();
 
-    m_state[voltageInLocation] = voltage;
-    m_state[angleInLocation] = angle;
-    m_state[frequencyInLocation] = freq;
+    component_state.m_state[voltageInLocation] = voltage;
+    component_state.m_state[angleInLocation] = angle;
+    component_state.m_state[frequencyInLocation] = freq;
 
     // first get the state size for the internal state ordering
     IOdata inputs{voltage, angle, freq};
@@ -586,12 +586,12 @@ void gridBus::set (const std::string &param, double val, units_t unitType)
     {
         if (voltage < 0.25)
         {
-            if (opFlags[dyn_initialized])
+            if (component_configuration.opFlags[dyn_initialized])
             {
                 alert (this, POTENTIAL_FAULT_CHANGE);
             }
         }
-        voltage = unitConversion (val, unitType, puV, systemBasePower, localBaseVoltage);
+        voltage = unitConversion (val, unitType, puV, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if ((param == "angle") || (param == "ang"))
     {
@@ -599,11 +599,11 @@ void gridBus::set (const std::string &param, double val, units_t unitType)
     }
     else if ((param == "freq") || (param == "frequency") || (param == "dadt"))
     {
-        freq = unitConversion (val, unitType, puHz, systemBaseFrequency);
+        freq = unitConversion (val, unitType, puHz, component_parameters.systemBaseFrequency);
     }
     else if ((param == "basevoltage") || (param == "base vol") || (param == "vbase") || (param == "voltagebase"))
     {
-        localBaseVoltage = unitConversionPower (val, unitType, kV);
+        component_parameters.localBaseVoltage = unitConversionPower (val, unitType, kV);
         for (auto &gen : attachedGens)
         {
             gen->set ("basevoltage", val);
@@ -615,7 +615,7 @@ void gridBus::set (const std::string &param, double val, units_t unitType)
     }
     else if ((param == "p") || (param == "gen p"))
     {
-        S.genP = unitConversion (val, unitType, puMW, systemBasePower, localBaseVoltage);
+        S.genP = unitConversion (val, unitType, puMW, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
         if (attachedGens.size () == 1)
         {
             attachedGens[0]->set ("p", S.genP);
@@ -1026,7 +1026,7 @@ int gridBus::propogatePower (bool /*makeSlack*/)
 void gridBus::residual (const IOdata &inputs, const stateData &sD, double resid[], const solverMode &sMode)
 {
     updateLocalCache (inputs, sD, sMode);
-    if ((opFlags[low_voltage_check_flag]) && (outputs[voltageInLocation] < Vtol / 2.0) && (isConnected ()))
+    if ((component_configuration.opFlags[low_voltage_check_flag]) && (outputs[voltageInLocation] < Vtol / 2.0) && (isConnected ()))
     {
         alert (this, INVALID_STATE_ALERT);
         alert (this, VERY_LOW_VOLTAGE_ALERT);
@@ -1129,9 +1129,9 @@ double gridBus::computeError (const stateData &sD, const solverMode &sMode)
 
 void gridBus::disconnect ()
 {
-    if (!opFlags[disconnected])
+    if (!component_configuration.opFlags[disconnected])
     {
-        opFlags.set (disconnected);
+        component_configuration.opFlags.set (disconnected);
         outLocs[voltageInLocation] = kNullLocation;
         outLocs[angleInLocation] = kNullLocation;
         outLocs[frequencyInLocation] = kNullLocation;
@@ -1144,10 +1144,10 @@ void gridBus::disconnect ()
 
 void gridBus::reconnect (gridBus *mapBus)
 {
-    if (opFlags[disconnected])
+    if (component_configuration.opFlags[disconnected])
     {
         LOG_DEBUG ("reconnecting to network");
-        opFlags.reset (disconnected);
+        component_configuration.opFlags.reset (disconnected);
         alert (this, JAC_COUNT_INCREASE);
         if (mapBus != nullptr)
         {
@@ -1170,8 +1170,8 @@ void gridBus::reconnect () { reconnect (nullptr); }
 
 void gridBus::updateFlags (bool dynOnly)
 {
-    opFlags.reset (preEx_requested);
-    opFlags.reset (has_powerflow_adjustments);
+    component_configuration.opFlags.reset (preEx_requested);
+    component_configuration.opFlags.reset (has_powerflow_adjustments);
     gridComponent::updateFlags (dynOnly);
 }
 
@@ -1298,7 +1298,7 @@ void gridBus::updateLocalCache ()
         }
     }
 
-    if (!opFlags[dyn_initialized])
+    if (!component_configuration.opFlags[dyn_initialized])
     {
         if ((type == busType::SLK) || (type == busType::afix))
         {
@@ -1498,7 +1498,7 @@ double gridBus::get (const std::string &param, units_t unitType) const
     double val;
     if (param == "voltage")
     {
-        val = unitConversionPower (voltage, puV, unitType, systemBasePower, localBaseVoltage);
+        val = unitConversionPower (voltage, puV, unitType, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if (param == "angle")
     {
@@ -1514,31 +1514,31 @@ double gridBus::get (const std::string &param, units_t unitType) const
     }
     else if ((param == "basevoltage") || (param == "vbase"))
     {
-        val = localBaseVoltage;
+        val = component_parameters.localBaseVoltage;
     }
     else if ((param == "genreal") || (param == "generationreal"))
     {
-        val = unitConversionPower (getGenerationReal (), puMW, unitType, systemBasePower, localBaseVoltage);
+        val = unitConversionPower (getGenerationReal (), puMW, unitType, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if ((param == "genreactive") || (param == "generationreactive"))
     {
-        val = unitConversionPower (getGenerationReactive (), puMW, unitType, systemBasePower, localBaseVoltage);
+        val = unitConversionPower (getGenerationReactive (), puMW, unitType, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if (param == "loadreal")
     {
-        val = unitConversionPower (getLoadReal (), puMW, unitType, systemBasePower, localBaseVoltage);
+        val = unitConversionPower (getLoadReal (), puMW, unitType, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if (param == "loadreactive")
     {
-        val = unitConversionPower (getLoadReactive (), puMW, unitType, systemBasePower, localBaseVoltage);
+        val = unitConversionPower (getLoadReactive (), puMW, unitType, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if (param == "linkreal")
     {
-        val = unitConversionPower (getLinkReal (), puMW, unitType, systemBasePower, localBaseVoltage);
+        val = unitConversionPower (getLinkReal (), puMW, unitType, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if (param == "linkreactive")
     {
-        val = unitConversionPower (getLinkReactive (), puMW, unitType, systemBasePower, localBaseVoltage);
+        val = unitConversionPower (getLinkReactive (), puMW, unitType, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
     }
     else if (param == "gencount")
     {
@@ -1567,7 +1567,7 @@ double gridBus::get (const std::string &param, units_t unitType) const
         if (fptr.first)
         {
             coreObject *tobj = const_cast<gridBus *> (this);
-            val = unitConversion (fptr.first (tobj), fptr.second, unitType, systemBasePower, localBaseVoltage);
+            val = unitConversion (fptr.first (tobj), fptr.second, unitType, component_parameters.systemBasePower, component_parameters.localBaseVoltage);
         }
         else
         {
@@ -1684,20 +1684,20 @@ bool compareBus (gridBus *bus1, gridBus *bus2, bool cmpValues, bool printDiff)
         }
     }
 
-    if (std::abs (bus1->localBaseVoltage - bus2->localBaseVoltage) > 0.00001)
+    if (std::abs (bus1->component_parameters.localBaseVoltage - bus2->component_parameters.localBaseVoltage) > 0.00001)
     {
         cmp = false;
         if (printDiff)
         {
-            printf ("base voltage is different b1=%f <> b2=%f\n", bus1->localBaseVoltage, bus2->localBaseVoltage);
+            printf ("base voltage is different b1=%f <> b2=%f\n", bus1->component_parameters.localBaseVoltage, bus2->component_parameters.localBaseVoltage);
         }
     }
-    if (std::abs (bus1->systemBasePower - bus2->systemBasePower) > 0.00001)
+    if (std::abs (bus1->component_parameters.systemBasePower - bus2->component_parameters.systemBasePower) > 0.00001)
     {
         cmp = false;
         if (printDiff)
         {
-            printf ("base power is different b1=%f <> b2=%f\n", bus1->systemBasePower, bus2->systemBasePower);
+            printf ("base power is different b1=%f <> b2=%f\n", bus1->component_parameters.systemBasePower, bus2->component_parameters.systemBasePower);
         }
     }
     if (cmpValues)

@@ -231,10 +231,7 @@ class gridDynSimulation : public gridSimulation
     /** @brief check if the system has any constraints
      *@return true if there is constraints false if not
      */
-    bool hasConstraints () const
-    {
-        return ((opFlags[has_constraints]) || (controlFlags[voltage_constraints_flag]));
-    }
+    bool hasConstraints () const;
 
     /**@brief run the simulation until the specified time
     @param[in] t_end  the simulation time to stop defaults to the time given in system parameters

@@ -25,15 +25,15 @@ namespace blocks
 {
 filteredDerivativeBlock::filteredDerivativeBlock (const std::string &objName) : Block (objName)
 {
-    opFlags.set (use_state);
-    opFlags.set (differential_output);
+    component_configuration.opFlags.set (use_state);
+    component_configuration.opFlags.set (differential_output);
 }
 
 filteredDerivativeBlock::filteredDerivativeBlock (double t1, double t2, const std::string &objName)
     : Block (objName), m_T1 (t1), m_T2 (t2)
 {
-    opFlags.set (use_state);
-    opFlags.set (differential_output);
+    component_configuration.opFlags.set (use_state);
+    component_configuration.opFlags.set (differential_output);
 }
 
 coreObject *filteredDerivativeBlock::clone (coreObject *obj) const
@@ -62,8 +62,8 @@ void filteredDerivativeBlock::dynObjectInitializeB (const IOdata &inputs,
     index_t loc = limiter_diff;  // can't have a ramp limiter
     if (desiredOutput.empty ())
     {
-        m_state[loc + 1] = K * (inputs[0] + bias);
-        m_state[loc] = 0;
+        component_state.m_state[loc + 1] = K * (inputs[0] + bias);
+        component_state.m_state[loc] = 0;
         if (limiter_diff > 0)
         {
             Block::dynObjectInitializeB (inputs, desiredOutput, fieldSet);
@@ -72,15 +72,15 @@ void filteredDerivativeBlock::dynObjectInitializeB (const IOdata &inputs,
     else
     {
         Block::dynObjectInitializeB (inputs, desiredOutput, fieldSet);
-        m_state[loc] = desiredOutput[0];
-        m_dstate_dt[loc + 1] = desiredOutput[0];
-        if (std::abs (m_dstate_dt[loc + 1]) < 1e-7)
+        component_state.m_state[loc] = desiredOutput[0];
+        component_state.m_dstate_dt[loc + 1] = desiredOutput[0];
+        if (std::abs (component_state.m_dstate_dt[loc + 1]) < 1e-7)
         {
-            m_state[loc + 1] = K * (inputs[0] + bias);
+            component_state.m_state[loc + 1] = K * (inputs[0] + bias);
         }
         else
         {
-            m_state[loc + 1] = (m_state[loc] - m_dstate_dt[loc + 1] * m_T1);
+            component_state.m_state[loc + 1] = (component_state.m_state[loc] - component_state.m_dstate_dt[loc + 1] * m_T1);
         }
     }
 }
@@ -93,8 +93,8 @@ double filteredDerivativeBlock::step (coreTime time, double inputA)
     double input = inputA + bias;
     if ((dt >= fabs (5.0 * m_T1)) && (dt >= fabs (5.0 * m_T2)))
     {
-        m_state[loc + 1] = K * input;
-        m_state[loc] = 0;
+        component_state.m_state[loc + 1] = K * input;
+        component_state.m_state[loc] = 0;
     }
     else
     {
@@ -102,8 +102,8 @@ double filteredDerivativeBlock::step (coreTime time, double inputA)
         double ct = object_time.prevTime + tstep;
         double in = prevInput;
         double pin = prevInput;
-        double ival = m_state[loc + 1];
-        double ival2 = m_state[loc];
+        double ival = component_state.m_state[loc + 1];
+        double ival2 = component_state.m_state[loc];
         double der1;
         while (ct < time)
         {
@@ -114,8 +114,8 @@ double filteredDerivativeBlock::step (coreTime time, double inputA)
             ct += tstep;
             pin = in;
         }
-        m_state[loc + 1] = ival + K / m_T1 * ((pin + input) / 2.0 - ival) * (time - ct + tstep);
-        m_state[loc] = ival2 + (K / m_T1 * ((pin + input) / 2.0 - ival) - ival2) / m_T2 * (time - ct + tstep);
+        component_state.m_state[loc + 1] = ival + K / m_T1 * ((pin + input) / 2.0 - ival) * (time - ct + tstep);
+        component_state.m_state[loc] = ival2 + (K / m_T1 * ((pin + input) / 2.0 - ival) - ival2) / m_T2 * (time - ct + tstep);
     }
     prevInput = input;
     double out;
@@ -125,7 +125,7 @@ double filteredDerivativeBlock::step (coreTime time, double inputA)
     }
     else
     {
-        out = m_state[0];
+        out = component_state.m_state[0];
         object_time.prevTime = time;
         m_output = out;
     }
@@ -198,7 +198,7 @@ stringVec filteredDerivativeBlock::localStateNames () const
     case 0:
         return {"deriv", "filter"};
     case 1:
-        if (opFlags[use_block_limits])
+        if (component_configuration.opFlags[use_block_limits])
         {
             return {"limited", "deriv", "filter"};
         }
