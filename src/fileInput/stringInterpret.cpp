@@ -319,7 +319,7 @@ double stringBlocktoDouble (std::string_view block, readerInfo &ri)
         }
         return valA;
     }
-    catch (std::invalid_argument &)
+    catch (std::invalid_argument const&)
     {
         return interpretString_sv (block, ri);
     }

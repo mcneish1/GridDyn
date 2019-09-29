@@ -27,7 +27,7 @@
 #include "utilities/workQueue.h"
 #include "utilities/stringToCmdLine.h"
 
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <boost/program_options.hpp>
 
 #include <chrono>
@@ -37,7 +37,7 @@
 #include <memory>
 
 namespace po = boost::program_options;
-namespace filesystem = boost::filesystem;
+namespace filesystem = std::filesystem;
 
 namespace griddyn
 {

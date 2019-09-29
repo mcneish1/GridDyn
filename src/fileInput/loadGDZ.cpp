@@ -12,23 +12,22 @@
 
 #include "fileInput/fileInput.h"
 #include "utilities/zipUtilities.h"
-#include <boost/filesystem.hpp>
+#include <filesystem>
 
 namespace griddyn
 {
-using namespace boost::filesystem;
 
 void loadGDZ (coreObject *parentObject, const std::string &fileName, readerInfo &ri)
 {
-    path fpath (fileName);
-    if (!exists (fpath))
+    std::filesystem::path fpath (fileName);
+    if (!std::filesystem::exists (fpath))
     {
         return;
     }
 
-    auto extractPath = temp_directory_path () / fpath.stem ();
+    auto extractPath = std::filesystem::temp_directory_path () / fpath.stem ();
     auto keyFile = extractPath / "simulation.xml";
-    if (!exists (keyFile))
+    if (!std::filesystem::exists (keyFile))
     {
         auto ret = utilities::unzip (fileName, extractPath.string ());
         if (ret != 0)
@@ -37,13 +36,13 @@ void loadGDZ (coreObject *parentObject, const std::string &fileName, readerInfo 
         }
     }
 
-    if (!exists (keyFile))
+    if (!std::filesystem::exists (keyFile))
     {
         return;
     }
     ri.addDirectory (extractPath.string ());
     auto resourcePath = extractPath / "resources";
-    if (exists (resourcePath))
+    if (std::filesystem::exists (resourcePath))
     {
         ri.addDirectory (resourcePath.string ());
     }

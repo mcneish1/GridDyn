@@ -15,7 +15,7 @@
 #include "core/coreExceptions.h"
 #include "core/objectInterpreter.h"
 #include "utilities/stringOps.h"
-#include <boost/filesystem.hpp>
+#include <filesystem>
 
 namespace griddyn
 {
@@ -84,7 +84,7 @@ void Recorder::set (const std::string &param, const std::string &val)
     if ((param == "file") || (param == "fileName"))
     {
         fileName_ = val;
-        boost::filesystem::path filePath (fileName_);
+        std::filesystem::path filePath (fileName_);
         std::string ext = convertToLowerCase (filePath.extension ().string ());
         binaryFile = ((ext != ".csv") && (ext != ".txt"));
     }
@@ -101,10 +101,10 @@ void Recorder::set (const std::string &param, const std::string &val)
 void Recorder::saveFile (const std::string &fileName)
 {
     bool bFile = binaryFile;
-    boost::filesystem::path savefileName (fileName_);
+    std::filesystem::path savefileName (fileName_);
     if (!fileName.empty ())
     {
-        savefileName = boost::filesystem::path (fileName);
+        savefileName = std::filesystem::path (fileName);
 
         std::string ext = convertToLowerCase (savefileName.extension ().string ());
         bFile = ((ext != ".csv") && (ext != ".txt"));
@@ -122,16 +122,16 @@ void Recorder::saveFile (const std::string &fileName)
         {
             if (!savefileName.has_root_directory ())
             {
-                savefileName = boost::filesystem::path (directory_) / savefileName;
+                savefileName = std::filesystem::path (directory_) / savefileName;
             }
         }
         // check to make sure the directories exist if not create them
         auto tmp = savefileName.parent_path ();
         if (!tmp.empty ())
         {
-            if (!boost::filesystem::exists (tmp))
+            if (!std::filesystem::exists (tmp))
             {
-                boost::filesystem::create_directories (tmp);
+                std::filesystem::create_directories (tmp);
             }
         }
         // recheck the columns if necessary

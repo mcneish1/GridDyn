@@ -158,7 +158,7 @@ X numeric_conversion (std::string_view V, const X defValue)
     {
         return numConv<X> (V);
     }
-    catch (std::invalid_argument)
+    catch (std::invalid_argument const&)
     {
         return defValue;
     }
@@ -188,7 +188,7 @@ X numeric_conversionComplete (std::string_view V, const X defValue)
         }
         return res;
     }
-    catch (std::invalid_argument)
+    catch (std::invalid_argument const&)
     {
         return defValue;
     }

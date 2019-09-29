@@ -13,8 +13,6 @@
 #include "fileInput/readerHelper.h"
 #include "fileInput/fileInput.h"
 
-#include <boost/filesystem.hpp>
-
 // library for printf debug statements
 
 #include <cmath>

@@ -36,6 +36,7 @@ boost_dep = dependency('boost', modules : [
     ])
 cc = meson.get_compiler('c')
 dl_lib = cc.find_library('dl')
+fs_lib = cc.find_library('stdc++fs')
 threads_dep = dependency('threads')
 mpi_dep = dependency('mpi', language: 'cpp')
 
@@ -66,7 +67,11 @@ griddyn_utility_lib = library('griddyn_utility', [
         'src/utilities/stringToCmdLine.cpp',
         'src/utilities/TripWire.cpp',
     ],
-    dependencies : [ minizip_dep, boost_dep ],
+    dependencies : [
+        minizip_dep,
+        boost_dep,
+        fs_lib,
+    ],
     include_directories : [griddyn_config_inc, griddyn_utility_inc])
 griddyn_utility_dep = declare_dependency(link_with : griddyn_utility_lib, include_directories : griddyn_utility_inc)
 
@@ -350,6 +355,7 @@ griddyn_file_input_lib = library('griddyn_file_input',
         griddyn_core_dep,
         griddyn_dep,
         boost_dep,
+        fs_lib,
     ])
 griddyn_file_input_dep = declare_dependency(link_with : griddyn_file_input_lib, include_directories : griddyn_file_input_inc)
 

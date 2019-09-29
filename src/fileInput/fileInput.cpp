@@ -23,7 +23,7 @@
 #include "utilities/stringOps.h"
 
 #include <boost/date_time/gregorian/gregorian.hpp>
-#include <boost/filesystem.hpp>
+#include <filesystem>
 
 #include "griddyn/gridDynSimulation.h"
 namespace griddyn
@@ -207,7 +207,7 @@ void loadFile (coreObject *parentObject, const std::string &fileName, readerInfo
 
     if (ext.empty ())
     {
-		boost::filesystem::path sourcePath(fileName);
+		std::filesystem::path sourcePath(fileName);
         ext = convertToLowerCase (sourcePath.extension ().string ());
         if (ext[0] == '.')
         {

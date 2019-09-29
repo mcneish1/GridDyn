@@ -136,7 +136,7 @@ X numeric_conversion (const std::string &V, const X defValue)
     {
         return numConv<X> (V);
     }
-    catch (std::invalid_argument)
+    catch (std::invalid_argument const&)
     {
         return defValue;
     }
@@ -166,7 +166,7 @@ X numeric_conversionComplete (const std::string &V, const X defValue)
         }
         return res;
     }
-    catch (std::invalid_argument)
+    catch (std::invalid_argument const&)
     {
         return defValue;
     }

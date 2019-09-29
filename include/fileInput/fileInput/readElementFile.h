@@ -16,7 +16,7 @@
 #include "formatInterpreters/readerElement.h"
 #include "core/coreObject.h"
 #include "griddyn/simulation/gridSimulation.h"
-#include <boost/filesystem.hpp>
+#include <filesystem>
 
 #include <type_traits>
 #include <memory>
@@ -69,9 +69,9 @@ coreObject * loadElementFile (coreObject *parentObject, const std::string &fileN
   }
 
 
-  boost::filesystem::path mainPath (fileName);
+  std::filesystem::path mainPath (fileName);
 
-  ri->addDirectory (boost::filesystem::current_path ().string ());
+  ri->addDirectory (std::filesystem::current_path ().string ());
   ri->addDirectory (mainPath.parent_path ().string ());
 
 
