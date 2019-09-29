@@ -24,10 +24,8 @@ namespace griddyn
 class offsetTable
 {
   private:
-    // std::vector<solverOffsets> offsetContainer;       //!< a vector of containers for offsets corresponding to
-    // the different solver modes
-    boost::container::small_vector<solverOffsets, DEFAULT_OFFSET_CONTAINER_SIZE>
-      offsetContainer;  //!< a vector of containers for offsets corresponding to the different solver modes
+    //!< a vector of containers for offsets corresponding to the different solver modes
+    std::vector<solverOffsets> offsetContainer;
   public:
     /** @brief constructor
      */
