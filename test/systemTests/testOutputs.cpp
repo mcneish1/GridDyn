@@ -15,7 +15,7 @@
 #include "griddyn/simulation/gridDynSimulationFileOps.h"
 #include "../testHelper.h"
 #include "utilities/vectorOps.hpp"
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <boost/test/unit_test.hpp>
 #include <cstdlib>
 
@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_CASE (output_test1)
     simpleStageCheck (fileName, gridSimulation::gridState_t::POWERFLOW_COMPLETE);
     savePowerFlowCdf (gds.get (), "testout.cdf");
 
-    BOOST_REQUIRE (boost::filesystem::exists ("testout.cdf"));
+    BOOST_REQUIRE (std::filesystem::exists ("testout.cdf"));
 
     gds2 = std::make_unique<gridDynSimulation> ();
     loadFile (gds2.get (), "testout.cdf");

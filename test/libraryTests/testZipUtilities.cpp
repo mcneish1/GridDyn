@@ -13,7 +13,7 @@
 // test case for workQueue
 
 #include "utilities/zipUtilities.h"
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <boost/test/unit_test.hpp>
 #include <fstream>
 
@@ -29,8 +29,8 @@ BOOST_AUTO_TEST_CASE (unzip_test)
     std::string directory = zip_test_directory + "Rectifier";
     int status = utilities::unzip (file, directory);
     BOOST_CHECK (status == 0);
-    BOOST_REQUIRE (boost::filesystem::exists (directory));
-    boost::filesystem::remove_all (directory);
+    BOOST_REQUIRE (std::filesystem::exists (directory));
+    std::filesystem::remove_all (directory);
 }
 
 BOOST_AUTO_TEST_CASE (zip_test2)
@@ -52,34 +52,34 @@ BOOST_AUTO_TEST_CASE (zip_test2)
     auto zipfile = zip_test_directory + "data.zip";
     auto status = utilities::zip (zipfile, std::vector<std::string>{fileZeros, fileOnes});
     BOOST_CHECK (status == 0);
-    BOOST_REQUIRE (boost::filesystem::exists (zipfile));
+    BOOST_REQUIRE (std::filesystem::exists (zipfile));
 
     // get the sizes of the original files
-    auto filesize1 = boost::filesystem::file_size (fileZeros);
-    auto filesize2 = boost::filesystem::file_size (fileOnes);
+    auto filesize1 = std::filesystem::file_size (fileZeros);
+    auto filesize2 = std::filesystem::file_size (fileOnes);
 
-    auto zipsize = boost::filesystem::file_size (zipfile);
+    auto zipsize = std::filesystem::file_size (zipfile);
     // make sure we compressed a lot
     BOOST_CHECK (zipsize < (filesize1 + filesize2) / 40);
 
     // remove the files
-    boost::filesystem::remove (fileZeros);
-    boost::filesystem::remove (fileOnes);
+    std::filesystem::remove (fileZeros);
+    std::filesystem::remove (fileOnes);
     // extract them and recheck sizes
     status = utilities::unzip (zipfile, zip_test_directory);
     BOOST_CHECK (status == 0);
-    BOOST_REQUIRE (boost::filesystem::exists (fileZeros));
-    BOOST_REQUIRE (boost::filesystem::exists (fileOnes));
+    BOOST_REQUIRE (std::filesystem::exists (fileZeros));
+    BOOST_REQUIRE (std::filesystem::exists (fileOnes));
 
-    auto filesize1b = boost::filesystem::file_size (fileZeros);
-    auto filesize2b = boost::filesystem::file_size (fileOnes);
+    auto filesize1b = std::filesystem::file_size (fileZeros);
+    auto filesize2b = std::filesystem::file_size (fileOnes);
 
     BOOST_CHECK (filesize1 == filesize1b);
     BOOST_CHECK (filesize2 == filesize2b);
     // remove all the files
-    boost::filesystem::remove (fileZeros);
-    boost::filesystem::remove (fileOnes);
-    boost::filesystem::remove (zipfile);
+    std::filesystem::remove (fileZeros);
+    std::filesystem::remove (fileOnes);
+    std::filesystem::remove (zipfile);
 }
 
 
