@@ -522,20 +522,6 @@ griddyn_shared_lib = library('griddyn_shared', [
     ])
 griddyn_shared_dep = declare_dependency(link_with : griddyn_shared_lib, include_directories : griddyn_shared_inc)
 
-executable('griddyn_server', [
-        'src/gridDynServer/gridDynServer.cpp',
-        'src/gridDynServer/gridDynServerMain.cpp',
-    ],
-    dependencies : [
-        griddyn_shared_dep,
-        griddyn_runner_dep,
-        griddyn_dep,
-        griddyn_core_dep,
-        griddyn_loader_dep,
-        boost_dep,
-        threads_dep,
-    ])
-
 executable('griddyn', 'src/gridDynMain/gridDynMain.cpp',
     dependencies : [
         griddyn_dep,
