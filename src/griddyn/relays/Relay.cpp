@@ -533,7 +533,7 @@ void Relay::updateA (coreTime time)
             object_time.nextUpdateTime = std::min (object_time.nextUpdateTime, m_nextSampleTime);
         }
     }
-    assert (object_time.nextUpdateTime > negTime / 2);
+    if (!(object_time.nextUpdateTime > negTime / 2)) throw std::logic_error("Some constraint violated in Relay::updateA");
     object_time.lastUpdateTime = time;
 }
 

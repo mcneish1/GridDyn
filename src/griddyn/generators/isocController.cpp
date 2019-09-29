@@ -80,8 +80,7 @@ void isocController::updateA (coreTime time)
 {
     if (time < object_time.nextUpdateTime)
     {
-        assert (false);
-        return;
+        throw std::logic_error("Invalid time passed to isocController::updateA");
     }
     integratorLevel += lastFreq * object_time.updatePeriod;
     if (lastFreq > db)

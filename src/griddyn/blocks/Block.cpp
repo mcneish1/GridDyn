@@ -187,7 +187,7 @@ void Block::dynObjectInitializeB (const IOdata &inputs, const IOdata &desiredOut
 
     if (desiredOutput.empty ())
     {
-        assert (!inputs.empty ());
+        if (inputs.empty ()) throw std::runtime_error("Block initialize B failed: inputs is empty");
         prevInput = (inputs[0] + bias);
         if (!component_configuration.opFlags[use_state])
         {

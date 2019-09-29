@@ -59,25 +59,25 @@ int main (int argc, char *argv[])
     // check for different options
     for (int ii = 1; ii < argc; ++ii)
     {
-        if (strcmp ("--mpicount", argv[ii])==0)
+        if (std::string("--mpicount") == argv[ii])
         {
             execMode = execMode_t::mpicount;
             break;
         }
-        if (strncmp("--buildgdz", argv[ii], 10) == 0)
+        if (std::string("--buildgdz") == argv[ii])
         {
             execMode = execMode_t::buildgdz;
             break;
         }
 #ifdef ENABLE_FMI_EXPORT
-        if (strncmp ("--buildfmu", argv[ii], 10)==0)
+        if (std::string("--buildfmu") == argv[ii])
         {
             execMode = execMode_t::buildfmu;
             break;
         }
 #endif
 #ifdef ENABLE_HELICS_EXECUTABLE
-        if (strcmp ("--helics", argv[ii])==0)
+        if (std::string("--helics") == argv[ii])
         {
             execMode = execMode_t::helics;
 
@@ -85,7 +85,7 @@ int main (int argc, char *argv[])
         }
 #endif
 #ifdef ENABLE_DIME
-        if (strcmp ("--dime", argv[ii])==0)
+        if (std::string("--dime") == argv[ii])
         {
             execMode = execMode_t::dime;
             break;

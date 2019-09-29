@@ -56,7 +56,7 @@ void nullBlock::dynObjectInitializeB (const IOdata &inputs, const IOdata &desire
 {
     if (desiredOutput.empty ())
     {
-        assert (!inputs.empty ());
+        if (inputs.empty ()) throw std::runtime_error("nullBlock initialize B failed: inputs is empty");
         prevInput = inputs[0];
     }
     else

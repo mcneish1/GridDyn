@@ -19,6 +19,8 @@
 
 #include "core/objectFactoryTemplates.hpp"
 
+#include <cstring>
+
 namespace griddyn
 {
 namespace links

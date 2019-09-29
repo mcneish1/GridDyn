@@ -249,7 +249,7 @@ void differentialRelay::receiveMessage (std::uint64_t /*sourceID*/, std::shared_
         break;
     default:
     {
-        assert (false);
+        throw std::logic_error("Unreachable in differentialRelay::receiveMessage");
     }
     }
 }
