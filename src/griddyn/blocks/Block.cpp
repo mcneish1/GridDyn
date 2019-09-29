@@ -953,10 +953,9 @@ stringVec Block::localStateNames () const
 
 std::unique_ptr<Block> make_block (const std::string &blockstr)
 {
-    using namespace utilities::string_viewOps;
     using namespace blocks;
 
-    string_view blockstrv (blockstr);
+    std::string_view blockstrv (blockstr);
     auto posp1 = blockstrv.find_first_of ('(');
     auto posp2 = blockstrv.find_last_of (')');
     auto blockNameStr = blockstrv.substr (0, posp1 - 1);
@@ -964,22 +963,22 @@ std::unique_ptr<Block> make_block (const std::string &blockstr)
 
     auto inputs = str2vector (argstr, kNullVal);
     auto tail = blockstrv.substr (posp2 + 2);
-    auto tailArgs = split (tail);
-    trim (tailArgs);
+    auto tailArgs = utilities::string_viewOps::split (tail);
+    utilities::string_viewOps::trim (tailArgs);
     double gain = 1.0;
     posp1 = blockNameStr.find_first_of ('*');
     std::unique_ptr<Block> ret;
     std::string fstr;
     if (posp1 == std::string::npos)
     {
-        fstr = convertToLowerCase (blockNameStr.to_string ());
+        fstr = convertToLowerCase (std::string(blockNameStr));
     }
     else
     {
         gain = numeric_conversion (blockNameStr, 1.0);  // purposely not using
                                                         // numeric_conversionComplete to just
                                                         // get the first number
-        fstr = convertToLowerCase (blockNameStr.substr (posp1 + 1).to_string ());
+        fstr = convertToLowerCase (std::string(blockNameStr.substr (posp1 + 1)));
     }
     if (fstr == "basic")
     {
@@ -1083,7 +1082,7 @@ std::unique_ptr<Block> make_block (const std::string &blockstr)
         }
         else
         {
-            ret = std::make_unique<functionBlock> (argstr.to_string ());
+            ret = std::make_unique<functionBlock> (std::string(argstr));
         }
         if (gain != 1.0)
         {
@@ -1097,12 +1096,12 @@ std::unique_ptr<Block> make_block (const std::string &blockstr)
     // process any additional parameters
     if (!tailArgs.empty ())
     {
-        for (auto &ta : tailArgs)
+        for (auto &&ta : tailArgs)
         {
             auto eloc = ta.find_first_of ('=');
             if (eloc == std::string::npos)
             {
-                ret->setFlag (ta.to_string (), true);
+                ret->setFlag (std::string(ta), true);
             }
             else
             {
@@ -1110,11 +1109,11 @@ std::unique_ptr<Block> make_block (const std::string &blockstr)
                 double val = numeric_conversionComplete (ta.substr (eloc + 1), kNullVal);
                 if (val == kNullVal)
                 {
-                    ret->set (param.to_string (), ta.substr (eloc + 1).to_string ());
+                    ret->set (std::string(param), std::string(ta.substr (eloc + 1)));
                 }
                 else
                 {
-                    ret->set (param.to_string (), val);
+                    ret->set (std::string(param), val);
                 }
             }
         }

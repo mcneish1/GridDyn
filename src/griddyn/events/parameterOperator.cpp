@@ -86,23 +86,21 @@ void parameterOperator::checkField () {}
 
 std::unique_ptr<parameterOperator> make_parameterOperator (const std::string &param, gridComponent *rootObject)
 {
-    using namespace utilities::string_viewOps;
-
-    utilities::string_view paramS (param);
+    std::string_view paramS (param);
     auto renameloc = paramS.find (" as ");  // spaces are important
                                             // extract out a rename
-    utilities::string_view rname;
+    std::string_view rname;
     if (renameloc != std::string::npos)
     {
-        rname = trim (paramS.substr (renameloc + 4));
+        rname = utilities::string_viewOps::trim (paramS.substr (renameloc + 4));
         paramS = paramS.substr (0, renameloc);
     }
-    objInfo objI (paramS.to_string (), rootObject);
+    objInfo objI (std::string(paramS), rootObject);
 
     auto pop = std::make_unique<parameterOperator> (dynamic_cast<gridComponent *> (objI.m_obj), objI.m_field);
     if (!rname.empty ())
     {
-        pop->setName (rname.to_string ());
+        pop->setName (std::string(rname));
     }
     return pop;
 }

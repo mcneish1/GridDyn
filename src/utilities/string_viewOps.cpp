@@ -19,18 +19,18 @@ namespace utilities
 {
 namespace string_viewOps
 {
-void trimString (string_view &input, string_view trimCharacters)
+void trimString (std::string_view &input, std::string_view trimCharacters)
 {
     input.remove_suffix (input.length () - std::min (input.find_last_not_of (trimCharacters) + 1, input.size ()));
     input.remove_prefix (std::min (input.find_first_not_of (trimCharacters), input.size ()));
 }
 
-string_view trim (string_view input, string_view trimCharacters)
+std::string_view trim (std::string_view input, std::string_view trimCharacters)
 {
     const auto strStart = input.find_first_not_of (trimCharacters);
     if (strStart == std::string::npos)
     {
-        return string_view ();  // no content
+        return {};
     }
 
     const auto strEnd = input.find_last_not_of (trimCharacters);
@@ -38,7 +38,7 @@ string_view trim (string_view input, string_view trimCharacters)
     return input.substr (strStart, strEnd - strStart + 1);
 }
 
-void trim (string_viewVector &input, string_view trimCharacters)
+void trim (std::vector<std::string_view> &input, std::string_view trimCharacters)
 {
     for (auto &istr : input)
     {
@@ -46,23 +46,23 @@ void trim (string_viewVector &input, string_view trimCharacters)
     }
 }
 
-string_view getTailString (string_view input, char separationCharacter)
+std::string_view getTailString (std::string_view input, char separationCharacter)
 {
     auto tc = input.find_last_of (separationCharacter);
-    string_view ret = (tc == string_view::npos) ? input : input.substr (tc + 1);
+    std::string_view ret = (tc == std::string_view::npos) ? input : input.substr (tc + 1);
     return ret;
 }
 
-string_view getTailString (string_view input, string_view separationCharacters)
+std::string_view getTailString (std::string_view input, std::string_view separationCharacters)
 {
     auto tc = input.find_last_of (separationCharacters);
-    string_view ret = (tc == string_view::npos) ? input : input.substr (tc + 1);
+    std::string_view ret = (tc == std::string_view::npos) ? input : input.substr (tc + 1);
     return ret;
 }
 
-string_view removeQuotes (string_view str)
+std::string_view removeQuotes (std::string_view str)
 {
-    string_view ret = trim (str);
+    std::string_view ret = trim (str);
     if (!ret.empty ())
     {
         if ((ret.front () == '\"') || (ret.front () == '\'') || (ret.front () == '`'))
@@ -78,9 +78,9 @@ string_view removeQuotes (string_view str)
 
 static const auto pmap = pairMapper ();
 
-string_view removeBrackets (string_view str)
+std::string_view removeBrackets (std::string_view str)
 {
-    string_view ret = trim (str);
+    std::string_view ret = trim (str);
     if (!ret.empty ())
     {
         if ((ret.front () == '[') || (ret.front () == '(') || (ret.front () == '{') || (ret.front () == '<'))
@@ -94,12 +94,12 @@ string_view removeBrackets (string_view str)
     return ret;
 }
 
-string_view merge (string_view string1, string_view string2)
+std::string_view merge (std::string_view string1, std::string_view string2)
 {
     int diff = (string2.data () - string1.data ()) + static_cast<int> (string1.length ());
     if ((diff >= 0) && (diff < 24))  // maximum of 24 bytes between the strings
     {
-        return string_view (string1.data (), diff + string1.length () + string2.length ());
+        return std::string_view (string1.data (), diff + string1.length () + string2.length ());
     }
     if (string1.empty ())
     {
@@ -112,30 +112,30 @@ string_view merge (string_view string1, string_view string2)
     throw (std::out_of_range ("unable to merge string_views"));
 }
 
-string_viewVector split (string_view str, string_view delimiters, delimiter_compression compression)
+std::vector<std::string_view> split (std::string_view str, std::string_view delimiters, delimiter_compression compression)
 {
     return generalized_string_split (str, delimiters, (compression == delimiter_compression::on));
 }
 
-string_viewVector splitlineQuotes (string_view line,
-                                   string_view delimiters,
-                                   string_view quoteChars,
+std::vector<std::string_view> splitlineQuotes (std::string_view line,
+                                   std::string_view delimiters,
+                                   std::string_view quoteChars,
                                    delimiter_compression compression)
 {
     bool compress = (compression == delimiter_compression::on);
     return generalized_section_splitting (line, delimiters, quoteChars, pmap, compress);
 }
 
-string_viewVector splitlineBracket (string_view line,
-                                    string_view delimiters,
-                                    string_view bracketChars,
+std::vector<std::string_view> splitlineBracket (std::string_view line,
+                                    std::string_view delimiters,
+                                    std::string_view bracketChars,
                                     delimiter_compression compression)
 {
     bool compress = (compression == delimiter_compression::on);
     return generalized_section_splitting (line, delimiters, bracketChars, pmap, compress);
 }
 
-int toIntSimple (string_view input)
+int toIntSimple (std::string_view input)
 {
     int ret = 0;
     for (auto c : input)
@@ -148,8 +148,8 @@ int toIntSimple (string_view input)
     return ret;
 }
 
-static const string_view digits ("0123456789");
-int trailingStringInt (string_view input, string_view &output, int defNum)
+static const std::string_view digits ("0123456789");
+int trailingStringInt (std::string_view input, std::string_view &output, int defNum)
 {
     if (isdigit (input.back ()) == 0)
     {
@@ -158,9 +158,9 @@ int trailingStringInt (string_view input, string_view &output, int defNum)
     }
     int num = defNum;
     auto pos1 = input.find_last_not_of (digits);
-    if (pos1 == string_view::npos)  // in case the whole thing is a number
+    if (pos1 == std::string_view::npos)  // in case the whole thing is a number
     {
-        output = string_view{};
+        output = std::string_view{};
         num = toIntSimple (input);
     }
     else
@@ -187,7 +187,7 @@ int trailingStringInt (string_view input, string_view &output, int defNum)
     return num;
 }
 
-int trailingStringInt (string_view input, int defNum)
+int trailingStringInt (std::string_view input, int defNum)
 {
     if (isdigit (input.back ()) == 0)
     {
@@ -195,7 +195,7 @@ int trailingStringInt (string_view input, int defNum)
     }
 
     auto pos1 = input.find_last_not_of (digits);
-    if (pos1 == string_view::npos)  // in case the whole thing is a number
+    if (pos1 == std::string_view::npos)  // in case the whole thing is a number
     {
         return toIntSimple (input);
     }

@@ -22,25 +22,25 @@ namespace griddyn
 {
 using namespace utilities::string_viewOps;
 
-double interpretStringBlock (string_view command, readerInfo &ri);
+double interpretStringBlock (std::string_view command, readerInfo &ri);
 
-void interpretStringBlock (string_view command, readerInfo &ri, std::vector<double> &outputs);
+void interpretStringBlock (std::string_view command, readerInfo &ri, std::vector<double> &outputs);
 
-double addSubStringBlocks (string_view command, readerInfo &ri, size_t rlc);
-double multDivStringBlocks (string_view command, readerInfo &ri, size_t rlc);
-size_t pChunckEnd (string_view command, size_t start);
+double addSubStringBlocks (std::string_view command, readerInfo &ri, size_t rlc);
+double multDivStringBlocks (std::string_view command, readerInfo &ri, size_t rlc);
+size_t pChunckEnd (std::string_view command, size_t start);
 
 double InterpretFunction (const std::string &command, readerInfo &ri);
 double InterpretFunction (const std::string &command, double val, readerInfo &ri);
 double InterpretFunction (const std::string &command, double val1, double val2, readerInfo &ri);
 
-double stringBlocktoDouble (string_view block, readerInfo &ri);
-double interpretString_sv (string_view command, readerInfo &ri);
+double stringBlocktoDouble (std::string_view block, readerInfo &ri);
+double interpretString_sv (std::string_view command, readerInfo &ri);
 
-double ObjectQuery (string_view command, coreObject *obj);
+double ObjectQuery (std::string_view command, coreObject *obj);
 
 double interpretString (const std::string &command, readerInfo &ri) { return interpretString_sv (command, ri); }
-double interpretString_sv (string_view command, readerInfo &ri)
+double interpretString_sv (std::string_view command, readerInfo &ri)
 {
     size_t rlc, rlcp = 0;
     // check for functions
@@ -83,7 +83,7 @@ double interpretString_sv (string_view command, readerInfo &ri)
             auto fcallstr = trim (command.substr (rlcps + 1, rlcp - rlcps - 1));
             if (fcallstr.empty ())
             {
-                val = InterpretFunction (cmdBlock.to_string (), ri);
+                val = InterpretFunction (std::string(cmdBlock), ri);
             }
             else
             {
@@ -96,7 +96,7 @@ double interpretString_sv (string_view command, readerInfo &ri)
                     {
                         double v1 = stringBlocktoDouble (args[0], ri);
                         double v2 = stringBlocktoDouble (args[1], ri);
-                        val = InterpretFunction (cmdBlock.to_string (), v1, v2, ri);
+                        val = InterpretFunction (std::string(cmdBlock), v1, v2, ri);
                     }
                     else if (args.size () == 1)  // if the single argument is a function of multiple arguments
                     {
@@ -107,12 +107,12 @@ double interpretString_sv (string_view command, readerInfo &ri)
                         else
                         {
                             double v1 = stringBlocktoDouble (args[0], ri);
-                            val = InterpretFunction (cmdBlock.to_string (), v1, ri);
+                            val = InterpretFunction (std::string(cmdBlock), v1, ri);
                         }
                     }
                     else
                     {
-                        printf ("invalid arguments to function %s\n", cmdBlock.to_string ().c_str ());
+                        printf ("invalid arguments to function %s\n", std::string(cmdBlock).c_str ());
                     }
                 }
                 else
@@ -127,7 +127,7 @@ double interpretString_sv (string_view command, readerInfo &ri)
 
                         if (!std::isnan (val))
                         {
-                            val = InterpretFunction (cmdBlock.to_string (), val, ri);
+                            val = InterpretFunction (std::string(cmdBlock), val, ri);
                         }
                     }
                 }
@@ -142,12 +142,12 @@ double interpretString_sv (string_view command, readerInfo &ri)
     return val;
 }
 
-double interpretStringBlock (string_view command, readerInfo &ri)
+double interpretStringBlock (std::string_view command, readerInfo &ri)
 {
     auto val = numeric_conversionComplete<double> (command, std::nan ("0"));
     if (std::isnan (val))
     {
-        std::string ncommand = ri.checkDefines (command.to_string ());
+        std::string ncommand = ri.checkDefines (std::string(command));
         // iterate the process until the variable is no longer modified and still fails conversion to numerical
         if (command != ncommand)
         {
@@ -161,7 +161,7 @@ double interpretStringBlock (string_view command, readerInfo &ri)
     return val;
 }
 
-void interpretStringBlock (string_view command, readerInfo &ri, std::vector<double> &outputs)
+void interpretStringBlock (std::string_view command, readerInfo &ri, std::vector<double> &outputs)
 {
     auto strSplit = split (command);
     trim (strSplit);
@@ -174,7 +174,7 @@ void interpretStringBlock (string_view command, readerInfo &ri, std::vector<doub
     //}
 }
 
-double addSubStringBlocks (string_view command, readerInfo &ri, size_t rlc)
+double addSubStringBlocks (std::string_view command, readerInfo &ri, size_t rlc)
 {
     char op = command[rlc];
 
@@ -182,7 +182,7 @@ double addSubStringBlocks (string_view command, readerInfo &ri, size_t rlc)
     auto Ablock = trim (command.substr (0, rlc));
     double valA = (Ablock.empty ()) ? 0.0 : stringBlocktoDouble (Ablock, ri);
 
-    auto Bblock = trim (command.substr (rlc + 1, string_view::npos));
+    auto Bblock = trim (command.substr (rlc + 1, std::string_view::npos));
     double valB = stringBlocktoDouble (Bblock, ri);
 
     return (op == '+') ? valA + valB : valA - valB;
@@ -190,7 +190,7 @@ double addSubStringBlocks (string_view command, readerInfo &ri, size_t rlc)
 
 const double nan_val = std::nan ("0");
 
-double multDivStringBlocks (string_view command, readerInfo &ri, size_t rlc)
+double multDivStringBlocks (std::string_view command, readerInfo &ri, size_t rlc)
 {
     char op = command[rlc];
 
@@ -198,7 +198,7 @@ double multDivStringBlocks (string_view command, readerInfo &ri, size_t rlc)
     double valA = stringBlocktoDouble (Ablock, ri);
 
     // load the second half of the multiplication
-    auto Bblock = trim (command.substr (rlc + 1, string_view::npos));
+    auto Bblock = trim (command.substr (rlc + 1, std::string_view::npos));
     double valB = stringBlocktoDouble (Bblock, ri);
 
     double val;
@@ -223,14 +223,14 @@ double multDivStringBlocks (string_view command, readerInfo &ri, size_t rlc)
     return val;
 }
 
-size_t pChunckEnd (string_view command, size_t start)
+size_t pChunckEnd (std::string_view command, size_t start)
 {
     int open = 1;
     size_t rlc = start - 1;
     while (open > 0)
     {
         rlc = command.find_first_of ("()", rlc + 1);
-        if (rlc == string_view::npos)
+        if (rlc == std::string_view::npos)
         {
             break;
         }
@@ -287,13 +287,13 @@ double InterpretFunction (const std::string &command, double val1, double val2, 
     return fval;
 }
 
-double ObjectQuery (string_view command, coreObject *obj)
+double ObjectQuery (std::string_view command, coreObject *obj)
 {
     if (obj == nullptr)
     {
         return nan_val;
     }
-    objInfo query (command.to_string (), obj);
+    objInfo query (std::string(command), obj);
     if (!query.m_field.empty ())
     {
         double val = query.m_obj->get (query.m_field, query.m_unitType);
@@ -302,7 +302,7 @@ double ObjectQuery (string_view command, coreObject *obj)
     return nan_val;
 }
 
-double stringBlocktoDouble (string_view block, readerInfo &ri)
+double stringBlocktoDouble (std::string_view block, readerInfo &ri)
 {
     if (nonNumericFirstCharacter (
           block))  // if the first character is not a digit then go to the string interpreter

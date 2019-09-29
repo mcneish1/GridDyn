@@ -36,31 +36,30 @@ const static bool unimplemented = false;
 
 using namespace gridUnits;
 using namespace utilities::string_viewOps;
-using utilities::string_view;
 
-void epcReadBus (gridBus *bus, string_view line, double base, const basicReaderInfo &bri);
-void epcReadDCBus (dcBus *bus, string_view line, double base, const basicReaderInfo &bri);
-void epcReadLoad (zipLoad *ld, string_view line, double base);
-void epcReadFixedShunt (zipLoad *ld, string_view line, double base);
-void epcReadSwitchShunt (loads::svd *ld, string_view line, double /* base */);
-void epcReadGen (Generator *gen, string_view line, double base);
+void epcReadBus (gridBus *bus, std::string_view line, double base, const basicReaderInfo &bri);
+void epcReadDCBus (dcBus *bus, std::string_view line, double base, const basicReaderInfo &bri);
+void epcReadLoad (zipLoad *ld, std::string_view line, double base);
+void epcReadFixedShunt (zipLoad *ld, std::string_view line, double base);
+void epcReadSwitchShunt (loads::svd *ld, std::string_view line, double /* base */);
+void epcReadGen (Generator *gen, std::string_view line, double base);
 void epcReadBranch (coreObject *parentObject,
-                    string_view line,
+                    std::string_view line,
                     double base,
                     std::vector<gridBus *> &busList,
                     const basicReaderInfo &bri);
 void epcReadDCBranch (coreObject *parentObject,
-                      string_view line,
+                      std::string_view line,
                       double base,
                       std::vector<dcBus *> &dcbusList,
                       const basicReaderInfo &bri);
 void epcReadTX (coreObject *parentObject,
-                string_view line,
+                std::string_view line,
                 double base,
                 std::vector<gridBus *> &busList,
                 const basicReaderInfo &bri);
 
-double epcReadSolutionParamters (coreObject *parentObject, string_view line);
+double epcReadSolutionParamters (coreObject *parentObject, std::string_view line);
 
 bool nextLine (std::ifstream &file, std::string &line)
 {
@@ -101,11 +100,11 @@ bool nextLine (std::ifstream &file, std::string &line)
     return ret;
 }
 
-int getSectionCount (string_view line)
+int getSectionCount (std::string_view line)
 {
     auto bbegin = line.find_first_of ('[');
     int cnt = -1;
-    if (bbegin != string_view::npos)
+    if (bbegin != std::string_view::npos)
     {
         auto bend = line.find_first_of (']', bbegin);
         cnt = numeric_conversion<int> (line.substr (bbegin + 1, (bend - bbegin - 1)), 0);
@@ -113,7 +112,7 @@ int getSectionCount (string_view line)
     return cnt;
 }
 
-int getLineIndex (string_view line)
+int getLineIndex (std::string_view line)
 {
     trimString (line);
     auto pos = line.find_first_not_of ("0123456789");
@@ -140,7 +139,7 @@ void ignoreSection (std::string line, std::ifstream &file)
     }
 }
 
-void ProcessSection (std::string line, std::ifstream &file, const std::function<void(string_view)> &Func)
+void ProcessSection (std::string line, std::ifstream &file, const std::function<void(std::string_view)> &Func)
 {
     int cnt = getSectionCount (line);
 
@@ -166,7 +165,7 @@ void ProcessSectionObject (std::string line,
                            std::ifstream &file,
                            const std::string &oname,
                            std::vector<gridBus *> &busList,
-                           const std::function<void(X *, string_view)> &Func)
+                           const std::function<void(X *, std::string_view)> &Func)
 {
     int cnt = getSectionCount (line);
 
@@ -331,36 +330,36 @@ void loadEPC (coreObject *parentObject, const std::string &fileName, const basic
         else if (tokens[0] == "branch")
         {
             ProcessSection (line, file,
-                            [&](string_view config) { epcReadBranch (parentObject, config, base, busList, bri); });
+                            [&](std::string_view config) { epcReadBranch (parentObject, config, base, busList, bri); });
         }
         else if (tokens[0] == "transformer")
         {
             ProcessSection (line, file,
-                            [&](string_view config) { epcReadTX (parentObject, config, base, busList, bri); });
+                            [&](std::string_view config) { epcReadTX (parentObject, config, base, busList, bri); });
         }
         else if (tokens[0] == "generator")
         {
             ProcessSectionObject<Generator> (line, file, "generator", busList,
-                                             [base](Generator *gen, string_view config) {
+                                             [base](Generator *gen, std::string_view config) {
                                                  epcReadGen (gen, config, base);
                                              });
         }
         else if (tokens[0] == "load")
         {
-            ProcessSectionObject<zipLoad> (line, file, "load", busList, [base](zipLoad *ld, string_view config) {
+            ProcessSectionObject<zipLoad> (line, file, "load", busList, [base](zipLoad *ld, std::string_view config) {
                 epcReadLoad (ld, config, base);
             });
         }
         else if (tokens[0] == "shunt")
         {
-            ProcessSectionObject<zipLoad> (line, file, "shunt", busList, [base](zipLoad *ld, string_view config) {
+            ProcessSectionObject<zipLoad> (line, file, "shunt", busList, [base](zipLoad *ld, std::string_view config) {
                 epcReadFixedShunt (ld, config, base);
             });
         }
         else if (tokens[0] == "svd")
         {
             ProcessSectionObject<loads::svd> (line, file, "svd", busList,
-                                              [base](loads::svd *ld, string_view config) {
+                                              [base](loads::svd *ld, std::string_view config) {
                                                   epcReadSwitchShunt (ld, config, base);
                                               });
         }
@@ -436,7 +435,7 @@ void loadEPC (coreObject *parentObject, const std::string &fileName, const basic
             }
             else if (tokens[1] == "line")
             {
-                ProcessSection (line, file, [&](string_view config) {
+                ProcessSection (line, file, [&](std::string_view config) {
                     epcReadDCBranch (parentObject, config, base, dcbusList, bri);
                 });
             }
@@ -502,7 +501,7 @@ sbase
 System base, MVA
 */
 
-double epcReadSolutionParamters (coreObject *parentObject, string_view line)
+double epcReadSolutionParamters (coreObject *parentObject, std::string_view line)
 {
     auto tokens = split (line, " ", delimiter_compression::on);
     auto val = numeric_conversion<double> (tokens[1], 0.0);
@@ -543,25 +542,25 @@ double epcReadSolutionParamters (coreObject *parentObject, string_view line)
     return val;
 }
 
-void epcReadBus (gridBus *bus, string_view line, double /*base*/, const basicReaderInfo &bri)
+void epcReadBus (gridBus *bus, std::string_view line, double /*base*/, const basicReaderInfo &bri)
 {
     auto strvec = splitlineBracket (line, " :", default_bracket_chars, delimiter_compression::on);
     // get the bus name
     auto temp = strvec[0];
-    std::string temp2 = trim (removeQuotes (strvec[1])).to_string ();
+    std::string temp2 = std::string(trim (removeQuotes (strvec[1])));
 
     if (bri.prefix.empty ())
     {
         if (temp2.empty ())  // 12 spaces is default value which would all get trimmed
         {
-            temp2 = "BUS_" + temp.to_string ();
+            temp2 = "BUS_" + std::string(temp);
         }
     }
     else
     {
         if (temp2.empty ())  // 12 spaces is default value which would all get trimmed
         {
-            temp2 = bri.prefix + '_' + temp.to_string ();
+            temp2 = bri.prefix + '_' + std::string(temp);
         }
         else
         {
@@ -595,7 +594,7 @@ void epcReadBus (gridBus *bus, string_view line, double /*base*/, const basicRea
         temp = "PQ";
         break;
     }
-    bus->set ("type", temp.to_string ());
+    bus->set ("type", std::string(temp));
     // skip the load flow area and loss zone for now
     // skip the owner information
     // get the voltage and angle specifications
@@ -633,25 +632,25 @@ void epcReadBus (gridBus *bus, string_view line, double /*base*/, const basicRea
     }
 }
 
-void epcReadDCBus (dcBus *bus, string_view line, double /*base*/, const basicReaderInfo &bri)
+void epcReadDCBus (dcBus *bus, std::string_view line, double /*base*/, const basicReaderInfo &bri)
 {
     auto strvec = splitlineBracket (line, " :", default_bracket_chars, delimiter_compression::on);
     // get the bus name
     auto temp = strvec[0];
-    std::string temp2 = trim (removeQuotes (strvec[1])).to_string ();
+    std::string temp2 = std::string(trim (removeQuotes (strvec[1])));
 
     if (bri.prefix.empty ())
     {
         if (temp2.empty ())  // 12 spaces is default value which would all get trimmed
         {
-            temp2 = "BUS_" + temp.to_string ();
+            temp2 = "BUS_" + std::string(temp);
         }
     }
     else
     {
         if (temp2.empty ())  // 12 spaces is default value which would all get trimmed
         {
-            temp2 = bri.prefix + '_' + temp.to_string ();
+            temp2 = bri.prefix + '_' + std::string(temp);
         }
         else
         {
@@ -683,7 +682,7 @@ void epcReadDCBus (dcBus *bus, string_view line, double /*base*/, const basicRea
         temp = "PQ";
         break;
     }
-    bus->set ("type", temp.to_string ());
+    bus->set ("type", std::string(temp));
 
     // skip the load flow area and loss zone for now
     // skip the owner information
@@ -704,7 +703,7 @@ void epcReadDCBus (dcBus *bus, string_view line, double /*base*/, const basicRea
 
 //#load data  [10485]          id   ------------long_id_------------     st      mw      mvar    mw_i    mvar_i
 // mw_z      mvar_z  ar zone  date_in date_out pid N own sdmon nonc ithbus ithflag
-void epcReadLoad (zipLoad *ld, string_view line, double /*base*/)
+void epcReadLoad (zipLoad *ld, std::string_view line, double /*base*/)
 {
     auto strvec = splitlineBracket (line, " :", default_bracket_chars, delimiter_compression::on);
 
@@ -712,13 +711,13 @@ void epcReadLoad (zipLoad *ld, string_view line, double /*base*/)
     std::string prefix = ld->getParent ()->getName () + "_Load";
     if (!strvec[3].empty ())
     {
-        prefix += '_' + strvec[3].to_string ();
+        prefix += '_' + std::string(strvec[3]);
     }
     ld->setName (prefix);
     auto long_id = trim (removeQuotes (strvec[4]));
     if (!long_id.empty ())
     {
-        ld->setDescription (long_id.to_string ());
+        ld->setDescription (std::string(long_id));
     }
     // get the status
     int status = toIntSimple (strvec[5]);
@@ -768,7 +767,7 @@ void epcReadLoad (zipLoad *ld, string_view line, double /*base*/)
 //#shunt data  [1988]         id                               ck  se  long_id_     st ar zone    pu_mw  pu_mvar
 // date_in date_out pid N own part1 own part2 own part3 own part4 --num--  --name--  --kv--
 
-void epcReadFixedShunt (zipLoad *ld, string_view line, double /*base*/)
+void epcReadFixedShunt (zipLoad *ld, std::string_view line, double /*base*/)
 {
     auto strvec = splitlineBracket (line, " :", default_bracket_chars, delimiter_compression::on);
 
@@ -776,13 +775,13 @@ void epcReadFixedShunt (zipLoad *ld, string_view line, double /*base*/)
     std::string prefix = ld->getParent ()->getName () + "_Shunt";
     if (!strvec[7].empty ())
     {
-        prefix += '_' + trim (strvec[7]).to_string ();
+        prefix += '_' + std::string(trim (strvec[7]));
     }
 
     auto long_id = trim (removeQuotes (strvec[4]));
     if (!long_id.empty ())
     {
-        ld->setDescription (long_id.to_string ());
+        ld->setDescription (std::string(long_id));
     }
 
     ld->setName (prefix);
@@ -808,161 +807,18 @@ void epcReadFixedShunt (zipLoad *ld, string_view line, double /*base*/)
     }
 }
 
-void epcReadSwitchShunt (loads::svd* /*ld*/, string_view /*line*/, double /*base*/)
+void epcReadSwitchShunt (loads::svd* /*ld*/, std::string_view /*line*/, double /*base*/)
 {
-    assert (unimplemented);
-    /*
-    auto strvec = splitlineBracket (line, " :", default_bracket_chars, delimiter_compression::on);
-
-    auto mode = numeric_conversion<int> (strvec[1], 0);
-    auto high = numeric_conversion<double> (strvec[12], 0.0);
-    auto low = numeric_conversion<double> (strvec[13], 0.0);
-    // get the controlled bus
-    auto cbus = numeric_conversion<int> (strvec[4], -1);
-
-    if (cbus < 0)
-    {
-        trimString(strvec[4]);
-        if (strvec[4] == "I")
-        {
-            cbus = index;
-        }
-        else if (strvec[4].empty())
-        {
-            cbus = index;
-        }
-        else
-        {
-            rbus = static_cast<gridBus *> (parentObject->find(strvec[4]));
-            if (rbus != nullptr)
-            {
-                cbus = rbus->getUserID();
-            }
-        }
-    }
-    else if (cbus == 0)
-    {
-        cbus = index;
-    }
-    else
-    {
-        rbus = busList[cbus];
-    }
-
-    switch (mode)
-    {
-    case 0:
-        ld->set("mode", "manual");
-        break;
-    case 1:
-        ld->set("mode", "stepped");
-        ld->set("vmax", high);
-        ld->set("vmin", low);
-        if (cbus != static_cast<int> (index))
-        {
-            ld->setControlBus(rbus);
-        }
-
-        temp = numeric_conversion<double>(strvec[5], 0.0);
-        if (temp > 0)
-        {
-            ld->set("participation", temp / 100.0);
-        }
-        break;
-    case 2:
-        ld->set("mode", "cont");
-        ld->set("vmax", high);
-        ld->set("vmin", low);
-        if (cbus != static_cast<int> (index))
-        {
-            ld->setControlBus(rbus);
-        }
-        temp = numeric_conversion<double>(strvec[5], 0.0);
-        if (temp > 0)
-        {
-            ld->set("participation", temp / 100.0);
-        }
-        break;
-    case 3:
-        ld->set("mode", "stepped");
-        ld->set("control", "reactive");
-        ld->set("qmax", high);
-        ld->set("qmin", low);
-        if (cbus != static_cast<int> (index))
-        {
-            ld->setControlBus(rbus);
-        }
-        break;
-    case 4:
-        ld->set("mode", "stepped");
-        ld->set("control", "reactive");
-        ld->set("qmax", high);
-        ld->set("qmin", low);
-        if (cbus != static_cast<int> (index))
-        {
-            ld->setControlBus(rbus);
-        }
-        // TODO: PT load target object note:unusual condition
-        break;
-    case 5:
-        ld->set("mode", "stepped");
-        ld->set("control", "reactive");
-        ld->set("qmax", high);
-        ld->set("qmin", low);
-        if (cbus != static_cast<int> (index))
-        {
-            ld->setControlBus(rbus);
-        }
-        break;
-    case 6:
-        ld->set("mode", "stepped");
-        ld->set("control", "reactive");
-        ld->set("qmax", high);
-        ld->set("qmin", low);
-        if (cbus != static_cast<int> (index))
-        {
-            ld->setControlBus(rbus);
-        }
-        // TODO: PT load target object note:unusual condition
-        break;
-    default:
-        ld->set("mode", "manual");
-        break;
-    }
-    // load the switched shunt blocks
-    int start = 7;
-    if (opt.version <= 27)
-    {
-        start = 5;
-    }
-
-    size_t ksize = strvec.size() - 1;
-    for (size_t kk = start + 1; kk < ksize; kk += 2)
-    {
-        auto cnt = numeric_conversion<int>(strvec[kk], 0);
-        auto block = numeric_conversion<double>(strvec[kk + 1], 0.0);
-        if ((cnt > 0) && (block != 0.0))
-        {
-            ld->addBlock(cnt, -block, MVAR);
-        }
-        else
-        {
-            break;
-        }
-    }
-    // set the initial value
-    auto initVal = numeric_conversion<double>(strvec[start], 0.0);
-
-    ld->set("yq", -initVal, MVAR);
-    */
+    throw false;
 }
+
 //#generator data  [XXX]    id   ------------long_id_------------    st ---no--     reg_name       prf  qrf  ar
 // zone   pgen   pmax   pmin   qgen   qmax   qmin   mbase   cmp_r cmp_x gen_r gen_x           hbus
 // tbus           date_in date_out pid N
 //#-rtran -xtran -gtap- ow1 part1 ow2 part2 ow3 part3 ow4 part4 ow5 part5 ow6 part6 ow7 part7 ow8 part8 gov agc
 // disp basld air turb qtab pmax2 sdmon
 
-void epcReadGen (Generator *gen, string_view line, double /*base*/)
+void epcReadGen (Generator *gen, std::string_view line, double /*base*/)
 {
     auto strvec = splitlineBracket (line, " :", default_bracket_chars, delimiter_compression::on);
 
@@ -970,11 +826,11 @@ void epcReadGen (Generator *gen, string_view line, double /*base*/)
     std::string prefix = gen->getParent ()->getName () + "_Gen";
     if (!trim (removeQuotes (strvec[3])).empty ())
     {
-        prefix += '_' + strvec[3].to_string ();
+        prefix += '_' + std::string(strvec[3]);
     }
     if (!trim (removeQuotes (strvec[4])).empty ())
     {
-        gen->setName (trim (removeQuotes (strvec[4])).to_string ());
+        gen->setName (std::string(trim (removeQuotes (strvec[4]))));
     }
     else
     {
@@ -1041,13 +897,13 @@ void epcReadGen (Generator *gen, string_view line, double /*base*/)
 }
 
 /** function to generate a name for a line based on the input data*/
-std::string generateLineName (const utilities::string_viewVector &svec, const std::string &prefix)
+std::string generateLineName (const std::vector<std::string_view> &svec, const std::string &prefix)
 {
-    std::string temp = trim (removeQuotes (svec[1])).to_string ();
+    std::string temp = std::string(trim (removeQuotes (svec[1])));
     std::string temp2;
     if (temp.empty ())
     {
-        temp = trim (svec[0]).to_string ();
+        temp = std::string(trim (svec[0]));
     }
     if (prefix.empty ())
     {
@@ -1058,10 +914,10 @@ std::string generateLineName (const utilities::string_viewVector &svec, const st
         temp2 = prefix + '_' + temp + "_to_";
     }
 
-    temp = trim (removeQuotes (svec[4])).to_string ();
+    temp = std::string(trim (removeQuotes (svec[4])));
     if (temp.empty ())
     {
-        temp = trim (svec[3]).to_string ();
+        temp = std::string(trim (svec[3]));
     }
     temp2 = temp2 + temp;
     if (trim (svec[7]) != "1")
@@ -1077,7 +933,7 @@ std::string generateLineName (const utilities::string_viewVector &svec, const st
 // rate6  rate7  rate8 ow1 part1 ow2 part2 ow3 part3 ow4 part4 ow5 part5 ow6 part6 ow7 part7 ow8 part8 ohm sdmon
 //#
 void epcReadBranch (coreObject *parentObject,
-                    string_view line,
+                    std::string_view line,
                     double base,
                     std::vector<gridBus *> &busList,
                     const basicReaderInfo &bri)
@@ -1099,7 +955,7 @@ void epcReadBranch (coreObject *parentObject,
     auto long_id = trim (removeQuotes (strvec[8]));
     if (!long_id.empty ())
     {
-        lnk->setDescription (long_id.to_string ());
+        lnk->setDescription (std::string(long_id));
     }
 
     // set the base power to that used this model
@@ -1160,7 +1016,7 @@ void epcReadBranch (coreObject *parentObject,
 // part6 ow7 part7 ow8 part8
 
 void epcReadDCBranch (coreObject *parentObject,
-                      string_view line,
+                      std::string_view line,
                       double base,
                       std::vector<dcBus *> &dcbusList,
                       const basicReaderInfo &bri)
@@ -1182,7 +1038,7 @@ void epcReadDCBranch (coreObject *parentObject,
     auto long_id = trim (removeQuotes (strvec[7]));
     if (!long_id.empty ())
     {
-        lnk->setDescription (long_id.to_string ());
+        lnk->setDescription (std::string(long_id));
     }
 
     // set the base power to that used this model
@@ -1238,7 +1094,7 @@ void epcReadDCBranch (coreObject *parentObject,
     }
 }
 void epcReadTX (coreObject *parentObject,
-                string_view line,
+                std::string_view line,
                 double base,
                 std::vector<gridBus *> &busList,
                 const basicReaderInfo &bri)
@@ -1301,7 +1157,7 @@ void epcReadTX (coreObject *parentObject,
     auto long_id = trim (removeQuotes (strvec[7]));
     if (!long_id.empty ())
     {
-        lnk->setDescription (long_id.to_string ());
+        lnk->setDescription (std::string(long_id));
     }
 
     addToParentRename (lnk, parentObject);

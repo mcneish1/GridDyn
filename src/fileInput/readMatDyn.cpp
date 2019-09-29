@@ -38,7 +38,7 @@ void loadGenGovArray (coreObject *parentObject, mArray &govData, std::vector<Gen
 
 void loadMatDyn (coreObject *parentObject, const std::string &filetext, const basicReaderInfo & /*bri*/)
 {
-    string_view ftext = filetext;
+    std::string_view ftext = filetext;
     mArray M1;
 
     std::vector<Generator *> genList;
@@ -51,7 +51,7 @@ void loadMatDyn (coreObject *parentObject, const std::string &filetext, const ba
     size_t D = B;
     size_t C;
     A = ftext.find (Tline[3], D);  // freq
-    if (A != string_view::npos)
+    if (A != std::string_view::npos)
     {
         B = ftext.find_first_of ('=', A);
         C = ftext.find_first_of (";\n", A);
@@ -61,7 +61,7 @@ void loadMatDyn (coreObject *parentObject, const std::string &filetext, const ba
     }
     // get the timestep parameter
     A = ftext.find (Tline[4], D);  // steptime
-    if (A != string_view::npos)
+    if (A != std::string_view::npos)
     {
         B = ftext.find_first_of ('=', A);
         C = ftext.find_first_of (";\n", A);
@@ -71,7 +71,7 @@ void loadMatDyn (coreObject *parentObject, const std::string &filetext, const ba
     }
     // get the stoptime parameter
     A = ftext.find (Tline[5], D);  // stoptime
-    if (A != string_view::npos)
+    if (A != std::string_view::npos)
     {
         B = ftext.find_first_of ('=', A);
         C = ftext.find_first_of (";\n", A);
@@ -80,7 +80,7 @@ void loadMatDyn (coreObject *parentObject, const std::string &filetext, const ba
         parentObject->set ("timestop", val);
     }
     A = ftext.find (Tline[0], D);  // gen
-    if (A != string_view::npos)
+    if (A != std::string_view::npos)
     {
         B = ftext.find_first_of ('=', A);
         readMatlabArray (filetext, B + 1, M1);
@@ -88,7 +88,7 @@ void loadMatDyn (coreObject *parentObject, const std::string &filetext, const ba
     }
 
     A = ftext.find (Tline[1], D);  // exc
-    if (A != string_view::npos)
+    if (A != std::string_view::npos)
     {
         B = ftext.find_first_of ('=', A);
         readMatlabArray (filetext, B + 1, M1);
@@ -96,7 +96,7 @@ void loadMatDyn (coreObject *parentObject, const std::string &filetext, const ba
     }
 
     A = ftext.find (Tline[2], D);  // gov
-    if (A != string_view::npos)
+    if (A != std::string_view::npos)
     {
         B = ftext.find_first_of ('=', A);
         readMatlabArray (filetext, B + 1, M1);
@@ -305,7 +305,7 @@ void loadGenGovArray (coreObject * /*parentObject*/, mArray &govData, std::vecto
 // read matdyn Event files
 void loadMatDynEvent (coreObject *parentObject, const std::string &filetext, const basicReaderInfo & /*bri*/)
 {
-    string_view ftext = filetext;
+    std::string_view ftext = filetext;
     mArray event1, M1;
     auto gds = dynamic_cast<gridSimulation *> (parentObject->getRoot ());
     if (gds == nullptr)
@@ -319,7 +319,7 @@ void loadMatDynEvent (coreObject *parentObject, const std::string &filetext, con
     auto Tline = split (tstr, "\t ,");
     size_t C = B;
     A = ftext.find (Tline[0], C);  // event
-    if (A != string_view::npos)
+    if (A != std::string_view::npos)
     {
         B = ftext.find_first_of ('=', A);
         readMatlabArray (filetext, B + 1, event1);
@@ -327,7 +327,7 @@ void loadMatDynEvent (coreObject *parentObject, const std::string &filetext, con
     }
 
     A = ftext.find (Tline[1], C);  // buschange
-    if (A != string_view::npos)
+    if (A != std::string_view::npos)
     {
         B = ftext.find_first_of ('=', A);
         readMatlabArray (filetext, B + 1, M1);

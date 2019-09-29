@@ -18,10 +18,8 @@
 extern const utilities::charMapper<bool> numCheck;
 extern const utilities::charMapper<bool> numCheckEnd;
 
-using utilities::string_view;
-
 template <typename X>
-X strViewToInteger (string_view input, size_t *rem = nullptr)
+X strViewToInteger (std::string_view input, size_t *rem = nullptr)
 {
     static_assert (std::is_integral<X>::value, "requested type is not integral");
     X ret = 0;
@@ -96,61 +94,61 @@ X strViewToInteger (string_view input, size_t *rem = nullptr)
 
 // templates for single numerical conversion
 template <typename X>
-inline X numConv (string_view V)
+inline X numConv (std::string_view V)
 {
     return (std::is_integral<X>::value) ? strViewToInteger<X> (V) : X (numConv<double> (V));
 }
 
 // template definition for double conversion
 template <>
-inline double numConv (string_view V)
+inline double numConv (std::string_view V)
 {
-    return std::stod (V.to_string ());
+    return std::stod (std::string(V));
 }
 
 template <>
-inline float numConv (utilities::string_view V)
+inline float numConv (std::string_view V)
 {
-    return std::stof (V.to_string ());
+    return std::stof (std::string(V));
 }
 
 // template definition for long double conversion
 template <>
-inline long double numConv (string_view V)
+inline long double numConv (std::string_view V)
 {
-    return std::stold (V.to_string ());
+    return std::stold (std::string(V));
 }
 
 // template for numeric conversion returning the position
 template <class X>
-inline X numConvComp (string_view V, size_t &rem)
+inline X numConvComp (std::string_view V, size_t &rem)
 {
     return (std::is_integral<X>::value) ? strViewToInteger<X> (V, &rem) : X (numConvComp<double> (V, rem));
 }
 
 template <>
-inline double numConvComp (string_view V, size_t &rem)
+inline double numConvComp (std::string_view V, size_t &rem)
 {
-    return std::stod (V.to_string (), &rem);
+    return std::stod (std::string(V), &rem);
 }
 
 template <>
-inline long double numConvComp (string_view V, size_t &rem)
+inline long double numConvComp (std::string_view V, size_t &rem)
 {
-    return std::stold (V.to_string (), &rem);
+    return std::stold (std::string(V), &rem);
 }
 
 /** check if the first character of the string is a valid numerical value*/
-inline bool nonNumericFirstCharacter (string_view V) { return ((V.empty ()) || (numCheck[V[0]] == false)); }
+inline bool nonNumericFirstCharacter (std::string_view V) { return ((V.empty ()) || (numCheck[V[0]] == false)); }
 
 /** check if the first character of the string is a valid numerical value*/
-inline bool nonNumericFirstOrLastCharacter (string_view V)
+inline bool nonNumericFirstOrLastCharacter (std::string_view V)
 {
     return ((V.empty ()) || (numCheck[V[0]] == false) || (numCheckEnd[V.back ()] == false));
 }
 
 template <typename X>
-X numeric_conversion (string_view V, const X defValue)
+X numeric_conversion (std::string_view V, const X defValue)
 {
     if (nonNumericFirstCharacter (V))
     {
@@ -169,7 +167,7 @@ X numeric_conversion (string_view V, const X defValue)
 /** do a numeric conversion of the complete string
  */
 template <typename X>
-X numeric_conversionComplete (string_view V, const X defValue)
+X numeric_conversionComplete (std::string_view V, const X defValue)
 {
     if (nonNumericFirstCharacter (V))
     {
@@ -203,9 +201,9 @@ X numeric_conversionComplete (string_view V, const X defValue)
 @return a vector of double precision numbers converted from the string
 */
 template <typename X>
-std::vector<X> str2vector (string_view line,
+std::vector<X> str2vector (std::string_view line,
                            const X defValue,
-                           string_view delimiters = utilities::string_viewOps::default_delim_chars)
+                           std::string_view delimiters = utilities::string_viewOps::default_delim_chars)
 {
     line = utilities::string_viewOps::removeBrackets (line);
     auto tempVec = utilities::string_viewOps::split (line, delimiters);
@@ -224,7 +222,7 @@ std::vector<X> str2vector (string_view line,
 @return a vector of double precision numbers converted from the string
 */
 template <typename X>
-std::vector<X> str2vector (const utilities::string_viewVector &tokens, const X defValue)
+std::vector<X> str2vector (const std::vector<std::string_view> &tokens, const X defValue)
 {
     std::vector<X> av;
     av.reserve (tokens.size ());

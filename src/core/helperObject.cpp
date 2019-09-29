@@ -73,11 +73,11 @@ void setMultipleFlags (helperObject *obj, const std::string &flags)
 		}
         if (flag.front() != '-')
         {
-            obj->setFlag (flag.to_string (), true);
+            obj->setFlag (std::string(flag), true);
         }
         else
         {
-            obj->setFlag (flag.substr (1, utilities::string_view::npos).to_string (), false);
+            obj->setFlag (std::string(flag.substr (1, std::string_view::npos)), false);
         }
     }
 }

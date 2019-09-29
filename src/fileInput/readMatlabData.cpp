@@ -135,7 +135,7 @@ void readMatlabArray (const std::string &text, size_t start, mArray &matA)
 {
 	using namespace utilities::string_viewOps;
 
-	utilities::string_view svtext = text;
+	std::string_view svtext = text;
     size_t A = text.find_first_of ('[', start);
     size_t B = text.find_first_of (']', A);
     auto Adat = svtext.substr (A + 1, B - A);
@@ -144,7 +144,7 @@ void readMatlabArray (const std::string &text, size_t start, mArray &matA)
     std::vector<double> M;
     size_t D = 0;
     size_t C = Adat.find_first_of ("];");
-    while (C != utilities::string_view::npos)
+    while (C != std::string_view::npos)
     {
         auto line = Adat.substr (D, C - D);
         utilities::string_viewOps::trimString (line);

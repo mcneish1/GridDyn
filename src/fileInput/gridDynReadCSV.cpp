@@ -171,16 +171,16 @@ void loadCSV (coreObject *parentObject, const std::string &fileName, readerInfo 
             }
             else if (index == -2)
             {
-                obj = locateObject (trim (lineTokens[0]).to_string (), parentObject);
+                obj = locateObject (std::string(trim (lineTokens[0])), parentObject);
             }
             if (refkey >= 0)
             {
-                obj = ri.makeLibraryObject (ref.to_string (), obj);
+                obj = ri.makeLibraryObject (std::string(ref), obj);
             }
 
             if (obj==nullptr)
             {
-                obj = cof->createObject (ObjectMode, type.to_string ());
+                obj = cof->createObject (ObjectMode, std::string(type));
                 if (obj!=nullptr)
                 {
                     if (index > 0)
@@ -189,7 +189,7 @@ void loadCSV (coreObject *parentObject, const std::string &fileName, readerInfo 
                     }
                     else if (index == -2)
                     {
-                        obj->setName (lineTokens[0].to_string ());
+                        obj->setName (std::string(lineTokens[0]));
                     }
                 }
             }
@@ -225,18 +225,18 @@ void loadCSV (coreObject *parentObject, const std::string &fileName, readerInfo 
                     if (ObjectMode == "bus")
                     {
                         auto str = trim (lineTokens[kk]);
-                        obj->set ("type", str.to_string ());
+                        obj->set ("type", std::string(str));
                     }
                 }
                 else if ((field == "name") || (field == "description"))
                 {
-                    auto str = trim (lineTokens[kk]).to_string ();
+                    auto str = std::string(trim (lineTokens[kk]));
                     str = ri.checkDefines (str);
                     obj->set (field, str);
                 }
                 else if ((field.compare (0, 2, "to") == 0) && (ObjectMode == "link"))
                 {
-                    auto str = trim (lineTokens[kk]).to_string ();
+                    auto str = std::string(trim (lineTokens[kk]));
 
                     str = ri.checkDefines (str);
                     auto val = numeric_conversion<double> (str, kBigNum);
@@ -256,7 +256,7 @@ void loadCSV (coreObject *parentObject, const std::string &fileName, readerInfo 
                 }
                 else if ((field.compare (0, 4, "from") == 0) && (ObjectMode == "link"))
                 {
-                    auto str = ri.checkDefines (trim (lineTokens[kk]).to_string ());
+                    auto str = ri.checkDefines (std::string(trim (lineTokens[kk])));
                     auto val = numeric_conversion<double> (str, kBigNum);
                     gridBus *bus = nullptr;
                     if (val < kHalfBigNum)
@@ -279,7 +279,7 @@ void loadCSV (coreObject *parentObject, const std::string &fileName, readerInfo 
                 }
                 else if ((field == "bus") && ((ObjectMode == "load") || (ObjectMode == "gen")))
                 {
-                    auto str = ri.checkDefines (lineTokens[kk].to_string ());
+                    auto str = ri.checkDefines (std::string(lineTokens[kk]));
                     auto val = numeric_conversion<double> (str, kBigNum);
                     gridBus *bus = nullptr;
                     if (val < kHalfBigNum)
@@ -303,7 +303,7 @@ void loadCSV (coreObject *parentObject, const std::string &fileName, readerInfo 
                 else if (((field == "target") || (field == "sink") || (field == "source")) &&
                          (ObjectMode == "relay"))
                 {
-                    auto str = ri.checkDefines (lineTokens[kk].to_string ());
+                    auto str = ri.checkDefines (std::string(lineTokens[kk]));
                     auto obj2 = locateObject (str, parentObject);
                     if (obj2!=nullptr)
                     {
@@ -324,7 +324,7 @@ void loadCSV (coreObject *parentObject, const std::string &fileName, readerInfo 
                 }
                 else if (field == "file")
                 {
-                    auto str = lineTokens[kk].to_string ();
+                    auto str = std::string(lineTokens[kk]);
                     ri.checkFileParam (str);
                     gridParameter po (field, str);
 
@@ -332,7 +332,7 @@ void loadCSV (coreObject *parentObject, const std::string &fileName, readerInfo 
                 }
                 else if (field == "workdir")
                 {
-                    auto str = lineTokens[kk].to_string ();
+                    auto str = std::string(lineTokens[kk]);
                     ri.checkDirectoryParam (str);
                     gridParameter po (field, str);
 
@@ -340,7 +340,7 @@ void loadCSV (coreObject *parentObject, const std::string &fileName, readerInfo 
                 }
                 else
                 {
-                    auto str = ri.checkDefines (trim (lineTokens[kk]).to_string ());
+                    auto str = ri.checkDefines (std::string(trim (lineTokens[kk])));
                     auto val = numeric_conversion<double> (str, kBigNum);
 
                     if (val < kHalfBigNum)

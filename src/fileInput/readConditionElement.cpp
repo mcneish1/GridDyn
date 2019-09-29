@@ -22,7 +22,7 @@ namespace griddyn
 using namespace readerConfig;
 
 static const IgnoreListType ignoreConditionVariables{"condition"};
-bool checkCondition (utilities::string_view cond, readerInfo &ri, coreObject *parentObject);
+bool checkCondition (std::string_view cond, readerInfo &ri, coreObject *parentObject);
 // "aP" is the XML element passed from the reader
 void loadConditionElement (std::shared_ptr<readerElement> &element, readerInfo &ri, coreObject *parentObject)
 {
@@ -77,23 +77,22 @@ bool compare (const X &val1, const X &val2, char op1, char op2)
     }
 }
 
-bool checkCondition (utilities::string_view cond, readerInfo &ri, coreObject *parentObject)
+bool checkCondition (std::string_view cond, readerInfo &ri, coreObject *parentObject)
 {
-    using utilities::string_view;
     using namespace utilities::string_viewOps;
     trim (cond);
     bool rev = false;
     if ((cond[0] == '!') || (cond[0] == '~'))
     {
         rev = true;
-        cond = cond.substr (1, string_view::npos);
+        cond = cond.substr (1, std::string_view::npos);
     }
     size_t pos = cond.find_first_of ("><=!");
     bool eval = false;
     char A, B;
-    string_view BlockA, BlockB;
+    std::string_view BlockA, BlockB;
 
-    if (pos == string_view::npos)
+    if (pos == std::string_view::npos)
     {
         A = '!';
         B = '=';
@@ -104,7 +103,7 @@ bool checkCondition (utilities::string_view cond, readerInfo &ri, coreObject *pa
             auto a1 = BlockA.find_first_of ('(', 6);
             auto a2 = BlockA.find_last_of (')');
             auto check = BlockA.substr (a1 + 1, a2 - a1 - 1);
-            coreObject *obj = locateObject (check.to_string (), parentObject, false);
+            coreObject *obj = locateObject (std::string(check), parentObject, false);
             return (rev) ? (obj == nullptr) : (obj != nullptr);
         }
     }
@@ -117,8 +116,8 @@ bool checkCondition (utilities::string_view cond, readerInfo &ri, coreObject *pa
     }
 
     ri.setKeyObject (parentObject);
-    double aval = interpretString (BlockA.to_string (), ri);
-    double bval = interpretString (BlockB.to_string (), ri);
+    double aval = interpretString (std::string(BlockA), ri);
+    double bval = interpretString (std::string(BlockB), ri);
 
     if (!std::isnan (aval) && !std::isnan (bval))
     {
@@ -133,8 +132,8 @@ bool checkCondition (utilities::string_view cond, readerInfo &ri, coreObject *pa
     }
     else if (std::isnan (aval) && (std::isnan (bval)))
     {  // do a string comparison
-        std::string astr = ri.checkDefines (BlockA.to_string ());
-        std::string bstr = ri.checkDefines (BlockB.to_string ());
+        std::string astr = ri.checkDefines (std::string(BlockA));
+        std::string bstr = ri.checkDefines (std::string(BlockB));
 
         try
         {
