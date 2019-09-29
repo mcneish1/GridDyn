@@ -394,41 +394,6 @@ library('griddyn_optimization', [
     ],
     include_directories : griddyn_optimization_inc)
 
-griddyn_networking_inc = include_directories('include/networking')
-library('griddyn_networking', [
-        'src/networking/zmqInterface.cpp',
-        'src/networking/tcpCommunicator.cpp',
-        'src/networking/dimeInterface.cpp',
-        'src/networking/AsioServiceManager.cpp',
-        'src/networking/dimeRunner.cpp',
-        'src/networking/dimeCollector.cpp',
-        'src/networking/networkingInterface.cpp',
-        'src/networking/dimeClientInterface.cpp',
-        'src/networking/zmqLibrary/zmqContextManager.cpp',
-        'src/networking/zmqLibrary/zmqSocketDescriptor.cpp',
-        'src/networking/zmqLibrary/zmqHelper.cpp',
-        'src/networking/zmqLibrary/zmqReactor.cpp',
-        'src/networking/zmqLibrary/zmqProxyHub.cpp',
-        'src/networking/tcpCollector.cpp',
-        'src/networking/zmqCommunicator.cpp',
-        'src/networking/tcpInterface.cpp',
-        'src/networking/TcpHelperClasses.cpp',
-        'src/networking/dimeCommunicator.cpp',
-    ],
-    include_directories : griddyn_networking_inc,
-    dependencies : [
-        jsoncpp_dep,
-        cppzmq_dep,
-        cereal_dep,
-        griddyn_dep,
-        griddyn_core_dep,
-        griddyn_file_input_dep,
-        griddyn_runner_dep,
-        griddyn_coupling_dep,
-        boost_dep,
-        threads_dep,
-    ])
-
 library('griddyn_model', [
         'src/extraModels/txLifeSpan.cpp',
         'src/extraModels/extraModels.cpp',
