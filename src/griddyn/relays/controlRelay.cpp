@@ -22,8 +22,6 @@
 #include "griddyn/simulation/gridSimulation.h"
 #include "utilities/stringOps.h"
 
-#include <boost/format.hpp>
-
 namespace griddyn
 {
 namespace relays
@@ -149,9 +147,7 @@ void controlRelay::actionTaken (index_t ActionNum,
                                 change_code /*actionReturn*/,
                                 coreTime /*actionTime*/)
 {
-    LOG_NORMAL ((boost::format ("condition %d-> action %d taken") % conditionNum % ActionNum).str ());
-	(void)(ActionNum);
-	(void)(conditionNum);
+    throw false;
 }
 
 using cm = griddyn::comms::controlMessagePayload;

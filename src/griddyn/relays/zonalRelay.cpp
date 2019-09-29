@@ -21,8 +21,6 @@
 #include "utilities/timeSeries.hpp"
 #include <algorithm>
 
-#include <boost/format.hpp>
-
 namespace griddyn
 {
 namespace relays
@@ -248,9 +246,6 @@ void zonalRelay::actionTaken (index_t ActionNum,
                               change_code /*actionReturn*/,
                               coreTime /*actionTime*/)
 {
-    LOG_NORMAL (
-      (boost::format ("condition %d action %d taken terminal %d") % conditionNum % ActionNum % m_terminal).str ());
-
     if (component_configuration.opFlags[use_commLink])
     {
         if (ActionNum == 0)
@@ -271,7 +266,6 @@ void zonalRelay::actionTaken (index_t ActionNum,
 
 void zonalRelay::conditionTriggered (index_t conditionNum, coreTime /*triggerTime*/)
 {
-    LOG_NORMAL ((boost::format ("condition %d triggered terminal %d") % conditionNum % m_terminal).str ());
     if (conditionNum < m_condition_level)
     {
         m_condition_level = conditionNum;
@@ -300,7 +294,6 @@ void zonalRelay::conditionTriggered (index_t conditionNum, coreTime /*triggerTim
 
 void zonalRelay::conditionCleared (index_t conditionNum, coreTime /*triggerTime*/)
 {
-    LOG_NORMAL ((boost::format ("condition %d cleared terminal %d ") % conditionNum % m_terminal).str ());
     for (index_t kk = 0; kk < m_zones; ++kk)
     {
         if (getConditionStatus (kk) == condition_status_t::active)

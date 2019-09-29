@@ -15,8 +15,6 @@
 #include "griddyn/events/Event.h"
 #include "griddyn/measurement/Condition.h"
 
-#include <boost/format.hpp>
-
 namespace griddyn
 {
 namespace relays
@@ -53,11 +51,7 @@ void loadRelay::setFlag (const std::string &flag, bool val)
         Relay::setFlag (flag, val);
     }
 }
-/*
-std::string commDestName;
-std::uint64_t commDestId=0;
-std::string commType;
-*/
+
 void loadRelay::set (const std::string &param, const std::string &val)
 {
     if (param[0] == '#')
@@ -137,118 +131,18 @@ void loadRelay::actionTaken (index_t ActionNum,
                              change_code /*actionReturn*/,
                              coreTime /*actionTime*/)
 {
-    LOG_NORMAL ((boost::format ("condition %d action %d") % conditionNum % ActionNum).str ());
-    ((void)(ActionNum));
-    ((void)(conditionNum));
-    /*
-    if (component_configuration.opFlags.test (use_commLink))
-    {
-    relayMessage P;
-    if (ActionNum == 0)
-    {
-    P.setMessageType (relayMessage::MESSAGE_TYPE::BREAKER_TRIP_EVENT);
-    if (commDestName.empty ())
-    {
-    auto b = P.buffer ();
-    commLink->transmit (commDestId, static_cast<int> (P.GetMessageType ()), P.size (), b);
-    }
-    else
-    {
-    auto b = P.buffer ();
-    commLink->transmit (commDestName, static_cast<int> (P.GetMessageType ()), P.size (), b);
-    }
-    }
-    }
-    for (size_t kk = conditionNum + 1; kk < m_zones; ++kk)
-    {
-    setConditionStatus (kk, condition_status_t::disabled);
-    }
-    if (conditionNum < m_condition_level)
-    {
-    m_condition_level = conditionNum;
-    }
-    */
+    throw false;
 }
 
 void loadRelay::conditionTriggered (index_t conditionNum, coreTime /*triggerTime*/)
 {
-    LOG_NORMAL ((boost::format ("condition %d triggered") % conditionNum).str ());
-    ((void)(conditionNum));
-    /*
-    if (conditionNum < m_condition_level)
-    {
-    m_condition_level = conditionNum;
-    }
-    if (component_configuration.opFlags.test (use_commLink))
-    {
-    if (conditionNum > m_condition_level)
-    {
-    return;
-    }
-    relayMessage P;
-    //std::cout << "GridDyn conditionTriggered(), conditionNum = " << conditionNum << '\n';
-    if (conditionNum == 0)
-    {
-    //std::cout << "GridDyn setting relay message type to LOCAL_FAULT_EVENT" << '\n';
-    P.setMessageType (relayMessage::MESSAGE_TYPE::LOCAL_FAULT_EVENT);
-    }
-    else
-    {
-    //std::cout << "GridDyn setting relay message type to REMOTE_FAULT_EVENT" << '\n';
-    P.setMessageType (relayMessage::MESSAGE_TYPE::REMOTE_FAULT_EVENT);
-    }
-    if (commDestName.empty ())
-    {
-    auto b = P.buffer ();
-    commLink->transmit (commDestId, static_cast<int> (P.GetMessageType ()), P.size (), b);
-    }
-    else
-    {
-    auto b = P.buffer ();
-    commLink->transmit (commDestName, static_cast<int> (P.GetMessageType ()), P.size (), b);
-    }
-    }
-    */
+    throw false;
 }
 
 void loadRelay::conditionCleared (index_t conditionNum, coreTime /*triggerTime*/)
 {
-    LOG_NORMAL ((boost::format ("condition %d cleared") % conditionNum).str ());
-    ((void)(conditionNum));
-    /*for (size_t kk = 0; kk < m_zones; ++kk)
-   {
-   if (cStates[kk] == condition_status_t::active)
-   {
-   m_condition_level = kk + 1;
-   }
-   else
-   {
-   return;
-   }
-   }
-   if (component_configuration.opFlags.test (use_commLink))
-   {
-   relayMessage P;
-   if (conditionNum == 0)
-   {
-   P.setMessageType (relayMessage::MESSAGE_TYPE::LOCAL_FAULT_CLEARED);
-   }
-   else
-   {
-   P.setMessageType (relayMessage::MESSAGE_TYPE::REMOTE_FAULT_CLEARED);
-   }
-   if (commDestName.empty ())
-   {
-   auto b = P.buffer ();
-   commLink->transmit (commDestId, static_cast<int> (P.GetMessageType ()), P.size (), b);
-   }
-   else
-   {
-   auto b = P.buffer ();
-   commLink->transmit (commDestName, static_cast<int> (P.GetMessageType ()), P.size (), b);
-   }
-   }
-   */
+    throw false;
 }
+
 }  // namespace relays
 }  // namespace griddyn

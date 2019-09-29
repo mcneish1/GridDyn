@@ -25,7 +25,6 @@
 #include "utilities/matrixDataSparse.hpp"
 
 #include <cmath>
-#include <boost/format.hpp>
 
 namespace griddyn
 {

@@ -23,8 +23,6 @@
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/matrixDataSparse.hpp"
 
-#include <boost/format.hpp>
-
 #include <cmath>
 
 namespace griddyn

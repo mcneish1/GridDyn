@@ -32,7 +32,6 @@
 #include "utilities/stringConversion.h"
 #include "griddyn/relays/zonalRelay.h"
 #include <stdexcept>
-#include <boost/format.hpp>
 
 namespace griddyn
 {
@@ -1003,41 +1002,6 @@ change_code Relay::evaluateCondCheck (condCheckTime &cond, coreTime checkTime)
     return eventReturn;
 }
 
-#ifdef DEBUG_LOG_ENABLE
-void Relay::actionTaken (index_t ActionNum,
-                         index_t conditionNum,
-                         change_code actionReturn,
-                         coreTime /*actionTime*/)
-{
-    LOG_DEBUG ((boost::format ("action %d taken based on condition %d  with return code %d") % ActionNum %
-                conditionNum % static_cast<int> (actionReturn))
-                 .str ());
-}
-void Relay::conditionTriggered (index_t conditionNum, coreTime timeTriggered)
-{
-    if (conditionTriggerTimes[conditionNum] > timeZero)
-    {
-        LOG_DEBUG ((boost::format ("condition %d triggered again at %f") % conditionNum % timeTriggered).str ())
-    }
-    else
-    {
-        LOG_DEBUG ((boost::format ("condition %d triggered at %f") % conditionNum % timeTriggered).str ());
-    }
-}
-void Relay::conditionCleared (index_t conditionNum, coreTime timeCleared)
-{
-    if (conditionTriggerTimes[conditionNum] > timeZero)
-    {
-        LOG_DEBUG ((boost::format ("condition %d cleared again at %f") % conditionNum % timeCleared).str ());
-    }
-    else
-    {
-        LOG_DEBUG ((boost::format ("condition %d cleared at %f") % conditionNum % timeCleared).str ());
-    }
-}
-
-#else
-
 void Relay::actionTaken (index_t /*ActionNum*/,
                          index_t /*conditionNum*/,
                          change_code /*actionReturn*/,
@@ -1046,7 +1010,6 @@ void Relay::actionTaken (index_t /*ActionNum*/,
 }
 void Relay::conditionTriggered (index_t /*conditionNum*/, coreTime /*timeTriggered*/) {}
 void Relay::conditionCleared (index_t /*conditionNum*/, coreTime /*timeCleared*/) {}
-#endif
 
 void Relay::updateObject (coreObject *obj, object_update_mode mode)
 {

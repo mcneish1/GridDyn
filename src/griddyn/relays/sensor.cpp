@@ -25,8 +25,6 @@
 #include "utilities/stringConversion.h"
 #include "utilities/timeSeries.hpp"
 
-#include <boost/format.hpp>
-
 namespace griddyn
 {
 using namespace gridUnits;

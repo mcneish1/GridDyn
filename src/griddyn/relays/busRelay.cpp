@@ -16,8 +16,6 @@
 #include "griddyn/events/eventQueue.h"
 #include "griddyn/measurement/Condition.h"
 
-#include <boost/format.hpp>
-
 namespace griddyn
 {
 namespace relays

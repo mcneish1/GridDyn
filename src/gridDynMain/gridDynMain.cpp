@@ -17,7 +17,7 @@
 #include "runner/gridDynRunner.h"
 
 #include "gridDynLoader/libraryLoader.h"
-#include <boost/format.hpp>
+
 #ifdef ENABLE_HELICS_EXECUTABLE
 #include "helics/helicsRunner.h"
 #endif
@@ -30,6 +30,8 @@
 #include "fmi_export/fmuBuilder.h"
 #endif
 
+#include <sstream>
+
 enum class execMode_t
 {
     normal = 0,
@@ -37,7 +39,7 @@ enum class execMode_t
     helics = 2,
     buildfmu = 3,
     dime = 4,
-	buildgdz=5,
+    buildgdz=5,
 };
 
 using namespace griddyn;
@@ -62,11 +64,11 @@ int main (int argc, char *argv[])
             execMode = execMode_t::mpicount;
             break;
         }
-		if (strncmp("--buildgdz", argv[ii], 10) == 0)
-		{
-			execMode = execMode_t::buildgdz;
-			break;
-		}
+        if (strncmp("--buildgdz", argv[ii], 10) == 0)
+        {
+            execMode = execMode_t::buildgdz;
+            break;
+        }
 #ifdef ENABLE_FMI_EXPORT
         if (strncmp ("--buildfmu", argv[ii], 10)==0)
         {
@@ -127,8 +129,8 @@ int main (int argc, char *argv[])
     case execMode_t::buildfmu:
 #ifdef ENABLE_FMI_EXPORT
     {
-		gds->log(nullptr, print_level::summary,
-			std::string("Building FMI through FMI builder"));
+        gds->log(nullptr, print_level::summary,
+            std::string("Building FMI through FMI builder"));
         auto builder = std::make_unique<fmi::fmuBuilder> (gds);
         auto ret = builder->Initialize (argc, argv);
         if (ret < 0)
@@ -143,8 +145,8 @@ int main (int argc, char *argv[])
     {
 #ifdef ENABLE_HELICS_EXECUTABLE
         auto runner = std::make_unique<helicsLib::helicsRunner> (gds);
-		gds->log(nullptr, print_level::summary,
-			std::string("Executing through HELICS runner"));
+        gds->log(nullptr, print_level::summary,
+            std::string("Executing through HELICS runner"));
         auto ret = runner->Initialize (argc, argv);
         if (ret > 0)
         {
@@ -171,8 +173,8 @@ int main (int argc, char *argv[])
     {
 #ifdef ENABLE_DIME
         auto runner = std::make_unique<dimeLib::dimeRunner> (gds);
-		gds->log(nullptr, print_level::summary,
-			std::string("Executing through DIME runner"));
+        gds->log(nullptr, print_level::summary,
+            std::string("Executing through DIME runner"));
         auto ret = runner->Initialize (argc, argv);
         if (ret > 0)
         {
@@ -186,14 +188,14 @@ int main (int argc, char *argv[])
         runner->Run ();
 #endif
     }
-	case execMode_t::buildgdz:
-		gds->log(nullptr, print_level::error,
-			std::string("GDZ builder not implemented yet"));
-		return (-4);
-	default:
-		gds->log(nullptr, print_level::error,
-			std::string("unknown execution mode"));
-		return (-4);
+    case execMode_t::buildgdz:
+        gds->log(nullptr, print_level::error,
+            std::string("GDZ builder not implemented yet"));
+        return (-4);
+    default:
+        gds->log(nullptr, print_level::error,
+            std::string("unknown execution mode"));
+        return (-4);
     break;
     };
 
@@ -202,15 +204,21 @@ int main (int argc, char *argv[])
     {
         auto ssize = gds->getInt ("dynstatesize");
         auto jsize = gds->getInt ("dynnonzeros");
-		auto res = boost::format("Simulation Final Dynamic Statesize =%d (%d V, %d angle, %d alg, %d differential), %d non zero elements in the the Jacobian\n") % ssize % gds->getInt("vcount")% gds->getInt("acount") % gds->getInt("algcount") % gds->getInt("diffcount") % jsize;
-		gds->log(nullptr, print_level::summary,res.str());
+        std::stringstream ss;
+        ss << "Simulation Final Dynamic Statesize = " << ssize
+           << "(" << gds->getInt("vcount") << " V, " << gds->getInt("acount") << " angle, " << gds->getInt("algcount") << " alg, " << gds->getInt("diffcount") << " differential),"
+           << jsize << " non zero elements in the the Jacobian\n";
+        gds->log(nullptr, print_level::summary, ss.str());
     }
     else  // if (pState <= gridDynSimulation::gridState_t::DYNAMIC_INITIALIZED)
     {
         auto ssize = gds->getInt ("pflowstatesize");
         auto jsize = gds->getInt ("pflownonzeros");
-		auto res = boost::format("Simulation Final Dynamic Statesize =%d (%d V, %d angle), %d non zero elements in the the Jacobian\n") % ssize % gds->getInt("vcount") % gds->getInt("acount") % jsize;
-        gds->log (nullptr, print_level::summary,res.str());
+        std::stringstream ss;
+        ss << "Simulation Final Dynamic Statesize = " << ssize
+           << "(" << gds->getInt("vcount") << " V, " << gds->getInt("acount") << " angle),"
+           << jsize << " non zero elements in the the Jacobian\n";
+        gds->log (nullptr, print_level::summary, ss.str());
     }
 
     return 0;
