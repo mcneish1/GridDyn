@@ -14,8 +14,6 @@
 #include "charMapper.h"
 #include "string_viewOps.h"
 
-#include <boost/spirit/home/x3.hpp>
-
 #include <stdexcept>
 extern const utilities::charMapper<bool> numCheck;
 extern const utilities::charMapper<bool> numCheckEnd;
@@ -107,27 +105,13 @@ inline X numConv (string_view V)
 template <>
 inline double numConv (string_view V)
 {
-#ifndef NO_SPIRIT
-    namespace x3 = boost::spirit::x3;
-    double retVal = -1e49;
-    x3::parse (V.cbegin (), V.cend (), x3::double_, retVal);
-    return retVal;
-#else
     return std::stod (V.to_string ());
-#endif
 }
 
 template <>
 inline float numConv (utilities::string_view V)
 {
-#ifndef NO_SPIRIT
-    namespace x3 = boost::spirit::x3;
-    float retVal = -1e25f;
-    x3::parse (V.cbegin (), V.cend (), x3::float_, retVal);
-    return retVal;
-#else
     return std::stof (V.to_string ());
-#endif
 }
 
 // template definition for long double conversion
