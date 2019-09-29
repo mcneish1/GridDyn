@@ -15,7 +15,6 @@
 
 #include "utilities/zipUtilities.h"
 #include <filesystem>
-#include <boost/range/iterator_range.hpp>
 
 namespace utilities
 {
