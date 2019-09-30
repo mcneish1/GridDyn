@@ -117,7 +117,7 @@ void zBreaker::updateLocalCache (const IOdata & /*inputs*/, const stateData &sD,
     {
         return;
     }
-    std::memset (&linkInfo, 0, sizeof (linkI));
+    linkInfo = {};
     linkInfo.seqID = sD.seqID;
     linkInfo.v1 = B1->getVoltage ();
     linkInfo.v2 = linkInfo.v1;

@@ -398,7 +398,7 @@ void dcLink::updateLocalCache (const IOdata & /*inputs*/, const stateData &sD, c
     {
         return;
     }
-    std::memset (&linkInfo, 0, sizeof (linkI));
+    linkInfo = {};
 
     linkInfo.v1 = B1->getVoltage (sD.state, sMode);
     linkInfo.v2 = B2->getVoltage (sD.state, sMode);
@@ -426,7 +426,7 @@ void dcLink::updateLocalCache (const IOdata & /*inputs*/, const stateData &sD, c
 
 void dcLink::updateLocalCache ()
 {
-    std::memset (&linkInfo, 0, sizeof (linkInfo));
+    linkInfo = {};
 
     if (isEnabled ())
     {

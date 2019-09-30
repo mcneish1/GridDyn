@@ -855,8 +855,8 @@ void acLine::disable ()
         return;
     }
     Link::disable ();
-    std::memset (&linkFlows, 0, sizeof (linkF));
-    std::memset (&LinkDeriv, 0, sizeof (linkPart));
+    linkFlows = {};
+    LinkDeriv = {};
 }
 
 double acLine::getMaxTransfer () const
@@ -1073,7 +1073,6 @@ void acLine::loadLinkInfo (const stateData &sD, const solverMode &sMode)
     {
         return;
     }
-    // std::memset (&linkInfo, 0, sizeof(linkI));
     linkInfo.v1 = B1->getVoltage (sD, sMode);
 
     linkInfo.v2 = B2->getVoltage (sD, sMode);
@@ -1339,7 +1338,7 @@ void acLine::swOpenCalc ()
 
 void acLine::faultDeriv ()
 {
-    std::memset (&LinkDeriv, 0, sizeof (linkPart));
+    LinkDeriv = {};
     if (!component_configuration.opFlags[switch1_open_flag])
     {
         LinkDeriv.dP1dv1 = 2 * (g / fault + fault * mp_G) / (tap * tap) * linkInfo.v1;
@@ -1702,7 +1701,7 @@ void acLine::fastDecoupledDeriv ()
 
 void acLine::swOpenDeriv ()
 {
-    std::memset (&LinkDeriv, 0, sizeof (linkPart));
+    LinkDeriv = {};
 
     // flows from bus 2 to bus
 

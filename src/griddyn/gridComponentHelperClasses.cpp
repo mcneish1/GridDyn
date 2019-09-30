@@ -52,7 +52,7 @@ solverMode::solverMode (index_t index):offsetIndex(index)
     }
 }
 
-void stateSizes::reset () { std::memset (this, 0, sizeof (stateSizes)); }
+void stateSizes::reset () { *this = {}; }
 void stateSizes::stateReset () { vSize = aSize = algSize = diffSize = 0; }
 void stateSizes::add (const stateSizes &arg)
 {
