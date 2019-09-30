@@ -17,7 +17,6 @@
 #include "../testHelper.h"
 #include "utilities/matrixDataSparse.hpp"
 #include "utilities/matrixDataSparseSM.hpp"
-#include "utilities/matrixOps.h"
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/test/unit_test.hpp>
 #include <iostream>
@@ -216,29 +215,4 @@ BOOST_AUTO_TEST_CASE (test_sparse_matrix)
     BOOST_CHECK (itbegin == itend);
 }
 
-
-BOOST_AUTO_TEST_CASE (test_sparse_matrix_multiply)
-{
-    matrixDataSparse<double> testMatrix;
-    testMatrix.setColLimit (10);
-    testMatrix.setRowLimit (10);
-    for (int ii = 0; ii < 10; ++ii)
-    {
-        testMatrix.assign (ii, ii, static_cast<double> (ii));
-    }
-
-    std::vector<double> v (10, 1.0);
-    auto res = matrixDataMultiply (testMatrix, v.data ());
-    BOOST_CHECK_EQUAL (res.size (),10u);
-
-    int ecount = 0;
-    for (int kk = 0; kk < 10; ++kk)
-    {
-        if (std::abs (res[kk] - static_cast<double> (kk)) > 0.000000001)
-        {
-            ++ecount;
-        }
-    }
-    BOOST_CHECK (ecount == 0);
-}
 BOOST_AUTO_TEST_SUITE_END ()
