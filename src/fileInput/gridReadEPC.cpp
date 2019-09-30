@@ -32,7 +32,6 @@
 
 namespace griddyn
 {
-const static bool unimplemented = false;
 
 using namespace gridUnits;
 using namespace utilities::string_viewOps;

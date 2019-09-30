@@ -434,7 +434,7 @@ int do_extract_currentfile(uf,popt_extract_without_path,popt_overwrite,password)
             {
                 char c=*(filename_withoutpath-1);
                 *(filename_withoutpath-1)='\0';
-                makedir(write_filename);
+                makedir((char*)write_filename);
                 *(filename_withoutpath-1)=c;
                 fout=FOPEN_FUNC(write_filename,"wb");
             }
