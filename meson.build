@@ -342,6 +342,4 @@ griddyn_file_input_lib = library('griddyn_file_input',
     ])
 griddyn_file_input_dep = declare_dependency(link_with : griddyn_file_input_lib, include_directories : griddyn_file_input_inc)
 
-subdir('plugins')
-
 subdir('test')
