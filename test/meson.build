@@ -24,14 +24,13 @@ library_tests = [
 
 system_tests = [
     #1 'testRoots',
-    #3 'testGridDynRunner',
     #4 'testInputs',
     #1 'testContingency',
     #2 'testDyn1',
     #4 'validationTests',
-    #4 'testDyn2',
+    #1 'testDyn2',
     #1 'testCloning',
-    #4 'faultTests',
+    #2 'faultTests',
     #1 'testConstraints',
     #1 'testOutputs',
     #1 'testpFlow',

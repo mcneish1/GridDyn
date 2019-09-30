@@ -19,7 +19,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
 #include <boost/test/floating_point_comparison.hpp>
-#include <boost/filesystem.hpp>
+#include <filesystem>
 
 #include <cstdio>
 #include <functional>
@@ -224,7 +224,7 @@ BOOST_DATA_TEST_CASE_F (gridDynSimulationTestFixture, compare_cases, data::xrang
 
     auto caseSet = compareCases[caseIndex];
     std::string fileName = std::string (IEEE_TEST_DIRECTORY) + caseSet[0];
-	if (!boost::filesystem::exists(fileName))
+	if (!std::filesystem::exists(fileName))
 	{
 		fileName = std::string(INPUT_TEST_DIRECTORY) + caseSet[0];
 	}
@@ -250,7 +250,7 @@ BOOST_DATA_TEST_CASE_F (gridDynSimulationTestFixture, compare_cases, data::xrang
         if (fname2.size () < 25)
         {
             fname2 = std::string (IEEE_TEST_DIRECTORY) + nf;
-			if (!boost::filesystem::exists(fname2))
+			if (!std::filesystem::exists(fname2))
 			{
 				fname2 = std::string(INPUT_TEST_DIRECTORY) + nf;
 			}

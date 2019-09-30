@@ -11,7 +11,7 @@
 */
 
 #include "../testHelper.h"
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/test/unit_test.hpp>
 
@@ -25,7 +25,6 @@ static const std::string contingency_test_directory (GRIDDYN_TEST_DIRECTORY "/co
 
 BOOST_FIXTURE_TEST_SUITE (largeContingency_tests, gridDynSimulationTestFixture)
 
-using namespace boost::filesystem;
 using namespace griddyn;
 
 
@@ -38,8 +37,8 @@ BOOST_AUTO_TEST_CASE (contingency_n2)
     auto start_t = std::chrono::high_resolution_clock::now ();
     gds->run ();
     auto stop_t = std::chrono::high_resolution_clock::now ();
-    BOOST_CHECK (exists ("contout_N2.csv"));
-    remove ("contout_N2.csv");
+    BOOST_CHECK (std::filesystem::exists ("contout_N2.csv"));
+    std::filesystem::remove ("contout_N2.csv");
 
     std::chrono::duration<double> load_time = (stop_t - start_t);
     printf ("contingencies run in %f seconds\n", load_time.count ());
@@ -55,7 +54,7 @@ BOOST_AUTO_TEST_CASE (contingency_bcase)
     int ret = gds->run ();
     auto stop_t = std::chrono::high_resolution_clock::now ();
     BOOST_CHECK (ret == FUNCTION_EXECUTION_SUCCESS);
-    BOOST_CHECK (exists ("contout_N2.csv"));
+    BOOST_CHECK (std::filesystem::exists ("contout_N2.csv"));
     // remove("contout_N2.csv");
 
     std::chrono::duration<double> load_time = (stop_t - start_t);

@@ -10,7 +10,6 @@
  * LLNS Copyright End
 */
 
-#include "gridDynLoader/libraryLoader.h"
 #include "../testHelper.h"
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/test/unit_test.hpp>
@@ -24,7 +23,6 @@ using namespace griddyn;
 BOOST_AUTO_TEST_CASE (test_thermaltx_txage, * boost::unit_test::label("quick"))
 {
     std::string fileName = std::string (EXTRAMODEL_TEST_DIRECTORY "test_thermaltx_txage.xml");
-    loadLibraries();
     runTestXML(fileName,gridDynSimulation::gridState_t::POWERFLOW_COMPLETE);
 
     auto col=gds->findCollector("collector#0");
