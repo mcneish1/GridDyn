@@ -12,7 +12,6 @@
 
 #include "griddyn/gridBus.h"
 #include "fileInput/fileInput.h"
-#include "griddyn/loads/gridLabDLoad.h"
 #include "griddyn/loads/ThreePhaseLoad.h"
 #include "griddyn/loads/motorLoad5.h"
 #include "griddyn/loads/zipLoad.h"
@@ -30,7 +29,6 @@ using namespace griddyn;
 using namespace griddyn::loads;
 
 static const std::string load_test_directory (GRIDDYN_TEST_DIRECTORY "/load_tests/");
-static const std::string gridlabd_test_directory (GRIDDYN_TEST_DIRECTORY "/gridlabD_tests/");
 
 BOOST_FIXTURE_TEST_SUITE (load_tests, gridLoadTestFixture, * boost::unit_test::label("quick"))
 
@@ -379,21 +377,6 @@ BOOST_AUTO_TEST_CASE(file_load_test2)
 	auto tod = Tdata.data()[0];
 	BOOST_CHECK_CLOSE(val, tod, 0.0001);
 
-}
-
-BOOST_AUTO_TEST_CASE (gridDynLoad_test1)
-{
-    std::string fileName = gridlabd_test_directory + "IEEE_13_mod.xml";
-
-    auto gds = readSimXMLFile (file_input_throw_if_null{}, fileName);
-
-    auto bus = gds->getBus (1);
-    auto gld = dynamic_cast<gridLabDLoad *> (bus->getLoad ());
-
-    BOOST_REQUIRE (gld != nullptr);
-
-    gds->run ();
-    requireStates (gds->currentProcessState (), gridDynSimulation::gridState_t::DYNAMIC_COMPLETE);
 }
 
 BOOST_AUTO_TEST_CASE (motor_test1)
