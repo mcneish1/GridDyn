@@ -34,9 +34,8 @@ class CommPayload
     virtual ~CommPayload () = default;
 
     template <class Archive>
-    void serialize (Archive & /*ar*/)
-    {
-    }
+    void serialize (Archive & /*ar*/) {} // stateless class serialized due to derived classes
+
     virtual std::string to_string (uint32_t type, uint32_t code) const = 0;
     virtual void from_string (uint32_t type, uint32_t code, const std::string &fromString, size_t offset = 0) = 0;
 };
@@ -132,28 +131,6 @@ class commMessage
     /** load a message definition from a string*/
     void from_string (const std::string &fromString);
 
-    /** convert a command to a raw data bytes
-    @param[out] data pointer to memory to store the command
-    @param[in] buffer_size-- the size of the buffer
-    @return the size of the buffer actually used
-    */
-    int toByteArray (char *data, size_t buffer_size) const;
-    /** convert to a data string using a reference*/
-    void to_datastring (std::string &data) const;
-    /** convert to a data string
-    @details a data string is a string containing raw data*/
-    std::string to_datastring () const;
-    /** covert to a byte vector using a reference*/
-    void to_vector (std::vector<char> &data) const;
-    /** convert a command to a byte vector*/
-    std::vector<char> to_vector () const;
-    /** generate a command from a raw data stream*/
-    void fromByteArray (const char *data, size_t buffer_size);
-    /** read a command from a string*/
-    void from_datastring (const std::string &data);
-    /** read a command from a char vector*/
-    void from_vector (const std::vector<char> &data);
-
   private:
     std::uint32_t m_messageType = ignoreMessageType;  //!< the actual type of the message
   public:
@@ -172,56 +149,6 @@ class commMessage
     void *payloadData = nullptr;  //!< blob pointer for payload data
     size_t payloadSize = 0;  //!< blob size;
     std::vector<char> payload_V;  // payload as a vector
-  public:
-    template <class Archive>
-    void save (Archive &ar) const
-    {
-        ar (m_messageType, code);
-        ar (static_cast<uint8_t> (ptype));
-        switch (ptype)
-        {
-        case payloadType_t::none:
-            break;
-        case payloadType_t::shared:
-            ar (payload);
-            break;
-        case payloadType_t::vector:
-            ar (payload_V);
-            break;
-        case payloadType_t::raw:
-            // Save number of chars + the data
-            ar (cereal::make_size_tag (payloadSize));
-            if (payloadData != nullptr)
-            {
-                ar (cereal::binary_data (payloadData, payloadSize));
-            }
-        }
-    }
-    template <class Archive>
-    void load (Archive &ar)
-    {
-        ar (m_messageType, code);
-        uint8_t type;
-        ar (type);
-        ptype = static_cast<payloadType_t> (type);
-        switch (ptype)
-        {
-        case payloadType_t::none:
-            break;
-        case payloadType_t::shared:
-            ar (payload);
-            break;
-        case payloadType_t::vector:
-            ar (payload_V);
-            break;
-        case payloadType_t::raw:
-            // Save to the vector
-            size_t size;
-            ar (cereal::make_size_tag (size));
-            payload_V.resize (static_cast<std::size_t> (size));
-            ar (cereal::binary_data (payload_V.data (), size));
-        }
-    }
 };
 
 // defining a number of alarm codes
