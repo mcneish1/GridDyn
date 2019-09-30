@@ -94,12 +94,6 @@ griddyn_format_interpreter_lib = library('griddyn_format_interpreter', [
     include_directories : griddyn_format_interpreter_inc)
 griddyn_format_interpreter_dep = declare_dependency(link_with : griddyn_format_interpreter_lib, include_directories : griddyn_format_interpreter_inc)
 
-griddyn_plugin_inc = include_directories('include/plugins')
-griddyn_plugin_lib = library('griddyn_plugin',
-    'src/plugins/gridDynPlugins.cpp',
-    include_directories : griddyn_plugin_inc)
-griddyn_plugin_dep = declare_dependency(link_with : griddyn_plugin_lib, include_directories : griddyn_plugin_inc)
-
 griddyn_core_lib = library('griddyn_core', [
         'src/core/coreExceptions.cpp',
         'src/core/coreObject.cpp',
