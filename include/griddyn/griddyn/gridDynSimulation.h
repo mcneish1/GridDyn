@@ -308,12 +308,6 @@ class gridDynSimulation : public gridSimulation
       coreTime tStart = negTime);  // code can detect this default param and use a previously specified start time
     void alert (coreObject *object, int code) override;
 
-    /** @brief function to count the number of MPI objects required for this simulation
-    @param[in] printInfo if set to true the information is printed to the console
-    @return the number of MPI objects
-    */
-    int countMpiObjects (bool printInfo = false) const;
-
     /** @brief get the number of non-zeros in the most recent Jacobian calculation
     @param[in] sMode the solverMode to get the number of non-zeros for
     @return the number of non-zero elements in the Jacobian

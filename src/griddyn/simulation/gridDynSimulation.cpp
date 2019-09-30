@@ -14,7 +14,6 @@
 #include "griddyn/events/Event.h"
 #include "griddyn/events/eventQueue.h"
 #include "griddyn/gridBus.h"
-#include "griddyn/loads/gridLabDLoad.h"
 
 #include "griddyn/events/parameterOperator.h"
 #include "griddyn/solvers/solverInterface.h"
@@ -35,12 +34,9 @@
 
 namespace griddyn
 {
-static typeFactory<gridDynSimulation> gf ("simulation", stringVec{"GridDyn", "gridlab", "gridlabd"}, "GridDyn");
+static typeFactory<gridDynSimulation> gf ("simulation", stringVec{"GridDyn"}, "GridDyn");
 
 std::atomic<gridDynSimulation *> gridDynSimulation::s_instance{nullptr};
-
-// local search functions for MPI based objects
-count_t searchForGridlabDobject (const coreObject *obj);
 
 gridDynSimulation::gridDynSimulation (const std::string &objName) : gridSimulation (objName), controlFlags (0ll)
 {
@@ -1433,17 +1429,6 @@ int gridDynSimulation::makeReady (gridState_t desiredState, const solverMode &sM
     return retval;
 }
 
-int gridDynSimulation::countMpiObjects (bool printInfo) const
-{
-    int gridlabdObjects = searchForGridlabDobject (this);
-    // print out the gridlabd objects
-    if (printInfo)
-    {
-        std::cout << "NumberOfGridLABDInstances = " << gridlabdObjects << '\n';
-    }
-    return gridlabdObjects;
-}
-
 void gridDynSimulation::setMaxNonZeros (const solverMode &sMode, count_t nonZeros)
 {
     getSolverInterface (sMode)->setMaxNonZeros (nonZeros);
@@ -1914,55 +1899,6 @@ bool gridDynSimulation::checkEventsForDynamicReset (coreTime cTime, const solver
         }
     }
     return false;
-}
-
-count_t searchForGridlabDobject (const coreObject *obj)
-{
-    count_t cnt = 0;
-    auto bus = dynamic_cast<const gridBus *> (obj);
-    if (bus != nullptr)
-    {
-        index_t kk = 0;
-        coreObject *obj2 = bus->getLoad (kk);
-        while (obj2 != nullptr)
-        {
-            auto gLd = dynamic_cast<const loads::gridLabDLoad *> (obj2);
-            if (gLd != nullptr)
-            {
-                cnt += gLd->mpiCount ();
-            }
-            ++kk;
-            obj2 = bus->getLoad (kk);
-        }
-        return cnt;
-    }
-    auto area = dynamic_cast<const Area *> (obj);
-    if (area != nullptr)
-    {
-        index_t kk = 0;
-        bus = area->getBus (kk);
-        while (bus != nullptr)
-        {
-            cnt += searchForGridlabDobject (bus);
-            ++kk;
-            bus = area->getBus (kk);
-        }
-        kk = 0;
-        Area *a2 = area->getArea (kk);
-        while (a2 != nullptr)
-        {
-            cnt += searchForGridlabDobject (a2);
-            ++kk;
-            a2 = area->getArea (kk);
-        }
-        return cnt;
-    }
-    auto gLd = dynamic_cast<const loads::gridLabDLoad *> (obj);
-    if (gLd != nullptr)
-    {
-        cnt += gLd->mpiCount ();
-    }
-    return cnt;
 }
 
 bool gridDynSimulation::hasConstraints () const
