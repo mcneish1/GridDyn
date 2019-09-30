@@ -28,7 +28,6 @@ griddyn_config_inc = include_directories('.')
 
 boost_dep = dependency('boost', modules : [
         'system',
-        'program_options',
         'unit_test_framework',
         'stacktrace_backtrace',
     ])
@@ -36,7 +35,6 @@ cc = meson.get_compiler('c')
 dl_lib = cc.find_library('dl')
 fs_lib = cc.find_library('stdc++fs')
 threads_dep = dependency('threads')
-mpi_dep = dependency('mpi', language: 'cpp')
 
 griddyn_core_inc = include_directories('include/core')
 griddyn_utility_inc = include_directories('include/utilities')
@@ -49,7 +47,6 @@ griddyn_utility_lib = library('griddyn_utility', [
         'src/utilities/stringOps.cpp',
         'src/utilities/string_viewOps.cpp',
         'src/utilities/ThreePhaseFunctions.cpp',
-        'src/utilities/matrixOps.cpp',
         'src/utilities/stringConversion.cpp',
         'src/utilities/units.cpp',
         'src/utilities/vectorOps.cpp',
