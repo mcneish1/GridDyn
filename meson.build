@@ -28,9 +28,7 @@ griddyn_config_inc = include_directories('.')
 
 boost_dep = dependency('boost', modules : [
         'system',
-        'filesystem',
         'program_options',
-        'thread',
         'unit_test_framework',
         'stacktrace_backtrace',
     ])
@@ -43,7 +41,6 @@ mpi_dep = dependency('mpi', language: 'cpp')
 griddyn_core_inc = include_directories('include/core')
 griddyn_utility_inc = include_directories('include/utilities')
 griddyn_inc = include_directories('include/griddyn')
-griddyn_optimization_inc = include_directories('include/optimization')
 subdir('src/property')
 
 griddyn_utility_lib = library('griddyn_utility', [
@@ -124,15 +121,6 @@ griddyn_core_dep = declare_dependency(
     include_directories : griddyn_core_inc,
     dependencies : griddyn_utility_dep)
 
-griddyn_coupling_inc = include_directories('include/coupling')
-griddyn_coupling_lib = library('griddyn_coupling', [
-        'src/coupling/GhostSwingBusManager.cpp',
-        'src/coupling/MpiService.cpp',
-    ],
-    dependencies : [ mpi_dep ],
-    include_directories : griddyn_coupling_inc)
-griddyn_coupling_dep = declare_dependency(link_with : griddyn_coupling_lib, include_directories : griddyn_coupling_inc)
-
 griddyn_lib = library('griddyn', [
         'src/griddyn/loads/fileLoad.cpp',
         'src/griddyn/loads/motorLoad5.cpp',
@@ -147,7 +135,6 @@ griddyn_lib = library('griddyn', [
         'src/griddyn/loads/Load.cpp',
         'src/griddyn/loads/rampLoad.cpp',
         'src/griddyn/loads/ThreePhaseLoad.cpp',
-        'src/griddyn/loads/gridLabDLoad.cpp',
         'src/griddyn/loads/motorLoad.cpp',
         'src/griddyn/loads/zipLoad.cpp',
         'src/griddyn/blocks/functionBlock.cpp',
@@ -300,7 +287,6 @@ griddyn_lib = library('griddyn', [
     dependencies : [
         griddyn_core_dep,
         griddyn_utility_dep,
-        griddyn_coupling_dep,
         cereal_dep,
         ticpp_dep,
         sundials_dep,
@@ -358,148 +344,6 @@ griddyn_file_input_lib = library('griddyn_file_input',
         fs_lib,
     ])
 griddyn_file_input_dep = declare_dependency(link_with : griddyn_file_input_lib, include_directories : griddyn_file_input_inc)
-
-griddyn_runner_inc = include_directories('include/runner')
-griddyn_runner_lib = library('griddyn_runner',
-    'src/runner/gridDynRunner.cpp',
-    dependencies : [
-        griddyn_file_input_dep,
-        griddyn_utility_dep,
-        griddyn_dep,
-        griddyn_core_dep,
-        griddyn_coupling_dep,
-        griddyn_file_input_dep,
-        boost_dep,
-    ],
-    include_directories : griddyn_runner_inc)
-griddyn_runner_dep = declare_dependency(link_with : griddyn_runner_lib, include_directories : griddyn_runner_inc)
-
-griddyn_loader_inc = include_directories('include/gridDynLoader')
-griddyn_loader_lib = library('griddyn_loader',
-    'src/gridDynLoader/libraryLoader.cpp',
-    include_directories : griddyn_loader_inc)
-griddyn_loader_dep = declare_dependency(link_with : griddyn_loader_lib, include_directories : griddyn_loader_inc)
-
-library('griddyn_optimization', [
-        'src/optimization/optimizerInterface.cpp',
-        'src/optimization/optHelperClasses.cpp',
-        'src/optimization/gridOptObjects.cpp',
-        'src/optimization/optObjectFactory.cpp',
-        'src/optimization/models/gridBusOpt.cpp',
-        'src/optimization/models/gridAreaOpt.cpp',
-        'src/optimization/models/gridLoadOpt.cpp',
-        'src/optimization/models/gridRelayOpt.cpp',
-        'src/optimization/models/gridLinkOpt.cpp',
-        'src/optimization/models/gridGenOpt.cpp',
-        'src/optimization/gridDynOpt.cpp',
-        griddyn_optimization_gen,
-    ],
-    dependencies : [
-        griddyn_core_dep,
-        griddyn_dep,
-    ],
-    include_directories : griddyn_optimization_inc)
-
-library('griddyn_model', [
-        'src/extraModels/txLifeSpan.cpp',
-        'src/extraModels/extraModels.cpp',
-        'src/extraModels/txThermalModel.cpp',
-    ],
-    dependencies : [
-        griddyn_dep,
-        griddyn_core_dep,
-    ])
-
-if false
-library('griddyn_solver', [
-        'src/extraSolvers/paradae/common/def.cxx',
-        'src/extraSolvers/paradae/common/MapParam.cxx',
-        'src/extraSolvers/paradae/common/Timer.cxx',
-        'src/extraSolvers/paradae/timeintegrators/FE_ExpTrap_12.cxx',
-        'src/extraSolvers/paradae/timeintegrators/Gauss4.cxx',
-        'src/extraSolvers/paradae/timeintegrators/BogaSham_23.cxx',
-        'src/extraSolvers/paradae/timeintegrators/RungeKutta_SDIRK.cxx',
-        'src/extraSolvers/paradae/timeintegrators/RungeKutta.cxx',
-        'src/extraSolvers/paradae/timeintegrators/Radau3.cxx',
-        'src/extraSolvers/paradae/timeintegrators/Kutta4.cxx',
-        'src/extraSolvers/paradae/timeintegrators/ImpMidPoint.cxx',
-        'src/extraSolvers/paradae/timeintegrators/ExpMidPoint.cxx',
-        'src/extraSolvers/paradae/timeintegrators/BackwardEuler.cxx',
-        'src/extraSolvers/paradae/timeintegrators/ImpVarUnk_12.cxx',
-        'src/extraSolvers/paradae/timeintegrators/BackwardDiff.cxx',
-        'src/extraSolvers/paradae/timeintegrators/Cash_24.cxx',
-        'src/extraSolvers/paradae/timeintegrators/Fudziah_45.cxx',
-        'src/extraSolvers/paradae/timeintegrators/RungeKutta_Explicit.cxx',
-        'src/extraSolvers/paradae/timeintegrators/DormPrince_45.cxx',
-        'src/extraSolvers/paradae/timeintegrators/SDIRK_12.cxx',
-        'src/extraSolvers/paradae/timeintegrators/Billington_23.cxx',
-        'src/extraSolvers/paradae/timeintegrators/ExpTrapezoidal.cxx',
-        'src/extraSolvers/paradae/timeintegrators/ForwardEuler.cxx',
-        'src/extraSolvers/paradae/timeintegrators/ImpTrapezoidal.cxx',
-        'src/extraSolvers/paradae/timeintegrators/Kutta3.cxx',
-        'src/extraSolvers/paradae/timeintegrators/Gauss6.cxx',
-        'src/extraSolvers/paradae/timeintegrators/TimeIntegrator.cxx',
-        'src/extraSolvers/paradae/timeintegrators/RungeKutta_Implicit.cxx',
-        'src/extraSolvers/paradae/timeintegrators/RungeKutta_DIRK.cxx',
-        'src/extraSolvers/paradae/timeintegrators/Cash_34.cxx',
-        'src/extraSolvers/paradae/timeintegrators/Ralston.cxx',
-        'src/extraSolvers/paradae/problems/ODEProblem.cxx',
-        'src/extraSolvers/paradae/math/SparseMatrix.cxx',
-        'src/extraSolvers/paradae/math/Vector.cxx',
-        'src/extraSolvers/paradae/math/SMultiVector.cxx',
-        'src/extraSolvers/paradae/math/IVander.cxx',
-        'src/extraSolvers/paradae/math/DBlockTriMatrix.cxx',
-        'src/extraSolvers/paradae/math/IVanderExt.cxx',
-        'src/extraSolvers/paradae/math/DenseMatrix.cxx',
-        'src/extraSolvers/paradae/math/PVector.cxx',
-        'src/extraSolvers/paradae/math/IPoly.cxx',
-        'src/extraSolvers/paradae/math/PMultiVector.cxx',
-        'src/extraSolvers/paradae/math/SBlockTriMatrix.cxx',
-        'src/extraSolvers/paradae/math/SVector.cxx',
-        'src/extraSolvers/paradae/math/paradaeArrayData.cxx',
-        'src/extraSolvers/paradae/math/VirtualMatrix.cxx',
-        'src/extraSolvers/paradae/equations/EqGridDyn.cxx',
-        'src/extraSolvers/paradae/equations/Equation.cxx',
-        'src/extraSolvers/paradae/equations/Equation_ODE.cxx',
-        'src/extraSolvers/paradae/solvers/NewtonStats.cxx',
-        'src/extraSolvers/paradae/solvers/Newton.cxx',
-        'src/extraSolvers/paradae/solvers/LineSearch.cxx',
-        'src/extraSolvers/paradae/solvers/Solver.cxx',
-        'src/extraSolvers/braid/braid_driver.cxx',
-        'src/extraSolvers/braid/braidSolver.cpp',
-        'src/extraSolvers/extraSolvers.cpp',
-    ],
-    dependencies : [
-        griddyn_core_dep,
-        griddyn_dep,
-    ])
-endif
-
-griddyn_shared_inc = include_directories('include/griddyn_shared')
-griddyn_shared_lib = library('griddyn_shared', [
-        'src/griddyn_shared/griddyn_exportEvents.cpp',
-        'src/griddyn_shared/griddyn_exportMathFunctions.cpp',
-        'src/griddyn_shared/griddyn_exportObjectMathFunctions.cpp',
-        'src/griddyn_shared/griddyn_exportObjects.cpp',
-        'src/griddyn_shared/griddyn_exportQueries.cpp',
-        'src/griddyn_shared/griddyn_exportSimulation.cpp',
-    ],
-    include_directories : griddyn_shared_inc,
-    dependencies : [
-        griddyn_core_dep,
-        griddyn_dep,
-        griddyn_file_input_dep,
-        griddyn_runner_dep,
-    ])
-griddyn_shared_dep = declare_dependency(link_with : griddyn_shared_lib, include_directories : griddyn_shared_inc)
-
-executable('griddyn', 'src/gridDynMain/gridDynMain.cpp',
-    dependencies : [
-        griddyn_dep,
-        griddyn_core_dep,
-        griddyn_runner_dep,
-        griddyn_loader_dep,
-    ])
 
 subdir('plugins')
 

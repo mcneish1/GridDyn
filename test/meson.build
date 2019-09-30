@@ -8,7 +8,6 @@ library_tests = [
     #1 'testOperatingBounds',
     #1 'testXML',
     #1 'testElementReaders',
-    #1 'testGridDynRunner',
     #1 'testCore',
     #1 'testMatrixData',
     #1 'simpleQueueTests',
@@ -46,7 +45,6 @@ component_tests = [
     #3 'testdcLinks',
     #3 'testExtraModels',
     #1 'testRecorders',
-    #1 'testGridLab',
     #1 'testGovernors',
     #3 'testGenerators',
     #1 'testLoads',
@@ -65,16 +63,11 @@ extra_tests = [
     #4 'largeContingencyTests',
 ]
 
-shared_library_tests = [
-    #1 'basic_tests',
-]
-
 folder_map = [
     [library_tests, 'libraryTests'],
     [system_tests, 'systemTests'],
     [component_tests, 'componentTests'],
     [extra_tests, 'extraTests'],
-    [shared_library_tests, 'testSharedLibrary'],
 ]
 
 foreach test_name_folder_name : folder_map
@@ -95,14 +88,10 @@ foreach test_name_folder_name : folder_map
             dependencies : [
                 griddyn_utility_dep,
                 griddyn_core_dep,
-                griddyn_runner_dep,
                 griddyn_dep,
                 griddyn_file_input_dep,
                 griddyn_format_interpreter_dep,
                 boost_dep,
-                griddyn_loader_dep,
-                griddyn_coupling_dep,
-                griddyn_shared_dep,
                 cereal_dep,
                 minizip_dep,
             ])
