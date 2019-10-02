@@ -12,15 +12,19 @@
 
 #pragma once
 
-#include "core/coreObject.h"
 #include "core/helperObject.h"
 
 #include "core/objectOperatorInterface.hpp"
 #include "eventInterface.hpp"
 #include "utilities/units.h"
 
+#include <memory>
+
 namespace griddyn
 {
+
+class coreObject;
+
 /** helper data class for holding information about an event during construction
  */
 class EventInfo

@@ -14,6 +14,7 @@
 
 #include "commMessage.h"
 
+#include <cereal/types/polymorphic.hpp>
 #include <cereal/types/vector.hpp>
 
 #define BASE_SCHEDULER_MESSAGE_NUMBER 800

@@ -14,6 +14,7 @@
 
 #include "utilities/stringConversion.h"
 
+#include "core/coreDefinitions.hpp"
 #include "core/objectInterpreter.h"
 #include "utilities/functionInterpreter.h"
 #include <cmath>

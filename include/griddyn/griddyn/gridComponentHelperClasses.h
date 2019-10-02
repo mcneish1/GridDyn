@@ -464,8 +464,6 @@ class stateData
 const stateData emptyStateData{};
 
 #define DEFAULT_OFFSET_CONTAINER_SIZE 5
-class gridComponent;
-
 
 }  // namespace griddyn
 #define ALGEBRAIC_VARIABLE (0.0)

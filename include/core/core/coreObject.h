@@ -14,12 +14,13 @@
 
 #include "coreDefinitions.hpp"
 #include "utilities/units.h"
-
+#include "utilities/indexTypes.hpp"
 #include "coreObjectComponents.hpp"
 
 // common libraries in all code
 // library for printf debug statements
 
+#include <string>
 #include <atomic>
 #include <memory>
 

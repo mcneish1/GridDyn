@@ -16,13 +16,11 @@
 
 namespace griddyn
 {
-// forward classes
-class gridDynSimulation;
+
 class Relay;
 class Link;
 class gridBus;
 class Generator;
-class Source;
 class coreObjectList;
 class listMaintainer;
 

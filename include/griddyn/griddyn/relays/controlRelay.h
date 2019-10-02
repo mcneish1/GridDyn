@@ -12,7 +12,6 @@
 
 #pragma once
 
-#include "griddyn/Link.h"  //some special features for links
 #include "griddyn/Relay.h"
 #include <unordered_map>
 
@@ -26,7 +25,6 @@ class controlMessagePayload;
 
 class gridSimulation;
 class functionEventAdapter;
-class gridGrabber;
 
 enum class change_code;
 namespace relays

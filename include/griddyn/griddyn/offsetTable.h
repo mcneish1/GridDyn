@@ -18,6 +18,8 @@
 namespace griddyn
 {
 
+class gridComponent;
+
 /**
  * @brief Helper class encapsulating offsets for the various solution solverMode types
  **/

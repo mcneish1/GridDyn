@@ -13,7 +13,6 @@
 #pragma once
 
 #include "subsystem.h"
-#include "acLine.h"
 
 namespace griddyn
 {

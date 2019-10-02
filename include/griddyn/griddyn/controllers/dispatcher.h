@@ -12,12 +12,13 @@
 
 #pragma once
 
-#include "griddyn/gridSubModel.h"
+#include "core/coreObject.h"
+
 #include <vector>
 
 namespace griddyn
 {
-class Area;
+
 class scheduler;
 
 class dispatcher : public coreObject

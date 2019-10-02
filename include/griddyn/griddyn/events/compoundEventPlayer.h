@@ -11,8 +11,6 @@
  */
 
 #pragma once
-// headers
-//#include "gridDynSimulation.h"
 
 #include "compoundEvent.h"
 #include "utilities/timeSeriesMulti.hpp"

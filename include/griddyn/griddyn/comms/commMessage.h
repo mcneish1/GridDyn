@@ -12,7 +12,6 @@
 
 #pragma once
 
-#include "griddyn/gridDynDefinitions.hpp"
 #include <cstddef>
 #include <cstdint>
 #include <memory>
@@ -20,11 +19,6 @@
 #include <type_traits>
 #include <unordered_map>
 #include <vector>
-
-#include <cereal/archives/portable_binary.hpp>
-#include <cereal/types/polymorphic.hpp>
-#include <cereal/types/vector.hpp>
-//#include <cereal/archives/json.hpp>
 
 namespace griddyn
 {

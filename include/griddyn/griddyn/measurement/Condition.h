@@ -12,13 +12,19 @@
 
 #pragma once
 
-#include "griddyn/gridComponent.h"
+#include "utilities/indexTypes.hpp"
 #include "core/objectOperatorInterface.hpp"
+
 #include <functional>
+#include <memory>
 
 namespace griddyn
 {
+
+class solverMode;
+class stateData;
 class grabberSet;
+
 /** enumeration of the available comparison types*/
 enum class comparison_type
 {

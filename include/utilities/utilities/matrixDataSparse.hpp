@@ -14,9 +14,7 @@
 
 #include "matrixData.hpp"
 #include "matrixDataOrdering.hpp"
-#include <algorithm>
-#include <cassert>
-#include <cmath>
+
 #include <vector>
 
 /**

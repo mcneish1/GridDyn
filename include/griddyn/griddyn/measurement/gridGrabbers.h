@@ -12,7 +12,7 @@
 
 #pragma once
 
-#include "griddyn/gridDynDefinitions.hpp"
+#include "core/coreDefinitions.hpp"
 #include "core/objectOperatorInterface.hpp"
 #include "utilities/units.h"
 #include <functional>
@@ -20,7 +20,6 @@
 
 namespace griddyn
 {
-class gridCore;
 
 // TODO:: PT make more of the parameters protected
 /* class that grabs data from another object directly

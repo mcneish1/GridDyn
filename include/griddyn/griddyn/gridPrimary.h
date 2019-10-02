@@ -20,6 +20,7 @@ class gridBus;
 class Area;
 class Link;
 class Relay;
+class violation;
 
 // these next two enumerations are used throughout the code base so I wouldn't recommend changing them if you want
 // the code to work properly making it adaptive would require a lot changes to const strings and arrays so isn't

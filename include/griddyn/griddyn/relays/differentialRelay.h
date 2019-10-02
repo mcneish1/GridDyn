@@ -13,7 +13,7 @@
 #pragma once
 
 #include "griddyn/Relay.h"
-#include "griddyn/comms/commMessage.h"
+
 namespace griddyn
 {
 namespace relays

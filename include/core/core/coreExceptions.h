@@ -12,12 +12,15 @@
 
 #pragma once
 
-#include "core/coreObject.h"
 #include <exception>
 #include <stdexcept>
+#include <string>
 
 namespace griddyn
 {
+
+class coreObject;
+
 /** exception class for use in griddyn*/
 class coreObjectException : public std::exception
 {

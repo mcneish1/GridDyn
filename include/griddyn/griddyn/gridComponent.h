@@ -17,8 +17,6 @@
 
 #include "griddynComponents.hpp"
 
-#include <bitset>
-
 template <class Y>
 class matrixData;
 
@@ -26,8 +24,6 @@ class matrixData;
 namespace griddyn
 {
 // forward declare the template class matrixData
-
-class violation;
 
 /** @brief base object for gridDynSimulations
  * the basic object for creating a power system encapsulating some common functions and data that is needed by all

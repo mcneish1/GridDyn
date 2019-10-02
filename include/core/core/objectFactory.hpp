@@ -12,14 +12,18 @@
 
 #pragma once
 
-#include "core/coreObject.h"
+#include "core/coreDefinitions.hpp"
+#include "utilities/indexTypes.hpp"
+
+#include <string>
 #include <map>
 #include <memory>
-#include <type_traits>
-#include <vector>
 
 namespace griddyn
 {
+
+class coreObject;
+
 /** @brief class definitions for the object factories that can create the objects
  cFactory is a virtual base class for object Construction functions
 */

@@ -12,10 +12,11 @@
 
 #pragma once
 
+#include "griddyn/gridDynDefinitions.hpp"
+#include "griddyn/solvers/solverMode.hpp"
+
 #include <functional>
 #include <vector>
-
-#include "griddyn/gridComponentHelperClasses.h"
 
 template <class Y>
 class matrixData;

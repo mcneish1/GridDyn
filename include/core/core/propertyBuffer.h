@@ -12,8 +12,8 @@
 
 #pragma once
 
-#include "core/coreOwningPtr.hpp"
 #include "utilities/units.h"
+
 #include <variant>
 #include <string>
 #include <utility>
@@ -21,7 +21,12 @@
 
 namespace griddyn
 {
+
+template<typename T>
+class coreOwningPtr;
+
 class coreObject;
+
 /** define a variant type for the different types of properties that may be set*/
 using property_type = std::variant<double, std::pair<double, gridUnits::units_t>, int, bool, std::string>;
 

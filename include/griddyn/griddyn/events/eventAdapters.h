@@ -13,8 +13,6 @@
 #pragma once
 
 #include "core/coreObject.h"
-
-#include "griddyn/gridDynDefinitions.hpp"
 #include "core/objectInterpreter.h"
 #include "core/objectOperatorInterface.hpp"
 #include "griddyn/events/eventInterface.hpp"
@@ -272,8 +270,6 @@ class eventTypeAdapter<std::shared_ptr<Y>> : public eventAdapter
     virtual void initialize () override { m_eventObj->initialize (); }
     virtual int eventCode () const override { return m_eventObj->eventCode (); }
 };
-
-class coreObject;
 
 template <>
 class eventTypeAdapter<coreObject> : public eventAdapter

@@ -16,7 +16,7 @@
 
 namespace griddyn
 {
-class gridBus;
+
 class Block;
 
 /** @brief class defining some additional components for a variable generator such as a renewable source like wind

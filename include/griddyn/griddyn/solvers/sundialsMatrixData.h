@@ -11,11 +11,12 @@
  */
 
 #pragma once
-#include "sunmatrix/sunmatrix_dense.h"
-#include "sunmatrix/sunmatrix_sparse.h"
+
+// #include "sunmatrix/sunmatrix_dense.h"
+#include "sundials/sundials_matrix.h"
 #include "utilities/matrixData.hpp"
-#include "utilities/matrixDataOrdering.hpp"
-#include <cstdio>
+// #include "utilities/matrixDataOrdering.hpp"
+
 #include <memory>
 
 namespace griddyn

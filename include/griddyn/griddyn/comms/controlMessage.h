@@ -12,10 +12,10 @@
 
 #pragma once
 
+#include "core/coreDefinitions.hpp"
 #include "griddyn/comms/commMessage.h"
 
-#include <cereal/types/string.hpp>
-#include <cereal/types/vector.hpp>
+#include <cereal/types/polymorphic.hpp>
 
 #define BASE_CONTROL_MESSAGE_NUMBER 500
 

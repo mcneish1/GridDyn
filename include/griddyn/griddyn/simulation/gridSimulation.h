@@ -13,19 +13,16 @@
 
 // header files
 #include "griddyn/Area.h"
-#include "griddyn-config.h"
+// #include "griddyn-config.h"
 #include <functional>
 
 namespace utilities
 {
-class Logger;
 class LoggerNoThread;
 }  // namespace utilities
 
 namespace griddyn
 {
-class Link;
-class gridBus;
 
 #define SINGLE (1)
 #define MULTICORE (2)
@@ -40,7 +37,6 @@ class gridBus;
 
 class collector;
 class Event;
-class Relay;
 class eventQueue;
 class eventAdapter;
 class functionEventAdapter;

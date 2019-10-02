@@ -17,6 +17,7 @@
 
 namespace griddyn
 {
+class Recorder;
 class gridDynSimulation;
 
 class parameterSequence

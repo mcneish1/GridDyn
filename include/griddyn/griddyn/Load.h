@@ -16,7 +16,6 @@
 
 namespace griddyn
 {
-class gridBus;
 
 /** primary load class defines the load component is a very simple constant power load
  */

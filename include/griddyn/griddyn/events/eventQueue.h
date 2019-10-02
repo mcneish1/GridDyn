@@ -15,8 +15,8 @@
 #include "eventAdapters.h"
 
 #include <algorithm>
-#include <cstdint>
 #include <mutex>
+
 namespace griddyn
 {
 class coreObject;

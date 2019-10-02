@@ -16,20 +16,19 @@ define some functions and operations for configuring file reader operations and 
 
 #pragma once
 
-#include "griddyn/gridDynDefinitions.hpp"
 #include "readerInfo.h"
+
+#include <memory>
+#include <string>
 
 namespace griddyn
 {
 
 struct file_input_throw_if_null {};
 
-class Event;
-class Recorder;
-
 class coreObject;
-
 class gridDynSimulation;
+class gridParameter;
 
 #define READER_VERBOSE_PRINT 3
 #define READER_NORMAL_PRINT 2

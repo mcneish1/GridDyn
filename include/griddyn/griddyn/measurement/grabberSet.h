@@ -12,22 +12,17 @@
 
 #pragma once
 
-#include "griddyn/gridDynDefinitions.hpp"
+#include "core/coreDefinitions.hpp"
 #include "core/objectOperatorInterface.hpp"
+#include "utilities/valuePredictor.hpp"
+
 #include <memory>
 
 template <class Y>
 class matrixData;
 
-namespace utilities
-{
-template <typename X, typename Y, typename Z>
-class valuePredictor;
-}
-
 namespace griddyn
 {
-class gridCore;
 class stateGrabber;
 class gridGrabber;
 class stateData;

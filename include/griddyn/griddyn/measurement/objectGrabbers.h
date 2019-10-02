@@ -13,13 +13,11 @@
 #pragma once
 
 #include "griddyn/solvers/solverMode.hpp"
-#include "core/coreExceptions.h"
 #include "core/objectInterpreter.h"
 #include "gridGrabbers.h"
 
 namespace griddyn
 {
-class gridSubModel;
 class gridComponent;
 class gridBus;
 class Load;

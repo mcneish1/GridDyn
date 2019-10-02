@@ -12,11 +12,15 @@
 
 #pragma once
 
-#include "core/coreObject.h"
+#include <string>
+
 #include "utilities/units.h"
 
 namespace griddyn
 {
+
+class coreObject;
+
 /** @brief class for constructing some info about an object
  generally used for interpreting an object string with object and field references and possibly units as well
 */

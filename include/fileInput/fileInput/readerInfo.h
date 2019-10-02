@@ -15,13 +15,13 @@
 // forward declarations
 class readerElement;
 
-class gridGrabberInfo;
+// class gridGrabberInfo;
 
-#include "gridParameter.h"
+// #include "gridParameter.h"
 
 #include <cstdint>
-#include <list>
-#include <map>
+// #include <list>
+// #include <map>
 #include <memory>
 #include <string>
 #include <tuple>
@@ -31,6 +31,7 @@ class gridGrabberInfo;
 
 namespace griddyn
 {
+class gridParameter;
 class collector;
 class Event;
 class coreObject;

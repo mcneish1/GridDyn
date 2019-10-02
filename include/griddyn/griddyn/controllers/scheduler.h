@@ -16,14 +16,14 @@
 #include "griddyn/comms/commManager.h"
 #include "schedulerInfo.h"
 #include <list>
-#include <utility>
 
 namespace griddyn
 {
+
 class AGControl;
-class Generator;
 class Communicator;
 class commMessage;
+
 /** object to manage scheduling for devices
  */
 class scheduler : public Source

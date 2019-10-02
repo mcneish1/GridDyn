@@ -12,18 +12,18 @@
 
 #pragma once
 
-// headers
-//#include "gridDynSimulation.h"
-
-#include "core/coreDefinitions.hpp"
 #include "core/helperObject.h"
-
 #include "core/objectOperatorInterface.hpp"
+#include "utilities/indexTypes.hpp"
+
 #include <memory>
 
 namespace griddyn
 {
+
 class gridComponent;
+class coreObject;
+
 /** a class defining a parameter to change as part of a sequence or other operation
  */
 class parameterOperator : public helperObject, public objectOperatorInterface

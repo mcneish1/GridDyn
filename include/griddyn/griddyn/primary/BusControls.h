@@ -12,7 +12,7 @@
 
 #pragma once
 
-#include "griddyn/gridDynDefinitions.hpp"
+#include "core/coreDefinitions.hpp"
 
 namespace griddyn
 {

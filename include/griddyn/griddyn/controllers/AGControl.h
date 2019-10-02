@@ -17,10 +17,9 @@
 
 namespace griddyn
 {
-class Area;
+
 class schedulerReg;
-class Generator;
-class battery;
+
 namespace blocks
 {
 class pidBlock;

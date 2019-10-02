@@ -11,7 +11,7 @@
  */
 #pragma once
 
-#include "griddyn/gridDynDefinitions.hpp"
+#include "utilities/indexTypes.hpp"
 #include "core/objectOperatorInterface.hpp"
 #include "utilities/workQueue.h"
 #include <future>

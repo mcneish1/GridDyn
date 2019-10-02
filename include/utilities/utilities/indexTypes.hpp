@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include <cstdint>
+#include <cstdint> // IWYU pragma: export
 #include <limits>
 
 #ifdef UNSIGNED_INDEXING

@@ -4,12 +4,6 @@
 #include "utilities/units.h"
 #include <atomic>
 
-using griddyn::coreTime;
-using griddyn::negTime;
-using griddyn::maxTime;
-using griddyn::timeZero;
-using griddyn::id_type_t;
-
 namespace components
 {
 
@@ -28,11 +22,11 @@ struct misc
 
 struct time_range
 {
-    coreTime prevTime = negTime;  //!<[s]the last state time of the object
-    coreTime nextUpdateTime = maxTime;  //!<[s] the next scheduled update
-    coreTime lastUpdateTime = negTime;  //!<[s] the last update time
-    coreTime updatePeriod = maxTime;  //!<[s]the update period
-    coreTime updateDelay = timeZero;  //!<[s]the requested delay between updateA and updateB--requested is key here not guaranteed
+    griddyn::coreTime prevTime = griddyn::negTime;  //!<[s]the last state time of the object
+    griddyn::coreTime nextUpdateTime = griddyn::maxTime;  //!<[s] the next scheduled update
+    griddyn::coreTime lastUpdateTime = griddyn::negTime;  //!<[s] the last update time
+    griddyn::coreTime updatePeriod = griddyn::maxTime;  //!<[s]the update period
+    griddyn::coreTime updateDelay = griddyn::timeZero;  //!<[s]the requested delay between updateA and updateB--requested is key here not guaranteed
 };
 
 struct refcount
@@ -43,7 +37,7 @@ struct refcount
 struct id
 {
     index_t id = 0;  //!< a user defined id for the object
-    id_type_t m_oid;  //!< a unique index for the object
+    griddyn::id_type_t m_oid;  //!< a unique index for the object
     std::string name;  //!< the text name of the object
 };
 

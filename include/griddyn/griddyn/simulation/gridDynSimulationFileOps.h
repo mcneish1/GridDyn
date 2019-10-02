@@ -11,6 +11,7 @@
  */
 #pragma once
 
+#include "core/coreDefinitions.hpp"
 #include "griddyn/solvers/solverMode.hpp"
 
 #include <memory>
@@ -21,7 +22,6 @@ namespace griddyn
 {
 // forward declare the template class matrixData
 
-class solverMode;
 class gridDynSimulation;
 
 /** @brief save the current state to a file

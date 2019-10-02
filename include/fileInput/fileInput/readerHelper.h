@@ -11,9 +11,8 @@
  */
 #pragma once
 
-#include "griddyn/gridDynDefinitions.hpp"
+#include "core/coreDefinitions.hpp"
 #include <iostream>
-#include <stdexcept>
 
 #define READER_DEFAULT_PRINT READER_NO_PRINT
 

@@ -21,6 +21,12 @@
 #include <boost/multi_index/ordered_index.hpp>
 #include <boost/multi_index_container.hpp>
 
+#include <string>
+#include <vector>
+
+#include "core/coreDefinitions.hpp"
+#include "utilities/indexTypes.hpp"
+
 namespace griddyn
 {
 using namespace boost::multi_index;

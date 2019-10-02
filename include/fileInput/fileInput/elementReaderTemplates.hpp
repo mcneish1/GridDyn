@@ -12,6 +12,7 @@
 
 #pragma once
 
+#include "core/coreObject.h"
 #include "core/coreExceptions.h"
 #include "core/objectFactory.hpp"
 #include "core/objectInterpreter.h"

@@ -15,13 +15,12 @@
 @file
 @brief define the simulation object itself and several helper classes and enumerations*/
 
-// header files
 #include "simulation/gridDynActions.h"
 #include "simulation/gridSimulation.h"
-// libraries
 #include "griddyn-config.h"
 #include <functional>
 #include <queue>
+
 namespace griddyn
 {
 #define SINGLE (1)
@@ -30,7 +29,6 @@ namespace griddyn
 
 #define STRINGIFY(x) #x
 
-class contingency;
 class continuationSequence;
 class SolverInterface;
 class parameterSet;
@@ -89,9 +87,6 @@ struct tolerances
     coreTime timeTol = kSmallTime;  //!< the allowable time slop in events.  The time span below which the system
                                     //! doesn't really care about
 };
-
-class Recorder;
-class Event;
 
 #define HANDLER_NO_RETURN (-500)
 

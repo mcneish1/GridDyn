@@ -17,7 +17,6 @@
 
 namespace toml
 {
-class Value;
 struct ParseResult;
 }  // namespace toml
 

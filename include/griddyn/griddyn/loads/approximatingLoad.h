@@ -18,15 +18,6 @@
 
 namespace griddyn
 {
-class GhostSwingBusManager;
-// to set up a dummy load function we need this header file
-#ifndef HAVE_MPI
-// forward declaration of voltage and current messages
-struct Vmessage;
-typedef struct Vmessage VoltageMessage;
-struct Cmessage;
-typedef struct Cmessage CurrentMessage;
-#endif
 
 namespace loads
 {

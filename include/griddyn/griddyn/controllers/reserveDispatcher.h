@@ -12,12 +12,11 @@
 
 #pragma once
 
-#include "griddyn/gridSubModel.h"
-#include "utilities/vectorOps.hpp"
+#include "core/coreObject.h"
 
 namespace griddyn
 {
-class Area;
+
 class schedulerRamp;
 
 /** in development object to manage the dispatch of reserve generation
