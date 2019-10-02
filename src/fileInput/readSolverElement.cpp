@@ -10,7 +10,6 @@
 * LLNS Copyright End
 */
 
-#include "fileInput/elementReaderTemplates.hpp"
 #include "griddyn/gridDynSimulation.h"
 #include "fileInput/fileInput.h"
 #include "fileInput/readElement.h"

@@ -10,14 +10,17 @@
  * LLNS Copyright End
 */
 
+#include "griddyn/GenModel.h"
+#include "griddyn/genmodels/GenModel8.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"
-#include "griddyn/Generator.h"
 #include "griddyn/gridBus.h"
-#include "griddyn/genmodels/otherGenModels.h"
 #include "utilities/matrixData.hpp"
-#include "utilities/vectorOps.hpp"
+#include "griddyn/genmodels/GenModel6type2.h"
+#include "griddyn/genmodels/GenModel5type2.h"
+#include "griddyn/genmodels/GenModelInverter.h"
+
 
 namespace griddyn
 {

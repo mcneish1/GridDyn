@@ -10,14 +10,22 @@
  * LLNS Copyright End
  */
 
-#include "griddyn/blocks/blockLibrary.h"
+#include "griddyn/blocks/controlBlock.h"
+#include "griddyn/blocks/deadbandBlock.h"
+#include "griddyn/blocks/delayBlock.h"
+#include "griddyn/blocks/derivativeBlock.h"
+#include "griddyn/blocks/filteredDerivativeBlock.h"
+#include "griddyn/blocks/functionBlock.h"
+#include "griddyn/blocks/integralBlock.h"
+#include "griddyn/blocks/lutBlock.h"
+#include "griddyn/blocks/pidBlock.h"
+
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"
 #include "griddyn/blocks/rampLimiter.h"
 #include "utilities/matrixData.hpp"
 #include "utilities/stringOps.h"
 #include "utilities/string_viewConversion.h"
-#include "utilities/vectorOps.hpp"
 #include "griddyn/blocks/valueLimiter.h"
 
 namespace griddyn

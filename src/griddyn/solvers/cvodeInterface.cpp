@@ -11,12 +11,8 @@
  */
 
 #include "griddyn/solvers/cvodeInterface.h"
-
-#include "core/coreExceptions.h"
-
 #include "griddyn/gridDynSimulation.h"
 #include "griddyn/simulation/gridDynSimulationFileOps.h"
-#include "utilities/stringOps.h"
 #include "utilities/vectorOps.hpp"
 
 #include <cvode/cvode.h>

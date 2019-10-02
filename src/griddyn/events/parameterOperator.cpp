@@ -14,6 +14,7 @@
 #include "griddyn/gridComponent.h"
 #include "core/objectInterpreter.h"
 #include "utilities/string_viewOps.h"
+#include "core/coreObject.h"
 
 namespace griddyn
 {

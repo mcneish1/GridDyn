@@ -13,8 +13,7 @@
 #include "formatInterpreters/tomlReaderElement.h"
 #include "formatInterpreters/tomlElement.h"
 #include "utilities/stringConversion.h"
-#include <cassert>
-#include <fstream>
+
 #include <iostream>
 
 static const std::string nullStr{};

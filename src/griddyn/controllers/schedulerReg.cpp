@@ -15,8 +15,6 @@
 #include "core/coreObjectTemplates.hpp"
 #include "griddyn/controllers/scheduler.h"
 
-#include <cstdio>
-
 namespace griddyn
 {
 schedulerReg::schedulerReg (const std::string &objName)

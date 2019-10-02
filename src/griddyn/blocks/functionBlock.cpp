@@ -15,7 +15,6 @@
 #include "utilities/functionInterpreter.h"
 #include "utilities/matrixData.hpp"
 #include "utilities/stringOps.h"
-#include "utilities/vectorOps.hpp"
 
 namespace griddyn
 {

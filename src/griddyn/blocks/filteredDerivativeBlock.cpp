@@ -13,7 +13,6 @@
 #include "griddyn/blocks/filteredDerivativeBlock.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
-#include "core/objectFactory.hpp"
 #include "utilities/matrixData.hpp"
 
 #include <algorithm>

@@ -14,12 +14,10 @@
 #include "griddyn/gridBus.h"
 #include "griddyn/measurement/objectGrabbers.h"
 #include "core/coreExceptions.h"
-#include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"
 #include "core/objectInterpreter.h"
 #include "utilities/OperatingBoundary.h"
 #include "utilities/matrixData.hpp"
-#include "utilities/stringOps.h"
 #include "utilities/vectorOps.hpp"
 #include "griddyn/generators/variableGenerator.h"
 

@@ -12,10 +12,7 @@
 
 #include "griddyn/loads/fileLoad.h"
 #include "core/coreObjectTemplates.hpp"
-#include "griddyn/gridBus.h"
 #include "utilities/stringOps.h"
-
-#include "utilities/vectorOps.hpp"
 
 namespace griddyn
 {

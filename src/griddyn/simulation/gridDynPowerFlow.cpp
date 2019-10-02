@@ -10,21 +10,17 @@
  * LLNS Copyright End
 */
 
-#include "griddyn/events/Event.h"
 #include "griddyn/gridDynSimulation.h"
-
 #include "griddyn/simulation/continuation.h"
 #include "griddyn/events/eventQueue.h"
 #include "griddyn/gridBus.h"
 #include "griddyn/simulation/gridDynSimulationFileOps.h"
 #include "griddyn/simulation/powerFlowErrorRecovery.h"
-#include "griddyn/simulation/diagnostics.h"
 #include "griddyn/solvers/solverInterface.h"
 #include "utilities/vectorOps.hpp"
-// system headers
+
 #include <cmath>
 #include <cstdio>
-#include <iostream>
 
 namespace griddyn
 {

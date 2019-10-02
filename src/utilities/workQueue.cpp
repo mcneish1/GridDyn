@@ -12,7 +12,6 @@
 
 #include "utilities/workQueue.h"
 #include "griddyn-config.h"
-#include <iostream>
 
 // static definitions in workQueue class
 std::shared_ptr<workQueue> workQueue::pInstance;

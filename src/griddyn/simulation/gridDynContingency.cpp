@@ -17,9 +17,7 @@
 #include "griddyn/gridBus.h"
 #include "griddyn/simulation/gridDynSimulationFileOps.h"
 #include "griddyn/gridDynSimulation.h"
-#include "griddyn/loads/zipLoad.h"
-#include "griddyn/simulation/diagnostics.h"
-#include "utilities/vectorOps.hpp"
+#include "griddyn/Load.h"
 #include "utilities/workQueue.h"
 
 namespace griddyn

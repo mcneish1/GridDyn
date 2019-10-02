@@ -14,8 +14,9 @@
 #include "core/coreObjectTemplates.hpp"
 #include "griddyn/gridBus.h"
 #include "utilities/matrixData.hpp"
-#include "utilities/stringOps.h"
+
 #include <cmath>
+
 namespace griddyn
 {
 namespace loads

@@ -11,7 +11,6 @@
 */
 
 #include "griddyn/simulation/faultResetRecovery.h"
-#include "griddyn/simulation/diagnostics.h"
 #include "griddyn/gridDynSimulation.h"
 #include "griddyn/solvers/solverInterface.h"
 

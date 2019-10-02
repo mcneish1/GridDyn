@@ -15,11 +15,8 @@
 #include "griddyn/measurement/objectGrabbers.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
-#include "utilities/matrixData.hpp"
 
 #include <cmath>
-#include <complex>
-#include <iostream>
 
 namespace griddyn
 {

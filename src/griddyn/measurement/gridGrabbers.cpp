@@ -17,15 +17,11 @@
 #include "griddyn/Load.h"
 #include "griddyn/Relay.h"
 #include "core/coreExceptions.h"
-
 #include "griddyn/gridBus.h"
 #include "griddyn/gridSubModel.h"
-#include "griddyn/relays/sensor.h"
-#include "griddyn/simulation/gridSimulation.h"
-#include "griddyn/measurement/grabberInterpreter.hpp"
 #include "griddyn/measurement/objectGrabbers.h"
 #include "utilities/functionInterpreter.h"
-#include "utilities/vectorOps.hpp"
+
 #include <algorithm>
 #include <cmath>
 #include <map>

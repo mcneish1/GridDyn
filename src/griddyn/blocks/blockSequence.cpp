@@ -13,9 +13,6 @@
 #include "griddyn/blocks/blockSequence.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
-#include "utilities/matrixData.hpp"
-#include "utilities/stringConversion.h"
-#include "utilities/vectorOps.hpp"
 
 namespace griddyn
 {

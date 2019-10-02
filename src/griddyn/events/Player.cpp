@@ -12,9 +12,10 @@
 
 #include "griddyn/events/Player.h"
 
-#include "core/coreExceptions.h"
-#include "core/objectInterpreter.h"
-#include "utilities/stringOps.h"
+#include "core/coreObject.h"
+#include "utilities/timeRepresentation.hpp"
+#include "utilities/units.h"
+
 #include <sstream>
 
 namespace griddyn

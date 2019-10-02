@@ -15,8 +15,6 @@
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/gridRandom.h"
 #include "utilities/stringOps.h"
-#include <cassert>
-#include <iostream>
 
 namespace griddyn
 {

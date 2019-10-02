@@ -31,12 +31,10 @@
 #include "utilities/matrixDataSparse.hpp"
 #include "utilities/stringOps.h"
 #include "utilities/units.h"
-#include "utilities/vectorOps.hpp"
-#include <filesystem>
 
-#include <cmath>
-#include <cstdio>
 #include <fstream>
+#include <filesystem>
+#include <cstdio>
 
 namespace griddyn
 {

@@ -16,14 +16,13 @@
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectInterpreter.h"
-#include "griddyn-config.h"
+#include "compiler-config.h"
 #include "utilities/matrixData.hpp"
 #include "utilities/matrixDataTranslate.hpp"
 #include "utilities/stringOps.h"
 #include "utilities/vectorOps.hpp"
 #include <cassert>
 #include <cmath>
-#include <iostream>
 
 /*
 enum control_mode_t{ manual_control=0, voltage_control=1, MW_control=2, MVar_control=3};

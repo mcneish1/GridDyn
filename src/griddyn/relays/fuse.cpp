@@ -10,10 +10,10 @@
  * LLNS Copyright End
  */
 
+#include "griddyn/events/eventAdapters.h"
 #include "griddyn/relays/fuse.h"
 #include "griddyn/Link.h"
 #include "griddyn/events/Event.h"
-#include "griddyn/events/eventQueue.h"
 #include "griddyn/gridBus.h"
 #include "griddyn/gridSecondary.h"
 #include "griddyn/measurement/Condition.h"
@@ -25,6 +25,7 @@
 #include "utilities/matrixDataSparse.hpp"
 
 #include <cmath>
+#include <cassert>
 
 namespace griddyn
 {

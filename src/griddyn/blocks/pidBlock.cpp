@@ -13,7 +13,7 @@
 #include "griddyn/blocks/pidBlock.h"
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/matrixData.hpp"
-#include "utilities/vectorOps.hpp"
+
 namespace griddyn
 {
 namespace blocks

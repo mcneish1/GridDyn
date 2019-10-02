@@ -14,11 +14,8 @@
 #include "griddyn/exciters/ExciterIEEEtype2.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"
-#include "griddyn/Generator.h"
-#include "griddyn/gridBus.h"
+#include "griddyn/gridPrimary.h"
 #include "utilities/matrixData.hpp"
-
-#include <cmath>
 
 // note that there is only 1 dynamic state since V_R = E_f
 

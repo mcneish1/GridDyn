@@ -11,8 +11,14 @@
  */
 
 #include "core/objectFactory.hpp"
+
+#include <utility>
+
 namespace griddyn
 {
+
+class coreObject;
+
 objectFactory::objectFactory (const std::string & /*component*/, std::string typeName)
     : name (std::move (typeName))
 {

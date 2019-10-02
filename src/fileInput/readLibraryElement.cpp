@@ -10,32 +10,33 @@
  * LLNS Copyright End
  */
 
+#include "fileInput/readerInfo.h"
+#include "core/coreObject.h"
 #include "fileInput/elementReaderTemplates.hpp"
 #include "fileInput/fileInput.h"
 #include "formatInterpreters/readerElement.h"
 #include "fileInput/readElement.h"
 #include "fileInput/readerHelper.h"
-
-#include <cassert>
-#include <functional>
-#include <map>
-
-// A bunch of includes to load these kinds of objects
-#include "griddyn/Area.h"
 #include "griddyn/Block.h"
 #include "griddyn/Exciter.h"
 #include "griddyn/GenModel.h"
 #include "griddyn/Generator.h"
 #include "griddyn/Governor.h"
-#include "griddyn/Link.h"
-#include "griddyn/Relay.h"
 #include "griddyn/Source.h"
 #include "griddyn/Stabilizer.h"
 #include "griddyn/controllers/AGControl.h"
 #include "griddyn/controllers/reserveDispatcher.h"
 #include "griddyn/controllers/scheduler.h"
+#include "griddyn/Load.h"
+#include "griddyn/Area.h"
+#include "griddyn/Link.h"
+#include "griddyn/Relay.h"
 #include "griddyn/gridBus.h"
-#include "griddyn/loads/zipLoad.h"
+#include "fileInput/gridParameter.h"
+
+#include <cassert>
+#include <functional>
+#include <map>
 
 namespace griddyn
 {

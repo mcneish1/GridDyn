@@ -10,12 +10,11 @@
  * LLNS Copyright End
 */
 
-#include "fileInput/elementReaderTemplates.hpp"
 #include "fileInput/fileInput.h"
 #include "fileInput/readElement.h"
 #include "fileInput/readerHelper.h"
-
 #include "utilities/stringConversion.h"
+
 #include <numeric>
 
 namespace griddyn

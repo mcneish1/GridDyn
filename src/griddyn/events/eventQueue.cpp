@@ -11,12 +11,8 @@
  */
 
 #include "griddyn/events/eventQueue.h"
-
-#include "griddyn/events/Event.h"
-
 #include "core/coreExceptions.h"
 #include "core/coreObject.h"
-#include "griddyn/measurement/collector.h"
 
 #include <typeinfo>
 

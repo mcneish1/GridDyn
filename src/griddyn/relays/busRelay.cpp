@@ -13,7 +13,6 @@
 #include "griddyn/relays/busRelay.h"
 #include "core/coreObjectTemplates.hpp"
 #include "griddyn/events/Event.h"
-#include "griddyn/events/eventQueue.h"
 #include "griddyn/measurement/Condition.h"
 
 namespace griddyn

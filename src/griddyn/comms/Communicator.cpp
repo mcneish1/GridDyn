@@ -9,7 +9,6 @@
  * For details, see the LICENSE file.
  * LLNS Copyright End
 */
-#include "griddyn-config.h"
 
 #include "griddyn/comms/Communicator.h"
 

@@ -19,7 +19,6 @@
 #include "griddyn/measurement/gridGrabbers.h"
 #include "griddyn/measurement/objectGrabbers.h"
 #include "griddyn/simulation/gridSimulation.h"
-#include "utilities/vectorOps.hpp"
 
 namespace griddyn
 {

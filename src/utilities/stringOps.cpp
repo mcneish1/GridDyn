@@ -12,22 +12,13 @@
 
 #include "utilities/stringOps.h"
 #include "generic_string_ops.hpp"
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-//#pragma GCC diagnostic warning "-w"
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/trim.hpp>
-#pragma GCC diagnostic pop
-#else
-#include <boost/algorithm/string/split.hpp>
-#include <boost/algorithm/string/trim.hpp>
-#endif
 
 #include <algorithm>
 #include <cctype>
-#include <cmath>
+
 #include <fstream>
-#include <iomanip>
 
 #ifndef TRIM
 #define TRIM(X) boost::algorithm::trim (X)

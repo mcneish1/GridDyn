@@ -10,9 +10,8 @@
  * LLNS Copyright End
  */
 
+#include "sunmatrix/sunmatrix_dense.h"
 #include "griddyn/solvers/sundialsMatrixData.h"
-#include <algorithm>
-#include <cstring>
 
 namespace griddyn
 {

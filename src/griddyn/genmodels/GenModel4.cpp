@@ -12,11 +12,10 @@
 
 #include "griddyn/genmodels/GenModel4.h"
 #include "core/coreObjectTemplates.hpp"
-#include "griddyn/gridBus.h"
 #include "utilities/matrixData.hpp"
 #include "utilities/vectorOps.hpp"
+#include "griddyn/gridPrimary.h"
 
-#include <cmath>
 namespace griddyn
 {
 namespace genmodels

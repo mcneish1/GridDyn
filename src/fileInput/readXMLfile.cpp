@@ -10,17 +10,12 @@
 * LLNS Copyright End
 */
 
-#include "fileInput/elementReaderTemplates.hpp"
+#include "core/coreExceptions.h"
 #include "formatInterpreters/tinyxml2ReaderElement.h"
 #include "formatInterpreters/tinyxmlReaderElement.h"
 #include "griddyn/gridDynSimulation.h"
-#include "fileInput/readElement.h"
 #include "fileInput/readElementFile.h"
-#include "fileInput/readerHelper.h"
 
-#include <cstdio>
-#include <sstream>
-#include <utility>
 #include <filesystem>
 
 namespace griddyn

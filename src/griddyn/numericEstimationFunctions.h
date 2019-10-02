@@ -13,6 +13,9 @@
 #pragma once
 
 #include "griddyn/gridDynDefinitions.hpp"
+#include "utilities/indexTypes.hpp"
+
+#include <vector>
 
 template <class X>
 class matrixData;

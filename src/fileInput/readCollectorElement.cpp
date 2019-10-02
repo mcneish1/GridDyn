@@ -9,12 +9,12 @@
  * For details, see the LICENSE file.
  * LLNS Copyright End
 */
-#include "core/factoryTemplates.hpp"
-#include "fileInput/elementReaderTemplates.hpp"
+
+#include "formatInterpreters/readerElement.h"
+#include "core/coreObject.h"
 #include "fileInput/fileInput.h"
 #include "fileInput/readElement.h"
 #include "fileInput/readerHelper.h"
-
 #include "core/objectInterpreter.h"
 #include "griddyn/measurement/collector.h"
 

@@ -11,11 +11,8 @@
 */
 
 #include "core/objectInterpreter.h"
-#include "formatInterpreters/readerElement.h"
 #include "fileInput/fileInput.h"
 #include "fileInput/readElement.h"
-#include "fileInput/readerHelper.h"
-#include "utilities/stringOps.h"
 
 namespace griddyn
 {

@@ -12,7 +12,6 @@
 #include "utilities/OperatingBoundary.h"
 
 #include <algorithm>
-#include <cmath>
 #include <stdexcept>
 
 namespace utilities

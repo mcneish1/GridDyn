@@ -11,6 +11,12 @@
  */
 
 #include "core/coreObjectList.h"
+
+#include <boost/multi_index/detail/bidir_node_iterator.hpp>
+#include <boost/operators.hpp>
+
+#include <utility>
+
 namespace griddyn
 {
 bool coreObjectList::insert (coreObject *obj, bool replace)

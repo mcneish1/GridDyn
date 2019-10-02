@@ -15,8 +15,6 @@
 #include "core/objectFactoryTemplates.hpp"
 #include "utilities/stringConversion.h"
 
-#include <cmath>
-
 namespace griddyn
 {
 namespace loads

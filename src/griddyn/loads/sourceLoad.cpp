@@ -9,13 +9,15 @@
  * For details, see the LICENSE file.
  * LLNS Copyright End
  */
+
+#include "griddyn/sources/sineSource.h"
+#include "griddyn/sources/randomSource.h"
+#include "griddyn/sources/pulseSource.h"
 #include "griddyn/loads/sourceLoad.h"
 #include "griddyn/Source.h"
-#include "griddyn/sources/sourceTypes.h"
-
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
-#include <cmath>
+
 #include <map>
 
 namespace griddyn

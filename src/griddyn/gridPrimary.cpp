@@ -12,11 +12,7 @@
 
 #include "griddyn/gridPrimary.h"
 #include "core/coreObjectTemplates.hpp"
-#include <cstdio>
-#include <iostream>
 
-#include <algorithm>
-#include <map>
 
 namespace griddyn
 {

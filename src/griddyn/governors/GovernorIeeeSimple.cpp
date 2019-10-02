@@ -11,10 +11,7 @@
  */
 
 #include "griddyn/governors/GovernorIeeeSimple.h"
-#include "griddyn/Generator.h"
-#include "griddyn/gridBus.h"
 #include "core/coreObjectTemplates.hpp"
-#include "core/objectFactory.hpp"
 #include "utilities/matrixData.hpp"
 
 namespace griddyn

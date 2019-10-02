@@ -21,7 +21,6 @@
 #include "core/objectFactoryTemplates.hpp"
 #include "core/objectInterpreter.h"
 #include "griddyn/links/dcLink.h"
-#include "utilities/matrixDataCompact.hpp"
 #include "utilities/stringOps.h"
 #include "utilities/vectorOps.hpp"
 

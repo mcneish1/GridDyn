@@ -13,7 +13,7 @@
 #include "formatInterpreters/iniReaderElement.h"
 #include "inih/INIReader.h"
 #include "utilities/stringConversion.h"
-#include <cassert>
+
 #include <fstream>
 #include <iostream>
 

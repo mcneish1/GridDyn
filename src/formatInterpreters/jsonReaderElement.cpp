@@ -13,10 +13,10 @@
 #include "formatInterpreters/jsonReaderElement.h"
 #include "formatInterpreters/jsonElement.h"
 #include "utilities/stringConversion.h"
-#include <cassert>
+
 #include <fstream>
 #include <iostream>
-// default initialized empty string
+
 static const std::string nullStr;
 
 bool isElement (const Json_gd::Value &testValue);

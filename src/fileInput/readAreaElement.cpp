@@ -14,7 +14,6 @@
 #include "griddyn/Area.h"
 #include "fileInput/readElement.h"
 #include "fileInput/readerHelper.h"
-#include <cstdio>
 
 namespace griddyn
 {

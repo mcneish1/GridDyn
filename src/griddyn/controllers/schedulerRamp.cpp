@@ -11,12 +11,9 @@
  */
 
 #include "griddyn/comms/schedulerMessage.h"
-#include "griddyn/controllers/AGControl.h"
 #include "core/coreObjectTemplates.hpp"
-#include "griddyn/controllers/reserveDispatcher.h"
 #include "griddyn/controllers/scheduler.h"
 #include "utilities/stringOps.h"
-#include "utilities/timeSeries.hpp"
 
 namespace griddyn
 {

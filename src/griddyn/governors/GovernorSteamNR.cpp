@@ -12,7 +12,6 @@
 
 #include "griddyn/governors/GovernorSteamNR.h"
 #include "griddyn/Generator.h"
-#include "griddyn/gridBus.h"
 #include "utilities/matrixData.hpp"
 
 namespace griddyn

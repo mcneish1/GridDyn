@@ -10,9 +10,7 @@
  * LLNS Copyright End
 */
 
-// headers
 #include "griddyn/primary/infiniteBus.h"
-#include "griddyn/Link.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 

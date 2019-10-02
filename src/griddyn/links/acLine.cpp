@@ -12,20 +12,17 @@
 
 // headers
 #include "griddyn/links/acLine.h"
-#include "griddyn/Area.h"
 #include "griddyn/gridBus.h"
 #include "griddyn/simulation/contingency.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"
-#include "core/objectInterpreter.h"
 #include "utilities/matrixDataCompact.hpp"
 #include "utilities/stringOps.h"
 #include "utilities/vectorOps.hpp"
 
 #include <cmath>
-#include <complex>
-#include <cstring>
+
 namespace griddyn
 {
 using namespace gridUnits;

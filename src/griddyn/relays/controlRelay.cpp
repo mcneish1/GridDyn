@@ -11,16 +11,14 @@
  */
 
 #include "griddyn/relays/controlRelay.h"
-#include "core/coreExceptions.h"
-//#include "utilities/timeSeries.hpp"
 #include "griddyn/comms/Communicator.h"
 #include "griddyn/comms/controlMessage.h"
 #include "core/coreObjectTemplates.hpp"
-#include "griddyn/events/Event.h"
-#include "griddyn/events/eventQueue.h"
 #include "griddyn/measurement/gridGrabbers.h"
 #include "griddyn/simulation/gridSimulation.h"
 #include "utilities/stringOps.h"
+#include "griddyn/events/eventAdapters.h"
+#include "griddyn/Link.h"
 
 namespace griddyn
 {

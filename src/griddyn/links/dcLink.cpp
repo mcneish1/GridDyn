@@ -11,15 +11,12 @@
 */
 
 #include "griddyn/links/dcLink.h"
-#include "griddyn/Area.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "griddyn/gridBus.h"
 #include "griddyn/primary/dcBus.h"
-#include "utilities/vectorOps.hpp"
 
 #include <cmath>
-#include <cstring>
 
 namespace griddyn
 {

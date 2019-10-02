@@ -10,7 +10,6 @@
 * LLNS Copyright End
 */
 #include "griddyn/comms/controlMessage.h"
-#include "griddyn/gridDynDefinitions.hpp"
 #include "utilities/stringConversion.h"
 
 namespace griddyn

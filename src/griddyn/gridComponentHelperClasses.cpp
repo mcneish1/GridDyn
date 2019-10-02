@@ -11,8 +11,6 @@
 */
 
 #include "griddyn/gridComponentHelperClasses.h"
-#include "griddyn/gridComponent.h"
-#include <cstring>
 
 namespace griddyn
 {

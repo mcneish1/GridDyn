@@ -10,7 +10,8 @@
  * LLNS Copyright End
  */
 
-#include "fileInput/fileInput.h"
+#include "core/coreObject.h"
+#include "griddyn/simulation/gridSimulation.h"
 #include "griddyn/Governor.h"
 #include "griddyn/Link.h"
 #include "griddyn/events/Event.h"
@@ -18,7 +19,6 @@
 #include "griddyn/generators/DynamicGenerator.h"
 #include "griddyn/genmodels/GenModel4.h"
 #include "griddyn/gridBus.h"
-#include "griddyn/gridDynSimulation.h"
 #include "griddyn/loads/zipLoad.h"
 #include "fileInput/readerHelper.h"
 #include "utilities/string_viewConversion.h"

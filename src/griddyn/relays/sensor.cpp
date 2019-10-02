@@ -12,10 +12,9 @@
 
 #include "griddyn/relays/sensor.h"
 #include "griddyn/Block.h"
-#include "griddyn/Link.h"  //some special features for links
+#include "griddyn/Link.h"
 #include "griddyn/comms/Communicator.h"
 #include "griddyn/comms/controlMessage.h"
-#include "griddyn/events/Event.h"
 #include "griddyn/measurement/Condition.h"
 #include "griddyn/measurement/grabberSet.h"
 #include "core/coreExceptions.h"
@@ -23,7 +22,9 @@
 #include "utilities/matrixDataSparse.hpp"
 #include "utilities/matrixDataTranslate.hpp"
 #include "utilities/stringConversion.h"
-#include "utilities/timeSeries.hpp"
+#include "utilities/vectorOps.hpp"
+
+#include <cassert>
 
 namespace griddyn
 {

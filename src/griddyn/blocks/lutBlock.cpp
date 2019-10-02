@@ -15,7 +15,7 @@
 #include "utilities/matrixData.hpp"
 #include "utilities/stringConversion.h"
 #include "utilities/timeSeries.hpp"
-#include "utilities/vectorOps.hpp"
+
 #include <utility>
 
 namespace griddyn

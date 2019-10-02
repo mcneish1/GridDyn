@@ -16,18 +16,13 @@
 #include "utilities/vectorOps.hpp"
 
 #include "griddyn/simulation/gridDynSimulationFileOps.h"
-#include "griddyn/solvers/sundialsMatrixData.h"
-#include "utilities/matrixCreation.h"
-#include "utilities/matrixDataFilter.hpp"
 #include <ida/ida.h>
 #include <ida/ida_direct.h>
-#include <sundials/sundials_math.h>
 
 #ifdef ENABLE_KLU
 #include <sunlinsol/sunlinsol_klu.h>
 #endif
 
-#include <algorithm>
 #include <cassert>
 #include <cstdio>
 #include <map>

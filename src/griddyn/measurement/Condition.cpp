@@ -10,10 +10,11 @@
  * LLNS Copyright End
 */
 
+#include "utilities/stringOps.h"
 #include "griddyn/measurement/Condition.h"
-#include "griddyn/measurement/grabberInterpreter.hpp"
 #include "griddyn/measurement/grabberSet.h"
 #include "utilities/mapOps.hpp"
+#include "core/coreObject.h"
 
 namespace griddyn
 {

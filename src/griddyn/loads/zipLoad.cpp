@@ -26,7 +26,6 @@
 
 #include <cmath>
 #include <complex>
-#include <iostream>
 
 namespace griddyn
 {

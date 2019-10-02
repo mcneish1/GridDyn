@@ -11,11 +11,8 @@
  */
 
 #include "griddyn/Stabilizer.h"
-#include "griddyn/Generator.h"
-#include "griddyn/gridBus.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"
-#include <cmath>
 
 namespace griddyn
 {

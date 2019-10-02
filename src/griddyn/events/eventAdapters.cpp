@@ -12,11 +12,6 @@
 
 #include "griddyn/events/eventAdapters.h"
 
-#include "griddyn/events/Event.h"
-#include "griddyn/Relay.h"
-#include "core/coreObject.h"
-
-#include <typeinfo>
 #include <cmath>
 
 namespace griddyn

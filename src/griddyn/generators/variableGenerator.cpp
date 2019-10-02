@@ -14,7 +14,6 @@
 #include "griddyn/Block.h"
 #include "griddyn/Source.h"
 #include "core/coreObjectTemplates.hpp"
-#include "griddyn/gridBus.h"
 
 namespace griddyn
 {

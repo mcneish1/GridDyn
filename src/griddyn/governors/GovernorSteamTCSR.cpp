@@ -11,9 +11,9 @@
  */
 
 #include "griddyn/governors/GovernorSteamTCSR.h"
-#include "griddyn/Generator.h"
-#include "griddyn/gridBus.h"
+#include "griddyn/gridPrimary.h"
 #include "utilities/matrixData.hpp"
+
 namespace griddyn
 {
 namespace governors

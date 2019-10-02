@@ -17,7 +17,6 @@
 #include "griddyn/links/adjustableTransformer.h"
 #include "griddyn/loads/zipLoad.h"
 #include "griddyn/primary/acBus.h"
-#include "fileInput/readerHelper.h"
 #include "utilities/stringConversion.h"
 
 #include <cstdlib>

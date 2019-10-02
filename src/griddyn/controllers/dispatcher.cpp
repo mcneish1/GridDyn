@@ -15,6 +15,7 @@
 
 namespace griddyn
 {
+
 dispatcher::dispatcher (const std::string &objName) : coreObject (objName) {}
 
 dispatcher::~dispatcher () = default;

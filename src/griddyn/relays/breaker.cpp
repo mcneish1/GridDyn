@@ -24,6 +24,7 @@
 #include "utilities/matrixDataSparse.hpp"
 
 #include <cmath>
+#include <cassert>
 
 namespace griddyn
 {

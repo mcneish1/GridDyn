@@ -16,12 +16,14 @@
 #include "formatInterpreters/readerElement.h"
 #include "griddyn/measurement/collector.h"
 #include "fileInput/readerHelper.h"
+#include "fileInput/gridParameter.h"
 
 #include <boost/date_time.hpp>
 #include <boost/date_time/gregorian/gregorian.hpp>
-#include <filesystem>
 
+#include <filesystem>
 #include <cmath>
+
 namespace griddyn
 {
 using namespace readerConfig;

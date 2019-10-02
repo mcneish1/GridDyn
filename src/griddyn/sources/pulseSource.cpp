@@ -13,7 +13,7 @@
 #include "griddyn/sources/pulseSource.h"
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/stringOps.h"
-#include "utilities/vectorOps.hpp"
+
 #include <cmath>
 
 namespace griddyn

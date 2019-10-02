@@ -29,8 +29,6 @@
 
 #include <cassert>
 #include <cmath>
-#include <iostream>
-#include <memory>
 
 namespace griddyn
 {

@@ -11,12 +11,8 @@
  */
 
 #include "griddyn/solvers/arkodeInterface.h"
-
-#include "core/coreExceptions.h"
-
 #include "griddyn/gridDynSimulation.h"
 #include "griddyn/simulation/gridDynSimulationFileOps.h"
-#include "utilities/stringOps.h"
 #include "utilities/vectorOps.hpp"
 
 #include <arkode/arkode.h>

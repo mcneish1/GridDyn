@@ -11,14 +11,13 @@
  */
 
 #include "fileInput/readerHelper.h"
-#include "fileInput/fileInput.h"
-
-// library for printf debug statements
+#include "fileInput/readerInfo.h"
+#include "fileInput/gridParameter.h"
 
 #include <cmath>
+
 namespace griddyn
 {
-using namespace readerConfig;
 
 void paramStringProcess (gridParameter &param, readerInfo &ri)
 {

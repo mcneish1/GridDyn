@@ -10,12 +10,13 @@
  * LLNS Copyright End
  */
 
+#include "core/coreObject.h"
 #include "core/objectInterpreter.h"
-#include "fileInput/fileInput.h"
 #include "utilities/functionInterpreter.h"
 #include "utilities/stringConversion.h"
 #include "utilities/string_viewConversion.h"
-#include <cctype>
+#include "fileInput/readerInfo.h"
+
 #include <cmath>
 
 namespace griddyn

@@ -11,8 +11,7 @@
 */
 
 #include "griddyn/events/interpolatingPlayer.h"
-#include "core/objectInterpreter.h"
-#include "utilities/stringOps.h"
+#include "core/coreObject.h"
 
 #include "core/coreExceptions.h"
 #include <sstream>

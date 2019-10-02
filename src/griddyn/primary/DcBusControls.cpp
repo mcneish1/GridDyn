@@ -10,7 +10,6 @@
 * LLNS Copyright End
 */
 
-#include "griddyn/primary/BusControls.h"
 #include "griddyn/primary/dcBus.h"
 #include "griddyn/gridSecondary.h"
 #include "griddyn/links/dcLink.h"

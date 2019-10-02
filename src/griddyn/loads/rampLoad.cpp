@@ -13,10 +13,7 @@
 #include "griddyn/loads/rampLoad.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
-#include "griddyn/gridBus.h"
-#include "utilities/vectorOps.hpp"
 
-//#include <ctime>
 namespace griddyn
 {
 namespace loads

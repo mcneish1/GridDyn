@@ -11,8 +11,8 @@
  */
 
 #include "griddyn/events/Event.h"
+#include "core/coreObject.h"
 
-#include "griddyn/gridDynSimulation.h"
 #include "core/coreExceptions.h"
 #include "core/factoryTemplates.hpp"
 #include "core/objectInterpreter.h"

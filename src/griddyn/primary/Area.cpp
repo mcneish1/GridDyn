@@ -15,7 +15,6 @@
 #include "griddyn/Link.h"
 #include "griddyn/Relay.h"
 #include "griddyn/gridBus.h"
-#include "griddyn/gridDynSimulation.h"
 #include "griddyn/measurement/objectGrabbers.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectList.h"

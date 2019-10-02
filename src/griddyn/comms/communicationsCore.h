@@ -10,11 +10,10 @@
  * LLNS Copyright End
 */
 
-#ifndef GRIDDYN_COMMUNICATIONS_CORE_
-#define GRIDDYN_COMMUNICATIONS_CORE_
 #pragma once
 
-#include "griddyn/gridDynDefinitions.hpp"
+#include "core/coreDefinitions.hpp"
+
 #include <memory>
 #include <unordered_map>
 #include <cstdint>
@@ -81,4 +80,3 @@ private:
   coreTime m_time=timeZero; //!< current time of the communicator
 };
 }//namespace griddyn
-#endif

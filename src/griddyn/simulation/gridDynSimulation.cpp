@@ -11,10 +11,8 @@
  */
 
 #include "griddyn/gridDynSimulation.h"
-#include "griddyn/events/Event.h"
 #include "griddyn/events/eventQueue.h"
 #include "griddyn/gridBus.h"
-
 #include "griddyn/events/parameterOperator.h"
 #include "griddyn/solvers/solverInterface.h"
 #include "griddyn/simulation/contingency.h"
@@ -23,9 +21,9 @@
 #include "core/objectFactoryTemplates.hpp"
 #include "core/objectInterpreter.h"
 #include "griddyn/simulation/gridDynSimulationFileOps.h"
-#include "utilities/mapOps.hpp"
 #include "utilities/matrixData.hpp"
 #include "utilities/stringOps.h"
+
 #include <cassert>
 #include <cstdio>
 #include <fstream>

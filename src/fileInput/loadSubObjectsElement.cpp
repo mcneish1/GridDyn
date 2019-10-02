@@ -13,9 +13,7 @@
 #include "fileInput/elementReaderTemplates.hpp"
 #include "fileInput/fileInput.h"
 #include "fileInput/readElement.h"
-#include <cstdio>
 #include <functional>
-#include <iterator>
 #include <map>
 
 // A bunch of includes to load these kinds of objects
@@ -23,13 +21,12 @@
 #include "griddyn/controllers/reserveDispatcher.h"
 #include "griddyn/controllers/scheduler.h"
 #include "griddyn/Generator.h"
+#include "griddyn/Load.h"
 #include "griddyn/Area.h"
 #include "griddyn/gridBus.h"
 #include "griddyn/Link.h"
-#include "griddyn/loads/zipLoad.h"
 #include "griddyn/Relay.h"
 #include "griddyn/Source.h"
-#include "griddyn/Block.h"
 #include "griddyn/Exciter.h"
 #include "griddyn/Governor.h"
 #include "griddyn/GenModel.h"

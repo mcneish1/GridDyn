@@ -16,8 +16,16 @@
 #include "utilities/dataDictionary.h"
 #include "utilities/stringOps.h"
 #include "utilities/string_viewOps.h"
+#include <memory>
+#include <string_view>
+#include <unordered_map>
+#include <utility>
+#include <vector>
+#include "core/coreDefinitions.hpp"
+#include "core/coreObjectComponents.hpp"
+#include "utilities/timeRepresentation.hpp"
+
 #include <cassert>
-#include <cmath>
 
 namespace griddyn
 {

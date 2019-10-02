@@ -13,6 +13,9 @@
 #pragma once
 
 #include "core/coreObject.h"
+#include "core/coreDefinitions.hpp"
+#include "utilities/indexTypes.hpp"
+#include <string>
 
 namespace griddyn
 {

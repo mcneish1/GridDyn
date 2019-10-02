@@ -28,12 +28,11 @@
 #include "core/factoryTemplates.hpp"
 
 #include "griddyn/gridDynSimulation.h"
-#include "griddyn/simulation/diagnostics.h"
 #include "griddyn/simulation/gridDynSimulationFileOps.h"
 #include "griddyn/solvers/sundialsMatrixData.h"
 #include "utilities/matrixCreation.h"
 #include "utilities/matrixDataFilter.hpp"
-#include "utilities/stringOps.h"
+
 #include <cassert>
 #include <cstdio>
 

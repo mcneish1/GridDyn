@@ -11,15 +11,12 @@
 */
 
 #include "fileInput/elementReaderTemplates.hpp"
-#include "formatInterpreters/readerElement.h"
 #include "fileInput/fileInput.h"
 #include "fileInput/readElement.h"
 #include "fileInput/readerHelper.h"
-
-#include "core/objectInterpreter.h"
 #include "griddyn/gridBus.h"
 #include "utilities/stringOps.h"
-
+#include "fileInput/gridParameter.h"
 #include "core/objectFactory.hpp"
 
 namespace griddyn

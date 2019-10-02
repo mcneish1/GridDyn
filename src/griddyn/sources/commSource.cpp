@@ -13,10 +13,9 @@
 #include "griddyn/sources/commSource.h"
 #include "griddyn/comms/Communicator.h"
 #include "griddyn/comms/controlMessage.h"
-#include "griddyn/events/eventQueue.h"
-#include "griddyn/gridDynSimulation.h"
 #include "core/coreObjectTemplates.hpp"
-#include <cassert>
+#include "griddyn/simulation/gridSimulation.h"
+#include "griddyn/events/eventAdapters.h"
 
 namespace griddyn
 {

@@ -11,14 +11,14 @@
 */
 
 #include "griddyn/relays/zonalRelay.h"
-#include "griddyn/comms/Communicator.h"
 #include "griddyn/comms/relayMessage.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "griddyn/events/Event.h"
 #include "griddyn/measurement/Condition.h"
 #include "utilities/stringConversion.h"
-#include "utilities/timeSeries.hpp"
+#include "utilities/vectorOps.hpp"
+
 #include <algorithm>
 
 namespace griddyn

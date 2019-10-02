@@ -10,16 +10,10 @@
  * LLNS Copyright End
 */
 
-// headers
 #include "griddyn/links/zBreaker.h"
-#include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "griddyn/gridBus.h"
-#include "utilities/stringOps.h"
-
 #include "core/objectFactoryTemplates.hpp"
-
-#include <cstring>
 
 namespace griddyn
 {

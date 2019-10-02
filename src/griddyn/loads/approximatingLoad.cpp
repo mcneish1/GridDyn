@@ -14,15 +14,10 @@
 #include "griddyn/gridBus.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
-#include "core/objectFactoryTemplates.hpp"
 #include "utilities/stringOps.h"
-#include "utilities/vectorOps.hpp"
 #include "utilities/workQueue.h"
-#include <complex>
 
 #include <cassert>
-#include <cmath>
-#include <iostream>
 
 //#define SGS_DEBUG
 namespace griddyn

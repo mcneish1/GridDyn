@@ -14,9 +14,7 @@
 
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
-#include "core/objectFactory.hpp"
-#include "griddyn/Generator.h"
-#include "griddyn/gridBus.h"
+#include "griddyn/gridPrimary.h"
 #include "utilities/matrixData.hpp"
 
 #include "utilities/vectorOps.hpp"

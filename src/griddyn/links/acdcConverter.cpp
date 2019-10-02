@@ -11,17 +11,15 @@
 */
 
 #include "griddyn/links/acdcConverter.h"
-#include "griddyn/Area.h"
 #include "griddyn/blocks/delayBlock.h"
 #include "griddyn/blocks/pidBlock.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "griddyn/primary/dcBus.h"
 #include "utilities/matrixDataSparse.hpp"
-#include "utilities/vectorOps.hpp"
 
 #include <cmath>
-#include <cstring>
+
 namespace griddyn
 {
 namespace links

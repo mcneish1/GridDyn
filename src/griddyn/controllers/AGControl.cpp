@@ -11,9 +11,12 @@
  */
 
 #include "griddyn/controllers/AGControl.h"
-#include "griddyn/Area.h"
-#include "griddyn/Generator.h"
-#include "griddyn/blocks/blockLibrary.h"
+#include "core/coreObject.h"
+#include "core/coreObjectComponents.hpp"
+#include "griddyn/Block.h"
+#include "griddyn/blocks/deadbandBlock.h"
+#include "griddyn/blocks/delayBlock.h"
+#include "griddyn/blocks/pidBlock.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"
@@ -21,55 +24,6 @@
 
 namespace griddyn
 {
-/*
-class AGControl
-{
-public:
-        char name[32];
-        Area *Parent;
-
-protected:
-        double KI;
-        double KP;
-        double beta;
-        double deadband;
-        double alpha;
-
-        double ACE;
-        double fACE;
-        double reg;
-        double regUpAvailable;
-        double regDownAvailable;
-
-        pidBlock *pid;
-
-        int schedCount;
-
-        std::vector<scheduler *> schedList;
-        double upRat;
-        double downRat;
-
-public:
-        AGControl();
-
-        ~AGControl();
-
-
-        double initialize(coreTime time0,double freq0,double tiedev0);
-
-        double updateP(coreTime time, double freq, double tiedev);
-        double currentValue();
-
-        double addGen(scheduler *sched);
-        void set (const std::string &param, double val,units_t unitType=defUnit);
-        void set (const std::string &param, double val,units_t unitType=defUnit){return set(param,&val,
-unitType);};
-
-        void regChange();
-protected:
-        void checkGen();
-};
-*/
 
 static typeFactory<Block> bbof ("agc", {"basic", "agc"}, "basic");
 

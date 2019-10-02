@@ -10,22 +10,29 @@
  * LLNS Copyright End
 */
 
+#include "core/coreObject.h"
+#include "core/coreDefinitions.hpp"
 #include "core/objectFactory.hpp"
+#include "griddyn/griddynComponents.hpp"
 #include "griddyn/Generator.h"
 #include "griddyn/gridBus.h"
-#include "fileInput/fileInput.h"
 #include "griddyn/Exciter.h"
 #include "griddyn/GenModel.h"
 #include "griddyn/Governor.h"
-
+#include "utilities/stringOps.h"
 #include "utilities/stringConversion.h"
 
-#include <cstdio>
+#include <memory>
+#include <string>
+#include <vector>
 #include <fstream>
 #include <iostream>
 
 namespace griddyn
 {
+
+class basicReaderInfo;
+
 static std::shared_ptr<coreObjectFactory> cof = coreObjectFactory::instance ();
 
 void loadGENROU (coreObject *parentObject, stringVec &tokens);

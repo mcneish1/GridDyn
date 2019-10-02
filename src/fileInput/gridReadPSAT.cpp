@@ -10,10 +10,9 @@
  * LLNS Copyright End
  */
 
-#include "fileInput/fileInput.h"
+#include "fileInput/readerInfo.h"
 #include "griddyn/Generator.h"
 #include "griddyn/events/Event.h"
-#include "griddyn-config.h"
 #include "griddyn/links/acLine.h"
 #include "griddyn/links/adjustableTransformer.h"
 #include "griddyn/loads/motorLoad.h"
@@ -21,7 +20,6 @@
 #include "griddyn/primary/acBus.h"
 #include "griddyn/relays/pmu.h"
 #include "fileInput/readerHelper.h"
-#include "utilities/stringOps.h"
 
 #ifdef ENABLE_OPTIMIZATION_LIBRARY
 #include "optimization/gridDynOpt.h"
@@ -31,12 +29,20 @@
 #endif
 
 #include "griddyn/Exciter.h"
-#include "griddyn/Stabilizer.h"
-#include "griddyn/genmodels/otherGenModels.h"
-#include "griddyn/governors/GovernorTypes.h"
+
+#include "griddyn/GenModel.h"
+#include "griddyn/genmodels/GenModel3.h"
+#include "griddyn/genmodels/GenModel4.h"
+#include "griddyn/genmodels/GenModel5.h"
+#include "griddyn/genmodels/GenModel5type2.h"
+#include "griddyn/genmodels/GenModel5type3.h"
+#include "griddyn/genmodels/GenModel6type2.h"
+#include "griddyn/genmodels/GenModel8.h"
+
+#include "griddyn/Governor.h"
+#include "griddyn/governors/GovernorIeeeSimple.h"
 
 #include <cstdlib>
-#include <fstream>
 #include <iostream>
 
 namespace griddyn

@@ -14,11 +14,8 @@
 
 #include "core/coreObjectTemplates.hpp"
 #include "griddyn/gridBus.h"
-#include "utilities/matrixData.hpp"
 #include "utilities/ThreePhaseFunctions.h"
-#include <cmath>
 #include <complex>
-#include <iostream>
 
 namespace griddyn
 {

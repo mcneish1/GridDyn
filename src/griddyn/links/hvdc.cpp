@@ -10,17 +10,13 @@
  * LLNS Copyright End
 */
 
-// headers
 #include "griddyn/links/hvdc.h"
 #include "griddyn/Link.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"
-#include "griddyn/gridBus.h"
 #include "griddyn/links/acdcConverter.h"
 #include "griddyn/links/dcLink.h"
 #include "griddyn/primary/dcBus.h"
-#include "utilities/stringOps.h"
-#include "utilities/vectorOps.hpp"
 
 namespace griddyn
 {

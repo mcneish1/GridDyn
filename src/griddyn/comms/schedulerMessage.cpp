@@ -11,7 +11,9 @@
  */
 
 #include "griddyn/comms/schedulerMessage.h"
+#include "core/coreDefinitions.hpp"
 #include "utilities/stringConversion.h"
+
 #include <cstring>
 
 namespace griddyn

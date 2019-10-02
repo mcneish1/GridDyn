@@ -11,17 +11,9 @@
  */
 
 #include "griddyn/loads/frequencySensitiveLoad.h"
-
 #include "griddyn/gridBus.h"
-#include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
-#include "core/objectFactoryTemplates.hpp"
 
-#include "utilities/matrixData.hpp"
-
-#include <cmath>
-#include <complex>
-#include <iostream>
 
 namespace griddyn
 {

@@ -11,9 +11,8 @@
 */
 
 #include "griddyn/solvers/basicOdeSolver.h"
-
 #include "griddyn/gridDynSimulation.h"
-#include "utilities/vectorOps.hpp"
+
 #include <algorithm>
 #include <cmath>
 

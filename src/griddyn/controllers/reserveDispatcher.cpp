@@ -11,63 +11,12 @@
  */
 
 #include "griddyn/controllers/reserveDispatcher.h"
-#include "griddyn/Area.h"
-#include "griddyn/Generator.h"
-#include "griddyn/controllers/AGControl.h"
 #include "core/coreExceptions.h"
 #include "griddyn/controllers/scheduler.h"
 
 namespace griddyn
 {
-/*
 
-class reserveDispatcher
-{
-public:
-        std::string name;
-        Area *Parent;
-        bool enabled;
-
-protected:
-        double threshold;
-        double dispatch
-        double reserveAvailable;
-
-        count_t schedCount;
-
-        std::vector<scheduler *> schedList;
-        std::vector<double> resAvailable;
-        std::vector<double> resUsed;
-
-public:
-        reserveDispatcher();
-
-        virtual ~reserveDispatcher();
-
-
-        virtual double initialize(coreTime time0,double dispatchSet);
-
-
-        void setTime(coreTime time);
-        virtual double updateP(coreTime time);
-        virtual double testP(coreTime time);
-        double currentValue(){return dispatch;};
-
-        virtual void addGen(scheduler *sched);
-        virtual void removeSched(scheduler *sched);
-        virtual void set (const std::string &param, double val,units_t unitType=defUnit);
-        virtual void set (const std::string &param, double val,units_t unitType=defUnit){return set(param,&val,
-unitType);};
-
-        double getAvailable(){return sum(&resAvailable)-sum(&resUsed);};
-
-        virtual void schedChange();
-protected:
-        virtual void checkGen();
-};
-
-
-*/
 reserveDispatcher::reserveDispatcher (const std::string &objName) : coreObject (objName) {}
 
 coreObject *reserveDispatcher::clone (coreObject *obj) const
@@ -94,14 +43,7 @@ coreObject *reserveDispatcher::clone (coreObject *obj) const
     return nobj;
 }
 
-reserveDispatcher::~reserveDispatcher ()
-{
-    index_t kk;
-    for (kk = 0; kk < schedCount; kk++)
-    {
-        // schedList[kk]->reserveDispatcherUnlink();
-    }
-}
+reserveDispatcher::~reserveDispatcher () = default;
 
 void reserveDispatcher::moveSchedulers (reserveDispatcher *rD)
 {

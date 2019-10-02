@@ -13,7 +13,12 @@
 #include "griddyn/Source.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"
-#include "griddyn/sources/sourceTypes.h"
+#include "griddyn/sources/fileSource.h"
+#include "griddyn/sources/grabberSource.h"
+#include "griddyn/sources/pulseSource.h"
+#include "griddyn/sources/rampSource.h"
+#include "griddyn/sources/randomSource.h"
+#include "griddyn/sources/sineSource.h"
 
 namespace griddyn
 {

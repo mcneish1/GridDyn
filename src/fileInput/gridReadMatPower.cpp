@@ -10,15 +10,14 @@
  * LLNS Copyright End
 */
 
-#include "griddyn-config.h"
 #include "fileInput/fileInput.h"
 #include "fileInput/readerHelper.h"
 
 #include "core/objectFactoryTemplates.hpp"
 #include "griddyn/Generator.h"
 #include "griddyn/gridBus.h"
-#include "griddyn/links/acLine.h"
-#include "griddyn/loads/zipLoad.h"
+#include "griddyn/Link.h"
+#include "griddyn/Load.h"
 
 #ifdef ENABLE_OPTIMIZATION_LIBRARY
 #include "optimization/gridDynOpt.h"

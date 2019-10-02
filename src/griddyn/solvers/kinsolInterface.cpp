@@ -14,11 +14,7 @@
 
 #include "griddyn/gridDynSimulation.h"
 #include "griddyn/simulation/gridDynSimulationFileOps.h"
-#include "griddyn/solvers/sundialsMatrixData.h"
-//#include "matrixDataBoost.h"
-#include "core/coreExceptions.h"
 
-#include "utilities/matrixCreation.h"
 #include <kinsol/kinsol.h>
 #include <kinsol/kinsol_direct.h>
 #include <sunlinsol/sunlinsol_dense.h>
@@ -32,7 +28,6 @@
 #include <chrono>
 #endif
 
-#include <cassert>
 #include <cstdio>
 #include <map>
 

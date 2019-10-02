@@ -11,8 +11,7 @@
  */
 
 #include "griddyn/governors/GovernorTgov1.h"
-#include "griddyn/Generator.h"
-#include "griddyn/gridBus.h"
+#include "griddyn/gridPrimary.h"
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/matrixData.hpp"
 

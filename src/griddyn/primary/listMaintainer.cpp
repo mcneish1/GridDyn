@@ -11,9 +11,7 @@
 */
 
 #include "griddyn/primary/listMaintainer.h"
-#include "griddyn/Area.h"
-
-#include "griddyn-config.h"
+#include "griddyn/gridPrimary.h"
 
 namespace griddyn
 {

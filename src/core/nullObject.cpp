@@ -9,8 +9,12 @@
  * For details, see the LICENSE file.
  * LLNS Copyright End
  */
+
 #include "nullObject.h"
+#include "core/coreObjectComponents.hpp"
+
 #include <cassert>
+
 namespace griddyn
 {
 nullObject::nullObject (std::uint64_t nullCode) noexcept : coreObject (nullCode)

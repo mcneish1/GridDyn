@@ -9,10 +9,14 @@
  * For details, see the LICENSE file.
  * LLNS Copyright End
  */
-
-#include "griddyn/Generator.h"
-#include "griddyn/gridBus.h"
-#include "griddyn/governors/GovernorTypes.h"
+#include "griddyn/governors/GovernorSteamNR.h"
+#include "griddyn/governors/GovernorSteamTCSR.h"
+#include "griddyn/governors/GovernorTgov1.h"
+#include "griddyn/governors/GovernorReheat.h"
+#include "griddyn/governors/GovernorHydro.h"
+#include "griddyn/Governor.h"
+#include "griddyn/griddynComponents.hpp"
+#include "core/coreObjectComponents.hpp"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"

@@ -12,10 +12,8 @@
 
 #include "griddyn/exciters/ExciterDC2A.h"
 #include "core/coreObjectTemplates.hpp"
-#include "griddyn/Generator.h"
-#include "griddyn/gridBus.h"
+#include "griddyn/gridPrimary.h"
 #include "utilities/matrixData.hpp"
-#include <cmath>
 
 // only differences from dc1a are gains and voltage limit is a function of
 // terminal voltage

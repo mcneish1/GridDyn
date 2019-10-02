@@ -10,10 +10,8 @@
  * LLNS Copyright End
 */
 
-// headers
 #include "griddyn/links/subsystem.h"
 #include "griddyn/Link.h"
-#include "griddyn/Relay.h"
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"

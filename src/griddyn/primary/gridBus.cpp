@@ -23,14 +23,11 @@
 #include "core/coreObjectTemplates.hpp"
 #include "core/objectFactoryTemplates.hpp"
 #include "griddyn/primary/dcBus.h"
-#include "griddyn-config.h"
+#include "compiler-config.h"
 #include "griddyn/primary/infiniteBus.h"
-#include "utilities/stringOps.h"
 #include "utilities/vectorOps.hpp"
 
-#include <cassert>
 #include <cmath>
-#include <iostream>
 
 namespace griddyn
 {

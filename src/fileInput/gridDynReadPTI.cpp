@@ -15,10 +15,8 @@
 #include "fileInput/fileInput.h"
 #include "griddyn/Generator.h"
 #include "griddyn/gridBus.h"
-#include "griddyn/links/acLine.h"
 #include "griddyn/links/adjustableTransformer.h"
-#include "griddyn/loads/zipLoad.h"
-#include "fileInput/readerHelper.h"
+#include "griddyn/Load.h"
 #include "utilities/stringConversion.h"
 
 #include <cstdlib>

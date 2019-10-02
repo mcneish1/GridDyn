@@ -12,12 +12,9 @@
 
 #include "griddyn/genmodels/GenModelInverter.h"
 #include "core/coreExceptions.h"
-#include "griddyn/Generator.h"
-
 #include "core/coreObjectTemplates.hpp"
 #include "griddyn/gridBus.h"
 #include "utilities/matrixData.hpp"
-#include "utilities/vectorOps.hpp"
 
 #include <cmath>
 #include <complex>

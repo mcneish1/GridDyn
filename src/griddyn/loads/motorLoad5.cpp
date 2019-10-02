@@ -13,11 +13,9 @@
 #include "griddyn/loads/motorLoad5.h"
 #include "griddyn/gridBus.h"
 #include "core/coreObjectTemplates.hpp"
-#include "core/objectFactory.hpp"
 #include "utilities/matrixData.hpp"
 #include "utilities/vectorOps.hpp"
 
-#include <iostream>
 namespace griddyn
 {
 namespace loads

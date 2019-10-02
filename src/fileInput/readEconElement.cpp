@@ -10,11 +10,9 @@
  * LLNS Copyright End
 */
 
-#include "core/objectInterpreter.h"
-#include "formatInterpreters/readerElement.h"
-#include "fileInput/fileInput.h"
 #include "fileInput/readElement.h"
-#include "fileInput/readerHelper.h"
+
+#include <memory>
 
 #ifdef ENABLE_OPTIMIZATION_LIBRARY
 #include "optimization/gridDynOpt.h"
@@ -23,11 +21,14 @@
 #include "optimization/optObjectFactory.h"
 #endif
 
-#include "utilities/stringOps.h"
+// #include "utilities/stringOps.h"
 
 namespace griddyn
 {
-using namespace readerConfig;
+
+class coreObject;
+
+// using namespace readerConfig;
 
 static const IgnoreListType econIgnoreElements{"mode", "objecttype", "retype", "parent"};
 

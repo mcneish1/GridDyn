@@ -14,6 +14,7 @@
 #include "core/coreExceptions.h"
 #include "core/coreObjectTemplates.hpp"
 #include "griddyn/primary/acBus.h"
+#include "griddyn/links/acLine.h"
 
 #include <cmath>
 

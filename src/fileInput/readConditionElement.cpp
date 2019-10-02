@@ -10,11 +10,12 @@
  * LLNS Copyright End
  */
 
+#include "utilities/stringOps.h"
+#include "core/objectInterpreter.h"
 #include "fileInput/readElement.h"
-
-#include "fileInput/elementReaderTemplates.hpp"
 #include "fileInput/readerHelper.h"
 #include "utilities/string_viewOps.h"
+
 #include <cmath>
 
 namespace griddyn

@@ -14,6 +14,10 @@
 
 #include "utilities/matrixDataSparse.hpp"
 
+#include <cassert>
+#include <algorithm>
+#include <cmath>
+
 template <typename ValueT>
 void matrixDataSparse<ValueT>::assign (index_t row, index_t col, ValueT num)
 {

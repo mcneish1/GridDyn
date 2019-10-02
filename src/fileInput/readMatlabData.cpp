@@ -10,12 +10,10 @@
 * LLNS Copyright End
 */
 
-#include "fileInput/fileInput.h"
 #include "fileInput/readerHelper.h"
-
 #include "utilities/string_viewConversion.h"
-
 #include "utilities/stringOps.h"
+
 #include <fstream>
 #include <iostream>
 #include <sstream>

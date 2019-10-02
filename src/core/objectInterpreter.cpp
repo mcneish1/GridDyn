@@ -10,8 +10,16 @@
  * LLNS Copyright End
  */
 
+#include "core/coreDefinitions.hpp"
+#include "core/coreObject.h"
 #include "core/objectInterpreter.h"
 #include "utilities/stringConversion.h"
+#include "utilities/units.h"
+#include "utilities/stringOps.h"
+
+#include <cstddef>
+#include <stdexcept>
+#include <string>
 
 namespace griddyn
 {

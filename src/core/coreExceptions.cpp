@@ -11,8 +11,12 @@
 */
 
 #include "core/coreExceptions.h"
+#include "core/coreObject.h"
+
 namespace griddyn
 {
+
 coreObjectException::coreObjectException (const coreObject *obj) noexcept : throwingObject (obj) {}
 std::string coreObjectException::who () const noexcept { return fullObjectName (throwingObject); }
-}  // namespace griddyn
+
+} // namespace griddyn

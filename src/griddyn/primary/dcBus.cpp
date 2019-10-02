@@ -11,7 +11,6 @@
  */
 
 #include "griddyn/primary/dcBus.h"
-#include "griddyn/Area.h"
 #include "griddyn/Generator.h"
 #include "griddyn/Link.h"
 #include "griddyn/Load.h"
@@ -20,9 +19,6 @@
 #include "core/objectFactoryTemplates.hpp"
 #include "utilities/matrixDataCompact.hpp"
 #include "utilities/stringOps.h"
-#include "utilities/vectorOps.hpp"
-
-#include <iostream>
 
 namespace griddyn
 {

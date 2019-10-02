@@ -10,6 +10,8 @@
 * LLNS Copyright End
 */
 
+#include "core/coreObject.h"
+
 #include "griddyn/events/reversibleEvent.h"
 #include "griddyn/measurement/gridGrabbers.h"
 

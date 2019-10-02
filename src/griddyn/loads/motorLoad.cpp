@@ -18,7 +18,7 @@
 #include "utilities/matrixData.hpp"
 
 #include <cmath>
-#include <iostream>
+
 namespace griddyn
 {
 namespace loads

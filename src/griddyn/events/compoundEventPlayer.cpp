@@ -10,11 +10,9 @@
  * LLNS Copyright End
  */
 
+#include "core/coreObject.h"
 #include "griddyn/events/compoundEventPlayer.h"
 
-#include "core/coreExceptions.h"
-#include "core/objectInterpreter.h"
-#include "utilities/stringOps.h"
 #include <sstream>
 
 namespace griddyn

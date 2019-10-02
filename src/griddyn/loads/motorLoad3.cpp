@@ -15,7 +15,6 @@
 #include "core/coreObjectTemplates.hpp"
 #include "utilities/matrixData.hpp"
 #include "utilities/vectorOps.hpp"
-#include <iostream>
 
 namespace griddyn
 {

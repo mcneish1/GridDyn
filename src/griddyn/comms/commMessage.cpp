@@ -11,7 +11,11 @@
 */
 
 #include "griddyn/comms/commMessage.h"
-#include "utilities/stringConversion.h"
+#include "utilities/stringOps.h"
+
+#include <cereal/archives/portable_binary.hpp>
+
+#include <map>
 
 using archiver = cereal::PortableBinaryOutputArchive;
 using retriever = cereal::PortableBinaryInputArchive;
