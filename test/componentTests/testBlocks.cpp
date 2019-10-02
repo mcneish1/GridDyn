@@ -13,7 +13,7 @@
 #include "core/objectFactory.hpp"
 #include "griddyn/Relay.h"
 #include "griddyn/simulation/diagnostics.h"
-#include "griddyn/blocks/blockLibrary.h"
+#include "griddyn/Block.h"
 #include "../testHelper.h"
 #include "utilities/timeSeriesMulti.hpp"
 #include "utilities/vectorOps.hpp"

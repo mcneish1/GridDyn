@@ -14,6 +14,8 @@
 #include "griddyn/relays/pmu.h"
 #include "../testHelper.h"
 #include "griddyn/gridBus.h"
+#include "griddyn/Link.h"
+
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/test/unit_test.hpp>
 

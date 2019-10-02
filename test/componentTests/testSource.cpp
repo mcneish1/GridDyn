@@ -11,7 +11,10 @@
 */
 
 #include "fileInput/readElement.h"
-#include "griddyn/sources/sourceTypes.h"
+#include "griddyn/Source.h"
+#include "griddyn/sources/rampSource.h"
+#include "griddyn/sources/pulseSource.h"
+#include "griddyn/sources/sineSource.h"
 #include "../testHelper.h"
 #include "utilities/timeSeries.hpp"
 #include <boost/test/floating_point_comparison.hpp>
