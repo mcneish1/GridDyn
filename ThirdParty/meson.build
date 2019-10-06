@@ -89,6 +89,123 @@ subdir('sundials/sundials') # put sundials_config in the right place
 cc = meson.get_compiler('c')
 m_lib = cc.find_library('m')
 
+type_options = {
+    'd' : '-DNULLDEFINE',
+    'z' : '-DCOMPLEX',
+    'l' : '-DDLONG',
+    'lz' : '-DCOMPLEX -DDLONG',
+}
+
+ss_inc = include_directories('SuiteSparse/SuiteSparse-5.3.0/SuiteSparse_config')
+ss_lib = library('suitesparse', [
+        'SuiteSparse/SuiteSparse-5.3.0/SuiteSparse_config/SuiteSparse_config.c',
+    ],
+    include_directories : ss_inc,
+    dependencies : m_lib)
+ss_dep = declare_dependency(include_directories : ss_inc, link_with : ss_lib)
+
+amd_inc = include_directories('SuiteSparse/SuiteSparse-5.3.0/AMD/Include')
+amd_libs = []
+foreach type, define : type_options
+    amd_lib = library('amd_' + type, [
+            'SuiteSparse/SuiteSparse-5.3.0/AMD/Source/amd_1.c',
+            'SuiteSparse/SuiteSparse-5.3.0/AMD/Source/amd_2.c',
+            'SuiteSparse/SuiteSparse-5.3.0/AMD/Source/amd_aat.c',
+            'SuiteSparse/SuiteSparse-5.3.0/AMD/Source/amd_control.c',
+            'SuiteSparse/SuiteSparse-5.3.0/AMD/Source/amd_defaults.c',
+            'SuiteSparse/SuiteSparse-5.3.0/AMD/Source/amd_dump.c',
+            'SuiteSparse/SuiteSparse-5.3.0/AMD/Source/amd_global.c',
+            'SuiteSparse/SuiteSparse-5.3.0/AMD/Source/amd_info.c',
+            'SuiteSparse/SuiteSparse-5.3.0/AMD/Source/amd_order.c',
+            'SuiteSparse/SuiteSparse-5.3.0/AMD/Source/amd_postorder.c',
+            'SuiteSparse/SuiteSparse-5.3.0/AMD/Source/amd_post_tree.c',
+            'SuiteSparse/SuiteSparse-5.3.0/AMD/Source/amd_preprocess.c',
+            'SuiteSparse/SuiteSparse-5.3.0/AMD/Source/amd_valid.c',
+        ],
+        c_args : define,
+        include_directories : amd_inc,
+        dependencies : [
+            ss_dep,
+            m_lib
+        ])
+    amd_libs += [amd_lib]
+endforeach
+amd_dep = declare_dependency(
+    include_directories : amd_inc,
+    dependencies : ss_dep,
+    link_with : amd_libs)
+
+colamd_inc = include_directories('SuiteSparse/SuiteSparse-5.3.0/COLAMD/Include')
+colamd_libs = []
+foreach type, define : type_options
+    colamd_lib = library('colamd_' + type,
+        'SuiteSparse/SuiteSparse-5.3.0/COLAMD/Source/colamd.c',
+        c_args : define,
+        include_directories : colamd_inc,
+        dependencies : [
+            ss_dep,
+            m_lib
+        ])
+    colamd_libs += [colamd_lib]
+endforeach
+colamd_dep = declare_dependency(include_directories : colamd_inc, link_with : colamd_libs)
+
+btf_inc = include_directories('SuiteSparse/SuiteSparse-5.3.0/BTF/Include')
+btf_libs = []
+foreach type, define : type_options
+    btf_lib = library('btf_' + type, [
+            'SuiteSparse/SuiteSparse-5.3.0/BTF/Source/btf_maxtrans.c',
+            'SuiteSparse/SuiteSparse-5.3.0/BTF/Source/btf_order.c',
+            'SuiteSparse/SuiteSparse-5.3.0/BTF/Source/btf_strongcomp.c',
+        ],
+        c_args : define,
+        include_directories : btf_inc,
+        dependencies : ss_dep)
+    btf_libs += [btf_lib]
+endforeach
+btf_dep = declare_dependency(include_directories : btf_inc, link_with : btf_libs)
+
+klu_inc = include_directories('SuiteSparse/SuiteSparse-5.3.0/KLU/Include')
+klu_libs = []
+foreach type, define : type_options
+    klu_lib = library('klu_' + type, [
+            'SuiteSparse/SuiteSparse-5.3.0/KLU/Source/klu.c',
+            'SuiteSparse/SuiteSparse-5.3.0/KLU/Source/klu_analyze.c',
+            'SuiteSparse/SuiteSparse-5.3.0/KLU/Source/klu_analyze_given.c',
+            'SuiteSparse/SuiteSparse-5.3.0/KLU/Source/klu_defaults.c',
+            'SuiteSparse/SuiteSparse-5.3.0/KLU/Source/klu_diagnostics.c',
+            'SuiteSparse/SuiteSparse-5.3.0/KLU/Source/klu_dump.c',
+            'SuiteSparse/SuiteSparse-5.3.0/KLU/Source/klu_extract.c',
+            'SuiteSparse/SuiteSparse-5.3.0/KLU/Source/klu_factor.c',
+            'SuiteSparse/SuiteSparse-5.3.0/KLU/Source/klu_free_numeric.c',
+            'SuiteSparse/SuiteSparse-5.3.0/KLU/Source/klu_free_symbolic.c',
+            'SuiteSparse/SuiteSparse-5.3.0/KLU/Source/klu_kernel.c',
+            'SuiteSparse/SuiteSparse-5.3.0/KLU/Source/klu_memory.c',
+            'SuiteSparse/SuiteSparse-5.3.0/KLU/Source/klu_refactor.c',
+            'SuiteSparse/SuiteSparse-5.3.0/KLU/Source/klu_scale.c',
+            'SuiteSparse/SuiteSparse-5.3.0/KLU/Source/klu_solve.c',
+            'SuiteSparse/SuiteSparse-5.3.0/KLU/Source/klu_sort.c',
+            'SuiteSparse/SuiteSparse-5.3.0/KLU/Source/klu_tsolve.c',
+        ],
+        include_directories : klu_inc,
+        c_args : define,
+        dependencies : [
+            amd_dep,
+            colamd_dep,
+            btf_dep,
+            m_lib,
+        ])
+    klu_libs += [klu_lib]
+endforeach
+klu_dep = declare_dependency(
+    include_directories : klu_inc,
+    link_with : klu_libs,
+    dependencies : [
+        amd_dep,
+        colamd_dep,
+        btf_dep,
+    ])
+
 sundials_inc = include_directories('sundials/sundials-3.1.1/include')
 sundials_config_file_inc = include_directories('sundials')
 sundials_lib = library('sundials', [
@@ -116,8 +233,21 @@ sundials_lib = library('sundials', [
         'sundials/sundials-3.1.1/src/cvode/cvode.c',
         'sundials/sundials-3.1.1/src/cvode/cvode_direct.c',
         'sundials/sundials-3.1.1/src/cvode/cvode_io.c',
+        'sundials/sundials-3.1.1/src/sunmat_sparse/sunmatrix_sparse.c',
+        'sundials/sundials-3.1.1/src/sunlinsol_klu/sunlinsol_klu.c',
     ],
-    dependencies : m_lib,
+    dependencies : [
+        m_lib,
+        klu_dep,
+    ],
     include_directories : [ sundials_inc, sundials_config_file_inc ])
 
-sundials_dep = declare_dependency(link_with : sundials_lib, include_directories : [ sundials_inc, sundials_config_file_inc ])
+sundials_dep = declare_dependency(
+    link_with : [
+        sundials_lib,
+    ],
+    include_directories : [
+        sundials_inc,
+        sundials_config_file_inc
+    ],
+    dependencies : klu_dep)
