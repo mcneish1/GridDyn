@@ -311,8 +311,11 @@ bool isSUNMatrixSetup (SUNMatrix J)
 void matrixDataToSUNMatrix (matrixData<double> &md, SUNMatrix J, count_t svsize)
 {
     int id = SUNMatGetID (J);
-    if (id == SUNMATRIX_SPARSE)
+    switch (id)
     {
+    default:
+        throw std::logic_error("Unsupported matrix data type");
+    case SUNMATRIX_SPARSE:
         auto M = SM_CONTENT_S (J);
         count_t indval = 0;
         M->indexptrs[0] = indval;
@@ -320,25 +323,6 @@ void matrixDataToSUNMatrix (matrixData<double> &md, SUNMatrix J, count_t svsize)
         md.compact ();
         assert (M->NNZ >= static_cast<int> (md.size ()));
         auto sz = static_cast<int> (md.size ());
-        /*
-      auto itel = md.begin();
-      for (int kk = 0; kk < sz; ++kk)
-      {
-          auto tp = *itel;
-          //      printf("kk: %d  dataval: %f  rowind: %d   colind: %d \n ", kk, a1->val(kk), a1->rowIndex(kk),
-      a1->colIndex(kk));
-          if (tp.col > colval)
-          {
-              colval++;
-              J->colptrs[colval] = kk;
-          }
-
-          J->data[kk] = tp.data;
-          J->rowvals[kk] = tp.row;
-          ++itel;
-      }
-    */
-        // SlsSetToZero(J);
 
         md.start ();
         for (int kk = 0; kk < sz; ++kk)
@@ -350,7 +334,7 @@ void matrixDataToSUNMatrix (matrixData<double> &md, SUNMatrix J, count_t svsize)
             {
                 indval++;
                 M->indexptrs[indval] = kk;
-                assert (tp.row == indval);
+                if (tp.row != indval) throw std::logic_error("Constraint violation");
             }
 
             M->data[kk] = tp.data;
@@ -363,9 +347,7 @@ void matrixDataToSUNMatrix (matrixData<double> &md, SUNMatrix J, count_t svsize)
         }
         assert (indval + 1 == svsize);
         M->indexptrs[indval + 1] = sz;
-    }
-    else if (id == SUNMATRIX_DENSE)
-    {
+        break;
     }
 }
 

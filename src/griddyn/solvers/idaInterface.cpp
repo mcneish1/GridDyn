@@ -337,6 +337,8 @@ void idaInterface::initialize (coreTime t0)
     }
     else
     {
+        auto jsize = m_gds->jacSize (mode);
+
         /* Create sparse SUNMatrix */
         J = SUNSparseMatrix (svsize, svsize, jsize, CSR_MAT);
         check_flag (J, "SUNSparseMatrix", 0);
