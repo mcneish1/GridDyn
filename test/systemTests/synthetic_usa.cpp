@@ -14,7 +14,7 @@ std::filesystem::path local_test_directory()
     return std::filesystem::path(GRIDDYN_TEST_DIRECTORY) / "ACTIVS" / "SyntheticUSA";
 }
 
-TEST(SyntheticUSA, Loads)
+TEST(SyntheticUSA, FileLoad)
 {
     auto test_file = local_test_directory() / "SyntheticUSA.RAW";
 
@@ -23,4 +23,17 @@ TEST(SyntheticUSA, Loads)
     auto sim = std::make_unique<griddyn::gridDynSimulation>();
 
     griddyn::loadFile(sim.get(), test_file);
+}
+
+TEST(SyntheticUSA, Powerflow)
+{
+    auto test_file = local_test_directory() / "SyntheticUSA.RAW";
+
+    ASSERT_TRUE(std::filesystem::exists(test_file)) << "Could not find " << test_file;
+
+    auto sim = std::make_unique<griddyn::gridDynSimulation>();
+
+    griddyn::loadFile(sim.get(), test_file);
+
+    sim->powerflow ();
 }
