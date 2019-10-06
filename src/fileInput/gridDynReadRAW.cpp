@@ -1172,6 +1172,77 @@ void rawReadTXadj (coreObject *parentObject,
     }
 }
 
+int rawReadTX3(coreObject* parentObject, std::vector<std::string>& txlines, std::vector<gridBus*>& busList, basicReaderInfo& opt)
+{
+    auto bus_0 = busfactory->makeTypeObject ();
+    parentObject->add(bus_0);
+
+    auto config_vec_1 = splitline(txlines[0]);
+    auto config_vec_2 = splitline(txlines[1]);
+    std::vector<std::vector<std::string>> windings =
+    {
+        splitline(txlines[2]),
+        splitline(txlines[3]),
+        splitline(txlines[4])
+    };
+
+    auto R = numeric_conversion<double>(config_vec_2[0], 0.0);
+    auto X = numeric_conversion<double>(config_vec_2[1], 0.0);
+
+    auto status = std::stoi(config_vec_1[11]);
+
+    for (auto&& index : { 0, 1, 2 })
+    {
+        auto winding = windings[index];
+
+        acLine* link;
+
+        auto winding_type = std::stoi(winding[6]);
+
+        switch (abs(winding_type))
+        {
+        case 0:
+        default:
+            link = linkfactory->makeDirectObject();
+            break;
+        case 1:
+            link = new links::adjustableTransformer();
+            link->set("mode", "voltage");
+            break;
+        case 2:
+            link = new links::adjustableTransformer();
+            link->set("mode", "mvar");
+            break;
+        case 3:
+            link = new links::adjustableTransformer();
+            link->set("mode", "mw");
+            break;
+        }
+
+        auto bus_idx = std::stoi(trim(config_vec_1[index]));
+        auto bus = busList[bus_idx];
+
+        parentObject->add(link);
+
+        link->set("basepower", opt.base);
+        link->updateBus(bus_0, 1);
+        link->updateBus(bus, 2);
+
+        link->set ("r", R);
+        link->set ("x", X);
+
+        if (status == 0) link->disable();
+
+        auto tap = numeric_conversion<double> (winding[0], 0.0);
+        link->set ("tap", tap);
+
+        auto tap_angle = numeric_conversion<double> (winding[2], 0.0);
+        link->set ("tapangle", tap_angle, deg);
+    }
+
+    return 5;
+}
+
 int rawReadTX (coreObject *parentObject, stringVec &txlines, std::vector<gridBus *> &busList, basicReaderInfo &opt)
 {
     // gridBus *bus3;
@@ -1193,11 +1264,7 @@ int rawReadTX (coreObject *parentObject, stringVec &txlines, std::vector<gridBus
     int tline = 4;
     if (ind3 != 0)
     {
-        tline = 5;
-        strvec5 = splitline (txlines[4]);
-        // TODO handle 3 way transformers(complicated)
-        std::cout << "3 winding transformers not supported at this time\n";
-        return tline;
+        return rawReadTX3(parentObject, txlines, busList, opt);
     }
 
     auto bus1 = busList[ind1];
@@ -1342,7 +1409,7 @@ int rawReadDCLine (coreObject * /*parentObject*/,
                    std::vector<gridBus *> & /*busList*/,
                    basicReaderInfo & /*bri*/)
 {
-    return 0;
+    throw std::logic_error("rawReadDCLine is currently unimplmented");
 }
 
 void rawReadSwitchedShunt (coreObject *parentObject,
