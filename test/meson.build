@@ -81,7 +81,7 @@ foreach test_name_folder_name : folder_map
             cpp_args : [
                 '-DBOOST_TEST_DYN_LINK',
                 '-DBOOST_TEST_MODULE=griddyn_tests',
-                '-DGRIDDYN_TEST_DIRECTORY="' + meson.current_source_dir() + '/test_files"',
+                '-DGRIDDYN_TEST_DIRECTORY="' + join_paths(meson.current_source_dir(), 'test_files') + '"',
             ],
             include_directories : griddyn_config_inc,
             dependencies : [
@@ -96,4 +96,29 @@ foreach test_name_folder_name : folder_map
             ])
         test('test_' + folder_name + '_' + test_name, test_exe)
     endforeach
+endforeach
+
+gtest_dep = subproject('gtest').get_variable('gtest_main_dep')
+new_tests = [['systemTests', 'synthetic_usa']]
+
+foreach t : new_tests
+    dir = t[0]
+    name = t[1]
+
+
+    exe = executable(
+        name,
+        join_paths(dir, name + '.cpp'),
+        cpp_args : [
+            '-DGRIDDYN_TEST_DIRECTORY="' + join_paths(meson.current_source_dir(), 'test_files') + '"'
+        ],
+        include_directories : griddyn_config_inc,
+        dependencies : [
+            gtest_dep,
+            fs_lib,
+            griddyn_dep,
+            griddyn_core_dep,
+            griddyn_file_input_dep,
+        ])
+    test(name, exe)
 endforeach
