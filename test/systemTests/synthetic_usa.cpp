@@ -16,7 +16,7 @@ std::filesystem::path local_test_directory()
 
 TEST(SyntheticUSA, Loads)
 {
-    auto test_file = local_test_directory() / "SyntheticUSA.EPC";
+    auto test_file = local_test_directory() / "SyntheticUSA.RAW";
 
     ASSERT_TRUE(std::filesystem::exists(test_file)) << "Could not find " << test_file;
 
