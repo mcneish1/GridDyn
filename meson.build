@@ -10,6 +10,7 @@ griddyn_conf = configuration_data({
         'GRIDDYN_VERSION_PATCH' : '0',
         'GRIDDYN_VERSION_STRING' : 'v1',
         'GRIDDYN_VERSION_STRING_SHORT' : 'v1',
+        'ENABLE_KLU' : '1',
     })
 
 griddyn_compiler_config = configure_file(
