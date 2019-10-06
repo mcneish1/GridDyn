@@ -52,7 +52,6 @@ void sundialsErrorHandlerFunc (int error_code,
                                char *msg,
                                void *user_data);
 
-#ifdef ENABLE_KLU
 /** @brief check if the matrix is setup already
  *@param[in] J the matrix to check
  *@return true if the matrix has been loaded already false otherwise
@@ -66,7 +65,6 @@ bool isSUNMatrixSetup (SUNMatrix J);
 */
 void matrixDataToSUNMatrix (matrixData<double> &md, SUNMatrix J, count_t svsize);
 
-#endif
 /** brief abstract base class for SUNDIALS based SolverInterface objects doesn't really do anything on its own
 just provides common functionality to SUNDIALS SolverInterface objects
 */
