@@ -833,7 +833,7 @@ void epcReadFixedShunt (zipLoad *ld, std::string_view line, double /*base*/)
 
 void epcReadSwitchShunt (loads::svd* /*ld*/, std::string_view /*line*/, double /*base*/)
 {
-    throw false;
+    throw std::logic_error("epcReadSwitchShunt unimplemented");
 }
 
 //#generator data  [XXX]    id   ------------long_id_------------    st ---no--     reg_name       prf  qrf  ar

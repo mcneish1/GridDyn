@@ -131,17 +131,17 @@ void loadRelay::actionTaken (index_t ActionNum,
                              change_code /*actionReturn*/,
                              coreTime /*actionTime*/)
 {
-    throw false;
+    throw std::logic_error("loadRelay actionTaken not implemented");
 }
 
 void loadRelay::conditionTriggered (index_t conditionNum, coreTime /*triggerTime*/)
 {
-    throw false;
+    throw std::logic_error("loadRelay conditionTriggered not implemented");
 }
 
 void loadRelay::conditionCleared (index_t conditionNum, coreTime /*triggerTime*/)
 {
-    throw false;
+    throw std::logic_error("loadRelay conditionTriggered not implemented");
 }
 
 }  // namespace relays

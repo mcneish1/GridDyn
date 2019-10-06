@@ -145,7 +145,7 @@ void controlRelay::actionTaken (index_t ActionNum,
                                 change_code /*actionReturn*/,
                                 coreTime /*actionTime*/)
 {
-    throw false;
+    throw std::logic_error("controlRelay actionTaken not implemented");
 }
 
 using cm = griddyn::comms::controlMessagePayload;
