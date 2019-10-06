@@ -24,13 +24,13 @@ library_tests = [
 
 system_tests = [
     #1 'testRoots',
-    #4 'testInputs',
+    #2 'testInputs',
     #1 'testContingency',
     #2 'testDyn1',
     #4 'validationTests',
-    #1 'testDyn2',
+    #4 'testDyn2',
     #1 'testCloning',
-    #2 'faultTests',
+    #4 'faultTests',
     #1 'testConstraints',
     #1 'testOutputs',
     #1 'testpFlow',
@@ -99,7 +99,9 @@ foreach test_name_folder_name : folder_map
 endforeach
 
 gtest_dep = subproject('gtest').get_variable('gtest_main_dep')
-new_tests = [['systemTests', 'synthetic_usa']]
+new_tests = [
+    #4 ['systemTests', 'synthetic_usa']
+]
 
 foreach t : new_tests
     dir = t[0]
