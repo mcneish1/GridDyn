@@ -19,13 +19,7 @@
 #include "griddyn/Link.h"
 #include "griddyn/Load.h"
 
-#ifdef ENABLE_OPTIMIZATION_LIBRARY
-#include "optimization/gridDynOpt.h"
-#include "optimization/models/gridGenOpt.h"
-#include "optimization/optObjectFactory.h"
-#else
 #include "griddyn/simulation/gridSimulation.h"
-#endif
 
 #include "utilities/stringConversion.h"
 
@@ -312,68 +306,9 @@ COST                    5 parameters defining total cost function f(p) begin in 
                             n + 1 coefficients of n-th order polynomial cost, starting with
                             highest order, where cost is f(p) = cn*p^n + ... + c1*p + c0
 */
-#ifdef ENABLE_OPTIMIZATION_LIBRARY
-void loadGenCostArray (coreObject *parentObject, mArray &genCost, int gencount)
-{
-    auto gdo = dynamic_cast<gridDynOptimization *> (parentObject->getRoot ());
-    if (gdo==nullptr)  // return if the core object doesn't support optimization
-    {
-        return;
-    }
 
-    gridGenOpt *go;
-    gridOptObject *oo;
-    coreObject *obj;
-    int mode = 0;
-    int numc = 0;
-    int q = 0;
-    std::vector<double> coeff;
-
-    auto genOptFactory = dynamic_cast<optObjectFactory<gridGenOpt, Generator> *> (
-      coreOptObjectFactory::instance ()->getFactory ("")->getFactory ("generator"));
-
-    std::vector<gridGenOpt *> genOptList (gencount);
-
-    int kk = 1;
-    for (auto &genLine : genCost)
-    {
-        if (kk > gencount)
-        {
-            q = 1;
-            go = genOptList[kk - gencount - 1];
-        }
-        else
-        {
-            obj = parentObject->getSubObject ("gen", kk);
-            if (obj==nullptr)
-            {
-                continue;
-            }
-            go = genOptFactory->makeTypeObject (obj);
-            genOptList[kk - 1] = go;
-            q = 0;
-            oo = gdo->makeOptObjectPath (obj->getParent ());
-            oo->add (go);
-        }
-
-        ++kk;
-        mode = static_cast<int> (genLine[0]);
-        numc = static_cast<int> (genLine[3]);
-        coeff.resize (numc);
-        for (int ii = 0; ii < numc; ii++)
-        {
-            coeff[ii] = genLine[4 + ii];
-        }
-        go->loadCostCoeff (coeff, q);
-        if (mode == 1)
-        {
-            go->set ("piecewise linear cost", 1);
-        }
-    }
-}
-#else
 void loadGenCostArray (coreObject * /*parentObject*/, mArray & /*genCost*/, int /*gencount*/) {}
-#endif
+
 /*
 see: http://www.pserc.cornell.edu/matpower/docs/ref/matpower6.0/idx_brch.html
 Branch data

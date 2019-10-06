@@ -21,12 +21,7 @@
 #include "griddyn/relays/pmu.h"
 #include "fileInput/readerHelper.h"
 
-#ifdef ENABLE_OPTIMIZATION_LIBRARY
-#include "optimization/gridDynOpt.h"
-#include "optimization/models/gridGenOpt.h"
-#else
 #include "griddyn/simulation/gridSimulation.h"
-#endif
 
 #include "griddyn/Exciter.h"
 
@@ -361,76 +356,12 @@ Column Variable Description Unit
 13 u Commitment variable boolean
 14 kTB Tie breaking cost $ / MWh
 */
-#ifndef ENABLE_OPTIMIZATION_LIBRARY
+
 void loadPsatSupplyArray (coreObject * /*parentObject*/,
                           const mArray & /*genCost*/,
                           const std::vector<gridBus *> & /*busList*/)
 {
 }
-#else
-void loadPsatSupplyArray (coreObject *parentObject, const mArray &genCost, const std::vector<gridBus *> &busList)
-{
-    auto gdo = dynamic_cast<gridDynOptimization *> (parentObject->getRoot ());
-    if (gdo == nullptr)
-    {
-        return;
-    }
-    for (auto &genLine : genCost)
-    {
-        auto bus = busList[static_cast<size_t> (genLine[0])];
-        auto gen = bus->getGen ();
-        if (gen != nullptr)
-        {
-            continue;
-        }
-        auto go = new gridGenOpt (gen);
-        auto oo = gdo->makeOptObjectPath (bus);
-        oo->add (go);
-
-        if (genLine[2] != 0.0)
-        {
-            go->set ("forecast", genLine[2], MW);
-        }
-        if (genLine[3] != 0.0)
-        {
-            go->set ("pmax", genLine[3], MW);
-        }
-        if (genLine[4] != 0.0)
-        {
-            go->set ("pmin", genLine[4], MW);
-        }
-
-        if (genLine[6] > 0.0)
-        {
-            go->set ("constantp", genLine[6], Cph);
-        }
-        if (genLine[9] > 0.0)
-        {
-            go->set ("constantq", genLine[9], Cph);
-        }
-        if (genLine[7] > 0.0)
-        {
-            go->set ("linearp", genLine[7], CpMWh);
-        }
-        if (genLine[10] > 0.0)
-        {
-            go->set ("linearq", genLine[10], CpMVARh);
-        }
-        if (genLine[8] != 0.0)
-        {
-            go->set ("quadraticp", genLine[8], CpMW2h);
-        }
-        if (genLine[11] != 0.0)
-        {
-            go->set ("quadraticq", genLine[11], CpMVAR2h);
-        }
-        if (genLine[13] != 0.0)
-        {
-            go->set ("penalty", genLine[13], CpMWh);
-        }
-    }
-}
-#endif  // ENABLE_OPTIMIZATION_LIBRARY
 
 /* Branch data
 Column Variable Description Unit
