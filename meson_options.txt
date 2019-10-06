@@ -1,4 +1,0 @@
-option('fskit-plugin', type : 'boolean', value : false)
-option('fmi-plugin', type : 'boolean', value : false)
-option('fncs-plugin', type : 'boolean', value : false)
-option('helics-plugin', type : 'boolean', value : false)
