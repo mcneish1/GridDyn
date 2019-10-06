@@ -57,43 +57,67 @@ void epcReadTX (coreObject *parentObject,
 
 double epcReadSolutionParamters (coreObject *parentObject, std::string_view line);
 
-bool nextLine (std::ifstream &file, std::string &line)
+// following https://stackoverflow.com/a/217605
+namespace detail {
+std::string ltrim(std::string s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) {
+        return !std::isspace(ch);
+    }));
+    return s;
+}
+
+std::string rtrim(std::string s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
+        return !std::isspace(ch);
+    }).base(), s.end());
+    return s;
+}
+
+std::string trim(std::string s) {
+    return ltrim(rtrim(s));
+}
+} // namespace detail
+
+bool nextLine (std::ifstream &file, std::string &out_line)
 {
-    bool ret = true;
-    while (ret)
+    std::string out;
+
+    bool read_next = false;
+    do
     {
-        if (std::getline (file, line))
+        /*
+         * Syntax:
+         * Continued: "#-", "", "-/"
+         * Read-from: "-", "-/"
+         */
+        read_next = false;
+
+        std::string line;
+        if (!std::getline(file, line)) return false;
+        auto trimmed_line = detail::trim(line);
+
+        if (trimmed_line.empty()
+         or trimmed_line.front() == '#'
+         or trimmed_line.back() == '/')
         {
-            if (line[0] == '#')  // ignore comment lines
-            {
-                continue;
-            }
-            stringOps::trimString (line);
-            if (line.empty ())  // continue over empty lines
-            {
-                continue;
-            }
-            while (line.back () == '/')  // get line continuation
-            {
-                line.pop_back ();
-                std::string temp1;
-                if (std::getline (file, temp1))
-                {
-                    line += " " + temp1;
-                }
-                else
-                {
-                    ret = false;
-                }
-            }
+            read_next = true;
         }
-        else
+
+        if (!trimmed_line.empty()
+         and trimmed_line.front() != '#')
         {
-            ret = false;
+            if (trimmed_line.back() == '/')
+            {
+                trimmed_line.back() = ' ';
+            }
+            out += trimmed_line;
         }
-        break;
+
     }
-    return ret;
+    while (read_next);
+
+    out_line = out;
+    return true;
 }
 
 int getSectionCount (std::string_view line)
@@ -459,9 +483,13 @@ void loadEPC (coreObject *parentObject, const std::string &fileName, const basic
         {
             break;
         }
+        else if (tokens[0] == "substation")
+        {
+            ignoreSection(line, file);
+        }
         else
         {
-            std::cerr << "unrecognized token " << tokens[0] << '\n';
+            throw std::runtime_error(std::string("unrecognized token ") + std::string(tokens[0]));
         }
     }
     file.close ();
@@ -1089,6 +1117,7 @@ void epcReadDCBranch (coreObject *parentObject,
         lnk->set ("length", val, km);
     }
 }
+
 void epcReadTX (coreObject *parentObject,
                 std::string_view line,
                 double base,
